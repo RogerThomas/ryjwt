@@ -1,0 +1,26 @@
+[package]
+name = "ryjwt"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "_ryjwt"
+crate-type = ["cdylib"]
+
+[dependencies]
+aws-lc-rs = "1.18.1"
+# Pinned to the exact version aws-lc-rs links: src/mac.rs uses its SHA-2 FFI directly.
+aws-lc-sys = "=0.45.0"
+base64-simd = "0.8.0"
+itoa = "1.0.17"
+jiter = { version = "0.17.0", features = ["python", "num-bigint"] }
+memchr = "2.8.3"
+num-bigint = "0.4"
+pem = "4.0.0"
+pyo3 = "0.29.3"
+ryu = "1.0.23"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1

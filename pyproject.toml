@@ -1,0 +1,103 @@
+[project]
+name = "ryjwt"
+version = "0.1.0"
+description = "Fast JWT encoding and decoding for Python, backed by Rust"
+readme = "README.md"
+authors = [
+    { name = "Roger Thomas", email = "roger.thomas87@gmail.com" }
+]
+requires-python = ">=3.14.3"
+dependencies = []
+
+[project.optional-dependencies]
+crypto = ["cryptography>=46"]
+msgspec = ["msgspec>=0.22"]
+pydantic = ["pydantic>=2.12"]
+
+[build-system]
+requires = ["maturin>=1.15,<2"]
+build-backend = "maturin"
+
+[tool.maturin]
+python-source = "python"
+module-name = "ryjwt._ryjwt"
+features = ["pyo3/extension-module"]
+
+[dependency-groups]
+bench = [
+    "pyjwt>=2.15.1",
+    "yeetr>=2026.9.18",
+]
+dev = [
+    "cryptography>=46",
+    "httpx>=0.28.1",
+    "pytest>=9",
+    "rich>=15.0.0",
+    "pyright>=1.1.414",
+    "ruff>=0.16.10",
+    "pytest-mock>=3.16.0",
+    "msgspec>=0.22.0",
+    "pydantic>=2.13.5",
+    "pyjwt>=2.15.1",
+]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "A",    # builtins shadowing
+    "ANN",  # type annotations
+    "ARG",  # unused arguments
+    "B",    # bugbear (common bugs & bad patterns)
+    "BLE",  # blind excepts
+    "C4",   # comprehensions
+    "C90",  # mccabe complexity
+    "COM",  # commas
+    "DTZ",  # datetime timezone
+    "E",    # pycodestyle errors
+    "ERA",  # eradicate commented-out code
+    "F",    # pyflakes
+    "FA",   # future annotations
+    "FBT",  # boolean trap
+    "I",    # import sorting
+    "ICN",  # import conventions
+    "ISC",  # implicit str concat
+    "N",    # naming conventions
+    "NPY",  # numpy rules
+    "PGH",  # pygrep-hooks
+    "PT",   # pytest style
+    "PTH",  # pathlib
+    "RET",  # return statements
+    "RUF",  # Ruff extra rules
+    "S",    # security
+    "SIM",  # simplifications
+    "T10",  # debugger statements
+    "TC",   # typing under TYPE_CHECKING
+    "TD",   # TODOs must be annotated
+    "TID",  # tidy imports
+    "TRY",  # tryceratops
+    "UP",   # pyupgrade / newer syntax
+    "W",    # pycodestyle warnings
+    "YTT",  # flake8-2020
+]
+ignore = [
+    "D211",  # no-blank-line-before-class
+    "D213",  # multi-line-summary-second-line
+    "TC006", # allow unquoted types in typing.cast()
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "S101", # assert is how pytest tests
+    "S311", # seeded random for reproducible fuzzing, not crypto
+]
+
+[tool.pyright]
+pythonVersion = "3.14"
+typeCheckingMode = "strict"
+
+[tool.uv]
+# Rebuild the extension when the Rust sources change.
+cache-keys = [{ file = "pyproject.toml" }, { file = "Cargo.toml" }, { file = "Cargo.lock" }, { file = "src/**/*.rs" }]

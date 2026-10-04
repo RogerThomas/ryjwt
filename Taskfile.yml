@@ -1,0 +1,17 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  ARGS: -s -vv -v -rA
+
+tasks:
+  run: uv run ./main.py {{.CLI_ARGS}}
+
+  uv-sync: uv sync --all-packages --all-groups
+
+  uv-lock: uv lock {{.CLI_ARGS}}
+
+  ruff: uv run ruff check --fix --unsafe-fixes .
+
+  pyright: uv run pyright .
