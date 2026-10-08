@@ -441,15 +441,15 @@ def test_fetches_once_on_first_decode(
         pytest.param(
             "public, max-age=0, must-revalidate",
             None,
-            0.2,
-            {"cooldown": 0, "min_cache_lifetime": 0.2},
+            0.5,
+            {"cooldown": 0, "min_cache_lifetime": 0.5},
             id="clamped-to-min",
         ),
         pytest.param(
             "max-age=3600",
             None,
-            0.2,
-            {"cooldown": 0, "min_cache_lifetime": 0, "max_cache_lifetime": 0.2},
+            0.5,
+            {"cooldown": 0, "min_cache_lifetime": 0, "max_cache_lifetime": 0.5},
             id="clamped-to-max",
         ),
         pytest.param(
@@ -462,46 +462,46 @@ def test_fetches_once_on_first_decode(
         pytest.param(
             "max-age=3600",
             "7200",
-            0.2,
-            {"cooldown": 0, "min_cache_lifetime": 0.2},
+            0.5,
+            {"cooldown": 0, "min_cache_lifetime": 0.5},
             id="age-over-max-age",
         ),
         pytest.param(
             "max-age=1", "x", 1, {"cooldown": 0, "min_cache_lifetime": 0}, id="invalid-age"
         ),
-        pytest.param(None, None, 0.2, {"cooldown": 0, "cache_lifetime": 0.2}, id="no-header"),
+        pytest.param(None, None, 0.5, {"cooldown": 0, "cache_lifetime": 0.5}, id="no-header"),
         pytest.param(
-            None, "3600", 0.2, {"cooldown": 0, "cache_lifetime": 0.2}, id="age-without-max-age"
+            None, "3600", 0.5, {"cooldown": 0, "cache_lifetime": 0.5}, id="age-without-max-age"
         ),
         pytest.param(
-            "no-cache", None, 0.2, {"cooldown": 0, "cache_lifetime": 0.2}, id="no-max-age"
+            "no-cache", None, 0.5, {"cooldown": 0, "cache_lifetime": 0.5}, id="no-max-age"
         ),
         pytest.param(
-            "max-age=x", None, 0.2, {"cooldown": 0, "cache_lifetime": 0.2}, id="invalid-max-age"
+            "max-age=x", None, 0.5, {"cooldown": 0, "cache_lifetime": 0.5}, id="invalid-max-age"
         ),
         # The same lifetimes as timedeltas.
         pytest.param(
             None,
             None,
-            0.2,
-            {"cooldown": 0, "cache_lifetime": timedelta(seconds=0.2)},
+            0.5,
+            {"cooldown": 0, "cache_lifetime": timedelta(seconds=0.5)},
             id="no-header-timedelta",
         ),
         pytest.param(
             "max-age=0",
             None,
-            0.2,
-            {"cooldown": 0, "min_cache_lifetime": timedelta(seconds=0.2)},
+            0.5,
+            {"cooldown": 0, "min_cache_lifetime": timedelta(seconds=0.5)},
             id="clamped-to-min-timedelta",
         ),
         pytest.param(
             "max-age=3600",
             None,
-            0.2,
+            0.5,
             {
                 "cooldown": 0,
                 "min_cache_lifetime": timedelta(0),
-                "max_cache_lifetime": timedelta(seconds=0.2),
+                "max_cache_lifetime": timedelta(seconds=0.5),
             },
             id="clamped-to-max-timedelta",
         ),
