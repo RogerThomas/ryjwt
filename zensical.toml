@@ -6,6 +6,7 @@
 site_name = "ryjwt"
 site_description = "Fast, strictly typed JWTs for Python, written in Rust"
 site_url = "https://rogerthomas.github.io/ryjwt/"
+extra_css = ["stylesheets/extra.css"]
 repo_url = "https://github.com/RogerThomas/ryjwt"
 repo_name = "RogerThomas/ryjwt"
 edit_uri = "edit/main/docs/"
