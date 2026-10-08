@@ -63,9 +63,13 @@ class Claims(msgspec.Struct):
 
 key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
 
-token = key.encode(Claims(sub="user-1", exp=datetime.now(UTC) + timedelta(minutes=15)))
-claims = key.decode(token, type=Claims)  # a Claims, with exp checked
-assert claims.sub == "user-1"
+# Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+claims_in = Claims(sub="user-1", exp=expires)
+
+token = key.encode(claims_in)
+claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
+assert claims_in == claims_out
 ```
 
 ### Into a pydantic model
@@ -87,9 +91,13 @@ class Claims(pydantic.BaseModel):
 
 key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
 
-token = key.encode(Claims(sub="user-1", exp=datetime.now(UTC) + timedelta(minutes=15)))
-claims = key.decode(token, type=Claims)  # a Claims, with exp checked
-assert claims.sub == "user-1"
+# Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+claims_in = Claims(sub="user-1", exp=expires)
+
+token = key.encode(claims_in)
+claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
+assert claims_in == claims_out
 ```
 
 ## Highlights
