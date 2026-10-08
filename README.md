@@ -18,7 +18,7 @@ Fast, strictly typed JSON Web Tokens for Python, written in Rust.
 **Documentation: [rogerthomas.github.io/ryjwt](https://rogerthomas.github.io/ryjwt/)**
 
 ryjwt signs and verifies JWTs, checks their claims, and decodes them into a dict, a msgspec
-`Struct` or a pydantic model. It also fetches and caches the keys an identity provider publishes
+`Struct` or a pydantic `BaseModel`. It also fetches and caches the keys an identity provider publishes
 at a JWKS URL.
 
 ![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and PyJWT over three seconds](https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/perf-race.svg)
@@ -79,7 +79,7 @@ claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
 assert claims_in == claims_out
 ```
 
-### Into a pydantic model
+### Into a pydantic `BaseModel`
 
 With `uv add --prerelease allow 'ryjwt[pydantic]'`:
 

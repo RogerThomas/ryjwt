@@ -10,7 +10,7 @@ Fast, strictly typed JSON Web Tokens for Python, written in Rust.
 ryjwt signs and verifies JWTs with HMAC, RSA, RSA-PSS, ECDSA and EdDSA keys, checks the
 registered claims (`exp`, `nbf`, `aud`, `iss`), and decodes the claims into a dict, a
 [msgspec](https://jcristharif.com/msgspec/) `Struct` or a [pydantic](https://docs.pydantic.dev/)
-model. It also fetches, caches and refreshes the keys an identity provider publishes at a JWKS URL.
+`BaseModel`. It also fetches, caches and refreshes the keys an identity provider publishes at a JWKS URL.
 
 !!! warning "Alpha"
 
@@ -31,7 +31,7 @@ Two optional extras: `ryjwt[msgspec]` makes decoding to a dict faster, and lets 
 
 ## A first token
 
-Decode the claims into a msgspec `Struct`, a pydantic model or a dict. Pick a tab: the others on
+Decode the claims into a msgspec `Struct`, a pydantic `BaseModel` or a dict. Pick a tab: the others on
 the site follow it. Each example is a whole script, and **Copy for uv** above it copies a command
 that runs it, extra and all, with nothing installed first.
 
@@ -122,7 +122,7 @@ ryjwt is fast because:
 - **Repeat headers are free.** Tokens from one issuer share a header. After the first verifies,
   ryjwt remembers which key that header picks, so it doesn't parse it again. The signature and
   claims are still checked on every token.
-- **Typed claims skip the dict.** With `type=`, your msgspec `Struct` or pydantic model is built
+- **Typed claims skip the dict.** With `type=`, your msgspec `Struct` or pydantic `BaseModel` is built
   straight from the payload, with no dict in between. Dicts are built by msgspec if it's
   installed, or by [jiter](https://github.com/pydantic/jiter), which is built in.
 

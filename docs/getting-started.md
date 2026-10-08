@@ -17,7 +17,7 @@ It checks them once, when you create it. Create it at startup, and use it for ev
 ## Encode and decode
 
 With a shared secret, the same `SecretKey` object signs and verifies. The claims can be a msgspec
-`Struct`, a pydantic model ([typed claims](#typed-claims)) or a dict:
+`Struct`, a pydantic `BaseModel` ([typed claims](#typed-claims)) or a dict:
 
 === "msgspec"
 
