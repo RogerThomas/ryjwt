@@ -1,0 +1,25 @@
+# cargo-about config for THIRD_PARTY_LICENSES (`task licenses`): the licenses of every crate
+# compiled into the extension module, which the wheels ship in their dist-info.
+accepted = ["Apache-2.0", "MIT", "ISC", "BSD-3-Clause", "Unicode-3.0", "MIT-0"]
+# The wheel targets (see .github/workflows/release.yml), so target-specific crates are covered.
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "aarch64-unknown-linux-gnu",
+    "x86_64-unknown-linux-musl",
+    "aarch64-unknown-linux-musl",
+    "x86_64-apple-darwin",
+    "aarch64-apple-darwin",
+    "x86_64-pc-windows-msvc",
+]
+ignore-build-dependencies = true
+ignore-dev-dependencies = true
+private = { ignore = true } # ryjwt itself (publish = false)
+
+# aws-lc-sys statically links AWS-LC, whose LICENSE file carries the BoringSSL and OpenSSL
+# copyright notices as well as the license texts: ship that file whole, not just generic texts.
+# The checksum pins it; when aws-lc-sys is bumped, check the new file and update both.
+[aws-lc-sys.clarify]
+license = "ISC AND (Apache-2.0 OR ISC) AND Apache-2.0 AND MIT AND BSD-3-Clause AND (Apache-2.0 OR ISC OR MIT) AND (Apache-2.0 OR ISC OR MIT-0)"
+[[aws-lc-sys.clarify.files]]
+path = "LICENSE"
+checksum = "728536b4160e051f86d7c9c388f704866b3d512cd7df97ac3516c65279523c4e"

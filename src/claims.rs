@@ -1,17 +1,19 @@
-//! Registered-claim validation (`exp`, `nbf`, `aud`, `iss`), on either a decoded dict or the raw
-//! payload bytes (for typed decoding, where the payload is never built into a dict).
+//! Registered-claim validation (`exp`, `nbf`, `aud`, `iss`), on a decoded dict, or for typed
+//! decoding (where the payload is never built into a dict) on the raw payload bytes or the decoded
+//! instance.
 
 use std::borrow::Cow;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use jiter::{Jiter, JsonValue};
-use pyo3::exceptions::PyTypeError;
+use pyo3::exceptions::{PyTypeError, PyValueError};
 use pyo3::intern;
 use pyo3::prelude::*;
 use pyo3::types::{PyBool, PyDelta, PyDeltaAccess, PyDict, PyFloat, PyInt, PyList, PyString};
 
 use crate::errors::{
-    DecodeError, ExpiredSignatureError, ImmatureSignatureError, InvalidAudienceError, InvalidIssuerError,
+    DecodeError, ExpiredSignatureError, ImmatureSignatureError, InvalidAudienceError,
+    InvalidIssuerError,
 };
 
 /// A registered claim's value, as far as validation cares.
@@ -78,7 +80,8 @@ impl<'a> Claim<'a> {
         } else if let Ok(f) = value.cast::<PyFloat>() {
             Self::Number(f.value())
         } else if let Ok(s) = value.cast::<PyString>() {
-            s.to_str().map_or(Self::Other, |s| Self::Str(Cow::Borrowed(s)))
+            s.to_str()
+                .map_or(Self::Other, |s| Self::Str(Cow::Borrowed(s)))
         } else if let Ok(list) = value.cast::<PyList>() {
             list.iter()
                 .map(|i| {
@@ -98,8 +101,11 @@ fn json_error(e: impl std::fmt::Display) -> PyErr {
     DecodeError::new_err(format!("Invalid payload JSON: {e}"))
 }
 
+/// The registered claims `decode` validates, in `Registered` field order.
+const REGISTERED: [&str; 4] = ["exp", "nbf", "aud", "iss"];
+
 fn slot_index(key: &str) -> Option<usize> {
-    ["exp", "nbf", "aud", "iss"].iter().position(|k| *k == key)
+    REGISTERED.iter().position(|k| *k == key)
 }
 
 /// Reads just the registered claims from a payload, skipping (but still syntax-checking) the rest.
@@ -113,7 +119,12 @@ pub fn scan(payload: &[u8]) -> PyResult<Registered<'_>> {
     while let Some(slot) = key {
         if let Some(i) = slot {
             let claim = Claim::from_json(jiter.next_value().map_err(json_error)?);
-            *[&mut claims.exp, &mut claims.nbf, &mut claims.aud, &mut claims.iss][i] = claim;
+            *[
+                &mut claims.exp,
+                &mut claims.nbf,
+                &mut claims.aud,
+                &mut claims.iss,
+            ][i] = claim;
         } else {
             jiter.next_skip().map_err(json_error)?;
         }
@@ -125,6 +136,63 @@ pub fn scan(payload: &[u8]) -> PyResult<Registered<'_>> {
 
 fn claim<'a>(value: Option<&'a Bound<'_, PyAny>>) -> Claim<'a> {
     value.map_or(Claim::Absent, Claim::from_py)
+}
+
+/// Nesting `scan` accepts (jiter's recursion limit is 200), counting every `[` and `{`.
+const MAX_PLAIN_BRACKETS: usize = 128;
+
+/// Where a decoded instance of a type holds the registered claims (`ryjwt._types.claim_attributes`):
+/// for a plain payload, reading them from the instance replaces scanning for them.
+pub struct ClaimAttributes {
+    /// Per registered claim, the attribute holding it, or None if the type doesn't declare it.
+    attributes: [Option<Py<PyString>>; 4],
+    /// Finds `"name"`, for each registered claim the type doesn't declare.
+    undeclared: Vec<memchr::memmem::Finder<'static>>,
+}
+
+impl ClaimAttributes {
+    pub fn new(attributes: [Option<Bound<'_, PyString>>; 4]) -> Self {
+        let undeclared = REGISTERED
+            .iter()
+            .zip(&attributes)
+            .filter(|(_, attribute)| attribute.is_none())
+            .map(|(name, _)| {
+                memchr::memmem::Finder::new(format!("\"{name}\"").as_bytes()).into_owned()
+            })
+            .collect();
+        Self {
+            attributes: attributes.map(|a| a.map(Bound::unbind)),
+            undeclared,
+        }
+    }
+
+    /// Whether `payload` is plain enough for the type's parser to reject every payload `scan`
+    /// rejects, and for its instance to hold every registered claim: valid UTF-8 (msgspec doesn't
+    /// check skipped strings), shallow (msgspec skips any depth), without escapes (so a key is
+    /// spelled as it reads) and without the names of the claims the type doesn't declare.
+    pub fn cover(&self, payload: &[u8]) -> bool {
+        std::str::from_utf8(payload).is_ok()
+            && memchr::memchr(b'\\', payload).is_none()
+            && memchr::memchr2_iter(b'[', b'{', payload).count() <= MAX_PLAIN_BRACKETS
+            && self.undeclared.iter().all(|f| f.find(payload).is_none())
+    }
+
+    /// Validates the registered claims read from a decoded instance of the type, given a payload
+    /// the instance `cover`s.
+    pub fn validate(&self, instance: &Bound<'_, PyAny>, checks: &Checks) -> PyResult<()> {
+        let py = instance.py();
+        let [exp, nbf, aud, iss] = self
+            .attributes
+            .each_ref()
+            .map(|a| a.as_ref().map(|a| instance.getattr(a.bind(py))).transpose());
+        let (exp, nbf, aud, iss) = (exp?, nbf?, aud?, iss?);
+        checks.validate(&Registered {
+            exp: claim(exp.as_ref()),
+            nbf: claim(nbf.as_ref()),
+            aud: claim(aud.as_ref()),
+            iss: claim(iss.as_ref()),
+        })
+    }
 }
 
 /// Validates the registered claims of a decoded payload dict.
@@ -199,11 +267,19 @@ fn leeway_seconds(leeway: Option<&Bound<'_, PyAny>>) -> PyResult<f64> {
     if leeway.is_instance_of::<PyBool>() {
         return Err(error());
     }
-    if let Ok(d) = leeway.cast::<PyDelta>() {
+    let seconds = if let Ok(d) = leeway.cast::<PyDelta>() {
         let micros = f64::from(d.get_microseconds()) / 1e6;
-        return Ok(f64::from(d.get_days()) * 86_400.0 + f64::from(d.get_seconds()) + micros);
+        f64::from(d.get_days()) * 86_400.0 + f64::from(d.get_seconds()) + micros
+    } else {
+        leeway.extract::<f64>().map_err(|_| error())?
+    };
+    // NaN and infinities would disable the exp/nbf checks (NaN fails every comparison).
+    if !(0.0..f64::INFINITY).contains(&seconds) {
+        return Err(PyValueError::new_err(format!(
+            "leeway must be finite and not negative, got {seconds}"
+        )));
     }
-    leeway.extract::<f64>().map_err(|_| error())
+    Ok(seconds)
 }
 
 impl<'a> Checks<'a> {
@@ -224,11 +300,10 @@ impl<'a> Checks<'a> {
 
     pub fn validate(&self, claims: &Registered<'_>) -> PyResult<()> {
         match claims.exp {
-            Claim::Absent => {}
             Claim::Number(exp) if exp <= self.now - self.leeway => {
                 return Err(ExpiredSignatureError::new_err("Signature has expired"));
             }
-            Claim::Number(_) => {}
+            Claim::Absent | Claim::Number(_) => {}
             _ => {
                 return Err(DecodeError::new_err(
                     "Expiration Time claim (exp) must be a number",
@@ -236,14 +311,17 @@ impl<'a> Checks<'a> {
             }
         }
         match claims.nbf {
-            Claim::Absent => {}
             Claim::Number(nbf) if nbf > self.now + self.leeway => {
                 return Err(ImmatureSignatureError::new_err(
                     "The token is not yet valid (nbf)",
                 ));
             }
-            Claim::Number(_) => {}
-            _ => return Err(DecodeError::new_err("Not Before claim (nbf) must be a number")),
+            Claim::Absent | Claim::Number(_) => {}
+            _ => {
+                return Err(DecodeError::new_err(
+                    "Not Before claim (nbf) must be a number",
+                ));
+            }
         }
         let token_audiences: &[Cow<'_, str>] = match &claims.aud {
             Claim::Absent => &[],
@@ -263,7 +341,9 @@ impl<'a> Checks<'a> {
                 ));
             }
             (false, Claim::Absent) => {
-                return Err(InvalidAudienceError::new_err("Token is missing the aud claim"));
+                return Err(InvalidAudienceError::new_err(
+                    "Token is missing the aud claim",
+                ));
             }
             (false, _) => {
                 if !token_audiences.iter().any(|a| self.audience.matches(a)) {
@@ -273,7 +353,11 @@ impl<'a> Checks<'a> {
         }
         if !self.issuer.is_unchecked() {
             match &claims.iss {
-                Claim::Absent => return Err(InvalidIssuerError::new_err("Token is missing the iss claim")),
+                Claim::Absent => {
+                    return Err(InvalidIssuerError::new_err(
+                        "Token is missing the iss claim",
+                    ));
+                }
                 Claim::Str(iss) if self.issuer.matches(iss) => {}
                 Claim::Str(_) => return Err(InvalidIssuerError::new_err("Issuer doesn't match")),
                 _ => return Err(InvalidIssuerError::new_err("Issuer (iss) must be a string")),

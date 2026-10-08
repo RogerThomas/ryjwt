@@ -1,11 +1,17 @@
-"""Optional msgspec/pydantic imports, and structural stand-ins for typing (as in lothc).
+"""Optional msgspec/pydantic support, and structural stand-ins for typing.
 
-The real `Struct`/`BaseModel` are for runtime `issubclass`/`isinstance` checks; when a library isn't
-installed they're placeholder classes nothing subclasses. The `*Typing` Protocols are for public
-annotations only, so those stay fully typed even when a library isn't resolvable to the checker.
+The real `Struct` is for runtime `issubclass`/`isinstance` checks; when msgspec isn't installed it's
+a placeholder class nothing subclasses. pydantic is never imported here: a model class can only
+exist once pydantic has been imported, so `is_model_class` looks for it in `sys.modules` instead,
+which keeps pydantic's import time off everyone who doesn't use it. The `*Typing` Protocols are for
+public annotations only, so those stay fully typed even when a library isn't resolvable to the
+checker.
 """
 
-from typing import TYPE_CHECKING, Any, ClassVar, Protocol
+from __future__ import annotations
+
+import sys
+from typing import TYPE_CHECKING, ClassVar, Protocol, Self, TypeGuard
 
 if TYPE_CHECKING:
     import msgspec
@@ -21,12 +27,11 @@ else:
         class Struct:
             pass
 
-    try:
-        from pydantic import BaseModel
-    except ImportError:
 
-        class BaseModel:
-            pass
+def is_model_class(cls: type[object]) -> TypeGuard[type[BaseModel]]:
+    """Whether `cls` is a pydantic `BaseModel` subclass, without importing pydantic."""
+    pydantic_main = sys.modules.get("pydantic.main")
+    return pydantic_main is not None and issubclass(cls, pydantic_main.BaseModel)
 
 
 class StructTyping(Protocol):
@@ -39,7 +44,13 @@ class BaseModelTyping(Protocol):
     """Structural stand-in for `pydantic.BaseModel`, matched on `model_validate_json`."""
 
     @classmethod
-    def model_validate_json(cls, json_data: str | bytes, /) -> Any: ...  # noqa: ANN401
+    def model_validate_json(cls, json_data: str | bytes, /) -> Self: ...
 
 
-__all__ = ["BaseModel", "BaseModelTyping", "Struct", "StructTyping", "msgspec"]
+__all__ = [
+    "BaseModelTyping",
+    "Struct",
+    "StructTyping",
+    "is_model_class",
+    "msgspec",
+]

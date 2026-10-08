@@ -1,7 +1,8 @@
 [package]
 name = "ryjwt"
-version = "0.1.0"
+version = "0.0.0-alpha.0"
 edition = "2024"
+license = "MIT"
 publish = false
 
 [lib]
@@ -9,7 +10,9 @@ name = "_ryjwt"
 crate-type = ["cdylib"]
 
 [dependencies]
-aws-lc-rs = "1.18.1"
+# prebuilt-nasm: on Windows x86_64 without NASM installed, use aws-lc-sys's prebuilt assembly
+# objects (a no-op elsewhere), so a plain MSVC toolchain can build the wheel.
+aws-lc-rs = { version = "1.18.1", features = ["prebuilt-nasm"] }
 # Pinned to the exact version aws-lc-rs links: src/mac.rs uses its SHA-2 FFI directly.
 aws-lc-sys = "=0.45.0"
 base64-simd = "0.8.0"
@@ -20,6 +23,16 @@ num-bigint = "0.4"
 pem = "4.0.0"
 pyo3 = "0.29.3"
 ryu = "1.0.23"
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+expect_used = "deny"
+panic = "deny"
+undocumented_unsafe_blocks = "deny"
+unwrap_used = "deny"
 
 [profile.release]
 lto = "fat"

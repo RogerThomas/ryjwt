@@ -1,0 +1,14 @@
+.git
+.venv
+**/__pycache__
+**/.mypy_cache
+**/.pytest_cache
+**/.ruff_cache
+target
+**/*.so
+bench/bun/node_modules
+bench/rust/target
+bench/results
+bench/results-docker
+bench/matrix/keys
+bench/results-matrix

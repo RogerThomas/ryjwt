@@ -17,6 +17,10 @@ pub struct Segments<'a> {
     pub signing_input: &'a [u8],
 }
 
+/// Real headers have a handful of parameters; capping them bounds the duplicate check (quadratic,
+/// but cheaper than hashing at this size) on attacker-controlled input.
+const MAX_HEADER_PARAMETERS: usize = 64;
+
 pub fn not_three_segments() -> PyErr {
     DecodeError::new_err("Token must have exactly three segments")
 }
@@ -34,7 +38,11 @@ fn b64_len(segment: &[u8], name: &str) -> PyResult<usize> {
 
 /// Unpadded base64url (RFC 7515 §2), canonical: no `=` and no stray trailing bits. `out` must be
 /// exactly the decoded length.
-fn b64_decode_into<'o>(segment: &[u8], out: &'o mut [MaybeUninit<u8>], name: &str) -> PyResult<&'o [u8]> {
+fn b64_decode_into<'o>(
+    segment: &[u8],
+    out: &'o mut [MaybeUninit<u8>],
+    name: &str,
+) -> PyResult<&'o [u8]> {
     URL_SAFE_NO_PAD
         .decode(segment, Out::from_uninit_slice(out))
         .map(|decoded| &*decoded)
@@ -68,11 +76,13 @@ pub fn b64_decode_to_pybytes<'py>(
     name: &str,
 ) -> PyResult<Bound<'py, PyBytes>> {
     let len = b64_len(segment, name)?;
+    let size = pyo3::ffi::Py_ssize_t::try_from(len)
+        .map_err(|_| DecodeError::new_err(format!("Invalid {name}: too long")))?;
     // SAFETY: PyBytes_FromStringAndSize(NULL, len) returns a new bytes object with `len`
     // uninitialised bytes (plus a trailing NUL) that we own exclusively until it's returned; we
     // fully initialise those bytes before anyone else can see the object.
     unsafe {
-        let ptr = pyo3::ffi::PyBytes_FromStringAndSize(std::ptr::null(), len as pyo3::ffi::Py_ssize_t);
+        let ptr = pyo3::ffi::PyBytes_FromStringAndSize(std::ptr::null(), size);
         let bytes = Bound::from_owned_ptr_or_err(py, ptr)?.cast_into_unchecked::<PyBytes>();
         let data = pyo3::ffi::PyBytes_AsString(ptr).cast::<MaybeUninit<u8>>();
         b64_decode_into(segment, std::slice::from_raw_parts_mut(data, len), name)?;
@@ -85,18 +95,29 @@ pub fn b64_encode_append(data: &[u8], out: &mut Vec<u8>) {
     URL_SAFE_NO_PAD.encode_append(data, out);
 }
 
-/// The header's `alg`, after checking the header is a well-formed object with no duplicate
-/// parameters and no `crit`.
-pub fn parse_header(segment: &[u8]) -> PyResult<String> {
-    with_b64_decoded::<256, _>(segment, "header", parse_header_json)
+/// The header's `alg`, and its `kid` if `want_kid` (which must then be a string if present), after
+/// checking the header is a well-formed object with no duplicate parameters and no `crit`.
+pub fn parse_header(segment: &[u8], want_kid: bool) -> PyResult<(String, Option<String>)> {
+    with_b64_decoded::<256, _>(segment, "header", |header| {
+        parse_header_json(header, want_kid)
+    })
 }
 
-fn parse_header_json(header_bytes: &[u8]) -> PyResult<String> {
+fn parse_header_json(header_bytes: &[u8], want_kid: bool) -> PyResult<(String, Option<String>)> {
     let header = match JsonValue::parse(header_bytes, false) {
         Ok(JsonValue::Object(header)) => header,
-        Ok(_) => return Err(DecodeError::new_err("Invalid header: must be a JSON object")),
+        Ok(_) => {
+            return Err(DecodeError::new_err(
+                "Invalid header: must be a JSON object",
+            ));
+        }
         Err(e) => return Err(DecodeError::new_err(format!("Invalid header JSON: {e}"))),
     };
+    if header.len() > MAX_HEADER_PARAMETERS {
+        return Err(DecodeError::new_err(format!(
+            "Invalid header: more than {MAX_HEADER_PARAMETERS} parameters"
+        )));
+    }
     let keys: Vec<&str> = header.iter().map(|(k, _)| k.as_ref()).collect();
     if let Some(dup) = keys
         .iter()
@@ -108,16 +129,30 @@ fn parse_header_json(header_bytes: &[u8]) -> PyResult<String> {
         )));
     }
     let mut alg = None;
+    let mut kid = None;
     for (name, value) in header.iter() {
         match (name.as_ref(), value) {
             // RFC 7515 §4.1.11: critical extensions we don't understand MUST be rejected (we know none).
-            ("crit", _) => return Err(InvalidTokenError::new_err("Unsupported critical header (crit)")),
+            ("crit", _) => {
+                return Err(InvalidTokenError::new_err(
+                    "Unsupported critical header (crit)",
+                ));
+            }
             ("alg", JsonValue::Str(s)) => alg = Some(s.to_string()),
-            ("alg", _) => return Err(InvalidAlgorithmError::new_err("Header alg must be a string")),
+            ("alg", _) => {
+                return Err(InvalidAlgorithmError::new_err(
+                    "Header alg must be a string",
+                ));
+            }
+            ("kid", JsonValue::Str(s)) if want_kid => kid = Some(s.to_string()),
+            ("kid", _) if want_kid => {
+                return Err(DecodeError::new_err("Header kid must be a string"));
+            }
             _ => {}
         }
     }
-    alg.ok_or_else(|| InvalidAlgorithmError::new_err("Header alg is missing"))
+    let alg = alg.ok_or_else(|| InvalidAlgorithmError::new_err("Header alg is missing"))?;
+    Ok((alg, kid))
 }
 
 /// Splits on the first and last dots. A payload segment containing a further dot is caught later

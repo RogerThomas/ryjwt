@@ -2,8 +2,10 @@
 
 version: '3'
 
-vars:
-  ARGS: -s -vv -v -rA
+includes:
+  tmp:
+    taskfile: ./Taskfile.tmp.yml
+    optional: true
 
 tasks:
   run: uv run ./main.py {{.CLI_ARGS}}
@@ -15,3 +17,77 @@ tasks:
   ruff: uv run ruff check --fix --unsafe-fixes .
 
   pyright: uv run pyright .
+
+  test: uv run pytest {{.CLI_ARGS}}
+
+  rustfmt: cargo fmt
+
+  clippy: cargo clippy --release --all-targets -- -D warnings
+
+  lint:
+    desc: 'Check formatting and lints (rustfmt, clippy pedantic, ruff), without changing files'
+    cmds:
+      - cargo fmt --check
+      - cargo clippy --release --all-targets -- -D warnings
+      # --only-group: ruff needs only the dev tools, not the extension built and installed.
+      - uv run --only-group dev ruff check --no-fix .
+      - uv run --only-group dev ruff format --check .
+
+  typecheck:
+    desc: 'Type-check the package (./python) with pyright, then the public interface (task typecheck-public)'
+    cmds:
+      - uv run pyright python
+      - task: typecheck-public
+
+  typecheck-public:
+    desc: 'Type-check the public interface (./tests, but not ./tests/typing_errors, which test_typing_errors.py checks) with mypy, ty, pyright, zuban & pyrefly. Runs all, fails if any do.'
+    cmd: |
+      set -u
+      rc=0
+      # pyproject.toml excludes tests/typing_errors for the others; pyrefly ignores that when given paths.
+      for tool in "mypy tests" "ty check tests" "pyright tests" "zuban check tests" "pyrefly check tests --project-excludes tests/typing_errors"; do
+        echo "──── uv run ${tool} ────"
+        uv run ${tool} || rc=1
+      done
+      exit ${rc}
+
+  licenses:
+    desc: 'Regenerate THIRD_PARTY_LICENSES, the licenses of the crates compiled into the extension (needs cargo-about: cargo install --locked --features cli cargo-about@0.9.2)'
+    cmds:
+      - cargo fetch --locked
+      - cargo about generate --frozen --fail --output-file THIRD_PARTY_LICENSES about.hbs
+
+  bench-docker:
+    desc: 'Benchmark every implementation in its own container (1 core, 500 MB), one after another; results in bench/results-docker'
+    dir: bench
+    cmds:
+      - docker compose build
+      - |
+        set -eu
+        for service in pyjwt ryjwt ryjwt-msgspec ryjwt-pydantic jose fast-jwt jsonwebtoken; do
+          echo "──── ${service} ────"
+          docker compose run --rm "${service}"
+        done
+      - uv run yeet ./compare.py results-docker
+      - uv run yeet ./compare.py results-docker markdown "Run in Docker, one container per library, each limited to 1 CPU core (pinned) and 500 MB with no swap."
+
+  bench-fixtures:
+    desc: 'Regenerate the bench fixtures (bench/fixtures.json, and the full matrix in bench/matrix, reusing its stored keys) and the JWKS server''s test TLS certificates'
+    dir: bench
+    cmds:
+      - uv run yeet ./gen_fixtures.py
+      - uv run yeet ./gen_tls.py
+
+  bench-matrix:
+    desc: 'Benchmark the full matrix (algorithm x key size x payload x key source) in Docker, one library container after another (1 core, 500 MB), against an HTTPS JWKS server; results in bench/results-matrix, page in bench/results-matrix.md'
+    dir: bench
+    cmds:
+      - docker compose build
+      - defer: docker compose rm --stop --force jwks
+      - |
+        set -eu
+        for service in matrix-pyjwt matrix-ryjwt matrix-ryjwt-msgspec matrix-jose matrix-fast-jwt matrix-jsonwebtoken; do
+          echo "──── ${service} ────"
+          docker compose run --rm "${service}"
+        done
+      - uv run yeet ./compare.py:matrix results-matrix "Run in Docker, one container per library, each limited to 1 CPU core (pinned) and 500 MB with no swap; the JWKS server runs in a container of its own, outside that limit."

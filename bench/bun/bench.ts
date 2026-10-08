@@ -1,5 +1,5 @@
 // JWT verify benchmark for Bun: jose vs fast-jwt over bench/fixtures.json.
-// Run from bench/bun:  bun run bench.ts
+// Run from bench/bun:  bun run bench.ts [jose|fast-jwt]  (default: both)
 import { jwtVerify } from "jose";
 import { createVerifier } from "fast-jwt";
 import { join } from "node:path";
@@ -146,10 +146,16 @@ function printTable(rows: Result[]): void {
   console.log();
 }
 
+const only = Bun.argv[2];
+const selected = only === undefined ? impls : impls.filter((i) => i.id === only);
+if (selected.length === 0) {
+  throw new Error(`unknown impl ${only}; expected one of: ${impls.map((i) => i.id).join(", ")}`);
+}
+
 const fixtures = (await Bun.file(FIXTURES).json()) as Fixture[];
 console.log(`Bun ${Bun.version}, ${fixtures.length} cases\n`);
 
-for (const impl of impls) {
+for (const impl of selected) {
   const rows: Result[] = [];
   for (const c of fixtures) rows.push(await benchCase(impl, c));
   await Bun.write(join(RESULTS_DIR, `${impl.id}.json`), JSON.stringify(rows, null, 2) + "\n");

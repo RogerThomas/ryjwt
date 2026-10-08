@@ -1,7 +1,10 @@
 """Fast JWT encoding and decoding for Python, backed by Rust."""
 
+from ryjwt._algorithms import AsymmetricAlgorithm, HMACAlgorithm
+from ryjwt._jwks_client import JWKSClient
 from ryjwt._ryjwt import (
-    RYJWT,
+    HMAC,
+    ClaimsValidationError,
     DecodeError,
     ExpiredSignatureError,
     ImmatureSignatureError,
@@ -11,13 +14,20 @@ from ryjwt._ryjwt import (
     InvalidKeyError,
     InvalidSignatureError,
     InvalidTokenError,
+    JWKSFetchError,
+    PrivateKey,
+    PublicKey,
     RYJWTError,
+    UnknownKeyError,
 )
 
 __all__ = [
-    "RYJWT",
+    "HMAC",
+    "AsymmetricAlgorithm",
+    "ClaimsValidationError",
     "DecodeError",
     "ExpiredSignatureError",
+    "HMACAlgorithm",
     "ImmatureSignatureError",
     "InvalidAlgorithmError",
     "InvalidAudienceError",
@@ -25,5 +35,10 @@ __all__ = [
     "InvalidKeyError",
     "InvalidSignatureError",
     "InvalidTokenError",
+    "JWKSClient",
+    "JWKSFetchError",
+    "PrivateKey",
+    "PublicKey",
     "RYJWTError",
+    "UnknownKeyError",
 ]

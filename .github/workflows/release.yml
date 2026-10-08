@@ -1,0 +1,396 @@
+# Releases with Release Please (release-please-config.json): on every push to main it opens or
+# updates a release PR (the next version, from the Conventional Commits since the last release, and
+# CHANGELOG.md); merging that PR tags the release and creates the GitHub release, and the same run
+# then builds, tests and publishes it. (A tag made with the workflow's own token can't trigger
+# another workflow, and PyPI trusts this file by name, so it all happens here.)
+#
+# Builds the wheels and the sdist, each uploaded with its SHA-256 as soon as it's built; tests them,
+# downloaded, in jobs of their own (.github/scripts/test-wheel.sh), each wheel on the Python it's
+# for; and when a release was created, once every build and test passed, publishes them all to
+# PyPI, checking first that each SHA-256 still matches: what's published is exactly what was tested.
+# Pull requests and manual runs build and test only.
+#
+# Each platform's job builds (and tests) a wheel per supported Python: cp312, cp313, cp314 and
+# cp314t, the free-threaded build. Not abi3: the extension uses CPython APIs outside the limited API
+# (e.g. PyO3's PyDelta accessors), jiter's fast string path needs them, and an abi3 wheel doesn't
+# load on a free-threaded Python anyway.
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "Cargo.*"
+      - "src/**"
+      - "python/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".python-version"
+      - "rust-toolchain.toml"
+      - ".github/scripts/**"
+      - ".github/workflows/release.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  CARGO_TERM_COLOR: always
+  MATURIN_VERSION: v1.15.0
+  UV_VERSION: 0.12.23 # as bench/docker/python.Dockerfile
+
+jobs:
+  release-please:
+    name: Release PR or release
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # the release, its tag and the release PR's branch
+      pull-requests: write # the release PR
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - id: release
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  build-linux:
+    name: Build ${{ matrix.platform.name }}
+    needs: release-please
+    if: >-
+      ${{ !cancelled() && needs.release-please.result != 'failure' &&
+      (github.event_name != 'push' || needs.release-please.outputs.release_created == 'true') }}
+    runs-on: ${{ matrix.platform.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        # Each on a runner of its own architecture (no emulation), as its test job is. The images are
+        # the ones maturin-action picks for each, pinned. The manylinux ones hold every CPython
+        # (cp314-cp314t included); for musl, maturin cross-compiles with its own sysconfig data.
+        platform:
+          - name: manylinux x86_64
+            runner: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+            manylinux: "2_28"
+            container: quay.io/pypa/manylinux_2_28_x86_64@sha256:39df0042d5cc900b085aa25a0659368b42a0006c54c474299b785b44c1b4ff82 # latest
+          - name: manylinux aarch64
+            runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+            manylinux: "2_28"
+            container: quay.io/pypa/manylinux_2_28_aarch64@sha256:f5f03dedf61b47d69d0742d36047db78adeee3bdb7a9910ff52304750ecf2514 # latest
+          - name: musllinux x86_64
+            runner: ubuntu-24.04
+            target: x86_64-unknown-linux-musl
+            manylinux: musllinux_1_2
+            container: ghcr.io/rust-cross/rust-musl-cross@sha256:ce75e9174325d4fbb3de85c309e2d7ca29f7500169bc4b5d2c611ff7e86d549a # x86_64-musl
+          - name: musllinux aarch64
+            runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-musl
+            manylinux: musllinux_1_2
+            container: ghcr.io/rust-cross/rust-musl-cross@sha256:ecae5dd62d1c938c14f8071d36c16fa699860aace03bfb5284fb1216474d2643 # aarch64-musl
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        with:
+          maturin-version: ${{ env.MATURIN_VERSION }}
+          target: ${{ matrix.platform.target }}
+          manylinux: ${{ matrix.platform.manylinux }}
+          container: ${{ matrix.platform.container }}
+          # Listed rather than --find-interpreter, which would also take the images' 3.15 betas.
+          args: --release --out dist --interpreter python3.12 python3.13 python3.14 python3.14t
+      - name: Record the SHA-256
+        run: sh .github/scripts/sha256.sh record dist/*.whl
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist-${{ matrix.platform.target }}
+          path: dist/
+          if-no-files-found: error
+
+  test-linux:
+    name: Test ${{ matrix.platform.name }}
+    needs: build-linux
+    runs-on: ${{ matrix.platform.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        # As build-linux: each wheel is tested natively.
+        platform:
+          - name: manylinux x86_64
+            runner: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+            libc: glibc
+          - name: manylinux aarch64
+            runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+            libc: glibc
+          - name: musllinux x86_64
+            runner: ubuntu-24.04
+            target: x86_64-unknown-linux-musl
+            libc: musl
+          - name: musllinux aarch64
+            runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-musl
+            libc: musl
+    env:
+      ALPINE_PYTHON_312: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4 # 3.12.15-alpine
+      ALPINE_PYTHON_313: python@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a # 3.13.16-alpine
+      ALPINE_PYTHON_314: python@sha256:f6a589d43c42b9e7f7dc67a12d37132491f362859a5d750607710cc56da3bc72 # 3.14.8-alpine
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist-${{ matrix.platform.target }}
+          path: dist
+      - name: Check the SHA-256
+        run: sh .github/scripts/sha256.sh check dist/*.sha256
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        if: matrix.platform.libc == 'glibc'
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: false # no caches in a workflow that publishes
+      - name: Test (glibc)
+        if: matrix.platform.libc == 'glibc'
+        # On the Pythons uv downloads (python-build-standalone's).
+        run: sh .github/scripts/test-wheel.sh dist 3.12 3.13 3.14 3.14t
+      - name: Test (musl, in Alpine)
+        if: matrix.platform.libc == 'musl'
+        # Each on the Python of an Alpine image of its version; 3.14t on one uv downloads, in the
+        # 3.14 image (there's no free-threaded one). Node for pyright, which
+        # tests/test_typing_errors.py runs. The wheels are mounted read-only.
+        run: |
+          for python in 3.12 3.13 3.14 3.14t; do
+            case $python in
+              3.12) image=$ALPINE_PYTHON_312 ;;
+              3.13) image=$ALPINE_PYTHON_313 ;;
+              *) image=$ALPINE_PYTHON_314 ;;
+            esac
+            docker run --rm --volume "$PWD:/io" --volume "$PWD/dist:/io/dist:ro" --workdir /io \
+              --env UV_VERSION --env UV_PYTHON_PREFERENCE=system --env PYTHON="$python" \
+              "$image" sh -euxc '
+                apk add --no-cache nodejs
+                pip install --root-user-action=ignore --disable-pip-version-check "uv==$UV_VERSION"
+                sh .github/scripts/test-wheel.sh dist "$PYTHON"
+              '
+          done
+
+  build-macos-windows:
+    name: Build ${{ matrix.platform.name }}
+    needs: release-please
+    if: >-
+      ${{ !cancelled() && needs.release-please.result != 'failure' &&
+      (github.event_name != 'push' || needs.release-please.outputs.release_created == 'true') }}
+    runs-on: ${{ matrix.platform.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - name: macOS x86_64
+            runner: macos-15-intel
+            target: x86_64-apple-darwin
+          - name: macOS arm64
+            runner: macos-15
+            target: aarch64-apple-darwin
+          - name: Windows x64
+            runner: windows-2025
+            target: x86_64-pc-windows-msvc
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # A wheel for each of these Pythons, which maturin is given by path.
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        id: python312
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        id: python313
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        id: python314
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        id: python314t
+        with:
+          python-version: "3.14t"
+      - name: Build
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        with:
+          maturin-version: ${{ env.MATURIN_VERSION }}
+          target: ${{ matrix.platform.target }}
+          args: >-
+            --release --out dist --interpreter
+            ${{ steps.python312.outputs.python-path }}
+            ${{ steps.python313.outputs.python-path }}
+            ${{ steps.python314.outputs.python-path }}
+            ${{ steps.python314t.outputs.python-path }}
+      - name: Record the SHA-256
+        run: sh .github/scripts/sha256.sh record dist/*.whl
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist-${{ matrix.platform.target }}
+          path: dist/
+          if-no-files-found: error
+
+  test-macos-windows:
+    name: Test ${{ matrix.platform.name }}
+    needs: build-macos-windows
+    runs-on: ${{ matrix.platform.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - name: macOS x86_64
+            runner: macos-15-intel
+            target: x86_64-apple-darwin
+          - name: macOS arm64
+            runner: macos-15
+            target: aarch64-apple-darwin
+          - name: Windows x64
+            runner: windows-2025
+            target: x86_64-pc-windows-msvc
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist-${{ matrix.platform.target }}
+          path: dist
+      - name: Check the SHA-256
+        run: sh .github/scripts/sha256.sh check dist/*.sha256
+      # The Pythons the wheels were built for (uv prefers them, and downloads one it can't find).
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: |
+            3.12
+            3.13
+            3.14
+            3.14t
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: false # no caches in a workflow that publishes
+      - name: Test
+        env:
+          UV_PYTHON_PREFERENCE: system
+        run: sh .github/scripts/test-wheel.sh dist 3.12 3.13 3.14 3.14t
+
+  build-sdist:
+    name: Build sdist
+    needs: release-please
+    if: >-
+      ${{ !cancelled() && needs.release-please.result != 'failure' &&
+      (github.event_name != 'push' || needs.release-please.outputs.release_created == 'true') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: false # no caches in a workflow that publishes
+      - name: Build
+        run: uv build --sdist --out-dir dist
+      - name: Record the SHA-256
+        run: sh .github/scripts/sha256.sh record dist/*.tar.gz
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist-sdist
+          path: dist/
+          if-no-files-found: error
+
+  test-sdist:
+    name: Test sdist
+    needs: build-sdist
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist-sdist
+          path: dist
+      - name: Check the SHA-256
+        run: sh .github/scripts/sha256.sh check dist/*.sha256
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: false # no caches in a workflow that publishes
+      # From the sdist alone: which fails if the sdist is missing a file.
+      - name: Build a wheel from the sdist
+        run: uv build --python 3.14 --wheel --out-dir wheel dist/*.tar.gz
+      - name: Test the wheel built from the sdist
+        run: sh .github/scripts/test-wheel.sh wheel 3.14
+
+  publish:
+    name: Publish to PyPI
+    if: needs.release-please.outputs.release_created == 'true'
+    needs:
+      - release-please
+      - build-linux
+      - build-macos-windows
+      - build-sdist
+      - test-linux
+      - test-macos-windows
+      - test-sdist
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment:
+      name: pypi
+      url: https://pypi.org/project/ryjwt/
+    permissions:
+      id-token: write # PyPI trusted publishing
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: dist-*
+          path: dist
+          merge-multiple: true
+      - name: Check every file is what was built and tested
+        working-directory: dist
+        run: |
+          ls -l
+          for file in *.whl *.tar.gz; do
+            test -f "$file.sha256" || { echo "::error::No SHA-256 recorded for $file"; exit 1; }
+          done
+          sha256sum --check --strict -- *.sha256
+          mkdir ../checksums
+          mv -- *.sha256 ../checksums/ # only the distributions are uploaded
+      - name: Check the release's version is the version built
+        env:
+          VERSION: ${{ needs.release-please.outputs.version }} # semver, e.g. 0.0.0-alpha.0
+        run: |
+          # The sdist is named with the PEP 440 form maturin makes of it (0.0.0a0).
+          python_version=$(printf '%s' "$VERSION" | sed -E 's/-alpha\.?/a/; s/-beta\.?/b/; s/-rc\.?/rc/')
+          test -f "dist/ryjwt-${python_version}.tar.gz" \
+            || { echo "::error::Release ${VERSION} doesn't match the version built (from Cargo.toml)"; exit 1; }
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2

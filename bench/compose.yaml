@@ -1,0 +1,129 @@
+# One service per implementation, each limited to a single core and 500 MB (no swap).
+# Run them one at a time (`task bench-docker`, `task bench-matrix`), so they never compete for the core.
+
+x-limits: &limits
+  cpuset: "0"
+  cpus: 1.0
+  mem_limit: 500m
+  memswap_limit: 500m
+  volumes:
+    - ./results-docker:/app/bench/results
+
+x-python: &python
+  <<: *limits
+  image: ryjwt-bench-python
+  build:
+    context: ..
+    dockerfile: bench/docker/python.Dockerfile
+
+x-bun: &bun
+  <<: *limits
+  image: ryjwt-bench-bun
+  build:
+    context: .
+    dockerfile: docker/bun.Dockerfile
+
+x-rust: &rust
+  <<: *limits
+  image: ryjwt-bench-rust
+  build:
+    context: .
+    dockerfile: docker/rust.Dockerfile
+
+# The full matrix (`task bench-matrix`): the same images and limits, results in results-matrix/, and
+# the JWKS server up (and healthy) before each benchmark starts.
+x-matrix-volumes: &matrix-volumes
+  - ./results-matrix:/app/bench/results/matrix
+
+x-needs-jwks: &needs-jwks
+  jwks:
+    condition: service_healthy
+
+services:
+  pyjwt:
+    <<: *python
+    command: ["pyjwt"]
+  ryjwt:
+    <<: *python
+    command: ["ryjwt"]
+  ryjwt-msgspec:
+    <<: *python
+    command: ["ryjwt-msgspec"]
+  ryjwt-pydantic:
+    <<: *python
+    command: ["ryjwt-pydantic"]
+  jose:
+    <<: *bun
+    command: ["jose"]
+  fast-jwt:
+    <<: *bun
+    command: ["fast-jwt"]
+  jsonwebtoken:
+    <<: *rust
+
+  # Serves matrix/jwks/<key>.json over HTTPS as https://jwks:8443/<key>.json, with a certificate
+  # from the test CA in matrix/tls (made by gen_tls.py). Not CPU-limited: it's only hit when a
+  # client fetches keys, never while decodes are timed.
+  jwks:
+    image: joseluisq/static-web-server:2.44.0-alpine
+    volumes:
+      - ./matrix/jwks:/srv/jwks:ro
+      - ./matrix/tls:/srv/tls:ro
+    environment:
+      SERVER_ROOT: /srv/jwks
+      SERVER_PORT: "8443"
+      SERVER_HTTP2_TLS: "true"
+      SERVER_HTTP2_TLS_CERT: /srv/tls/server.pem
+      SERVER_HTTP2_TLS_KEY: /srv/tls/server.key.pem
+      SERVER_HEALTH: "true"
+      SERVER_LOG_LEVEL: warn
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "--no-check-certificate", "https://localhost:8443/health"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 10s
+      start_interval: 500ms
+
+  matrix-pyjwt:
+    <<: *python
+    volumes: *matrix-volumes
+    depends_on: *needs-jwks
+    entrypoint: ["yeet", "./bench_matrix.py"]
+    command: ["pyjwt"]
+  matrix-ryjwt:
+    <<: *python
+    volumes: *matrix-volumes
+    depends_on: *needs-jwks
+    environment:
+      SSL_CERT_FILE: /app/bench/matrix/tls/ca.pem # ryjwt uses Python's default SSL context
+    entrypoint: ["yeet", "./bench_matrix.py"]
+    command: ["ryjwt"]
+  matrix-ryjwt-msgspec:
+    <<: *python
+    volumes: *matrix-volumes
+    depends_on: *needs-jwks
+    environment:
+      SSL_CERT_FILE: /app/bench/matrix/tls/ca.pem
+    entrypoint: ["yeet", "./bench_matrix.py"]
+    command: ["ryjwt-msgspec"]
+  matrix-jose:
+    <<: *bun
+    volumes: *matrix-volumes
+    depends_on: *needs-jwks
+    environment:
+      NODE_EXTRA_CA_CERTS: /app/bench/matrix/tls/ca.pem
+    entrypoint: ["bun", "run", "matrix.ts"]
+    command: ["jose"]
+  matrix-fast-jwt:
+    <<: *bun
+    volumes: *matrix-volumes
+    depends_on: *needs-jwks
+    environment:
+      NODE_EXTRA_CA_CERTS: /app/bench/matrix/tls/ca.pem
+    entrypoint: ["bun", "run", "matrix.ts"]
+    command: ["fast-jwt"]
+  matrix-jsonwebtoken:
+    <<: *rust
+    volumes: *matrix-volumes
+    entrypoint: ["jwt_matrix"]

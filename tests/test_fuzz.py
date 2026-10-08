@@ -3,17 +3,32 @@
 import contextlib
 import json
 import random
-from typing import TYPE_CHECKING, cast
+from collections.abc import Callable
+from typing import NoReturn, TypeGuard
 
 import msgspec
+import pytest
 import ryjwt
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
 
 
 class Empty(msgspec.Struct):
     pass
+
+
+class Claims(msgspec.Struct):
+    """Declares every registered claim, so they're read from the decoded instance."""
+
+    exp: int
+    nbf: int
+    aud: str | list[str]
+    iss: str
+
+
+class ScannedClaims(Claims):
+    """`Claims`, but having a `__post_init__` makes `decode` scan the payload for the claims."""
+
+    def __post_init__(self) -> None:
+        pass
 
 
 def _mutate(data: bytes, rng: random.Random) -> bytes:
@@ -33,23 +48,45 @@ def _mutate(data: bytes, rng: random.Random) -> bytes:
     return bytes(out)
 
 
+def _is_json_object(value: object) -> TypeGuard[dict[str, object]]:
+    """Whether `value`, parsed by `json.loads`, is an object (whose keys are always str)."""
+    return isinstance(value, dict)
+
+
+def _reject_constant(name: str) -> NoReturn:
+    """Rejects `NaN`, `Infinity` and `-Infinity`, which `json` accepts but JSON doesn't."""
+    raise ValueError(name)
+
+
 def _reference(payload: bytes) -> object | None:
     """What a strict JSON object parser makes of `payload`, or None if it's invalid."""
     try:
-        parsed = json.loads(payload, parse_constant=lambda c: (_ for _ in ()).throw(ValueError(c)))
-    except ValueError, RecursionError:
+        parsed = json.loads(payload, parse_constant=_reject_constant)
+    except (ValueError, RecursionError):
         return None
-    return cast("dict[str, object]", parsed) if isinstance(parsed, dict) else None
+    return parsed if _is_json_object(parsed) else None
 
 
+@pytest.mark.parametrize(
+    "payload",
+    [
+        pytest.param(
+            b'{"sub":"s","n":-1.5e3,"l":[true,false,null],"o":{"k":"\\u00e9"},'
+            b'"x":"\\ud83d\\ude00"}',
+            id="escapes",
+        ),
+        pytest.param(
+            b'{"sub":"s","n":-1.5e3,"l":[true,false,null],"o":{"k":"\xc3\xa9"}}',
+            id="plain",
+        ),
+    ],
+)
 def test_fuzzed_payloads(
-    hmac_jwt: ryjwt.RYJWT,
+    payload: bytes,
+    hmac_jwt: ryjwt.HMAC,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     rng = random.Random(0)
-    payload = (
-        b'{"sub":"s","n":-1.5e3,"l":[true,false,null],"o":{"k":"\\u00e9"},"x":"\\ud83d\\ude00"}'
-    )
     outcomes: set[bool] = set()
     for _ in range(5000):
         mutated = _mutate(payload, rng)
@@ -70,7 +107,37 @@ def test_fuzzed_payloads(
     assert outcomes == {True, False}
 
 
-def test_fuzzed_tokens(hmac_jwt: ryjwt.RYJWT) -> None:
+def _outcome(hmac_jwt: ryjwt.HMAC, token: str, type_: type[Claims]) -> object:
+    """The decoded claims, or the type of the error decoding raised."""
+    try:
+        return msgspec.structs.asdict(hmac_jwt.decode(token, type=type_, audience="a", issuer="i"))
+    except ryjwt.RYJWTError as e:
+        return type(e)
+
+
+def test_fuzzed_claims(
+    hmac_jwt: ryjwt.HMAC,
+    raw_hs256_token: Callable[[bytes, bytes], str],
+) -> None:
+    """Reading the claims from a decoded Struct must validate them exactly as scanning does."""
+    rng = random.Random(2)
+    payload = (
+        b'{"exp":4102444800,"nbf":1000000000,"aud":["a","b"],"iss":"i",'
+        b'"l":[true,false,null,-1.5e3],"o":{"exp":1,"k":"\xc3\xa9"}}'
+    )
+    outcomes: list[object] = []
+    for _ in range(20000):
+        mutated = _mutate(payload, rng)
+        token = raw_hs256_token(b'{"alg":"HS256"}', mutated)
+        outcome = _outcome(hmac_jwt, token, Claims)
+        assert outcome == _outcome(hmac_jwt, token, ScannedClaims), mutated
+        outcomes.append(outcome)
+    decoded = sum(isinstance(o, dict) for o in outcomes)
+    assert decoded > 1000
+    assert len({o for o in outcomes if isinstance(o, type)}) > 4
+
+
+def test_fuzzed_tokens(hmac_jwt: ryjwt.HMAC) -> None:
     rng = random.Random(1)
     token = hmac_jwt.encode({"sub": "sub", "aud": "aud"})
     for _ in range(5000):

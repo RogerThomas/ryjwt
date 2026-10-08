@@ -17,6 +17,17 @@ pub enum Hash {
     Sha512,
 }
 
+impl Hash {
+    /// The tag size in bytes, which RFC 7518 §3.2 also makes the minimum key size.
+    pub const fn output_len(self) -> usize {
+        match self {
+            Self::Sha256 => 32,
+            Self::Sha384 => 48,
+            Self::Sha512 => 64,
+        }
+    }
+}
+
 #[derive(Clone)]
 enum States {
     Sha256 {
@@ -109,18 +120,39 @@ impl HmacKey {
     pub fn new(hash: Hash, key: &[u8]) -> Self {
         Self(match hash {
             Hash::Sha256 => {
-                let (inner, outer) =
-                    sha2_states!(sys::SHA256_CTX, SHA256_Init, SHA256_Update, SHA256, 32, 64, key);
+                let (inner, outer) = sha2_states!(
+                    sys::SHA256_CTX,
+                    SHA256_Init,
+                    SHA256_Update,
+                    SHA256,
+                    32,
+                    64,
+                    key
+                );
                 States::Sha256 { inner, outer }
             }
             Hash::Sha384 => {
-                let (inner, outer) =
-                    sha2_states!(sys::SHA512_CTX, SHA384_Init, SHA384_Update, SHA384, 48, 128, key);
+                let (inner, outer) = sha2_states!(
+                    sys::SHA512_CTX,
+                    SHA384_Init,
+                    SHA384_Update,
+                    SHA384,
+                    48,
+                    128,
+                    key
+                );
                 States::Sha384 { inner, outer }
             }
             Hash::Sha512 => {
-                let (inner, outer) =
-                    sha2_states!(sys::SHA512_CTX, SHA512_Init, SHA512_Update, SHA512, 64, 128, key);
+                let (inner, outer) = sha2_states!(
+                    sys::SHA512_CTX,
+                    SHA512_Init,
+                    SHA512_Update,
+                    SHA512,
+                    64,
+                    128,
+                    key
+                );
                 States::Sha512 { inner, outer }
             }
         })
@@ -147,7 +179,9 @@ impl HmacKey {
         let expected = self.sign(msg, &mut out);
         // SAFETY: both buffers are `expected.len()` bytes long.
         expected.len() == tag.len()
-            && unsafe { sys::CRYPTO_memcmp(expected.as_ptr().cast(), tag.as_ptr().cast(), tag.len()) } == 0
+            && unsafe {
+                sys::CRYPTO_memcmp(expected.as_ptr().cast(), tag.as_ptr().cast(), tag.len())
+            } == 0
     }
 }
 

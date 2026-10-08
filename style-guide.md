@@ -10,15 +10,15 @@
 - [3. On tests, prefer passing fixture name instead of file bytes](#3-on-tests-prefer-passing-fixture-name-instead-of-file-bytes)
 - [4. Use simple test values, not pseudo-realistic ones](#4-use-simple-test-values-not-pseudo-realistic-ones)
 - [5. Place private methods/functions before the methods/functions that use them](#5-place-private-methodsfunctions-before-the-methodsfunctions-that-use-them)
-- [6. Configuration and service settings](#6-configuration-and-service-settings)
-  - [When to use configuration vs. service settings](#when-to-use-configuration-vs-service-settings)
-- [7. Almost never test private methods/functions](#7-almost-never-test-private-methodsfunctions)
-- [8. Use `@dataclass(slots=True)` for internal DTOs](#8-use-dataclassslotstrue-for-internal-dtos)
-- [9. Use `create_autospec` for mocking in tests](#9-use-create_autospec-for-mocking-in-tests)
-- [10. Almost never use globals](#10-almost-never-use-globals)
-- [11. Public methods should never call other public methods](#11-public-methods-should-never-call-other-public-methods)
-- [12. Keep `try`/`except` blocks as small as possible](#12-keep-tryexcept-blocks-as-small-as-possible)
-- [13. Write abbreviations, acronyms and initialisms in uppercase](#13-write-abbreviations-acronyms-and-initialisms-in-uppercase)
+- [6. Test only the public interface](#6-test-only-the-public-interface)
+- [7. Use `@dataclass(slots=True)` for internal DTOs](#7-use-dataclassslotstrue-for-internal-dtos)
+- [8. Use `create_autospec` for mocking in tests](#8-use-create_autospec-for-mocking-in-tests)
+- [9. Almost never use globals](#9-almost-never-use-globals)
+- [10. Public methods should never call other public methods](#10-public-methods-should-never-call-other-public-methods)
+- [11. Keep `try`/`except` blocks as small as possible](#11-keep-tryexcept-blocks-as-small-as-possible)
+- [12. Write abbreviations, acronyms and initialisms in uppercase](#12-write-abbreviations-acronyms-and-initialisms-in-uppercase)
+- [13. Don't nest functions](#13-dont-nest-functions)
+- [14. Don't silence the type checker](#14-dont-silence-the-type-checker)
 
 <!-- mdformat-toc end -->
 
@@ -95,7 +95,7 @@ For example
 def test_example(fixture_name: str, request: pytest.FixtureRequest):
     # Instead of using file_bytes directly, use the fixture name
     file_bytes = request.getfixturevalue(fixture_name)
-    #...
+    # ...
     assert file_bytes == b"expected bytes"
 ```
 
@@ -155,7 +155,7 @@ There is no added value in using a pseudo-realistic value like a UUID when a sim
 
 As a general convention, use the `kebab-case` version of the variable name as the test value. For example, `first_name` becomes `"first-name"`, `last_name` becomes `"last-name"`, `token_id` becomes `"token-id"`, and so on. This keeps test values predictable and trivially derivable from the variable they represent.
 
-Also, prefer inlining these simple test values directly at the call site rather than extracting them into variables or fixtures. A literal like `"user-id"` is more readable inline than a `user_id` fixture or constant — there is no shared construction cost or duplication being eliminated, just unnecessary indirection. Reserve fixtures for values that are non-trivial to construct or genuinely benefit from being shared (see [Section 10](#10-almost-never-use-globals)).
+Also, prefer inlining these simple test values directly at the call site rather than extracting them into variables or fixtures. A literal like `"user-id"` is more readable inline than a `user_id` fixture or constant — there is no shared construction cost or duplication being eliminated, just unnecessary indirection. Reserve fixtures for values that are non-trivial to construct or genuinely benefit from being shared (see [Section 9](#9-almost-never-use-globals)).
 
 ## 5. Place private methods/functions before the methods/functions that use them<a name="5-place-private-methodsfunctions-before-the-methodsfunctions-that-use-them"></a>
 
@@ -216,107 +216,36 @@ class DocumentProcessor:
         return str(self._extract_metadata(doc))
 ```
 
-## 6. Configuration and service settings<a name="6-configuration-and-service-settings"></a>
+## 6. Test only the public interface<a name="6-test-only-the-public-interface"></a>
 
-Configuration should be decoupled from service settings. This separation provides several key benefits:
+Private names (prefixed with `_`) are implementation details. Tests that import them, call them or read private attributes couple the tests to the internals: every refactor breaks them, and they can pass while the public behaviour is wrong.
 
-- **Testability**: Services can be tested in isolation with explicit settings instances, without requiring a full configuration system or environment variables
-- **Flexibility**: Services can have sensible hardcoded defaults while still allowing environment-specific overrides when needed
-- **Clarity**: The distinction between service-level behavior and environment-specific configuration becomes explicit
-- **Maintainability**: Changes to service defaults don't require touching configuration files, and vice versa
+Test through the public interface only — what a user of the code can reach. If private logic is complex enough to want its own tests, that is a signal it should be extracted into its own public function or class.
 
-### When to use configuration vs. service settings<a name="when-to-use-configuration-vs-service-settings"></a>
+- **No private imports** in tests: `from package._module import ...` and `package._thing` are off limits.
+- **No reaching into private attributes** (`obj._state`) to set up or assert. Drive the behaviour through the public API, or inject a dependency and assert on its interactions.
+- **For a library, the tests are the typed contract.** They use the public API exactly as a user would, and every type checker the library supports must pass on them, so typing regressions show up as test failures.
 
-Settings should only be pulled from the central configuration system **if and when** those values need to vary between environments (local-dev, dev, prod).
-
-For all other settings, it is perfectly acceptable—and preferred—to define sensible defaults directly in the service's settings class. These defaults can be overridden from configuration if the need arises in the future.
-
-**Good**
-
-```Python
-@dataclass
-class MyServiceSettings:
-    """Settings for MyService"""
-
-    # Environment-specific: varies between local/dev/prod
-    max_file_size_mb: float
-
-    # Service-specific: sensible default, same across all environments
-    chunk_size: int = 1000
-    chunk_overlap: int = 100
-    temperature: float = 0.0
-```
-
-```Python
-class Settings(BaseModel):
-    my_service: MyServiceSettings
-    # ... other settings
-
-typed_settings = Settings(
-    my_service=MyServiceSettings(
-        max_file_size_mb=_get_float_setting("my_service.max_file_size_mb"),
-        # chunk_size, chunk_overlap, temperature use their defaults
-    ),
-)
-```
-
-**Bad**
-
-```Python
-# Putting everything in config when most values never change
-@dataclass
-class MyServiceSettings:
-    max_file_size_mb: float
-    chunk_size: int  # Same in all environments
-    chunk_overlap: int  # Same in all environments
-    temperature: float  # Same in all environments
-
-default:
-  my_service:
-    max_file_size_mb: 100
-    chunk_size: 1000
-    chunk_overlap: 100
-    temperature: 0.0
-
-dev:
-  my_service:
-    max_file_size_mb: 250
-    chunk_size: 1000  # Duplicated
-    chunk_overlap: 100  # Duplicated
-    temperature: 0.0  # Duplicated
-```
-
-This approach keeps configuration files focused on what actually varies between environments, while keeping service logic and its sensible defaults colocated in the service code.
-
-## 7. Almost never test private methods/functions<a name="7-almost-never-test-private-methodsfunctions"></a>
-
-Private methods and functions (prefixed with `_`) are implementation details. Testing them directly couples tests to internals, making refactoring harder and tests more fragile.
-
-Instead, test the public interface. If a private method has complex logic worth testing, it is a signal it should be extracted into its own public class or function.
-
-We use dependency injection throughout the codebase, which makes this straightforward. Dependencies are injected via the constructor and replaced with mocks in tests. Use mock assertions (e.g. `assert_called_once_with`) to verify a component interacts with its dependencies correctly, without reaching into private implementation details.
-
-**Good** — inject the mock handler as a fixture, assert on its interactions:
+**Good** — the dependency is injected, and the test asserts on its interactions:
 
 ```Python
 @pytest.fixture(name="handler_mock")
-def _handler_mock(mocker: MockerFixture) -> MagicMock:
-    return mocker.create_autospec(Handler)
+def _handler_mock() -> MagicMock:
+    return create_autospec(Handler, spec_set=True, instance=True)
+
 
 @pytest.fixture(name="service")
 def _service(handler_mock: MagicMock) -> Service:
     return Service(handler_mock)
 
-def test_service_calls_handler_with_correct_args(
-    service: Service,
-    handler_mock: MagicMock,
-):
+
+def test_service_calls_handler_with_correct_args(service: Service, handler_mock: MagicMock):
     service.process("input")
 
     handler_mock.handle.assert_called_once_with("input")
 ```
 
-**Bad** — accessing the private dependency directly instead of using the injected mock:
+**Bad** — reaching into the private attribute instead of using the injected mock:
 
 ```Python
 def test_service_calls_handler_with_correct_args(service: Service):
@@ -325,7 +254,7 @@ def test_service_calls_handler_with_correct_args(service: Service):
     service._handler.handle.assert_called_once_with("input")  # Accessing internals
 ```
 
-## 8. Use `@dataclass(slots=True)` for internal DTOs<a name="8-use-dataclassslotstrue-for-internal-dtos"></a>
+## 7. Use `@dataclass(slots=True)` for internal DTOs<a name="7-use-dataclassslotstrue-for-internal-dtos"></a>
 
 When defining internal data transfer objects (DTOs) — structs that carry data between layers within the application — use `@dataclass(slots=True)` rather than a plain `@dataclass`, `NamedTuple`, or Pydantic `BaseModel`.
 
@@ -339,7 +268,9 @@ Slots eliminate the per-instance `__dict__`, reducing memory usage and improving
 
 `@dataclass(slots=True)` is the fastest across all benchmarks. The memory saving is the most significant benefit — slotted dataclasses use roughly the same memory as a `namedtuple` and 2.3x less than a plain `@dataclass`.
 
-**Pydantic should still be used at I/O boundaries** (router request/response models, external API payloads, config deserialization) where validation, serialization, and schema generation are needed. For everything in between — data passed between services, controllers, and internal helpers — prefer `@dataclass(slots=True)`.
+**Pydantic should still be used at I/O boundaries** (router request/response models, external API payloads, config deserialization) where validation, serialization, and schema generation are needed. For everything in between — data passed between components and internal helpers — prefer `@dataclass(slots=True)`.
+
+**Exception: import time.** In a library, modules loaded by a plain `import package` should keep their own imports cheap, because every user pays for them on startup. If `dataclasses` isn't otherwise needed there, a `NamedTuple` or a plain class is fine — measure with `python -X importtime`. The same goes for Section 1.
 
 ```Python
 from dataclasses import dataclass
@@ -352,7 +283,7 @@ class ParsedDocument:
     text: str
 ```
 
-## 9. Use `create_autospec` for mocking in tests<a name="9-use-create_autospec-for-mocking-in-tests"></a>
+## 8. Use `create_autospec` for mocking in tests<a name="8-use-create_autospec-for-mocking-in-tests"></a>
 
 Always use `create_autospec(Thing, spec_set=True, instance=True)` when creating mocks, rather than `MagicMock()` or `mocker.MagicMock()`.
 
@@ -374,7 +305,7 @@ def _handler_mock() -> MagicMock:
     return MagicMock()  # typos in method names go undetected
 ```
 
-## 10. Almost never use globals<a name="10-almost-never-use-globals"></a>
+## 9. Almost never use globals<a name="9-almost-never-use-globals"></a>
 
 Module-level globals (constants, configuration values, or shared state defined outside of a class) are mostly a design smell. They make code harder to test, harder to reason about, and harder to override in different contexts. Prefer encapsulating these values as class attributes (or dependency-injected settings), so that they live alongside the code that uses them and can be substituted in tests or different runtime contexts.
 
@@ -408,8 +339,7 @@ def _parsed_document() -> ParsedDocument:
     return ParsedDocument(document_id="document-id", page_count=1, text="text")
 
 
-def test_something(parsed_document: ParsedDocument):
-    ...
+def test_something(parsed_document: ParsedDocument): ...
 ```
 
 **Bad** — shared test setup defined as a module-level global:
@@ -423,7 +353,7 @@ def test_something():
     ...
 ```
 
-## 11. Public methods should never call other public methods<a name="11-public-methods-should-never-call-other-public-methods"></a>
+## 10. Public methods should never call other public methods<a name="10-public-methods-should-never-call-other-public-methods"></a>
 
 A public method should never call another public method on the same class. Route shared behavior through a private method instead, and have every public entry point that needs it call the private method directly. If the same functionality also needs to be exposed as its own public method, give that public method a body that is nothing but a call to the private one.
 
@@ -433,8 +363,7 @@ This keeps a class's public methods independent of each other: overriding, subcl
 
 ```Python
 class Example:
-    def _thing(self) -> int:
-        ...
+    def _thing(self) -> int: ...
 
     def public1(self) -> None:
         thing = self._thing()
@@ -448,15 +377,14 @@ class Example:
 
 ```Python
 class Example:
-    def thing(self) -> int:
-        ...
+    def thing(self) -> int: ...
 
     def public1(self) -> None:
         thing = self.thing()  # Should call a private method instead
         ...
 ```
 
-## 12. Keep `try`/`except` blocks as small as possible<a name="12-keep-tryexcept-blocks-as-small-as-possible"></a>
+## 11. Keep `try`/`except` blocks as small as possible<a name="11-keep-tryexcept-blocks-as-small-as-possible"></a>
 
 Only wrap the line(s) that can actually raise the exception being handled — not surrounding code that can't. A wider `try` block risks catching an unrelated error and mishandling it as if it were the expected one, and makes it unclear which line is actually expected to fail.
 
@@ -501,7 +429,7 @@ except Exception:
     ...
 ```
 
-## 13. Write abbreviations, acronyms and initialisms in uppercase<a name="13-write-abbreviations-acronyms-and-initialisms-in-uppercase"></a>
+## 12. Write abbreviations, acronyms and initialisms in uppercase<a name="12-write-abbreviations-acronyms-and-initialisms-in-uppercase"></a>
 
 In CapWords names — classes, exceptions, enums, type aliases, test classes — write every abbreviation, acronym or initialism in full uppercase, as [PEP 8](https://peps.python.org/pep-0008/#descriptive-naming-styles) recommends. It keeps the abbreviation recognisable, and matches the standard library (`HTTPServer`, `JSONDecodeError`, `URLError`).
 
@@ -530,3 +458,47 @@ class JsonBody: ...
 ```
 
 In snake_case names — functions, methods, variables, attributes, modules — the abbreviation stays lowercase, like the rest of the name: `http_client_factory`, `pdf_bytes`, `json_body`.
+
+## 13. Don't nest functions<a name="13-dont-nest-functions"></a>
+
+Don't define a function, class or lambda inside another function — in library code, tests or scripts. Nested definitions hide state in closures, can't be tested or reused on their own, and make the outer function harder to read.
+
+Use a module-level function (passing what it needs as arguments), a method on the class that owns the state, a small class with `__call__`, or `functools.partial`.
+
+**Good**
+
+```Python
+def _decode(token: str, *, client: Client, issuer: str) -> Claims:
+    return client.decode(token, issuer=issuer)
+
+
+def run(client: Client, issuer: str) -> None:
+    decode = partial(_decode, client=client, issuer=issuer)
+    ...
+```
+
+**Bad**
+
+```Python
+def run(client: Client, issuer: str) -> None:
+    def decode(token: str) -> Claims:
+        return client.decode(token, issuer=issuer)
+
+    ...
+```
+
+## 14. Don't silence the type checker<a name="14-dont-silence-the-type-checker"></a>
+
+Don't add `# type: ignore`, `# pyright: ignore[...]` or other checker-specific suppressions, and don't use `typing.cast` — it silences the checker just the same. When a checker complains, fix the types: narrow an annotation, use a precise alias or `TypedDict`, or write a `TypeIs`/`TypeGuard` helper.
+
+If a suppression is genuinely unavoidable, it must come with a comment saying why, and be flagged in review.
+
+One pattern is fine: a test that deliberately passes ill-typed input, to check what an untyped caller gets, routes it through an `Any`-typed local:
+
+```Python
+def test_rejects_a_str_cooldown() -> None:
+    untyped_caller: Any = "30"  # what an untyped caller could pass
+
+    with pytest.raises(TypeError):
+        Client("https://issuer/jwks", cooldown=untyped_caller)
+```

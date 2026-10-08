@@ -82,7 +82,7 @@ class Case:
     name: str
     token: str
     key: str
-    alg: str
+    alg: ryjwt.HMACAlgorithm
     audience: str
     payload: dict[str, Any]
     token_len: int
@@ -109,8 +109,8 @@ class PythonBenchmark:
     def _prepare(self, case: Case) -> Prepared:
         if self._impl == "pyjwt":
             kwargs = {"key": case.key, "algorithms": [case.alg], "audience": case.audience}
-            return Prepared(jwt.decode, kwargs, case.payload)  # pyright: ignore[reportUnknownMemberType]
-        decode = ryjwt.RYJWT(case.key, algorithms=[case.alg]).decode
+            return Prepared(jwt.decode, kwargs, case.payload)
+        decode = ryjwt.HMAC(case.key, algorithms=[case.alg]).decode
         kwargs: dict[str, Any] = {"audience": case.audience}
         typical = case.name.startswith("typical")
         if self._impl == "ryjwt-msgspec":

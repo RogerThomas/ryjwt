@@ -1,32 +1,43 @@
 //! Algorithms and keys: a key is parsed once into a verifier (and, for secrets/private keys, a
 //! signer) per configured algorithm. aws-lc-rs does the key parsing and type/curve checks.
 
+use std::fmt::Display;
 use std::sync::Arc;
 
+use aws_lc_rs::encoding::AsDer;
 use aws_lc_rs::error::KeyRejected;
 use aws_lc_rs::rand::SystemRandom;
 use aws_lc_rs::signature::{
-    self, EcdsaKeyPair, Ed25519KeyPair, KeyPair, ParsedPublicKey, RsaKeyPair, VerificationAlgorithm,
+    self, EcdsaKeyPair, EcdsaSigningAlgorithm, Ed25519KeyPair, KeyPair, ParsedPublicKey,
+    RsaEncoding, RsaKeyPair, VerificationAlgorithm,
 };
 use pyo3::exceptions::PyValueError;
-use pyo3::intern;
 use pyo3::prelude::*;
 use pyo3::types::{PyBytes, PyString};
 
 use crate::errors::InvalidKeyError;
 use crate::mac::{self, HmacKey};
 
+/// How an algorithm signs and verifies.
 #[derive(Clone, Copy)]
-enum Family {
+pub enum Family {
+    /// A MAC with a shared secret, which both signs and verifies.
     Hmac(mac::Hash),
-    Rsa(&'static dyn signature::RsaEncoding),
-    Ecdsa(&'static signature::EcdsaSigningAlgorithm),
+    /// The asymmetric families sign with a private key, and verify with its public key.
+    Rsa {
+        signing: &'static dyn RsaEncoding,
+        verification: &'static dyn VerificationAlgorithm,
+    },
+    Ecdsa {
+        signing: &'static EcdsaSigningAlgorithm,
+        verification: &'static dyn VerificationAlgorithm,
+    },
     Ed25519,
 }
 
 /// Which algorithms can share one key: an HMAC secret, an RSA key, an EC key on one curve, Ed25519.
 #[derive(Clone, Copy, PartialEq, Eq)]
-enum KeyKind {
+pub enum KeyKind {
     Secret,
     Rsa,
     P256,
@@ -36,313 +47,670 @@ enum KeyKind {
     Ed25519,
 }
 
-/// (name, key kind, family, verification algorithm for asymmetric keys)
-type AlgSpec = (&'static str, KeyKind, Family, &'static dyn VerificationAlgorithm);
+/// A supported algorithm.
+pub struct AlgSpec {
+    /// Its JWS `alg` name.
+    pub name: &'static str,
+    /// The kind of key it takes.
+    pub key_kind: KeyKind,
+    pub family: Family,
+}
+
+impl AlgSpec {
+    const fn hmac(name: &'static str, hash: mac::Hash) -> Self {
+        Self {
+            name,
+            key_kind: KeyKind::Secret,
+            family: Family::Hmac(hash),
+        }
+    }
+
+    const fn rsa(
+        name: &'static str,
+        signing: &'static dyn RsaEncoding,
+        verification: &'static dyn VerificationAlgorithm,
+    ) -> Self {
+        Self {
+            name,
+            key_kind: KeyKind::Rsa,
+            family: Family::Rsa {
+                signing,
+                verification,
+            },
+        }
+    }
+
+    const fn ecdsa(
+        name: &'static str,
+        key_kind: KeyKind,
+        signing: &'static EcdsaSigningAlgorithm,
+        verification: &'static dyn VerificationAlgorithm,
+    ) -> Self {
+        Self {
+            name,
+            key_kind,
+            family: Family::Ecdsa {
+                signing,
+                verification,
+            },
+        }
+    }
+}
 
 static ALGORITHMS: [AlgSpec; 15] = [
-    (
-        "HS256",
-        KeyKind::Secret,
-        Family::Hmac(mac::Hash::Sha256),
-        &signature::ED25519,
-    ),
-    (
-        "HS384",
-        KeyKind::Secret,
-        Family::Hmac(mac::Hash::Sha384),
-        &signature::ED25519,
-    ),
-    (
-        "HS512",
-        KeyKind::Secret,
-        Family::Hmac(mac::Hash::Sha512),
-        &signature::ED25519,
-    ),
-    (
+    AlgSpec::hmac("HS256", mac::Hash::Sha256),
+    AlgSpec::hmac("HS384", mac::Hash::Sha384),
+    AlgSpec::hmac("HS512", mac::Hash::Sha512),
+    AlgSpec::rsa(
         "RS256",
-        KeyKind::Rsa,
-        Family::Rsa(&signature::RSA_PKCS1_SHA256),
+        &signature::RSA_PKCS1_SHA256,
         &signature::RSA_PKCS1_2048_8192_SHA256,
     ),
-    (
+    AlgSpec::rsa(
         "RS384",
-        KeyKind::Rsa,
-        Family::Rsa(&signature::RSA_PKCS1_SHA384),
+        &signature::RSA_PKCS1_SHA384,
         &signature::RSA_PKCS1_2048_8192_SHA384,
     ),
-    (
+    AlgSpec::rsa(
         "RS512",
-        KeyKind::Rsa,
-        Family::Rsa(&signature::RSA_PKCS1_SHA512),
+        &signature::RSA_PKCS1_SHA512,
         &signature::RSA_PKCS1_2048_8192_SHA512,
     ),
-    (
+    AlgSpec::rsa(
         "PS256",
-        KeyKind::Rsa,
-        Family::Rsa(&signature::RSA_PSS_SHA256),
+        &signature::RSA_PSS_SHA256,
         &signature::RSA_PSS_2048_8192_SHA256,
     ),
-    (
+    AlgSpec::rsa(
         "PS384",
-        KeyKind::Rsa,
-        Family::Rsa(&signature::RSA_PSS_SHA384),
+        &signature::RSA_PSS_SHA384,
         &signature::RSA_PSS_2048_8192_SHA384,
     ),
-    (
+    AlgSpec::rsa(
         "PS512",
-        KeyKind::Rsa,
-        Family::Rsa(&signature::RSA_PSS_SHA512),
+        &signature::RSA_PSS_SHA512,
         &signature::RSA_PSS_2048_8192_SHA512,
     ),
-    (
+    AlgSpec::ecdsa(
         "ES256",
         KeyKind::P256,
-        Family::Ecdsa(&signature::ECDSA_P256_SHA256_FIXED_SIGNING),
+        &signature::ECDSA_P256_SHA256_FIXED_SIGNING,
         &signature::ECDSA_P256_SHA256_FIXED,
     ),
-    (
+    AlgSpec::ecdsa(
         "ES256K",
         KeyKind::Secp256k1,
-        Family::Ecdsa(&signature::ECDSA_P256K1_SHA256_FIXED_SIGNING),
+        &signature::ECDSA_P256K1_SHA256_FIXED_SIGNING,
         &signature::ECDSA_P256K1_SHA256_FIXED,
     ),
-    (
+    AlgSpec::ecdsa(
         "ES384",
         KeyKind::P384,
-        Family::Ecdsa(&signature::ECDSA_P384_SHA384_FIXED_SIGNING),
+        &signature::ECDSA_P384_SHA384_FIXED_SIGNING,
         &signature::ECDSA_P384_SHA384_FIXED,
     ),
     // ES512 is the common (if misnamed) alias for P-521 + SHA-512.
-    (
+    AlgSpec::ecdsa(
         "ES512",
         KeyKind::P521,
-        Family::Ecdsa(&signature::ECDSA_P521_SHA512_FIXED_SIGNING),
+        &signature::ECDSA_P521_SHA512_FIXED_SIGNING,
         &signature::ECDSA_P521_SHA512_FIXED,
     ),
-    (
+    AlgSpec::ecdsa(
         "ES521",
         KeyKind::P521,
-        Family::Ecdsa(&signature::ECDSA_P521_SHA512_FIXED_SIGNING),
+        &signature::ECDSA_P521_SHA512_FIXED_SIGNING,
         &signature::ECDSA_P521_SHA512_FIXED,
     ),
-    ("EdDSA", KeyKind::Ed25519, Family::Ed25519, &signature::ED25519),
+    AlgSpec {
+        name: "EdDSA",
+        key_kind: KeyKind::Ed25519,
+        family: Family::Ed25519,
+    },
 ];
 
-enum Material {
-    Secret(Vec<u8>),
-    Public(Vec<u8>),
-    Private(Vec<u8>),
-}
-
-#[allow(clippy::large_enum_variant)] // built once per RYJWT, never moved around
-enum Signer {
-    Hmac(HmacKey),
-    Rsa(Arc<RsaKeyPair>, &'static dyn signature::RsaEncoding),
-    Ecdsa(EcdsaKeyPair),
-    Ed25519(Arc<Ed25519KeyPair>),
-}
-
-#[allow(clippy::large_enum_variant)] // built once per RYJWT, never moved around
-enum Verifier {
+#[allow(clippy::large_enum_variant)] // built once per key, never moved around
+enum VerifyingKey {
     Hmac(HmacKey),
     Public(ParsedPublicKey),
 }
 
-pub struct PreparedAlg {
-    pub name: &'static str,
-    verifier: Verifier,
-    signer: Option<Signer>,
+/// One (key, algorithm) pair tokens may be verified with.
+pub struct Verifier {
+    pub algorithm: &'static str,
+    /// The key's `kid`, for keys from a JWKS that has one.
+    pub kid: Option<Box<str>>,
+    key: VerifyingKey,
 }
 
-impl PreparedAlg {
-    pub fn verify(&self, signing_input: &[u8], signature: &[u8]) -> bool {
-        match &self.verifier {
-            Verifier::Hmac(key) => key.verify(signing_input, signature),
-            Verifier::Public(key) => key.verify_sig(signing_input, signature).is_ok(),
+#[allow(clippy::large_enum_variant)] // built once per key, never moved around
+enum SigningKey {
+    Hmac(HmacKey),
+    Rsa(Arc<RsaKeyPair>, &'static dyn RsaEncoding),
+    Ecdsa(EcdsaKeyPair),
+    Ed25519(Arc<Ed25519KeyPair>),
+}
+
+/// A secret or private key, prepared to sign with one algorithm.
+pub struct Signer {
+    pub algorithm: &'static str,
+    key: SigningKey,
+}
+
+/// Every (key, algorithm) pair tokens may be verified with.
+pub struct KeySet {
+    /// The configured algorithm names.
+    pub algorithm_names: Vec<&'static str>,
+    /// One per (key, algorithm) pair.
+    pub verifiers: Vec<Verifier>,
+    /// How many keys `verifiers` holds: 1, unless built from a JWKS.
+    pub key_count: usize,
+}
+
+impl KeySet {
+    /// The set for a single key, with a verifier per spec.
+    fn single_key(specs: &[&AlgSpec], verifiers: Vec<Verifier>) -> Self {
+        Self {
+            algorithm_names: specs.iter().map(|s| s.name).collect(),
+            verifiers,
+            key_count: 1,
         }
     }
+}
 
+/// RSA moduli aws-lc-rs signs and verifies with; outside this range every signature fails.
+const RSA_BITS: std::ops::RangeInclusive<usize> = 2048..=8192;
+
+/// The encodings of the Ed25519 points of small order, compared without the sign bit (the top bit
+/// of the last byte), as libsodium's `has_small_order` does: 0 and 1 (each also non-canonically,
+/// as p and p + 1), p - 1, and the two order-8 points' y. A signature by such a key verifies for
+/// (nearly) any message.
+const ED25519_SMALL_ORDER: [[u8; 32]; 7] = [
+    [0; 32],
+    [
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0,
+    ],
+    [
+        0x26, 0xe8, 0x95, 0x8f, 0xc2, 0xb2, 0x27, 0xb0, 0x45, 0xc3, 0xf4, 0x89, 0xf2, 0xef, 0x98,
+        0xf0, 0xd5, 0xdf, 0xac, 0x05, 0xd3, 0xc6, 0x33, 0x39, 0xb1, 0x38, 0x02, 0x88, 0x6d, 0x53,
+        0xfc, 0x05,
+    ],
+    [
+        0xc7, 0x17, 0x6a, 0x70, 0x3d, 0x4d, 0xd8, 0x4f, 0xba, 0x3c, 0x0b, 0x76, 0x0d, 0x10, 0x67,
+        0x0f, 0x2a, 0x20, 0x53, 0xfa, 0x2c, 0x39, 0xcc, 0xc6, 0x4e, 0xc7, 0xfd, 0x77, 0x92, 0xac,
+        0x03, 0x7a,
+    ],
+    ed25519_p_plus(-1),
+    ed25519_p_plus(0),
+    ed25519_p_plus(1),
+];
+
+/// The little-endian encoding of p + `offset` (p = 2^255 - 19), for small `offset`s.
+const fn ed25519_p_plus(offset: i8) -> [u8; 32] {
+    let mut bytes = [0xff; 32];
+    bytes[0] = 0xed_u8.wrapping_add_signed(offset);
+    bytes[31] = 0x7f;
+    bytes
+}
+
+/// Whether `key` (an Ed25519 key aws-lc-rs parsed) is one of `ED25519_SMALL_ORDER`.
+fn is_small_order_ed25519(key: &ParsedPublicKey) -> bool {
+    // Its SubjectPublicKeyInfo ends with the raw 32-byte key.
+    let Some(raw) = key
+        .as_der()
+        .ok()
+        .and_then(|der| der.as_ref().last_chunk::<32>().copied())
+    else {
+        return true; // can't check it, so don't trust it
+    };
+    ED25519_SMALL_ORDER
+        .iter()
+        .any(|small| small[..31] == raw[..31] && small[31] == raw[31] & 0x7f)
+}
+
+/// Why a key can't be used for the algorithm `name`.
+fn unusable(name: &str, why: impl Display) -> String {
+    format!("Key can't be used for {name:?}: {why}")
+}
+
+impl Verifier {
+    /// A verifier for `spec` with a public key: `SubjectPublicKeyInfo` or PKCS#1 DER for RSA, an
+    /// uncompressed point for EC, the raw key for Ed25519. Errors say why the key is unusable.
+    pub fn public(spec: &AlgSpec, public_key: &[u8], kid: Option<&str>) -> Result<Self, String> {
+        let name = spec.name;
+        let verification = match spec.family {
+            Family::Hmac(_) => return Err(unusable(name, "it needs an HMAC secret")),
+            Family::Rsa { verification, .. } => {
+                let key = aws_lc_rs::rsa::PublicKey::from_der(public_key)
+                    .map_err(|e| unusable(name, e))?;
+                let n = key.modulus();
+                let n = n.big_endian_without_leading_zero();
+                let bits = n.len() * 8 - n.first().map_or(0, |b| b.leading_zeros() as usize);
+                if !RSA_BITS.contains(&bits) {
+                    return Err(unusable(
+                        name,
+                        format!("RSA keys must be 2048 to 8192 bits, this one has {bits}"),
+                    ));
+                }
+                verification
+            }
+            Family::Ecdsa { verification, .. } => verification,
+            Family::Ed25519 => &signature::ED25519,
+        };
+        let key = ParsedPublicKey::new(verification, public_key).map_err(|e| unusable(name, e))?;
+        if let Family::Ed25519 = spec.family
+            && is_small_order_ed25519(&key)
+        {
+            return Err(unusable(
+                name,
+                "it's a small-order Ed25519 point, which lets anyone forge signatures",
+            ));
+        }
+        Ok(Self {
+            algorithm: name,
+            kid: kid.map(Into::into),
+            key: VerifyingKey::Public(key),
+        })
+    }
+
+    pub fn verify(&self, signing_input: &[u8], signature: &[u8]) -> bool {
+        match &self.key {
+            VerifyingKey::Hmac(key) => key.verify(signing_input, signature),
+            VerifyingKey::Public(key) => key.verify_sig(signing_input, signature).is_ok(),
+        }
+    }
+}
+
+impl Signer {
     pub fn sign(&self, signing_input: &[u8]) -> PyResult<Vec<u8>> {
         let failed = |_| InvalidKeyError::new_err("Signing failed");
-        match &self.signer {
-            None => Err(InvalidKeyError::new_err(
-                "Can't sign with a public key: construct RYJWT with the private key to encode",
-            )),
-            Some(Signer::Hmac(key)) => Ok(key.sign(signing_input, &mut [0; mac::MAX_TAG_LEN]).to_vec()),
-            Some(Signer::Rsa(pair, encoding)) => {
+        match &self.key {
+            SigningKey::Hmac(key) => {
+                Ok(key.sign(signing_input, &mut [0; mac::MAX_TAG_LEN]).to_vec())
+            }
+            SigningKey::Rsa(pair, encoding) => {
                 let mut sig = vec![0; pair.public_modulus_len()];
                 pair.sign(*encoding, &SystemRandom::new(), signing_input, &mut sig)
                     .map_err(failed)?;
                 Ok(sig)
             }
-            Some(Signer::Ecdsa(pair)) => Ok(pair
+            SigningKey::Ecdsa(pair) => Ok(pair
                 .sign(&SystemRandom::new(), signing_input)
                 .map_err(failed)?
                 .as_ref()
                 .to_vec()),
-            Some(Signer::Ed25519(pair)) => Ok(pair.sign(signing_input).as_ref().to_vec()),
+            SigningKey::Ed25519(pair) => Ok(pair.sign(signing_input).as_ref().to_vec()),
         }
     }
 }
 
-fn key_bytes(key: &Bound<'_, PyAny>) -> Option<PyResult<Vec<u8>>> {
-    if let Ok(s) = key.cast::<PyString>() {
-        return Some(s.to_str().map(|s| s.as_bytes().to_vec()));
-    }
-    key.cast::<PyBytes>().ok().map(|b| Ok(b.as_bytes().to_vec()))
+/// The key classes: each takes its own kind of key, for its own algorithms.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum KeyClass {
+    /// `HMAC`: a shared secret, for HS*.
+    Hmac,
+    /// `PrivateKey`: a private key PEM, for the asymmetric algorithms.
+    Private,
+    /// `PublicKey`: a public key PEM (or a JWKS), for the asymmetric algorithms.
+    Public,
 }
 
-fn hmac_secret(key: &Bound<'_, PyAny>) -> PyResult<Vec<u8>> {
-    let secret =
-        key_bytes(key).unwrap_or_else(|| Err(InvalidKeyError::new_err("HMAC keys must be str or bytes")))?;
+impl KeyClass {
+    fn name(self) -> &'static str {
+        match self {
+            Self::Hmac => "HMAC",
+            Self::Private => "PrivateKey",
+            Self::Public => "PublicKey",
+        }
+    }
+}
+
+/// A str key (or JWKS) as UTF-8: `InvalidKeyError` if it can't be, holding a lone surrogate.
+pub fn str_bytes<'a>(s: &'a Bound<'_, PyString>, what: &str) -> PyResult<&'a [u8]> {
+    s.to_str().map(str::as_bytes).map_err(|e| {
+        let err = InvalidKeyError::new_err(format!(
+            "{what} is a str that isn't valid Unicode (it holds a lone surrogate)"
+        ));
+        err.set_cause(s.py(), Some(e));
+        err
+    })
+}
+
+fn key_bytes<'a>(key: &'a Bound<'_, PyAny>, what: &str) -> Option<PyResult<&'a [u8]>> {
+    if let Ok(s) = key.cast::<PyString>() {
+        return Some(str_bytes(s, what));
+    }
+    key.cast::<PyBytes>().ok().map(|b| Ok(b.as_bytes()))
+}
+
+/// Whether `secret` looks like a public key: a PEM, an OpenSSH (including FIDO `sk-`) or RFC 4716
+/// (SSH2) key, or a JWK, after any leading whitespace.
+fn looks_like_public_key(secret: &[u8]) -> bool {
+    let secret = secret.trim_ascii_start();
+    memchr::memmem::find(secret, b"-----BEGIN").is_some()
+        || secret.starts_with(b"ssh-")
+        || secret.starts_with(b"ecdsa-sha2-")
+        || secret.starts_with(b"sk-ssh-")
+        || secret.starts_with(b"sk-ecdsa-sha2-")
+        || secret.starts_with(b"---- BEGIN SSH2")
+        || (secret.starts_with(b"{") && memchr::memmem::find(secret, b"\"kty\"").is_some())
+}
+
+/// Whether `der` parses as a public key, as `PublicKey` parses the DER of its PEMs: a
+/// `SubjectPublicKeyInfo` of a kind of key ryjwt supports, or a PKCS#1 RSA public key (of any
+/// size). Only DER is tried, not the raw encodings `Verifier::public` also takes (an EC point, a
+/// 32-byte Ed25519 key), which random bytes can be.
+fn parses_as_public_key(der: &[u8]) -> bool {
+    // Both are a DER SEQUENCE; a raw EC point starts with 2, 3 or 4 instead.
+    if der.first() != Some(&0x30) {
+        return false;
+    }
+    aws_lc_rs::rsa::PublicKey::from_der(der).is_ok()
+        || ALGORITHMS.iter().any(|spec| match spec.family {
+            Family::Ecdsa { verification, .. } => ParsedPublicKey::new(verification, der).is_ok(),
+            // 32 bytes would be parsed as a raw key.
+            Family::Ed25519 => {
+                der.len() != 32 && ParsedPublicKey::new(&signature::ED25519, der).is_ok()
+            }
+            Family::Hmac(_) | Family::Rsa { .. } => false,
+        })
+}
+
+/// `data` decoded from base64, if it is that: in the standard or URL-safe alphabet, padded or not,
+/// ignoring ASCII whitespace.
+fn base64_decoded(data: &[u8]) -> Option<Vec<u8>> {
+    let standard: Vec<u8> = data
+        .iter()
+        .map(|&b| match b {
+            b'-' => b'+',
+            b'_' => b'/',
+            b => b,
+        })
+        .collect();
+    base64_simd::forgiving_decode_to_vec(&standard).ok()
+}
+
+/// Whether `secret` is a public key: `looks_like_public_key`, or its DER, raw or in base64 (as
+/// Keycloak shows a realm's public key).
+fn is_public_key(secret: &[u8]) -> bool {
+    looks_like_public_key(secret)
+        || parses_as_public_key(secret)
+        || base64_decoded(secret).is_some_and(|der| parses_as_public_key(&der))
+}
+
+/// `key` as an HMAC secret for `specs`: at least as long as the longest of their tags (RFC 7518
+/// §3.2), unless `allow_short_secret`.
+fn hmac_secret<'a>(
+    key: &'a Bound<'_, PyAny>,
+    specs: &[&AlgSpec],
+    allow_short_secret: bool,
+) -> PyResult<&'a [u8]> {
+    let secret = key_bytes(key, "The HMAC secret").unwrap_or_else(|| {
+        Err(InvalidKeyError::new_err(format!(
+            "HMAC secret must be str or bytes, got {}",
+            key.get_type().name()?
+        )))
+    })?;
     if secret.is_empty() {
-        return Err(InvalidKeyError::new_err("HMAC key must not be empty"));
+        return Err(InvalidKeyError::new_err("HMAC secret must not be empty"));
     }
     // Guard against configuring HS* with a public key, which makes forging tokens trivial.
-    if memchr::memmem::find(&secret, b"-----BEGIN").is_some() || secret.starts_with(b"ssh-") {
+    if is_public_key(secret) {
         return Err(InvalidKeyError::new_err(
-            "This looks like an asymmetric key, not an HMAC secret: use RS*/PS*/ES*/EdDSA",
+            "This looks like an asymmetric key, not an HMAC secret: use PrivateKey or PublicKey",
         ));
+    }
+    let longest = specs
+        .iter()
+        .filter_map(|spec| match spec.family {
+            Family::Hmac(hash) => Some((spec.name, hash.output_len())),
+            _ => None,
+        })
+        .max_by_key(|&(_, len)| len);
+    if !allow_short_secret
+        && let Some((name, min_len)) = longest
+        && secret.len() < min_len
+    {
+        return Err(InvalidKeyError::new_err(format!(
+            "{name:?} needs a secret of at least {min_len} bytes, got {} (pass \
+             allow_short_secret=True to accept it)",
+            secret.len()
+        )));
     }
     Ok(secret)
 }
 
-fn parse_pem(key: &[u8]) -> PyResult<Material> {
-    let pem =
-        pem::parse(key).map_err(|e| InvalidKeyError::new_err(format!("Expected a PEM-encoded key: {e}")))?;
-    let der = pem.contents().to_vec();
-    match pem.tag() {
-        "PUBLIC KEY" | "RSA PUBLIC KEY" => Ok(Material::Public(der)),
-        "PRIVATE KEY" | "RSA PRIVATE KEY" | "EC PRIVATE KEY" => Ok(Material::Private(der)),
-        "ENCRYPTED PRIVATE KEY" => Err(InvalidKeyError::new_err(
-            "Encrypted private keys aren't supported",
-        )),
-        other => Err(InvalidKeyError::new_err(format!("Unsupported PEM type: {other}"))),
-    }
-}
-
-/// A cryptography key object, exported as DER (PKCS#8 for private keys, SPKI for public keys).
-fn material_from_object(key: &Bound<'_, PyAny>) -> PyResult<Material> {
-    let py = key.py();
-    let is_private = key.hasattr(intern!(py, "private_bytes"))?;
-    if !is_private && !key.hasattr(intern!(py, "public_bytes"))? {
-        return Err(InvalidKeyError::new_err(format!(
-            "Unsupported key type {}: expected str, bytes or a cryptography key object",
+/// The DER of the key in a PEM, which must be of the kind `class` takes. `EC PARAMETERS` blocks
+/// (as `openssl ecparam -genkey` writes ahead of the key) are skipped; exactly one key must remain.
+fn pem_der(key: &Bound<'_, PyAny>, class: KeyClass) -> PyResult<Vec<u8>> {
+    let bytes = key_bytes(key, "The PEM").unwrap_or_else(|| {
+        Err(InvalidKeyError::new_err(format!(
+            "Expected a PEM-encoded key as str or bytes, got {} (export key objects as PEM)",
             key.get_type().name()?
-        )));
-    }
-    let serialization = py.import("cryptography.hazmat.primitives.serialization")?;
-    let der = serialization.getattr("Encoding")?.getattr("DER")?;
-    let out = if is_private {
-        let format = serialization.getattr("PrivateFormat")?.getattr("PKCS8")?;
-        key.call_method1(
-            "private_bytes",
-            (der, format, serialization.getattr("NoEncryption")?.call0()?),
-        )?
-    } else {
-        let format = serialization
-            .getattr("PublicFormat")?
-            .getattr("SubjectPublicKeyInfo")?;
-        key.call_method1("public_bytes", (der, format))?
+        )))
+    })?;
+    let blocks = pem::parse_many(bytes)
+        .map_err(|e| InvalidKeyError::new_err(format!("Expected a PEM-encoded key: {e}")))?;
+    let blocks: Vec<_> = blocks
+        .into_iter()
+        .filter(|b| b.tag() != "EC PARAMETERS")
+        .collect();
+    let pem = match blocks.as_slice() {
+        [pem] => pem,
+        [] => {
+            return Err(InvalidKeyError::new_err(
+                "Expected a PEM-encoded key, but found no key block",
+            ));
+        }
+        several => {
+            let tags: Vec<&str> = several.iter().map(pem::Pem::tag).collect();
+            return Err(InvalidKeyError::new_err(format!(
+                "Expected one key in the PEM, but found {} blocks: {}",
+                several.len(),
+                tags.join(", ")
+            )));
+        }
     };
-    let der = out.cast::<PyBytes>()?.as_bytes().to_vec();
-    Ok(if is_private {
-        Material::Private(der)
-    } else {
-        Material::Public(der)
-    })
+    let private = match pem.tag() {
+        "PUBLIC KEY" | "RSA PUBLIC KEY" => false,
+        "PRIVATE KEY" | "RSA PRIVATE KEY" | "EC PRIVATE KEY" => true,
+        "ENCRYPTED PRIVATE KEY" => {
+            return Err(InvalidKeyError::new_err(
+                "Encrypted private keys aren't supported",
+            ));
+        }
+        other => {
+            return Err(InvalidKeyError::new_err(format!(
+                "Unsupported PEM type: {other}"
+            )));
+        }
+    };
+    match (class, private) {
+        (KeyClass::Private, false) => Err(InvalidKeyError::new_err(
+            "PrivateKey needs a private key, but this is a public key: use PublicKey to verify tokens",
+        )),
+        (KeyClass::Public, true) => Err(InvalidKeyError::new_err(
+            "PublicKey needs a public key, but this is a private key: pass its public key, or \
+             use PrivateKey",
+        )),
+        _ => Ok(pem.contents().to_vec()),
+    }
 }
 
-/// Shared across algorithms of one key (e.g. RS256 + PS256 with one RSA key).
+/// Validates `algorithms` for `class`: each one supported, and at least one. Duplicates are dropped.
+pub fn algorithm_specs(
+    class: KeyClass,
+    algorithms: Vec<String>,
+) -> PyResult<Vec<&'static AlgSpec>> {
+    let hmac = class == KeyClass::Hmac;
+    let supported = || {
+        ALGORITHMS
+            .iter()
+            .filter(move |s| (s.key_kind == KeyKind::Secret) == hmac)
+    };
+    let mut specs: Vec<&AlgSpec> = Vec::new();
+    for name in algorithms {
+        let Some(spec) = supported().find(|s| s.name == name) else {
+            let hint = match (hmac, ALGORITHMS.iter().any(|s| s.name == name)) {
+                (_, false) => "",
+                (true, true) => " (it needs a PrivateKey or PublicKey)",
+                (false, true) => " (it needs an HMAC secret)",
+            };
+            let known: Vec<String> = supported().map(|s| format!("{:?}", s.name)).collect();
+            return Err(PyValueError::new_err(format!(
+                "Unsupported algorithm {name:?} for {}{hint}; supported: {}",
+                class.name(),
+                known.join(", ")
+            )));
+        };
+        if !specs.iter().any(|s| s.name == spec.name) {
+            specs.push(spec);
+        }
+    }
+    if specs.is_empty() {
+        return Err(PyValueError::new_err("algorithms must not be empty"));
+    }
+    Ok(specs)
+}
+
+/// `algorithm_specs`, which must all take the same kind of key: one key serves them all.
+fn single_key_specs(class: KeyClass, algorithms: Vec<String>) -> PyResult<Vec<&'static AlgSpec>> {
+    let specs = algorithm_specs(class, algorithms)?;
+    if let [first, rest @ ..] = specs.as_slice()
+        && rest.iter().any(|s| s.key_kind != first.key_kind)
+    {
+        return Err(PyValueError::new_err(
+            "algorithms must all use the same kind of key (don't mix RS*/PS*, EC curves and EdDSA)",
+        ));
+    }
+    Ok(specs)
+}
+
+/// Validates `algorithms` for `HMAC` and prepares `secret` to sign and verify with each of them.
+pub fn prepare_secret(
+    secret: &Bound<'_, PyAny>,
+    algorithms: Vec<String>,
+    allow_short_secret: bool,
+) -> PyResult<(KeySet, Vec<Signer>)> {
+    let specs = single_key_specs(KeyClass::Hmac, algorithms)?;
+    let secret = hmac_secret(secret, &specs, allow_short_secret)?;
+    let (verifiers, signers) = specs
+        .iter()
+        .map(|spec| {
+            let Family::Hmac(hash) = spec.family else {
+                return Err(InvalidKeyError::new_err(unusable(
+                    spec.name,
+                    "it needs a private key",
+                )));
+            };
+            let key = HmacKey::new(hash, secret);
+            let verifier = Verifier {
+                algorithm: spec.name,
+                kid: None,
+                key: VerifyingKey::Hmac(key.clone()),
+            };
+            let signer = Signer {
+                algorithm: spec.name,
+                key: SigningKey::Hmac(key),
+            };
+            Ok((verifier, signer))
+        })
+        .collect::<PyResult<(Vec<_>, Vec<_>)>>()?;
+    Ok((KeySet::single_key(&specs, verifiers), signers))
+}
+
+/// Key pairs shared across the algorithms of one key (e.g. RS256 + PS256 with one RSA key).
 #[derive(Default)]
 struct KeyPairs {
     rsa: Option<Arc<RsaKeyPair>>,
     ed25519: Option<Arc<Ed25519KeyPair>>,
 }
 
-fn prepare_alg(spec: &AlgSpec, material: &Material, pairs: &mut KeyPairs) -> PyResult<PreparedAlg> {
-    let &(name, _, family, verification) = spec;
-    let rejected = |e: KeyRejected| InvalidKeyError::new_err(format!("Key can't be used for {name}: {e}"));
-    let public = |bytes: &[u8]| {
-        ParsedPublicKey::new(verification, bytes)
-            .map(Verifier::Public)
-            .map_err(rejected)
-    };
-    let (verifier, signer) = match (family, material) {
-        (Family::Hmac(alg), Material::Secret(secret)) => {
-            let key = HmacKey::new(alg, secret);
-            (Verifier::Hmac(key.clone()), Some(Signer::Hmac(key)))
+impl KeyPairs {
+    fn rsa(&mut self, der: &[u8]) -> Result<Arc<RsaKeyPair>, KeyRejected> {
+        if let Some(pair) = &self.rsa {
+            return Ok(Arc::clone(pair));
         }
-        (Family::Hmac(_), _) | (_, Material::Secret(_)) => unreachable!("HMAC iff secret"),
-        (_, Material::Public(der)) => (public(der)?, None),
-        (Family::Rsa(encoding), Material::Private(der)) => {
-            let pair = match &pairs.rsa {
-                Some(pair) => Arc::clone(pair),
-                None => {
-                    let pair = RsaKeyPair::from_pkcs8(der)
-                        .or_else(|_| RsaKeyPair::from_der(der))
-                        .map_err(rejected)?;
-                    Arc::clone(pairs.rsa.insert(Arc::new(pair)))
-                }
-            };
-            (
-                public(pair.public_key().as_ref())?,
-                Some(Signer::Rsa(pair, encoding)),
-            )
+        let pair = RsaKeyPair::from_pkcs8(der).or_else(|_| RsaKeyPair::from_der(der))?;
+        Ok(Arc::clone(self.rsa.insert(Arc::new(pair))))
+    }
+
+    fn ed25519(&mut self, der: &[u8]) -> Result<Arc<Ed25519KeyPair>, KeyRejected> {
+        if let Some(pair) = &self.ed25519 {
+            return Ok(Arc::clone(pair));
         }
-        (Family::Ecdsa(alg), Material::Private(der)) => {
-            let pair = EcdsaKeyPair::from_private_key_der(alg, der).map_err(rejected)?;
-            (public(pair.public_key().as_ref())?, Some(Signer::Ecdsa(pair)))
-        }
-        (Family::Ed25519, Material::Private(der)) => {
-            let pair = match &pairs.ed25519 {
-                Some(pair) => Arc::clone(pair),
-                None => {
-                    let pair = Ed25519KeyPair::from_pkcs8_maybe_unchecked(der).map_err(rejected)?;
-                    Arc::clone(pairs.ed25519.insert(Arc::new(pair)))
-                }
-            };
-            (public(pair.public_key().as_ref())?, Some(Signer::Ed25519(pair)))
-        }
-    };
-    Ok(PreparedAlg {
-        name,
-        verifier,
-        signer,
-    })
+        let pair = Ed25519KeyPair::from_pkcs8_maybe_unchecked(der)?;
+        Ok(Arc::clone(self.ed25519.insert(Arc::new(pair))))
+    }
 }
 
-/// Validates `algorithms` and prepares `key` for each of them.
-pub fn prepare(key: &Bound<'_, PyAny>, algorithms: &[String]) -> PyResult<Vec<PreparedAlg>> {
-    let mut specs: Vec<&AlgSpec> = Vec::new();
-    for name in algorithms {
-        let spec = ALGORITHMS.iter().find(|s| s.0 == name).ok_or_else(|| {
-            let known: Vec<&str> = ALGORITHMS.iter().map(|s| s.0).collect();
-            PyValueError::new_err(format!(
-                "Unsupported algorithm {name:?}; supported: {}",
-                known.join(", ")
-            ))
-        })?;
-        if !specs.iter().any(|s| s.0 == spec.0) {
-            specs.push(spec);
+/// The private key `der` prepared to sign with `spec`, and its public key to verify with it.
+fn private_key_pair(
+    spec: &AlgSpec,
+    der: &[u8],
+    pairs: &mut KeyPairs,
+) -> PyResult<(Verifier, Signer)> {
+    let rejected = |e: KeyRejected| InvalidKeyError::new_err(unusable(spec.name, e));
+    let public =
+        |bytes: &[u8]| Verifier::public(spec, bytes, None).map_err(InvalidKeyError::new_err);
+    let (verifier, key) = match spec.family {
+        Family::Hmac(_) => {
+            return Err(InvalidKeyError::new_err(unusable(
+                spec.name,
+                "it needs an HMAC secret",
+            )));
         }
-    }
-    let Some(first) = specs.first() else {
-        return Err(PyValueError::new_err("algorithms must not be empty"));
+        Family::Rsa { signing, .. } => {
+            let pair = pairs.rsa(der).map_err(rejected)?;
+            (
+                public(pair.public_key().as_ref())?,
+                SigningKey::Rsa(pair, signing),
+            )
+        }
+        Family::Ecdsa { signing, .. } => {
+            let pair = EcdsaKeyPair::from_private_key_der(signing, der).map_err(rejected)?;
+            (public(pair.public_key().as_ref())?, SigningKey::Ecdsa(pair))
+        }
+        Family::Ed25519 => {
+            let pair = pairs.ed25519(der).map_err(rejected)?;
+            (
+                public(pair.public_key().as_ref())?,
+                SigningKey::Ed25519(pair),
+            )
+        }
     };
-    if specs.iter().any(|s| s.1 != first.1) {
-        return Err(PyValueError::new_err(
-            "algorithms must all use the same kind of key (don't mix HS*, RS*/PS*, EC curves and EdDSA)",
-        ));
-    }
-    let material = match (first.2, key_bytes(key)) {
-        (Family::Hmac(_), _) => Material::Secret(hmac_secret(key)?),
-        (_, Some(bytes)) => parse_pem(&bytes?)?,
-        (_, None) => material_from_object(key)?,
+    let signer = Signer {
+        algorithm: spec.name,
+        key,
     };
+    Ok((verifier, signer))
+}
+
+/// Validates `algorithms` for `PrivateKey` and prepares the private key `pem` to sign with each of
+/// them (and its public key to verify with them).
+pub fn prepare_private(
+    pem: &Bound<'_, PyAny>,
+    algorithms: Vec<String>,
+) -> PyResult<(KeySet, Vec<Signer>)> {
+    let specs = single_key_specs(KeyClass::Private, algorithms)?;
+    let der = pem_der(pem, KeyClass::Private)?;
     let mut pairs = KeyPairs::default();
-    specs
-        .into_iter()
-        .map(|spec| prepare_alg(spec, &material, &mut pairs))
-        .collect()
+    let (verifiers, signers) = specs
+        .iter()
+        .map(|spec| private_key_pair(spec, &der, &mut pairs))
+        .collect::<PyResult<(Vec<_>, Vec<_>)>>()?;
+    Ok((KeySet::single_key(&specs, verifiers), signers))
+}
+
+/// Validates `algorithms` for `PublicKey` and prepares the public key `pem` to verify with each of
+/// them.
+pub fn prepare_public(pem: &Bound<'_, PyAny>, algorithms: Vec<String>) -> PyResult<KeySet> {
+    let specs = single_key_specs(KeyClass::Public, algorithms)?;
+    let der = pem_der(pem, KeyClass::Public)?;
+    let verifiers = specs
+        .iter()
+        .map(|spec| Verifier::public(spec, &der, None).map_err(InvalidKeyError::new_err))
+        .collect::<PyResult<_>>()?;
+    Ok(KeySet::single_key(&specs, verifiers))
 }
