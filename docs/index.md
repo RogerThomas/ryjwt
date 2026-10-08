@@ -14,11 +14,11 @@ model. It also fetches, caches and refreshes the keys an identity provider publi
 ## Install
 
 ```console
-pip install --pre ryjwt
+uv add --prerelease allow ryjwt
 ```
 
-or `uv add --prerelease allow ryjwt`. ryjwt supports Python 3.12, 3.13 and 3.14, including
-free-threaded 3.14t ([threads](threads.md)). It has no runtime dependencies. Wheels are built for
+ryjwt supports Python 3.12, 3.13 and 3.14, including free-threaded 3.14t
+([threads](threads.md)). It has no runtime dependencies. Wheels are built for
 Linux (glibc and musl, x86_64 and aarch64), macOS (x86_64 and arm64) and Windows (x64).
 
 Two optional extras: `ryjwt[msgspec]` makes decoding to a dict faster, and lets you decode to

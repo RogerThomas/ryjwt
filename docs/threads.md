@@ -23,7 +23,7 @@ assert claims[42] == {"sub": "user-42"}
 ## Free-threaded Python
 
 On free-threaded Python (3.14t), ryjwt doesn't need the GIL, and doesn't turn it back on: threads
-encode and decode in parallel. Install it as usual; pip picks the `cp314t` wheel.
+encode and decode in parallel. Install it as usual; uv picks the `cp314t` wheel.
 
 On the regular, GIL build of Python, ryjwt holds the GIL while it encodes or decodes, so threads
 take turns. Each call is short (about a microsecond for a typical HS256 token), so that rarely matters;

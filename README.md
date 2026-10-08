@@ -18,11 +18,10 @@ Each bar is one library decoding 100,000 HS256 tokens, in real time. See the
 ## Install
 
 ```console
-pip install --pre ryjwt
+uv add --prerelease allow ryjwt
 ```
 
-Or `uv add --prerelease allow ryjwt`. ryjwt supports Python 3.12, 3.13 and 3.14, including
-free-threaded 3.14t.
+ryjwt supports Python 3.12, 3.13 and 3.14, including free-threaded 3.14t.
 
 ## Example
 

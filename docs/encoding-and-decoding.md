@@ -240,7 +240,7 @@ In a dict, the claims stay numbers.
 ## Decoding to a dict: msgspec or jiter
 
 `decode` reads the payload into a dict with [msgspec](https://jcristharif.com/msgspec/) if it's
-installed (`pip install ryjwt[msgspec]`), as it's faster for typical tokens. Otherwise it uses
+installed (`uv add 'ryjwt[msgspec]'`), as it's faster for typical tokens. Otherwise it uses
 [jiter](https://github.com/pydantic/jiter), which is built into ryjwt. Each key object picks one
 when you create it.
 
