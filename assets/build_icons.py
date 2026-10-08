@@ -5,8 +5,9 @@
 - assets/favicon.ico: 16x16, 32x32 and 48x48, transparent.
 - assets/apple-touch-icon.png: 180x180, the mark on solid white (iOS shows transparency as black).
 
-Also copies favicon.svg to docs/assets/, which the docs site uses as its favicon and header logo
-(Zensical only publishes files in docs/; tests/test_docs.py checks the copy matches).
+Also copies favicon.svg, logo-light.svg and logo-dark.svg to docs/assets/: the docs site uses the
+mark as its favicon and header logo, and the wordmarks on its home page (Zensical only publishes
+files in docs/; tests/test_docs.py checks the copies match).
 
 Each size is rendered from the SVG by rsvg-convert (librsvg: `brew install librsvg`), not scaled
 down from a larger raster, so the small sizes stay sharp.
@@ -21,6 +22,8 @@ from PIL import Image
 from rich.console import Console
 
 ICO_SIZES = (16, 32, 48)
+DOCS_SVGS = ("favicon.svg", "logo-light.svg", "logo-dark.svg")
+"""The SVGs the docs site shows, copied to docs/assets/."""
 APPLE_TOUCH_SIZE = 180
 APPLE_TOUCH_MARK = 144
 """The mark's size inside the apple-touch icon: iOS rounds the corners, so it gets a margin."""
@@ -43,7 +46,7 @@ def _apple_touch_icon(rsvg: str, svg: Path) -> Image.Image:
 
 def main() -> None:
     """Writes assets/favicon-32.png, assets/favicon.ico and assets/apple-touch-icon.png from
-    assets/favicon.svg, and copies favicon.svg to docs/assets/."""
+    assets/favicon.svg, and copies the SVGs the docs show to docs/assets/."""
     rsvg = shutil.which("rsvg-convert")
     if rsvg is None:
         raise SystemExit("rsvg-convert isn't installed: brew install librsvg")
@@ -58,7 +61,9 @@ def main() -> None:
         assets / "favicon.ico", sizes=[image.size for image in ico], append_images=ico[:-1]
     )
     _apple_touch_icon(rsvg, svg).save(assets / "apple-touch-icon.png", optimize=True)
-    shutil.copyfile(svg, root / "docs" / "assets" / svg.name)
+    for name in DOCS_SVGS:
+        shutil.copyfile(assets / name, root / "docs" / "assets" / name)
     for name in ("favicon-32.png", "favicon.ico", "apple-touch-icon.png"):
         console.print(f"wrote assets/{name}")
-    console.print(f"copied assets/{svg.name} to docs/assets/{svg.name}")
+    for name in DOCS_SVGS:
+        console.print(f"copied assets/{name} to docs/assets/{name}")

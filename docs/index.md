@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="assets/logo-light.svg#only-light" alt="ryjwt" width="300">
+  <img src="assets/logo-dark.svg#only-dark" alt="ryjwt" width="300">
+</p>
+
 # ryjwt
 
 Fast, strictly typed JSON Web Tokens for Python, written in Rust.
