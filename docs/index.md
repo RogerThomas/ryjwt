@@ -44,6 +44,62 @@ claims = key.decode(token)  # signature, exp and aud checked
 assert claims["sub"] == "user-1"
 ```
 
+### Into a msgspec Struct
+
+With `uv add --prerelease allow 'ryjwt[msgspec]'`:
+
+```python
+import secrets
+from datetime import UTC, datetime, timedelta
+
+import msgspec
+import ryjwt
+
+
+class Claims(msgspec.Struct):
+    sub: str
+    exp: datetime
+
+
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+
+# Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+claims_in = Claims(sub="user-1", exp=expires)
+
+token = key.encode(claims_in)
+claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
+assert claims_in == claims_out
+```
+
+### Into a pydantic model
+
+With `uv add --prerelease allow 'ryjwt[pydantic]'`:
+
+```python
+import secrets
+from datetime import UTC, datetime, timedelta
+
+import pydantic
+import ryjwt
+
+
+class Claims(pydantic.BaseModel):
+    sub: str
+    exp: datetime
+
+
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+
+# Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+claims_in = Claims(sub="user-1", exp=expires)
+
+token = key.encode(claims_in)
+claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
+assert claims_in == claims_out
+```
+
 [Getting started](getting-started.md) goes on from there.
 
 ## Why it's fast
