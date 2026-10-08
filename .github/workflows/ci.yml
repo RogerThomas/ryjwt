@@ -1,4 +1,5 @@
-# Runs the Taskfile tasks developers run locally (task lint, task typecheck, task test), so the two
+# Runs the Taskfile tasks developers run locally (task lint, task typecheck, task test, task
+# docs-test), so the two
 # can't drift. uv takes Python from .python-version (or the test job's UV_PYTHON) and rustup takes
 # Rust from rust-toolchain.toml. Lint and type-check run once, on 3.14: the type checkers target
 # 3.12 (pyproject.toml), so they catch any use of a newer API.
@@ -99,6 +100,25 @@ jobs:
         run: rustup toolchain install
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
       - run: task test
+
+  docs:
+    name: Docs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2.2.0
+        with:
+          version: ${{ env.TASK_VERSION }}
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      # No Rust: the API reference reads the sources statically, without building the extension.
+      # (The examples in the docs run in the test job, as tests/test_docs.py.)
+      - run: task docs-test
 
   licenses:
     name: Third-party licenses

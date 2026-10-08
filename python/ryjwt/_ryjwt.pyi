@@ -40,7 +40,15 @@ class HMAC:
         *,
         algorithm: HMACAlgorithm | None = None,
         headers: Mapping[str, Any] | None = None,
-    ) -> str: ...
+    ) -> str:
+        """Signs `claims` (a dict, a msgspec Struct or a pydantic BaseModel) and returns the token.
+
+        `algorithm` must be one of `algorithms`, and may be left out when only one is configured.
+        `headers` are added to the token's header, which always has `alg`, and `"typ": "JWT"`
+        unless `headers` sets `typ`; setting `alg` in `headers` is a `ValueError`. A `datetime`
+        under `exp`, `nbf` or `iat` is written as whole seconds since the epoch; a naive one is a
+        `ValueError`.
+        """
     @overload
     def decode(
         self,
@@ -54,9 +62,18 @@ class HMAC:
         """Verifies `token` and returns its claims as a dict, or (given `type`, a msgspec Struct or
         pydantic BaseModel class) as an instance of `type`.
 
+        Checks the signature, with the algorithm the token's header names: it must be one of
+        `algorithms`. Then checks the claims:
+
+        - `exp` and `nbf`, if the token has them, allowing `leeway` seconds for clock differences;
+        - `aud` against `audience`. A token with an `aud` is rejected if no `audience` is given;
+        - `iss` against `issuer`, if given.
+
+        Every rejection is an `InvalidTokenError`.
+
         The payload is parsed with msgspec if it was installed when this object was created, else
         with jiter. They agree on all valid JSON, but may differ on exotic payloads (e.g. `1e400`,
-        or nesting over ~200 levels deep); see the README.
+        or nesting over ~200 levels deep); see the documentation's "Encoding and decoding" page.
         """
     @overload
     def decode[T: StructTyping | BaseModelTyping](
@@ -71,7 +88,7 @@ class HMAC:
 
 @final
 class PrivateKey:
-    """Encodes and decodes JWTs with a private key (RS*, PS*, ES*, EdDSA).
+    """Encodes and decodes JWTs with a private key (`RS*`, `PS*`, `ES*`, `EdDSA`).
 
     `pem` is a PEM-encoded, unencrypted private key: PKCS#8 (`BEGIN PRIVATE KEY`), or PKCS#1 /
     SEC 1 (`BEGIN RSA PRIVATE KEY` / `BEGIN EC PRIVATE KEY`). A public key is rejected.
@@ -97,7 +114,15 @@ class PrivateKey:
         *,
         algorithm: AsymmetricAlgorithm | None = None,
         headers: Mapping[str, Any] | None = None,
-    ) -> str: ...
+    ) -> str:
+        """Signs `claims` (a dict, a msgspec Struct or a pydantic BaseModel) and returns the token.
+
+        `algorithm` must be one of `algorithms`, and may be left out when only one is configured.
+        `headers` are added to the token's header, which always has `alg`, and `"typ": "JWT"`
+        unless `headers` sets `typ`; setting `alg` in `headers` is a `ValueError`. A `datetime`
+        under `exp`, `nbf` or `iat` is written as whole seconds since the epoch; a naive one is a
+        `ValueError`.
+        """
     @overload
     def decode(
         self,
@@ -111,9 +136,18 @@ class PrivateKey:
         """Verifies `token` and returns its claims as a dict, or (given `type`, a msgspec Struct or
         pydantic BaseModel class) as an instance of `type`.
 
+        Checks the signature, with the algorithm the token's header names: it must be one of
+        `algorithms`. Then checks the claims:
+
+        - `exp` and `nbf`, if the token has them, allowing `leeway` seconds for clock differences;
+        - `aud` against `audience`. A token with an `aud` is rejected if no `audience` is given;
+        - `iss` against `issuer`, if given.
+
+        Every rejection is an `InvalidTokenError`.
+
         The payload is parsed with msgspec if it was installed when this object was created, else
         with jiter. They agree on all valid JSON, but may differ on exotic payloads (e.g. `1e400`,
-        or nesting over ~200 levels deep); see the README.
+        or nesting over ~200 levels deep); see the documentation's "Encoding and decoding" page.
         """
     @overload
     def decode[T: StructTyping | BaseModelTyping](
@@ -128,7 +162,8 @@ class PrivateKey:
 
 @final
 class PublicKey:
-    """Decodes JWTs with a public key or a JWKS' keys (RS*, PS*, ES*, EdDSA). It can't encode.
+    """Decodes JWTs with a public key or a JWKS' keys (`RS*`, `PS*`, `ES*`, `EdDSA`). It can't
+    encode.
 
     `pem` is a PEM-encoded public key: SubjectPublicKeyInfo (`BEGIN PUBLIC KEY`), or PKCS#1
     (`BEGIN RSA PUBLIC KEY`). A private key is rejected: pass its public key instead.
@@ -174,9 +209,18 @@ class PublicKey:
         """Verifies `token` and returns its claims as a dict, or (given `type`, a msgspec Struct or
         pydantic BaseModel class) as an instance of `type`.
 
+        Checks the signature, with the algorithm the token's header names: it must be one of
+        `algorithms`. Then checks the claims:
+
+        - `exp` and `nbf`, if the token has them, allowing `leeway` seconds for clock differences;
+        - `aud` against `audience`. A token with an `aud` is rejected if no `audience` is given;
+        - `iss` against `issuer`, if given.
+
+        Every rejection is an `InvalidTokenError`.
+
         The payload is parsed with msgspec if it was installed when this object was created, else
         with jiter. They agree on all valid JSON, but may differ on exotic payloads (e.g. `1e400`,
-        or nesting over ~200 levels deep); see the README.
+        or nesting over ~200 levels deep); see the documentation's "Encoding and decoding" page.
         """
     @overload
     def decode[T: StructTyping | BaseModelTyping](
@@ -204,26 +248,51 @@ def validate_jwks_algorithms(algorithms: Sequence[AsymmetricAlgorithm]) -> None:
     """Validates `algorithms` as `PublicKey.from_jwks` does, raising the same errors: a JWKS client
     checks its algorithms when it's built, before it fetches any keys."""
 
-class RYJWTError(Exception): ...
-class InvalidKeyError(RYJWTError): ...
+class RYJWTError(Exception):
+    """Base class for all ryjwt errors."""
+
+class InvalidKeyError(RYJWTError):
+    """A key can't be used: it doesn't parse, isn't supported, is too weak, or doesn't suit the
+    configured algorithms."""
 
 class JWKSFetchError(RYJWTError):
-    """A JWKS client has no usable keys: none fetched yet (or none under `max_stale` out of date),
-    because fetching them failed, or `decode_nowait` was called before `refresh()`. Not the token's
-    fault (-> 503)."""
+    """A JWKS client has no usable keys. Fetching them failed, and it has none cached, or they've
+    been expired for over `max_stale`; or `decode_nowait` was called before the first fetch. It's
+    not the token's fault: respond 503."""
 
-class InvalidTokenError(RYJWTError): ...
-class DecodeError(InvalidTokenError): ...
-class InvalidSignatureError(DecodeError): ...
+class InvalidTokenError(RYJWTError):
+    """The token was rejected: respond 401. Each reason has a subclass. This class itself is
+    raised for a header with a `crit` field, which ryjwt must reject."""
+
+class DecodeError(InvalidTokenError):
+    """The token is malformed: e.g. not three parts, not valid base64url, or not valid JSON. Also
+    raised when its `exp` or `nbf` claim isn't a number."""
+
+class InvalidSignatureError(DecodeError):
+    """The signature doesn't match."""
 
 class ClaimsValidationError(InvalidTokenError):
     """The claims don't fit the `type` given to `decode`: a required claim is missing, or one has
     the wrong type or is out of range. Its `__cause__` is msgspec's or pydantic's
     `ValidationError`."""
 
-class InvalidAlgorithmError(InvalidTokenError): ...
-class UnknownKeyError(InvalidTokenError): ...
-class ExpiredSignatureError(InvalidTokenError): ...
-class ImmatureSignatureError(InvalidTokenError): ...
-class InvalidAudienceError(InvalidTokenError): ...
-class InvalidIssuerError(InvalidTokenError): ...
+class InvalidAlgorithmError(InvalidTokenError):
+    """The token's algorithm (its header's `alg`) is missing, or isn't one the key may be used
+    with."""
+
+class UnknownKeyError(InvalidTokenError):
+    """No key in the JWKS has the token's `kid`. Also raised when the JWKS has several keys, and
+    the token has no `kid` (or the keys have none) to pick one with."""
+
+class ExpiredSignatureError(InvalidTokenError):
+    """The `exp` claim is in the past (allowing for `leeway`)."""
+
+class ImmatureSignatureError(InvalidTokenError):
+    """The `nbf` claim is in the future (allowing for `leeway`)."""
+
+class InvalidAudienceError(InvalidTokenError):
+    """The token's audience (`aud`) doesn't match `audience`, or is missing or malformed. Also
+    raised when the token has an `aud` but no `audience` was given."""
+
+class InvalidIssuerError(InvalidTokenError):
+    """The token's issuer (`iss`) doesn't match `issuer`, or is missing or malformed."""

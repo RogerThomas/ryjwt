@@ -26,6 +26,9 @@ target/
 # Bench
 node_modules/
 
+# The built documentation site (task docs-test)
+site/
+
 # Editors and OS
 .idea/
 .vscode/

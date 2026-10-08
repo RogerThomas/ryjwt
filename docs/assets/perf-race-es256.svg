@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="366" viewBox="0 0 780 366">
+  <title>Decoding 100,000 ES256 tokens</title>
+  <desc>6 JWT libraries each decode 100,000 tokens (ES256 with a PEM public key, a typical 704-byte token), the bars filling in real time. ryjwt → dict (Python) finishes in 3.22s, PyJWT (Python) in 7.34s. Versions: ryjwt 0.0.0a0 → dict, ryjwt 0.0.0a0 → Struct, jsonwebtoken 11.1.0 (aws-lc-rs), fast-jwt 6.3.3, jose 6.2.12, pyjwt 2.15.1.</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    .title { font-size: 15px; fill: #0b0b0b; font-weight: 600; }
+    .tick { font-size: 10px; fill: #898781; }
+    .name { font-size: 13px; fill: #0b0b0b; font-weight: 600; }
+    .rate { font-size: 10px; fill: #52514e; }
+    .caption { font-size: 11px; fill: #52514e; }
+    .badge { font-size: 12px; font-weight: 700; }
+    .track { fill: #f3f2ef; stroke: #e1e0d9; }
+    .grid { stroke: #e1e0d9; stroke-width: 1; }
+    .playhead { stroke: #0b0b0b; stroke-width: 1.5; opacity: 0.55; }
+
+    /* One 10.340s loop: the race runs for the first 70.986%
+       (7.340s, the slowest library's time), then every bar holds
+       for 3s, so the finish times can be read, before it restarts. */
+    #playhead { animation: playhead 10.340s linear infinite; }
+    #bar-ryjwt { animation: fill-ryjwt 10.340s linear infinite; }
+    #badge-ryjwt { animation: show-ryjwt 10.340s step-end infinite; }
+    @keyframes fill-ryjwt { 0% { width: 0; } 31.174% { width: 470px; } 100% { width: 470px; } }
+    @keyframes show-ryjwt { 0% { opacity: 0; } 31.174% { opacity: 1; } 100% { opacity: 1; } }
+    #bar-ryjwt-msgspec { animation: fill-ryjwt-msgspec 10.340s linear infinite; }
+    #badge-ryjwt-msgspec { animation: show-ryjwt-msgspec 10.340s step-end infinite; }
+    @keyframes fill-ryjwt-msgspec { 0% { width: 0; } 31.210% { width: 470px; } 100% { width: 470px; } }
+    @keyframes show-ryjwt-msgspec { 0% { opacity: 0; } 31.210% { opacity: 1; } 100% { opacity: 1; } }
+    #bar-jsonwebtoken { animation: fill-jsonwebtoken 10.340s linear infinite; }
+    #badge-jsonwebtoken { animation: show-jsonwebtoken 10.340s step-end infinite; }
+    @keyframes fill-jsonwebtoken { 0% { width: 0; } 33.342% { width: 470px; } 100% { width: 470px; } }
+    @keyframes show-jsonwebtoken { 0% { opacity: 0; } 33.342% { opacity: 1; } 100% { opacity: 1; } }
+    #bar-fast-jwt { animation: fill-fast-jwt 10.340s linear infinite; }
+    #badge-fast-jwt { animation: show-fast-jwt 10.340s step-end infinite; }
+    @keyframes fill-fast-jwt { 0% { width: 0; } 34.316% { width: 470px; } 100% { width: 470px; } }
+    @keyframes show-fast-jwt { 0% { opacity: 0; } 34.316% { opacity: 1; } 100% { opacity: 1; } }
+    #bar-jose { animation: fill-jose 10.340s linear infinite; }
+    #badge-jose { animation: show-jose 10.340s step-end infinite; }
+    @keyframes fill-jose { 0% { width: 0; } 41.521% { width: 470px; } 100% { width: 470px; } }
+    @keyframes show-jose { 0% { opacity: 0; } 41.521% { opacity: 1; } 100% { opacity: 1; } }
+    #bar-pyjwt { animation: fill-pyjwt 10.340s linear infinite; }
+    #badge-pyjwt { animation: show-pyjwt 10.340s step-end infinite; }
+    @keyframes fill-pyjwt { 0% { width: 0; } 70.986% { width: 470px; } 100% { width: 470px; } }
+    @keyframes show-pyjwt { 0% { opacity: 0; } 70.986% { opacity: 1; } 100% { opacity: 1; } }
+    @keyframes playhead {
+      0% { transform: translateX(0); }
+      70.986% { transform: translateX(470px); }
+      100% { transform: translateX(470px); }
+    }
+  </style>
+
+  <rect width="780" height="366" fill="#fcfcfb" />
+  <text x="20" y="26" class="title">Decoding 100,000 ES256 tokens</text>
+
+  <g>
+    <line x1="210" y1="46" x2="680" y2="46" class="grid" />
+    <line x1="210.0" y1="46" x2="210.0" y2="304" class="grid" />
+    <text x="210.0" y="40" class="tick" text-anchor="middle">0.0s</text>
+    <line x1="304.0" y1="46" x2="304.0" y2="304" class="grid" />
+    <text x="304.0" y="40" class="tick" text-anchor="middle">1.5s</text>
+    <line x1="398.0" y1="46" x2="398.0" y2="304" class="grid" />
+    <text x="398.0" y="40" class="tick" text-anchor="middle">2.9s</text>
+    <line x1="492.0" y1="46" x2="492.0" y2="304" class="grid" />
+    <text x="492.0" y="40" class="tick" text-anchor="middle">4.4s</text>
+    <line x1="586.0" y1="46" x2="586.0" y2="304" class="grid" />
+    <text x="586.0" y="40" class="tick" text-anchor="middle">5.9s</text>
+    <line x1="680.0" y1="46" x2="680.0" y2="304" class="grid" />
+    <text x="680.0" y="40" class="tick" text-anchor="middle">7.3s</text>
+    <g id="playhead">
+      <line x1="210" y1="46" x2="210" y2="304" class="playhead" />
+    </g>
+  </g>
+
+  <g>
+    <rect x="210" y="58" width="470" height="26" rx="4" class="track" />
+    <rect id="bar-ryjwt" x="210" y="58" width="0" height="26" rx="4" fill="#00c200" />
+    <rect x="20" y="71.0" width="10" height="10" rx="2" fill="#00c200" />
+    <text x="36" y="73.0" class="name">ryjwt → dict (Python)</text>
+    <text x="36" y="86.0" class="rate">31,023 decodes/s</text>
+    <g id="badge-ryjwt" opacity="0">
+      <text x="690" y="80.0" class="badge" fill="#00c200">&#x2713; 3.22s</text>
+    </g>
+  </g>
+  <g>
+    <rect x="210" y="100" width="470" height="26" rx="4" class="track" />
+    <rect id="bar-ryjwt-msgspec" x="210" y="100" width="0" height="26" rx="4" fill="#009e00" />
+    <rect x="20" y="113.0" width="10" height="10" rx="2" fill="#009e00" />
+    <text x="36" y="115.0" class="name">ryjwt → Struct (Python)</text>
+    <text x="36" y="128.0" class="rate">30,988 decodes/s</text>
+    <g id="badge-ryjwt-msgspec" opacity="0">
+      <text x="690" y="122.0" class="badge" fill="#009e00">&#x2713; 3.23s</text>
+    </g>
+  </g>
+  <g>
+    <rect x="210" y="142" width="470" height="26" rx="4" class="track" />
+    <rect id="bar-jsonwebtoken" x="210" y="142" width="0" height="26" rx="4" fill="#eb6834" />
+    <rect x="20" y="155.0" width="10" height="10" rx="2" fill="#eb6834" />
+    <text x="36" y="157.0" class="name">jsonwebtoken (Rust)</text>
+    <text x="36" y="170.0" class="rate">29,007 decodes/s</text>
+    <g id="badge-jsonwebtoken" opacity="0">
+      <text x="690" y="164.0" class="badge" fill="#eb6834">&#x2713; 3.45s</text>
+    </g>
+  </g>
+  <g>
+    <rect x="210" y="184" width="470" height="26" rx="4" class="track" />
+    <rect id="bar-fast-jwt" x="210" y="184" width="0" height="26" rx="4" fill="#4a3aa7" />
+    <rect x="20" y="197.0" width="10" height="10" rx="2" fill="#4a3aa7" />
+    <text x="36" y="199.0" class="name">fast-jwt (Bun)</text>
+    <text x="36" y="212.0" class="rate">28,183 decodes/s</text>
+    <g id="badge-fast-jwt" opacity="0">
+      <text x="690" y="206.0" class="badge" fill="#4a3aa7">&#x2713; 3.55s</text>
+    </g>
+  </g>
+  <g>
+    <rect x="210" y="226" width="470" height="26" rx="4" class="track" />
+    <rect id="bar-jose" x="210" y="226" width="0" height="26" rx="4" fill="#eda100" />
+    <rect x="20" y="239.0" width="10" height="10" rx="2" fill="#eda100" />
+    <text x="36" y="241.0" class="name">jose (Bun)</text>
+    <text x="36" y="254.0" class="rate">23,293 decodes/s</text>
+    <g id="badge-jose" opacity="0">
+      <text x="690" y="248.0" class="badge" fill="#eda100">&#x2713; 4.29s</text>
+    </g>
+  </g>
+  <g>
+    <rect x="210" y="268" width="470" height="26" rx="4" class="track" />
+    <rect id="bar-pyjwt" x="210" y="268" width="0" height="26" rx="4" fill="#2a78d6" />
+    <rect x="20" y="281.0" width="10" height="10" rx="2" fill="#2a78d6" />
+    <text x="36" y="283.0" class="name">PyJWT (Python)</text>
+    <text x="36" y="296.0" class="rate">13,624 decodes/s</text>
+    <g id="badge-pyjwt" opacity="0">
+      <text x="690" y="290.0" class="badge" fill="#2a78d6">&#x2713; 7.34s</text>
+    </g>
+  </g>
+
+  <text x="20" y="330" class="caption">ES256 with a PEM public key, a typical 704-byte token. Each bar takes 100,000 &#215; the library's mean time per decode.</text>
+  <text x="20" y="346" class="caption">Measured in Docker, one container per library, each on one pinned CPU core.</text>
+</svg>

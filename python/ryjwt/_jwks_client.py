@@ -145,32 +145,26 @@ class _Outcome(NamedTuple):
 
 @final
 class JWKSClient:
-    """Decodes JWTs with the keys of a JWKS URL, fetched and kept up to date.
+    """Decodes JWTs with the keys published at a JWKS URL, which it fetches and keeps up to date.
 
-    Construction does no I/O. It can be used two ways:
+    Creating it doesn't fetch anything. Use it in one of two ways:
 
-    - Automatic: `decode` (in sync code) or `await adecode` (in async code) fetch the keys when
-      needed. The first decode waits for them. Once they expire (`Cache-Control: max-age` less
-      `Age`, clamped to [`min_cache_lifetime`, `max_cache_lifetime`]; `cache_lifetime` without
-      it; but never sooner than `cooldown` after the fetch), decodes keep using them while they're
-      refreshed in the background. A token whose `kid` is unknown waits for a refetch, unless the
-      last fetch was under `cooldown` ago.
-    - Manual: `refresh()` / `await arefresh()` fetch when the caller decides (at startup, or when
-      `needs_refresh`), and `decode_nowait` decodes with the keys held, never fetching or waiting.
+    - Automatic: `decode` (in sync code) or `await adecode` (in async code). They fetch the keys
+      when needed: the first time, and when a token's `kid` is unknown. Once the keys expire,
+      they keep using them while new ones are fetched in the background.
+    - Manual: `refresh()` or `await arefresh()` fetch the keys when you decide (at startup, or
+      when `needs_refresh`), and `decode_nowait` decodes with the keys held, never fetching or
+      waiting.
 
-    A failed fetch keeps the keys held, and is retried after `cooldown`, until they've been expired
-    for over `max_stale`; with no usable keys, `JWKSFetchError` is raised (again, without a
-    request, until the cooldown is over). Fetched keys that can't be used are skipped.
+    If a fetch fails, the client keeps using the keys it has, for up to `max_stale` after they
+    expired, and tries again after `cooldown`. With no usable keys, decodes raise
+    `JWKSFetchError`. Keys in a fetched JWKS that can't be used are skipped.
 
-    One fetch runs at a time, on a daemon thread of its own, shared by every caller needing it:
-    sync or async, on any thread or event loop. Fetches use the standard library's
-    `urllib.request`, verify TLS certificates and don't follow redirects. https:// fetches go
-    through the proxy `HTTPS_PROXY`/`NO_PROXY` (or, on macOS and Windows, the system settings)
-    say; http:// ones, to this machine, never use a proxy. Callers stop waiting 2.5 seconds after
-    a fetch started (DNS lookup included), and the fetch then counts as failed; if it still gets
-    usable keys after all (its response was read in time, but reading the keys took longer), they
-    are used, unless a later fetch has ended meanwhile. `decode` blocks while it waits for a
-    fetch: in async code, use `adecode`. Times are seconds or `timedelta`s.
+    Fetches use the standard library's `urllib.request`. They check TLS certificates, don't
+    follow redirects, and give up after 2.5 seconds. One fetch runs at a time, on a thread of its
+    own, and every caller that needs it shares it, sync or async, on any thread or event loop.
+
+    `decode` blocks while it waits for a fetch: in async code, use `adecode`.
     """
 
     # Times are `time.monotonic()` seconds. The keys and their deadlines are `_held` (a `_Held`):
@@ -201,6 +195,21 @@ class JWKSClient:
         max_stale: float | timedelta = 86400,
         cooldown: float | timedelta = 30,
     ) -> None:
+        """`url` must be `https://`, or `http://` to this machine (`localhost`, `127.0.0.1` or
+        `[::1]`). URLs with credentials, whitespace, control or non-ASCII characters, or
+        backslashes are rejected too. A URL that isn't allowed is a `ValueError`. `algorithms` are
+        checked as `PublicKey.from_jwks` checks them.
+
+        The times are seconds or `timedelta`s, and mustn't be negative:
+
+        - `cache_lifetime`: how long keys stay fresh if the response doesn't say (it has no
+          `Cache-Control: max-age`).
+        - `min_cache_lifetime`, `max_cache_lifetime`: the shortest and longest time keys stay
+          fresh, whatever the response says.
+        - `max_stale`: how long expired keys stay in use while fetching new ones keeps failing.
+        - `cooldown`: the least time between fetches, after a failed fetch or for an unknown
+          `kid`. Keys also stay fresh for at least this long.
+        """
         parsed = _parse_url(url)
         if parsed is None or not self._allowed(*parsed):
             got = "an invalid URL" if parsed is None else _redacted(*parsed)

@@ -51,6 +51,15 @@ tasks:
       done
       exit ${rc}
 
+  docs:
+    desc: 'Serve the documentation site (zensical.toml) at http://localhost:8000, rebuilding it as the docs change'
+    # --only-group: the API reference reads the sources statically, so the extension isn't needed.
+    cmd: uv run --only-group docs zensical serve {{.CLI_ARGS}}
+
+  docs-test:
+    desc: 'Build the documentation site in strict mode, as CI does: any warning (a broken link or anchor, an unresolved API reference, a missing included file) fails it'
+    cmd: uv run --only-group docs zensical build --strict --clean
+
   licenses:
     desc: 'Regenerate THIRD_PARTY_LICENSES, the licenses of the crates compiled into the extension (needs cargo-about: cargo install --locked --features cli cargo-about@0.9.2)'
     cmds:
@@ -91,3 +100,9 @@ tasks:
           docker compose run --rm "${service}"
         done
       - uv run yeet ./compare.py:matrix results-matrix "Run in Docker, one container per library, each limited to 1 CPU core (pinned) and 500 MB with no swap; the JWKS server runs in a container of its own, outside that limit."
+      - task: race-svg
+
+  race-svg:
+    desc: 'Redraw the decode races (assets/perf-race.svg, HS256, and assets/perf-race-es256.svg, ES256; copied to docs/assets/) from the full matrix''s results in bench/results-matrix'
+    dir: bench
+    cmd: uv run yeet ./race_svg.py {{.CLI_ARGS}}
