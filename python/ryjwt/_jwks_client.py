@@ -10,8 +10,6 @@ which sync callers wait on directly and async ones through `asyncio.wrap_future`
 thread or event loop, sync or async, share it, and a background refresh needs no event loop.
 """
 
-from __future__ import annotations
-
 import math
 import threading
 import time
@@ -116,7 +114,7 @@ class _Fetch(NamedTuple):
     """A fetch running on its own thread. (A NamedTuple rather than a dataclass: importing
     dataclasses would double `import ryjwt`'s time.)"""
 
-    future: Future[None]
+    future: "Future[None]"
     """Done once the fetch's outcome is recorded (or it was abandoned)."""
     deadline: float
     """When callers stop waiting for it (`time.monotonic()`): `JWKSClient._timeout` after it
@@ -264,7 +262,7 @@ class JWKSClient:
             return False
         return scheme == "https" or (scheme == "http" and hostname.lower() in cls._local_hosts)
 
-    def _get(self, deadline: float) -> Response:
+    def _get(self, deadline: float) -> "Response":
         """GETs the JWKS, on the calling thread, by `deadline`."""
         if self._http is None:
             from ryjwt._http import HTTPGetter  # only now: it imports ssl and urllib.request

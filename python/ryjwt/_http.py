@@ -6,20 +6,16 @@ always to this machine, never go through a proxy.
 Imported on a client's first fetch only: `ssl` and `urllib.request` take ~25 ms to import.
 """
 
-from __future__ import annotations
-
 import http.client
 import io
+import socket
 import ssl
 import time
 import urllib.request
+from collections.abc import Buffer
 from contextvars import ContextVar
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, ClassVar
-
-if TYPE_CHECKING:
-    import socket
-    from collections.abc import Buffer
+from typing import ClassVar
 
 type Response = tuple[int, str | None, str | None, bytes]
 """What a fetch got: the status, the `Cache-Control` and `Age` headers, and the body."""

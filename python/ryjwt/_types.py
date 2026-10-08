@@ -1,8 +1,7 @@
 """Glue between ryjwt's Rust core and msgspec/pydantic, for `decode(type=...)` and `encode`."""
 
-from __future__ import annotations
-
 import inspect
+from collections.abc import Callable, Iterator
 from datetime import UTC, datetime, timedelta
 from functools import partial
 from types import MemberDescriptorType, NoneType, UnionType
@@ -11,8 +10,6 @@ from typing import TYPE_CHECKING, Annotated, Any, TypeAliasType, Union, get_args
 from ryjwt._compat import Struct, is_model_class, msgspec
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator
-
     import msgspec.inspect as msgspec_inspect
     from pydantic import BaseModel
     from pydantic.fields import FieldInfo
@@ -38,7 +35,7 @@ def _members(value: object) -> Iterator[object]:
         yield value
 
 
-def _nested_types(node: msgspec_inspect.Type) -> Iterator[msgspec_inspect.Type]:
+def _nested_types(node: "msgspec_inspect.Type") -> Iterator["msgspec_inspect.Type"]:
     """The types directly inside `node` (item, key/value, union member and field types)."""
     for value in msgspec.structs.astuple(node):
         for item in _members(value):
@@ -48,7 +45,7 @@ def _nested_types(node: msgspec_inspect.Type) -> Iterator[msgspec_inspect.Type]:
                 yield item
 
 
-def _decodes_without_user_code(root: msgspec_inspect.Type) -> bool:
+def _decodes_without_user_code(root: "msgspec_inspect.Type") -> bool:
     """Whether msgspec decodes `root` without calling any user code (`__post_init__`, a
     dataclass's or NamedTuple's constructor, an Enum's `_missing_`, a custom type's hook)."""
     unsafe = (
@@ -72,7 +69,7 @@ def _decodes_without_user_code(root: msgspec_inspect.Type) -> bool:
     return True
 
 
-def _is_claim_type(claim: str, type_: msgspec_inspect.Type) -> bool:
+def _is_claim_type(claim: str, type_: "msgspec_inspect.Type") -> bool:
     """Whether a field of this type decodes the claim to the very value `decode` validates."""
     str_type, list_type = msgspec.inspect.StrType, msgspec.inspect.ListType
     match claim:
@@ -104,7 +101,7 @@ def _origin(type_: object) -> type[object] | None:
     return origin if isinstance(origin, type) else None
 
 
-def _is_struct_datetime(type_: msgspec_inspect.Type) -> bool:
+def _is_struct_datetime(type_: "msgspec_inspect.Type") -> bool:
     """Whether a Struct field of this type is a datetime: `datetime`, or `datetime | None`."""
     members = type_.types if isinstance(type_, msgspec.inspect.UnionType) else (type_,)
     datetime_type, none_type = msgspec.inspect.DateTimeType, msgspec.inspect.NoneType
@@ -134,7 +131,7 @@ def _struct_date_claims(cls: type[Struct]) -> DateClaims:
     return tuple((key, name) for key, name in names if key in NUMERIC_DATE_CLAIMS)
 
 
-def _model_date_claims(cls: type[BaseModel], *, by_alias: bool) -> DateClaims:
+def _model_date_claims(cls: "type[BaseModel]", *, by_alias: bool) -> DateClaims:
     """The NumericDate claims (`exp`, `nbf`, `iat`) BaseModel `cls` has fields for, whatever their
     annotations, named as `cls` encodes them."""
     claims: list[tuple[str, str]] = []
@@ -222,7 +219,7 @@ def _is_model_datetime(annotation: object) -> bool:
     )
 
 
-def _validation_keys(name: str, field: FieldInfo, *, by_alias: bool, by_name: bool) -> set[str]:
+def _validation_keys(name: str, field: "FieldInfo", *, by_alias: bool, by_name: bool) -> set[str]:
     """The payload members a BaseModel field named `name` is validated from: its alias(es) (single
     keys; not paths into nested values), and its name, if the model validates by it."""
     import pydantic  # imported already: the model's class was made with it
@@ -240,7 +237,7 @@ def _validation_keys(name: str, field: FieldInfo, *, by_alias: bool, by_name: bo
     return keys
 
 
-def _model_datetime_claims(cls: type[BaseModel]) -> tuple[str, ...]:
+def _model_datetime_claims(cls: "type[BaseModel]") -> tuple[str, ...]:
     """The NumericDate claims (`exp`, `nbf`, `iat`) BaseModel `cls` validates into datetime
     fields."""
     by_alias: bool = cls.model_config.get("validate_by_alias", True)
@@ -434,11 +431,11 @@ def mismatch(type_: object, error: BaseException) -> tuple[str, bool] | None:
     return None
 
 
-def _model_dump(claims: BaseModel, *, by_alias: bool) -> dict[str, Any]:
+def _model_dump(claims: "BaseModel", *, by_alias: bool) -> dict[str, Any]:
     return claims.model_dump(mode="json", by_alias=by_alias)
 
 
-def _model_dump_json(claims: BaseModel, *, by_alias: bool) -> bytes:
+def _model_dump_json(claims: "BaseModel", *, by_alias: bool) -> bytes:
     return claims.model_dump_json(by_alias=by_alias).encode()
 
 

@@ -19,7 +19,6 @@ import math
 import re
 import socket
 import ssl
-import sys
 import threading
 import time
 import typing
@@ -1680,10 +1679,7 @@ def test_signatures_resolve_at_runtime(method: str) -> None:
 
     for signed in [function, *typing.get_overloads(function)]:
         assert inspect.signature(signed).parameters
-        # CPython before 3.12.4 can't resolve a PEP 695 type parameter (the decode overloads' `T`)
-        # in a postponed annotation (gh-114053), whatever the library does.
-        if sys.version_info >= (3, 12, 4):
-            assert typing.get_type_hints(signed)
+        assert typing.get_type_hints(signed)
     assert "url" in inspect.signature(ryjwt.JWKSClient).parameters
 
 

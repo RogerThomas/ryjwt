@@ -8,8 +8,6 @@ public annotations only, so those stay fully typed even when a library isn't res
 checker.
 """
 
-from __future__ import annotations
-
 import sys
 from typing import TYPE_CHECKING, ClassVar, Protocol, Self, TypeGuard
 
@@ -28,7 +26,7 @@ else:
             pass
 
 
-def is_model_class(cls: type[object]) -> TypeGuard[type[BaseModel]]:
+def is_model_class(cls: type[object]) -> "TypeGuard[type[BaseModel]]":
     """Whether `cls` is a pydantic `BaseModel` subclass, without importing pydantic."""
     pydantic_main = sys.modules.get("pydantic.main")
     return pydantic_main is not None and issubclass(cls, pydantic_main.BaseModel)
