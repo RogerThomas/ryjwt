@@ -133,4 +133,5 @@
 
   <text x="20" y="330" class="caption">ES256 with a PEM public key, a typical 704-byte token. Each bar takes 100,000 &#215; the library's mean time per decode.</text>
   <text x="20" y="346" class="caption">Measured in Docker, one container per library, each on one pinned CPU core.</text>
+
 </svg>

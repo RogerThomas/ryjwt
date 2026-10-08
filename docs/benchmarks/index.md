@@ -27,6 +27,26 @@ Each bar is one library decoding 100,000 tokens, filling in real time. A library
 With HS256, ryjwt decodes around 30 times faster than PyJWT. It's about three times faster than
 the fastest JavaScript and Rust libraries.
 
+### Why it's faster than jsonwebtoken (Rust)
+
+Both use the same token, the same checks and the same crypto library (aws-lc), so the gap comes
+from the work done per token. jsonwebtoken 11, decoding a typical HS256 token (measured natively
+on an M3, in nanoseconds):
+
+| step | jsonwebtoken | ryjwt | why |
+| :-- | --: | --: | :-- |
+| Read the header | 711 | 3 | jsonwebtoken parses it twice per token; ryjwt remembers headers it has already verified |
+| Set up the HMAC key | 116 | 0 | jsonwebtoken re-keys the HMAC per token; ryjwt does it once, when the key is created |
+| Compute the HMAC | 340 | 254 | ryjwt reuses the precomputed key state |
+| Decode base64 | 151 | 58 | SIMD, into a stack buffer |
+| Build the claims | 1,188 | 604 | jsonwebtoken builds a `serde_json::Value`; ryjwt builds the dict in one pass |
+| Check the claims | 399 | — | jsonwebtoken deserialises the claims a second time to check them; ryjwt checks them in the same pass |
+| Everything else | 249 | 156 | including, for ryjwt, the call from Python |
+| **Total** | **3,155** | **1,075** | |
+
+Decoding into a typed Rust struct with the mimalloc allocator, jsonwebtoken's fastest setup, still
+takes 2.35 µs: about 2.4 times ryjwt's decode into a msgspec `Struct`.
+
 ![A race to decode 100,000 ES256 tokens: ryjwt finishes first in about 3.2 seconds, just ahead of the Rust and Bun libraries, and PyJWT takes over 7 seconds](../assets/perf-race-es256.svg)
 
 With ES256, most of the time goes into checking the signature. Every library hands that to a

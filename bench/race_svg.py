@@ -49,6 +49,10 @@ class Race:
     """The key the tokens were verified with, for the caption."""
     output: str
     """The SVG's file name, in assets/."""
+    starred: str = ""
+    """The lane (a results key) to mark with an asterisk, explained by `footnote`."""
+    footnote: tuple[str, ...] = ()
+    """Lines under the caption, starting with the asterisk."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -142,11 +146,17 @@ fill="{lane.color}" />
             )
         return "\n".join(lines)
 
+    def _footnote(self, y: int) -> str:
+        return "\n".join(
+            f'  <text x="20" y="{y + 16 * i}" class="caption">{line}</text>'
+            for i, line in enumerate(self.race.footnote)
+        )
+
     def render(self) -> str:
         loop = self._loop_seconds()
         race_end = self._race_seconds() / loop * 100
         footer_y = self._axis_bottom() + 26
-        height = footer_y + 36
+        height = footer_y + 36 + 16 * len(self.race.footnote)
         fastest, slowest = self.lanes[0], self.lanes[-1]
         styles = "\n".join(self._lane_style(lane) for lane in self.lanes)
         lanes = "\n".join(self._lane(i, lane) for i, lane in enumerate(self.lanes))
@@ -200,6 +210,7 @@ class="playhead" />
 {self.decodes:,} &#215; the library's mean time per decode.</text>
   <text x="20" y="{footer_y + 16}" class="caption">Measured in Docker, one container per \
 library, each on one pinned CPU core.</text>
+{self._footnote(footer_y + 32)}
 </svg>
 """
 
@@ -222,7 +233,24 @@ class Races:
     }
     runtimes: ClassVar[dict[str, str]] = {"CPython": "Python", "Bun": "Bun", "Rust": "Rust"}
     races: ClassVar[list[Race]] = [
-        Race("hmac", "typical-k64", "HS256", "a 64-byte secret", "perf-race.svg"),
+        Race(
+            "hmac",
+            "typical-k64",
+            "HS256",
+            "a 64-byte secret",
+            "perf-race.svg",
+            starred="jsonwebtoken",
+            footnote=(
+                (
+                    "* Same token, checks and crypto library (aws-lc) on both sides. Per token, "
+                    "jsonwebtoken 11 parses the header"
+                ),
+                (
+                    "twice, re-keys the HMAC and deserialises the claims twice; ryjwt keys the "
+                    "HMAC once and parses each part once."
+                ),
+            ),
+        ),
         Race("pem", "typical-es256", "ES256", "a PEM public key", "perf-race-es256.svg"),
     ]
 
@@ -236,7 +264,8 @@ class Races:
         row = self._row(key, race)
         name, color = self.lane_names[key]
         runtime = self.runtimes[results["runtime"].split()[0]]
-        return Lane(key, f"{name} ({runtime})", color, row["mean_us"], results["impl"])
+        star = "*" if key == race.starred else ""
+        return Lane(key, f"{name} ({runtime}){star}", color, row["mean_us"], results["impl"])
 
     @classmethod
     def load(cls, results_dir: Path) -> Races:
