@@ -83,6 +83,7 @@ jobs:
           - { os: windows-2025, python: "3.14" }
     env:
       UV_PYTHON: ${{ matrix.python }} # instead of .python-version's; uv downloads it if need be
+      UV_PYTHON_PREFERENCE: only-managed # the latest patch release, not the runner's own Python
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

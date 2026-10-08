@@ -172,6 +172,8 @@ jobs:
       - name: Test (glibc)
         if: matrix.platform.libc == 'glibc'
         # On the Pythons uv downloads (python-build-standalone's).
+        env:
+          UV_PYTHON_PREFERENCE: only-managed # not the runner's own python3.12 (an old patch release)
         run: sh .github/scripts/test-wheel.sh dist 3.12 3.13 3.14 3.14t
       - name: Test (musl, in Alpine)
         if: matrix.platform.libc == 'musl'

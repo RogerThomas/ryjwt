@@ -33,6 +33,7 @@ node_modules/
 
 # Local
 .claude/settings.local.json
+.claude/worktrees/
 .env
 .env.*
 .in
