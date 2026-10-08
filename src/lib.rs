@@ -14,8 +14,9 @@ mod mac;
 
 use pyo3::intern;
 use pyo3::prelude::*;
-use pyo3::types::{PyMapping, PyString};
+use pyo3::types::{PyMapping, PyString, PyTuple};
 
+use claims::Expected;
 use decoder::Decoder;
 use encoder::Encoder;
 use keys::{KeyClass, KeySet};
@@ -40,16 +41,18 @@ struct Hmac {
 #[pymethods]
 impl Hmac {
     #[new]
-    #[pyo3(signature = (secret, *, algorithms, allow_short_secret=false))]
+    #[pyo3(signature = (secret, *, algorithms, audience=None, issuer=None, allow_short_secret=false))]
     fn new(
         py: Python<'_>,
         secret: &Bound<'_, PyAny>,
         algorithms: Vec<String>,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
         allow_short_secret: bool,
     ) -> PyResult<Self> {
         let (keys, signers) = keys::prepare_secret(secret, algorithms, allow_short_secret)?;
         Ok(Self {
-            decoder: Decoder::new(py, keys)?,
+            decoder: Decoder::new(py, keys, audience, issuer)?,
             encoder: Encoder::new(py, signers)?,
         })
     }
@@ -93,10 +96,16 @@ struct PrivateKey {
 }
 
 impl PrivateKey {
-    fn from_pem(py: Python<'_>, pem: &Bound<'_, PyAny>, algorithms: Vec<String>) -> PyResult<Self> {
+    fn from_pem(
+        py: Python<'_>,
+        pem: &Bound<'_, PyAny>,
+        algorithms: Vec<String>,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
+    ) -> PyResult<Self> {
         let (keys, signers) = keys::prepare_private(pem, algorithms)?;
         Ok(Self {
-            decoder: Decoder::new(py, keys)?,
+            decoder: Decoder::new(py, keys, audience, issuer)?,
             encoder: Encoder::new(py, signers)?,
         })
     }
@@ -105,20 +114,28 @@ impl PrivateKey {
 #[pymethods]
 impl PrivateKey {
     #[new]
-    #[pyo3(signature = (pem, *, algorithms))]
-    fn new(py: Python<'_>, pem: &Bound<'_, PyAny>, algorithms: Vec<String>) -> PyResult<Self> {
-        Self::from_pem(py, pem, algorithms)
+    #[pyo3(signature = (pem, *, algorithms, audience=None, issuer=None))]
+    fn new(
+        py: Python<'_>,
+        pem: &Bound<'_, PyAny>,
+        algorithms: Vec<String>,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
+    ) -> PyResult<Self> {
+        Self::from_pem(py, pem, algorithms, audience, issuer)
     }
 
     /// Reads the PEM from the file at `path`.
     #[staticmethod]
-    #[pyo3(signature = (path, *, algorithms))]
+    #[pyo3(signature = (path, *, algorithms, audience=None, issuer=None))]
     fn from_path(
         py: Python<'_>,
         path: &Bound<'_, PyAny>,
         algorithms: Vec<String>,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
     ) -> PyResult<Self> {
-        Self::from_pem(py, &read_key_file(path)?, algorithms)
+        Self::from_pem(py, &read_key_file(path)?, algorithms, audience, issuer)
     }
 
     /// The configured algorithm names.
@@ -159,9 +176,14 @@ struct PublicKey {
 }
 
 impl PublicKey {
-    fn from_keys(py: Python<'_>, keys: KeySet) -> PyResult<Self> {
+    fn from_keys(
+        py: Python<'_>,
+        keys: KeySet,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
+    ) -> PyResult<Self> {
         Ok(Self {
-            decoder: Decoder::new(py, keys)?,
+            decoder: Decoder::new(py, keys, audience, issuer)?,
         })
     }
 }
@@ -169,32 +191,44 @@ impl PublicKey {
 #[pymethods]
 impl PublicKey {
     #[new]
-    #[pyo3(signature = (pem, *, algorithms))]
-    fn new(py: Python<'_>, pem: &Bound<'_, PyAny>, algorithms: Vec<String>) -> PyResult<Self> {
-        Self::from_keys(py, keys::prepare_public(pem, algorithms)?)
+    #[pyo3(signature = (pem, *, algorithms, audience=None, issuer=None))]
+    fn new(
+        py: Python<'_>,
+        pem: &Bound<'_, PyAny>,
+        algorithms: Vec<String>,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
+    ) -> PyResult<Self> {
+        Self::from_keys(py, keys::prepare_public(pem, algorithms)?, audience, issuer)
     }
 
     /// Reads the PEM from the file at `path`.
     #[staticmethod]
-    #[pyo3(signature = (path, *, algorithms))]
+    #[pyo3(signature = (path, *, algorithms, audience=None, issuer=None))]
     fn from_path(
         py: Python<'_>,
         path: &Bound<'_, PyAny>,
         algorithms: Vec<String>,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
     ) -> PyResult<Self> {
-        Self::from_keys(py, keys::prepare_public(&read_key_file(path)?, algorithms)?)
+        let keys = keys::prepare_public(&read_key_file(path)?, algorithms)?;
+        Self::from_keys(py, keys, audience, issuer)
     }
 
     /// Takes the keys from a JWKS document (JSON str/bytes, or a Mapping); tokens pick theirs by
     /// `kid`.
     #[staticmethod]
-    #[pyo3(signature = (jwks, *, algorithms))]
+    #[pyo3(signature = (jwks, *, algorithms, audience=None, issuer=None))]
     fn from_jwks(
         py: Python<'_>,
         jwks: &Bound<'_, PyAny>,
         algorithms: Vec<String>,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
     ) -> PyResult<Self> {
-        Self::from_keys(py, jwks::prepare(jwks, algorithms, jwks::Mode::Strict)?)
+        let keys = jwks::prepare(jwks, algorithms, jwks::Mode::Strict)?;
+        Self::from_keys(py, keys, audience, issuer)
     }
 
     /// The configured algorithm names.
@@ -221,13 +255,16 @@ impl PublicKey {
 /// `PublicKey.from_jwks` for a JWKS client's fetched document: keys that can't be used are skipped
 /// rather than rejecting the document (see `jwks::Mode::Lenient`).
 #[pyfunction]
-#[pyo3(signature = (jwks, *, algorithms))]
+#[pyo3(signature = (jwks, *, algorithms, audience=None, issuer=None))]
 fn public_key_from_fetched_jwks(
     py: Python<'_>,
     jwks: &Bound<'_, PyAny>,
     algorithms: Vec<String>,
+    audience: Option<&Bound<'_, PyAny>>,
+    issuer: Option<&Bound<'_, PyAny>>,
 ) -> PyResult<PublicKey> {
-    PublicKey::from_keys(py, jwks::prepare(jwks, algorithms, jwks::Mode::Lenient)?)
+    let keys = jwks::prepare(jwks, algorithms, jwks::Mode::Lenient)?;
+    PublicKey::from_keys(py, keys, audience, issuer)
 }
 
 /// Validates `algorithms` as `PublicKey.from_jwks` does, raising the same errors: a JWKS client
@@ -237,6 +274,31 @@ fn validate_jwks_algorithms(algorithms: Vec<String>) -> PyResult<()> {
     keys::algorithm_specs(KeyClass::Public, algorithms).map(drop)
 }
 
+/// An `audience`/`issuer` value that can be read again: None, a str, or a tuple of str.
+type Reusable<'py> = Option<Bound<'py, PyAny>>;
+
+/// `value` (an `audience`/`issuer` argument called `name`) validated as the key classes validate
+/// it, in a form that can be read again: an iterable (which may only be read once) as a tuple.
+fn reusable<'py>(value: Option<Bound<'py, PyAny>>, name: &str) -> PyResult<Reusable<'py>> {
+    let Some(value) = value else { return Ok(None) };
+    Ok(match Expected::parse(Some(&value), name)? {
+        Expected::Unchecked => None,
+        Expected::One(_) => Some(value),
+        Expected::AnyOf(values) => Some(PyTuple::new(value.py(), values)?.into_any()),
+    })
+}
+
+/// Validates `audience` and `issuer` as the key classes do, raising the same errors: a JWKS client
+/// checks them when it's built, and keeps what this returns to pass to each `PublicKey` it builds.
+#[pyfunction]
+#[pyo3(signature = (*, audience, issuer))]
+fn validate_audience_and_issuer<'py>(
+    audience: Option<Bound<'py, PyAny>>,
+    issuer: Option<Bound<'py, PyAny>>,
+) -> PyResult<(Reusable<'py>, Reusable<'py>)> {
+    Ok((reusable(audience, "audience")?, reusable(issuer, "issuer")?))
+}
+
 /// Runs without the GIL on free-threaded Python (`gil_used = false`, the default, stated here): the
 /// classes are frozen and hold only `Sync` data, and their caches (`Decoder`'s known headers and
 /// parsers, `Encoder`'s payload encoders) tolerate racing fills, every racer storing an equal entry.
@@ -244,6 +306,7 @@ fn validate_jwks_algorithms(algorithms: Vec<String>) -> PyResult<()> {
 fn _ryjwt(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(public_key_from_fetched_jwks, m)?)?;
     m.add_function(wrap_pyfunction!(validate_jwks_algorithms, m)?)?;
+    m.add_function(wrap_pyfunction!(validate_audience_and_issuer, m)?)?;
     m.add_class::<Hmac>()?;
     m.add_class::<PrivateKey>()?;
     m.add_class::<PublicKey>()?;

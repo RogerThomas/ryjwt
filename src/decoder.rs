@@ -8,7 +8,7 @@ use pyo3::intern;
 use pyo3::prelude::*;
 use pyo3::types::{PyBytes, PyDict, PyString, PyType};
 
-use crate::claims::{self, Checks, ClaimAttributes};
+use crate::claims::{self, Checks, ClaimAttributes, Expected};
 use crate::errors::{
     ClaimsValidationError, DecodeError, InvalidAlgorithmError, InvalidSignatureError,
     UnknownKeyError,
@@ -30,6 +30,9 @@ pub struct Decoder {
     verifiers: Vec<Verifier>,
     /// The configured algorithm names.
     algorithm_names: Vec<&'static str>,
+    /// The configured `audience` and `issuer`, which `decode`'s own replace.
+    audience: Expected<'static>,
+    issuer: Expected<'static>,
     /// How many keys `verifiers` holds: 1, unless built from a JWKS.
     key_count: usize,
     /// Whether any key has a `kid`, so tokens' `kid`s must be read to pick the key.
@@ -149,7 +152,14 @@ fn msgspec_dict_decoder(py: Python<'_>) -> PyResult<Option<Py<PyAny>>> {
 }
 
 impl Decoder {
-    pub fn new(py: Python<'_>, keys: KeySet) -> PyResult<Self> {
+    /// A decoder for `keys`, checking `audience` and `issuer` (validated as `decode` validates its
+    /// own) unless a `decode` call passes its own.
+    pub fn new(
+        py: Python<'_>,
+        keys: KeySet,
+        audience: Option<&Bound<'_, PyAny>>,
+        issuer: Option<&Bound<'_, PyAny>>,
+    ) -> PyResult<Self> {
         let KeySet {
             algorithm_names,
             verifiers,
@@ -159,6 +169,8 @@ impl Decoder {
             any_kid: verifiers.iter().any(|v| v.kid.is_some()),
             verifiers,
             algorithm_names,
+            audience: Expected::configured(audience, "audience")?,
+            issuer: Expected::configured(issuer, "issuer")?,
             key_count,
             parsers: PyDict::new(py).unbind(),
             msgspec_decode: msgspec_dict_decoder(py)?,
@@ -358,7 +370,9 @@ impl Decoder {
         issuer: Option<&Bound<'py, PyAny>>,
         leeway: Option<&Bound<'py, PyAny>>,
     ) -> PyResult<Bound<'py, PyAny>> {
-        let checks = Checks::new(audience, issuer, leeway)?;
+        let audience = Expected::parse(audience, "audience")?;
+        let issuer = Expected::parse(issuer, "issuer")?;
+        let checks = Checks::new(audience.or(&self.audience), issuer.or(&self.issuer), leeway)?;
         let token = jws::split(token_bytes(token)?)?;
         self.decode_segments(py, &token, r#type, &checks)
             .map_err(|e| {

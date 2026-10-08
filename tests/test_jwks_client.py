@@ -23,7 +23,7 @@ import sys
 import threading
 import time
 import typing
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import timedelta
@@ -60,6 +60,13 @@ class Policy(TypedDict, total=False):
     max_cache_lifetime: float | timedelta
     max_stale: float | timedelta
     cooldown: float | timedelta
+
+
+class ClaimChecks(TypedDict, total=False):
+    """The `audience` and `issuer` a client, or a decode, checks tokens against."""
+
+    audience: str | Iterable[str] | None
+    issuer: str | Iterable[str] | None
 
 
 @dataclass
@@ -125,6 +132,25 @@ class _ClientMaker:
     ) -> Caller:
         client = ryjwt.JWKSClient(url, algorithms=algorithms or ["ES256"], **policy)
         return Caller(client, self.kind, self.runner)
+
+
+@dataclass
+class ClientDecode:
+    """A `JWKSClient`'s `decode`, `adecode` (run on `runner`) or `decode_nowait`, as `method`
+    says."""
+
+    client: ryjwt.JWKSClient
+    method: str
+    runner: asyncio.Runner
+
+    def __call__(self, token: str, **checks: Unpack[ClaimChecks]) -> dict[str, Any]:
+        match self.method:
+            case "decode":
+                return self.client.decode(token, **checks)
+            case "adecode":
+                return self.runner.run(self.client.adecode(token, **checks))
+            case _:
+                return self.client.decode_nowait(token, **checks)
 
 
 @dataclass
@@ -197,6 +223,20 @@ def _raises(error: type[Exception], decode: Callable[[str], object], token: str)
 
 def _refreshed(client: ryjwt.JWKSClient) -> bool:
     return not client.needs_refresh
+
+
+def _client_decode(
+    url: str,
+    method: str,
+    runner: asyncio.Runner,
+    **checks: Unpack[ClaimChecks],
+) -> ClientDecode:
+    """`method` of a new client for `url` (RS256 and ES256, with `checks`), which has fetched the
+    keys already for `decode_nowait`."""
+    client = ryjwt.JWKSClient(url, algorithms=["RS256", "ES256"], **checks)
+    if method == "decode_nowait":
+        client.refresh()
+    return ClientDecode(client, method, runner)
 
 
 def _decodes(decode: Callable[[str], object], token: str) -> bool:
@@ -1610,6 +1650,18 @@ def test_invalid_urls(url: str) -> None:
             {"algorithms": ["HS256"]}, ValueError, "needs an HMAC secret", id="hmac-algorithm"
         ),
         pytest.param({"algorithms": []}, ValueError, "must not be empty", id="no-algorithms"),
+        pytest.param(
+            {"audience": 1},
+            TypeError,
+            "audience must be a str or an iterable of str",
+            id="audience",
+        ),
+        pytest.param(
+            {"issuer": ["iss", 1]},
+            TypeError,
+            "issuer must be a str or an iterable of str",
+            id="issuer-item",
+        ),
     ],
 )
 def test_invalid_arguments(policy: dict[str, Any], error: type[Exception], match: str) -> None:
@@ -1718,3 +1770,56 @@ def test_full_decode_nowait_api(
     with pytest.raises(ryjwt.DecodeError):
         client.decode_nowait("not-a-token")
     assert mixed_server.requests == 1
+
+
+@pytest.mark.parametrize("method", ["decode", "adecode", "decode_nowait"])
+def test_audience_and_issuer_set_on_the_client(
+    method: str,
+    mixed_server: JWKSServer,
+    tokens: dict[str, str],
+    private_keys: dict[ryjwt.AsymmetricAlgorithm, SigningKey],
+    runner: asyncio.Runner,
+) -> None:
+    claims = {"sub": "sub", "aud": "aud", "iss": "iss"}
+    without_iss = jwt.encode(
+        {"aud": "aud"}, private_keys["ES256"], algorithm="ES256", headers={"kid": "ec"}
+    )
+    decode = _client_decode(mixed_server.url, method, runner, audience="aud", issuer=["x", "iss"])
+    other = _client_decode(mixed_server.url, method, runner, audience="other", issuer="other")
+    no_audience = _client_decode(mixed_server.url, method, runner, issuer="iss")
+
+    assert decode(tokens["rs256"]) == claims
+    assert decode(tokens["es256"]) == claims
+    with pytest.raises(ryjwt.InvalidIssuerError, match="missing the iss claim"):
+        decode(without_iss)
+    with pytest.raises(ryjwt.InvalidAudienceError, match="Audience doesn't match"):
+        other(tokens["es256"])
+    with pytest.raises(ryjwt.InvalidIssuerError, match="Issuer doesn't match"):
+        other(tokens["es256"], audience="aud")
+    assert other(tokens["es256"], audience="aud", issuer="iss") == claims
+    with pytest.raises(ryjwt.InvalidAudienceError, match="Audience doesn't match"):
+        decode(tokens["es256"], audience="other")  # replaces the client's, rather than adding
+    with pytest.raises(ryjwt.InvalidIssuerError, match="Issuer doesn't match"):
+        decode(tokens["es256"], issuer="other")
+    with pytest.raises(ryjwt.InvalidAudienceError, match="no audience was given"):
+        no_audience(tokens["es256"])
+    assert no_audience(tokens["es256"], audience="aud") == claims
+
+
+def test_client_audience_and_issuer_accept_any_iterable(
+    mixed_server: JWKSServer,
+    tokens: dict[str, str],
+) -> None:
+    claims = {"sub": "sub", "aud": "aud", "iss": "iss"}
+    client = ryjwt.JWKSClient(
+        mixed_server.url,
+        algorithms=["RS256", "ES256"],
+        audience=(a for a in ["x", "aud"]),
+        issuer=iter(["iss"]),
+    )
+
+    client.refresh()
+    assert client.decode_nowait(tokens["es256"]) == claims
+    client.refresh()  # the keys fetched again get the same audience and issuer
+    assert client.decode_nowait(tokens["es256"]) == claims
+    assert mixed_server.requests == 2

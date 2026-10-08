@@ -27,6 +27,7 @@ from ryjwt._ryjwt import (
     PublicKey,
     UnknownKeyError,
     public_key_from_fetched_jwks,
+    validate_audience_and_issuer,
     validate_jwks_algorithms,
 )
 
@@ -189,6 +190,8 @@ class JWKSClient:
         url: str,
         *,
         algorithms: Sequence[AsymmetricAlgorithm],
+        audience: str | Iterable[str] | None = None,
+        issuer: str | Iterable[str] | None = None,
         cache_lifetime: float | timedelta = 900,
         min_cache_lifetime: float | timedelta = 60,
         max_cache_lifetime: float | timedelta = 86400,
@@ -199,6 +202,9 @@ class JWKSClient:
         `[::1]`). URLs with credentials, whitespace, control or non-ASCII characters, or
         backslashes are rejected too. A URL that isn't allowed is a `ValueError`. `algorithms` are
         checked as `PublicKey.from_jwks` checks them.
+
+        `audience` and `issuer` are what `decode`, `adecode` and `decode_nowait` check tokens'
+        `aud` and `iss` against, as for `PublicKey`. Each call may pass its own instead.
 
         The times are seconds or `timedelta`s, and mustn't be negative:
 
@@ -218,6 +224,9 @@ class JWKSClient:
                 f" credentials, got {got}"
             )
         validate_jwks_algorithms(algorithms)  # now, rather than on the first fetch
+        self._audience, self._issuer = validate_audience_and_issuer(
+            audience=audience, issuer=issuer
+        )
         self._url = url
         self._scheme, self._host = parsed
         self._origin = _redacted(*parsed)  # what messages show of the URL
@@ -320,7 +329,9 @@ class JWKSClient:
         if not 200 <= status < 300:
             return _Outcome(partial(self._failed, f"HTTP status {status}", None), succeeded=False)
         try:
-            keys = public_key_from_fetched_jwks(body, algorithms=self._algorithms)
+            keys = public_key_from_fetched_jwks(
+                body, algorithms=self._algorithms, audience=self._audience, issuer=self._issuer
+            )
         except InvalidKeyError as e:
             return _Outcome(partial(self._failed, str(e), e), succeeded=False)
         lifetime = self._lifetime(cache_control, age)
@@ -533,7 +544,8 @@ class JWKSClient:
         leeway: float | timedelta = 0,
     ) -> object:
         """Verifies `token` with the JWKS' keys, as `PublicKey.decode` does, fetching them first if
-        needed (blocking: in async code, use `adecode`).
+        needed (blocking: in async code, use `adecode`). `audience` and `issuer`, if given, replace
+        the client's own for this call.
 
         Raises `JWKSFetchError` if there are no keys (the fetch failed) or they've been out of date
         for over `max_stale`, and `UnknownKeyError` if the token's `kid` is in neither the keys

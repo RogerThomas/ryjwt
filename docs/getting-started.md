@@ -35,8 +35,8 @@ In a real service, the secret comes from your configuration, and is at least 32 
 `HS256` (see [HMAC secrets](keys.md#hmac)).
 
 `decode` checks the signature. Then it checks the token's times: it mustn't have expired (its
-`exp` claim), or be used too early (its `nbf` claim). Pass `audience` and `issuer` to check who
-the token is for (`aud`) and who issued it (`iss`) as well:
+`exp` claim), or be used too early (its `nbf` claim). Set `audience` and `issuer` on the key to
+check who the token is for (`aud`) and who issued it (`iss`) as well:
 
 ```python
 import secrets
@@ -44,7 +44,12 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.HMAC(
+    secrets.token_bytes(32),
+    algorithms=["HS256"],
+    audience="my-api",
+    issuer="https://issuer.example/",
+)
 token = key.encode({
     "sub": "user-1",
     "aud": "my-api",
@@ -52,11 +57,12 @@ token = key.encode({
     "exp": int(time.time()) + 900,
 })
 
-claims = key.decode(token, audience="my-api", issuer="https://issuer.example/")
+claims = key.decode(token)
 ```
 
-A token with an `aud` claim is rejected unless you pass `audience`. It's meant for a particular
-service, and ryjwt won't assume it's yours. [Encoding and decoding](encoding-and-decoding.md)
+A token with an `aud` claim is rejected unless you set `audience`. It's meant for a particular
+service, and ryjwt won't assume it's yours. `decode` can also take its own `audience` and
+`issuer`, which replace the key's for that call. [Encoding and decoding](encoding-and-decoding.md)
 covers every check.
 
 ## Handle invalid tokens

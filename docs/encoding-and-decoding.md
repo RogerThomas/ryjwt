@@ -30,7 +30,8 @@ token = key.encode({"sub": "user-1"}, algorithm="HS512", headers={"kid": "key-1"
 ## Decoding
 
 `decode(token, *, type=None, audience=None, issuer=None, leeway=0)` verifies `token` and returns
-its claims. The token is a `str` or `bytes`.
+its claims. The token is a `str` or `bytes`. You'd usually set `audience` and `issuer` [on the
+key](#on-the-key-or-for-one-call) instead.
 
 ```python
 import secrets
@@ -38,10 +39,10 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
 
-claims = key.decode(token, audience="my-api")
+claims = key.decode(token)
 assert claims["sub"] == "user-1"
 ```
 
@@ -62,7 +63,7 @@ The payload is only read once the signature has checked out. Anything wrong is a
 | `exp` | when the token expires | if the token has one |
 | `nbf` | when the token becomes valid ("not before") | if the token has one |
 | `aud` | who the token is for (the audience) | always |
-| `iss` | who issued the token | only if you pass `issuer` |
+| `iss` | who issued the token | only if you set `issuer` |
 
 **`exp` and `nbf`** are times, as numbers of seconds since 1970 (UTC). A token is rejected once
 `exp` has passed ([`ExpiredSignatureError`][ryjwt.ExpiredSignatureError]), or while `nbf` is
@@ -72,18 +73,72 @@ number, the token is rejected too.
 Neither is required: a token without `exp` never expires. To require them, make them required
 fields of a [`type`](#typed-claims).
 
-**`aud`** is a string, or a list of strings. Pass the audience you expect as `audience`:
+**`aud`** is a string, or a list of strings. Set the audience you expect as `audience`:
 
-- with `audience`, the token must have an `aud`, and one of its values must match;
-- without `audience`, a token that has an `aud` is rejected. It's meant for some particular
-  service, and ryjwt won't assume it's yours.
+- with an `audience`, the token must have an `aud`, and one of its values must match;
+- without one, a token that has an `aud` is rejected. It's meant for some particular service,
+  and ryjwt won't assume it's yours.
 
-**`iss`** is a string. Pass the issuer you expect as `issuer`, and the token must have a
-matching `iss`.
+**`iss`** is a string. Set the issuer you expect as `issuer`, and the token must have a matching
+`iss`. Without an `issuer`, `iss` isn't checked.
 
 `audience` and `issuer` can also be lists (any iterable): then any one of them may match. A
 mismatch raises [`InvalidAudienceError`][ryjwt.InvalidAudienceError] or
 [`InvalidIssuerError`][ryjwt.InvalidIssuerError].
+
+#### On the key, or for one call
+
+Set `audience` and `issuer` once, when you create the key. Every `decode` then checks them:
+
+```python
+import secrets
+import time
+
+import ryjwt
+
+key = ryjwt.HMAC(
+    secrets.token_bytes(32),
+    algorithms=["HS256"],
+    audience="my-api",
+    issuer="https://issuer.example/",
+)
+token = key.encode({
+    "sub": "user-1",
+    "aud": "my-api",
+    "iss": "https://issuer.example/",
+    "exp": int(time.time()) + 900,
+})
+
+claims = key.decode(token)
+```
+
+`decode` takes `audience` and `issuer` too. A value you pass there replaces the key's for that
+call. It isn't added to it:
+
+```python
+import secrets
+
+import ryjwt
+
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+token = key.encode({"sub": "user-1", "aud": "admin-api"})
+
+claims = key.decode(token, audience="admin-api")  # checked against "admin-api" only
+```
+
+Leaving them out, or passing `None`, uses the key's. You can't switch a check off for one call.
+If some tokens need different checks, create a second key object for them.
+
+#### Why `issuer` is optional, but `aud` is strict
+
+The JWT standard says a service must reject a token whose `aud` doesn't name it. It leaves
+checking `iss` up to you. And a key you trust usually belongs to one issuer: if the signature is
+valid, that issuer made the token.
+
+That isn't always true. Some identity providers serve many customers (tenants) with one set of
+keys, and each tenant is its own issuer. A valid signature then only tells you the provider made
+the token, not which tenant it's from. Set `issuer` whenever you know it, and always when one key
+or JWKS serves several issuers.
 
 **`leeway`** allows for clocks that differ a little between the token's issuer and you. It's in
 seconds, or a `timedelta`, and extends both `exp` and `nbf`. A negative or infinite `leeway` is a
@@ -96,7 +151,12 @@ from datetime import timedelta
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.HMAC(
+    secrets.token_bytes(32),
+    algorithms=["HS256"],
+    audience="my-api",
+    issuer=["https://issuer.example/", "https://old-issuer.example/"],
+)
 token = key.encode({
     "sub": "user-1",
     "aud": ["my-api", "other-api"],
@@ -104,12 +164,7 @@ token = key.encode({
     "exp": int(time.time()) - 5,  # expired 5 seconds ago
 })
 
-claims = key.decode(
-    token,
-    audience="my-api",
-    issuer=["https://issuer.example/", "https://old-issuer.example/"],
-    leeway=timedelta(seconds=30),  # so still accepted
-)
+claims = key.decode(token, leeway=timedelta(seconds=30))  # so still accepted
 ```
 
 Other claims, such as `sub`, `iat` or `jti`, aren't checked: check the ones you rely on yourself.

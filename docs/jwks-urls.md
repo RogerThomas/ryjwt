@@ -5,7 +5,8 @@ tokens as a [JWKS](keys.md#jwks-documents) at a URL, and replace the keys from t
 [`JWKSClient`][ryjwt.JWKSClient] verifies tokens with those keys. It fetches them, caches them,
 and fetches them again when they change.
 
-- **You pass** the JWKS URL and the algorithms to accept.
+- **You pass** the JWKS URL, the algorithms to accept, and usually the `audience` and `issuer` to
+  check tokens against.
 - **You get** `decode` (for sync code), `adecode` (for async code) and `decode_nowait` (never
   fetches). They take the same arguments as [`PublicKey.decode`][ryjwt.PublicKey.decode], and
   check the same [claims](encoding-and-decoding.md#claims-checks).
@@ -26,11 +27,24 @@ share between threads and event loops. Creating it doesn't fetch anything.
 ```python
 import ryjwt
 
-client = ryjwt.JWKSClient("https://issuer.example/.well-known/jwks.json", algorithms=["RS256"])
+client = ryjwt.JWKSClient(
+    "https://issuer.example/.well-known/jwks.json",
+    algorithms=["RS256"],
+    audience="my-api",
+    issuer="https://issuer.example/",
+)
 
-claims = client.decode(token, audience="my-api")  # in sync code
-claims = await client.adecode(token, audience="my-api")  # in async code
+claims = client.decode(token)  # in sync code
+claims = await client.adecode(token)  # in async code
 ```
+
+Every decode checks tokens against the client's `audience` and `issuer`. A decode can pass its
+own, which replace the client's for that call: `client.decode(token, audience="admin-api")`.
+
+Set `issuer` even though it's optional. Some providers sign tokens for many customers (tenants)
+with the keys of one JWKS URL, and each tenant is its own issuer. Without `issuer`, a token from
+any of them would be accepted. [Claims checks](encoding-and-decoding.md#why-issuer-is-optional-but-aud-is-strict)
+explains more.
 
 `decode` and `adecode` fetch the keys when they need to:
 
@@ -56,7 +70,7 @@ If you'd rather decide when the client fetches (from a background task, say), us
 ```python
 if client.needs_refresh:
     client.refresh()  # or: await client.arefresh()
-claims = client.decode_nowait(token, audience="my-api")
+claims = client.decode_nowait(token)
 ```
 
 - `decode_nowait` decodes with the keys the client has. It never fetches, and never waits.

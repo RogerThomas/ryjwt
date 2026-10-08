@@ -38,8 +38,8 @@ a pydantic validator) only runs once `exp`, `nbf`, `aud` and `iss` have passed t
 
 ### Tokens meant for another service
 
-A token with an audience (`aud`) is rejected unless you pass `audience`. A service that forgot to
-check can't accept a token meant for another one.
+A token with an audience (`aud`) is rejected unless you set `audience`, on the key or the
+`decode` call. A service that forgot to check can't accept a token meant for another one.
 
 ### Weak keys
 
@@ -82,7 +82,9 @@ A [`JWKSClient`](jwks-urls.md):
 - **Allow only the algorithms you use.** The shorter the list, the less there is to go wrong.
 - **Keep secrets secret.** An HMAC secret or a private key lets whoever has it make tokens. When
   other services only need to check tokens, give them a public key instead.
-- **Pass `audience`, and `issuer`.** Without `issuer`, a token's issuer isn't checked at all.
+- **Set `audience`, and `issuer`.** Without `issuer`, a token's issuer isn't checked at all.
+  That matters most when one key or JWKS serves several issuers, as with multi-tenant identity
+  providers (see [why](encoding-and-decoding.md#why-issuer-is-optional-but-aud-is-strict)).
 - **Get the JWKS URL right.** A `JWKSClient` trusts whatever keys its URL serves.
 - **Require the claims you rely on.** `exp` and `nbf` are only checked if the token has them, so
   a token without `exp` never expires. Make them required fields of a [typed

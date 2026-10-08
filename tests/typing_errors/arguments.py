@@ -39,5 +39,14 @@ hmac.encode({}, header={"kid": "kid"})  # error
 ryjwt.HMAC("secret", algorithm=["HS256"])  # error
 ryjwt.HMAC(1, algorithms=["HS256"])  # error
 ryjwt.PrivateKey("pem", algorithms=["ES256"], allow_short_secret=True)  # error
+ryjwt.HMAC("secret", algorithms=["HS256"], audience=1)  # error
+ryjwt.HMAC("secret", algorithms=["HS256"], audiences="aud")  # error
+ryjwt.PrivateKey("pem", algorithms=["ES256"], issuer=[1])  # error
+ryjwt.PrivateKey.from_path("private.pem", algorithms=["ES256"], audience=b"aud")  # error
+ryjwt.PublicKey("pem", algorithms=["ES256"], audience=1)  # error
+ryjwt.PublicKey.from_path("public.pem", algorithms=["ES256"], issuer=1)  # error
+ryjwt.PublicKey.from_jwks("{}", algorithms=["ES256"], audience=[1])  # error
+ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"], audience=1)  # error
+ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"], issuer=[b"iss"])  # error
 ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"], cooldown="30")  # error
 ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"], http=None)  # error

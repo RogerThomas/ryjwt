@@ -214,51 +214,75 @@ pub fn validate_dict(payload: &Bound<'_, PyDict>, checks: &Checks) -> PyResult<(
 pub struct Checks<'a> {
     now: f64,
     leeway: f64,
-    audience: Expected<'a>,
-    issuer: Expected<'a>,
+    audience: &'a Expected<'a>,
+    issuer: &'a Expected<'a>,
 }
 
-/// An expected `aud`/`iss`: not checked, one str (borrowed from the caller's `str`, no copy), or
-/// any of several.
-enum Expected<'a> {
+/// An expected `aud`/`iss`: not checked, one str, or any of several. A `decode` argument borrows
+/// its str (no copy); a key's configured value owns it (`Expected<'static>`).
+pub enum Expected<'a> {
     Unchecked,
-    One(&'a str),
+    One(Cow<'a, str>),
     AnyOf(Vec<String>),
 }
 
-impl Expected<'_> {
-    fn is_unchecked(&self) -> bool {
+impl<'a> Expected<'a> {
+    /// An `audience`/`issuer` argument (called `name` in errors): None isn't checked, else a str or
+    /// an iterable of str.
+    pub fn parse(value: Option<&'a Bound<'_, PyAny>>, name: &str) -> PyResult<Self> {
+        let Some(value) = value.filter(|v| !v.is_none()) else {
+            return Ok(Self::Unchecked);
+        };
+        if let Ok(s) = value.cast::<PyString>() {
+            return Ok(Self::One(Cow::Borrowed(s.to_str()?)));
+        }
+        let error = || PyTypeError::new_err(format!("{name} must be a str or an iterable of str"));
+        let mut out = Vec::new();
+        for item in value.try_iter().map_err(|_| error())? {
+            out.push(
+                item?
+                    .cast::<PyString>()
+                    .map_err(|_| error())?
+                    .to_str()?
+                    .to_owned(),
+            );
+        }
+        Ok(Self::AnyOf(out))
+    }
+
+    /// `parse`, for a value a key keeps.
+    pub fn configured(value: Option<&Bound<'_, PyAny>>, name: &str) -> PyResult<Expected<'static>> {
+        Ok(match Expected::parse(value, name)? {
+            Expected::Unchecked => Expected::Unchecked,
+            Expected::One(s) => Expected::One(Cow::Owned(s.into_owned())),
+            Expected::AnyOf(values) => Expected::AnyOf(values),
+        })
+    }
+
+    pub fn is_unchecked(&self) -> bool {
         matches!(self, Self::Unchecked)
+    }
+
+    /// This value (a `decode` argument) if given, else `configured` (the key's): a value given
+    /// replaces the key's, rather than adding to it.
+    pub fn or<'s>(&'s self, configured: &'s Expected<'s>) -> &'s Expected<'s>
+    where
+        'a: 's,
+    {
+        if self.is_unchecked() {
+            configured
+        } else {
+            self
+        }
     }
 
     fn matches(&self, value: &str) -> bool {
         match self {
             Self::Unchecked => true,
-            Self::One(expected) => *expected == value,
+            Self::One(expected) => **expected == *value,
             Self::AnyOf(expected) => expected.iter().any(|e| e == value),
         }
     }
-}
-
-fn strings<'a>(value: Option<&'a Bound<'_, PyAny>>, name: &str) -> PyResult<Expected<'a>> {
-    let Some(value) = value.filter(|v| !v.is_none()) else {
-        return Ok(Expected::Unchecked);
-    };
-    if let Ok(s) = value.cast::<PyString>() {
-        return Ok(Expected::One(s.to_str()?));
-    }
-    let error = || PyTypeError::new_err(format!("{name} must be a str or an iterable of str"));
-    let mut out = Vec::new();
-    for item in value.try_iter().map_err(|_| error())? {
-        out.push(
-            item?
-                .cast::<PyString>()
-                .map_err(|_| error())?
-                .to_str()?
-                .to_owned(),
-        );
-    }
-    Ok(Expected::AnyOf(out))
 }
 
 fn leeway_seconds(leeway: Option<&Bound<'_, PyAny>>) -> PyResult<f64> {
@@ -284,8 +308,8 @@ fn leeway_seconds(leeway: Option<&Bound<'_, PyAny>>) -> PyResult<f64> {
 
 impl<'a> Checks<'a> {
     pub fn new(
-        audience: Option<&'a Bound<'_, PyAny>>,
-        issuer: Option<&'a Bound<'_, PyAny>>,
+        audience: &'a Expected<'a>,
+        issuer: &'a Expected<'a>,
         leeway: Option<&Bound<'_, PyAny>>,
     ) -> PyResult<Self> {
         Ok(Self {
@@ -293,8 +317,8 @@ impl<'a> Checks<'a> {
                 .duration_since(UNIX_EPOCH)
                 .map_or(0.0, |d| d.as_secs_f64()),
             leeway: leeway_seconds(leeway)?,
-            audience: strings(audience, "audience")?,
-            issuer: strings(issuer, "issuer")?,
+            audience,
+            issuer,
         })
     }
 

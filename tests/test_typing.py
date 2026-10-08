@@ -78,6 +78,40 @@ def test_encode_and_algorithms_types(
 def test_hmac_constructor_types(hmac_key: str) -> None:
     assert_type(ryjwt.HMAC(hmac_key, algorithms=["HS256"]), ryjwt.HMAC)
     assert_type(ryjwt.HMAC(b"secret", algorithms=["HS256"], allow_short_secret=True), ryjwt.HMAC)
+    assert_type(
+        ryjwt.HMAC(hmac_key, algorithms=["HS256"], audience="aud", issuer=["iss", "other-iss"]),
+        ryjwt.HMAC,
+    )
+    assert_type(ryjwt.HMAC(hmac_key, algorithms=["HS256"], audience=None, issuer=None), ryjwt.HMAC)
+
+
+def test_audience_and_issuer_constructor_types(
+    tmp_path: Path,
+    private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
+    public_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
+) -> None:
+    (tmp_path / "private.pem").write_bytes(private_pems["ES256"])
+    (tmp_path / "public.pem").write_bytes(public_pems["ES256"])
+    private_key = ryjwt.PrivateKey(private_pems["ES256"], algorithms=["ES256"], audience="aud")
+    public_key = ryjwt.PublicKey(public_pems["ES256"], algorithms=["ES256"], issuer=("iss",))
+    token = private_key.encode({"sub": "sub", "aud": "aud", "iss": "iss"})
+
+    assert_type(private_key, ryjwt.PrivateKey)
+    assert_type(public_key, ryjwt.PublicKey)
+    assert_type(
+        ryjwt.PrivateKey.from_path(
+            tmp_path / "private.pem", algorithms=["ES256"], audience="aud", issuer="iss"
+        ),
+        ryjwt.PrivateKey,
+    )
+    assert_type(
+        ryjwt.PublicKey.from_path(
+            tmp_path / "public.pem", algorithms=["ES256"], audience={"aud"}, issuer=None
+        ),
+        ryjwt.PublicKey,
+    )
+    assert_type(private_key.decode(token, issuer="iss"), dict[str, Any])
+    assert_type(public_key.decode(token, audience="aud", type=ClaimsStruct), ClaimsStruct)
 
 
 def test_from_path_types(
@@ -109,6 +143,10 @@ def test_from_jwks_types(
     token = ryjwt.PrivateKey(private_pems["EdDSA"], algorithms=["EdDSA"]).encode({"sub": "sub"})
 
     assert_type(from_mapping, ryjwt.PublicKey)
+    assert_type(
+        ryjwt.PublicKey.from_jwks(jwks, algorithms=["EdDSA"], audience=["aud"], issuer="iss"),
+        ryjwt.PublicKey,
+    )
     assert_type(ryjwt.PublicKey.from_jwks(json.dumps(jwks), algorithms=["EdDSA"]), ryjwt.PublicKey)
     assert_type(
         ryjwt.PublicKey.from_jwks(json.dumps(jwks).encode(), algorithms=["EdDSA"]),
@@ -153,9 +191,17 @@ def test_jwks_client_types() -> None:
         max_stale=timedelta(hours=1),
         cooldown=timedelta(seconds=1),
     )
+    checking = ryjwt.JWKSClient(
+        "https://issuer/jwks",
+        algorithms=["ES256"],
+        audience="aud",
+        issuer=["iss", "other-iss"],
+        cooldown=30,
+    )
 
     assert_type(client, ryjwt.JWKSClient)
     assert_type(configured, ryjwt.JWKSClient)
+    assert_type(checking, ryjwt.JWKSClient)
     assert_type(client.needs_refresh, bool)
     assert inspect.iscoroutinefunction(_jwks_client_calls)
 

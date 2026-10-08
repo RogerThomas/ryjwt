@@ -38,7 +38,7 @@ from typing import Any
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
 
 def authenticate(authorization: str) -> dict[str, Any] | None:
@@ -47,7 +47,7 @@ def authenticate(authorization: str) -> dict[str, Any] | None:
     if scheme.lower() != "bearer":
         return None
     try:
-        return key.decode(token, audience="my-api")
+        return key.decode(token)
     except ryjwt.ExpiredSignatureError:
         return None  # the client should get a new token
     except ryjwt.InvalidTokenError:
@@ -82,9 +82,10 @@ Each message says more. The details:
 - **`UnknownKeyError`**: also raised when the JWKS has several keys and the token can't pick one:
   it has no `kid`, or the keys have none.
 - **`InvalidAudienceError`**: the token's `aud` doesn't match `audience`, is missing, or isn't a
-  string or list of strings. Or the token has an `aud` but you passed no `audience`.
-- **`InvalidIssuerError`**: you passed `issuer`, and the token's `iss` doesn't match it, is
-  missing, or isn't a string.
+  string or list of strings. Or the token has an `aud` but you set no `audience`, on the key or
+  the call.
+- **`InvalidIssuerError`**: you set `issuer`, and the token's `iss` doesn't match it, is missing,
+  or isn't a string.
 - **`ClaimsValidationError`**: a required field is missing, or a value has the wrong type or is
   out of range. msgspec's or pydantic's `ValidationError` is its `__cause__`.
 
@@ -124,7 +125,8 @@ before you run anything.
 - `type` isn't a msgspec `Struct` or pydantic `BaseModel` class;
 - `claims` isn't a dict, `Struct` or `BaseModel`;
 - `token` isn't a `str` or `bytes`;
-- `audience` or `issuer` isn't a `str` or an iterable of them;
+- `audience` or `issuer`, on a key, a client or a `decode` call, isn't a `str` or an iterable of
+  them;
 - `leeway` isn't a number or a `timedelta`.
 
 `OSError` (`FileNotFoundError`, `PermissionError`, ...): from `from_path`, reading the file.

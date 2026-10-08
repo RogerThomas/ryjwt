@@ -6,13 +6,23 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
+from pathlib import Path
 from typing import Annotated, Any, ClassVar, Protocol, TypedDict, Unpack
 
 import msgspec
 import pydantic
 import pytest
 import ryjwt
-from _support import ClaimsModel, ClaimsStruct, DatetimeClaimsModel, DatetimeClaimsStruct
+from _support import (
+    ClaimsModel,
+    ClaimsStruct,
+    DatetimeClaimsModel,
+    DatetimeClaimsStruct,
+    SigningKey,
+    make_jwk,
+)
+
+type AnyKey = ryjwt.HMAC | ryjwt.PrivateKey | ryjwt.PublicKey
 
 
 class NoClaims(msgspec.Struct):
@@ -143,9 +153,14 @@ class NumberedMembersModel(pydantic.BaseModel):
     nested: dict[str, list[float | int]]
 
 
-class DecodeOptions(TypedDict, total=False):
+class Expectations(TypedDict, total=False):
+    """The `audience` and `issuer` a key, or a `decode` call, checks tokens against."""
+
     audience: str | Iterable[str] | None
     issuer: str | Iterable[str] | None
+
+
+class DecodeOptions(Expectations, total=False):
     leeway: float | timedelta
 
 
@@ -171,6 +186,86 @@ def _decode(request: pytest.FixtureRequest, hmac_jwt: ryjwt.HMAC) -> Decode:
     """`hmac_jwt.decode`, to a dict or to a Struct: claim validation must behave the same either
     way."""
     return _DecodeTo(hmac_jwt, request.param)
+
+
+@dataclass(frozen=True, slots=True)
+class KeyMaker:
+    """Builds keys from one `source` (a class, or one of its other constructors), set up with an
+    audience and issuer, and signs tokens they verify."""
+
+    source: str
+    hmac_key: str
+    private_pem: bytes
+    public_pem: bytes
+    jwk: dict[str, Any]
+    directory: Path
+
+    def __call__(self, **expected: Unpack[Expectations]) -> AnyKey:
+        private_path, public_path = self.directory / "private.pem", self.directory / "public.pem"
+        private_path.write_bytes(self.private_pem)
+        public_path.write_bytes(self.public_pem)
+        match self.source:
+            case "hmac":
+                return ryjwt.HMAC(self.hmac_key, algorithms=["HS256"], **expected)
+            case "private-key":
+                return ryjwt.PrivateKey(self.private_pem, algorithms=["ES256"], **expected)
+            case "private-key-from-path":
+                return ryjwt.PrivateKey.from_path(private_path, algorithms=["ES256"], **expected)
+            case "public-key":
+                return ryjwt.PublicKey(self.public_pem, algorithms=["ES256"], **expected)
+            case "public-key-from-path":
+                return ryjwt.PublicKey.from_path(public_path, algorithms=["ES256"], **expected)
+            case _:
+                jwks = {"keys": [self.jwk]}
+                return ryjwt.PublicKey.from_jwks(jwks, algorithms=["ES256"], **expected)
+
+    def encode(self, claims: dict[str, Any]) -> str:
+        if self.source == "hmac":
+            return ryjwt.HMAC(self.hmac_key, algorithms=["HS256"]).encode(claims)
+        return ryjwt.PrivateKey(self.private_pem, algorithms=["ES256"]).encode(claims)
+
+
+@pytest.fixture(
+    name="make_key",
+    params=[
+        "hmac",
+        "private-key",
+        "private-key-from-path",
+        "public-key",
+        "public-key-from-path",
+        "public-key-from-jwks",
+    ],
+)
+def _make_key(
+    request: pytest.FixtureRequest,
+    hmac_key: str,
+    private_keys: dict[ryjwt.AsymmetricAlgorithm, SigningKey],
+    private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
+    public_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
+    tmp_path: Path,
+) -> KeyMaker:
+    return KeyMaker(
+        request.param,
+        hmac_key,
+        private_pems["ES256"],
+        public_pems["ES256"],
+        make_jwk(private_keys["ES256"]),
+        tmp_path,
+    )
+
+
+def _rejection(
+    key: AnyKey,
+    token: str,
+    **kwargs: Unpack[Expectations],
+) -> tuple[type[Exception], str] | None:
+    """Why `key.decode(token, **kwargs)` rejects the token (its error's type and message), or None
+    if it doesn't."""
+    try:
+        key.decode(token, **kwargs)
+    except ryjwt.InvalidTokenError as e:
+        return type(e), str(e)
+    return None
 
 
 def test_decodes_to_dict_by_default(hmac_jwt: ryjwt.HMAC) -> None:
@@ -689,6 +784,124 @@ def test_invalid_arguments(
 
     with pytest.raises(error):
         hmac_jwt.decode(hmac_jwt.encode({"sub": "sub"}), **untyped_caller)
+
+
+@pytest.mark.parametrize(
+    ("expected", "claims", "error"),
+    [
+        pytest.param({"audience": "aud"}, {"aud": "aud"}, None, id="aud-match"),
+        pytest.param({"audience": "aud"}, {"aud": ["x", "aud"]}, None, id="aud-list-match"),
+        pytest.param({"audience": ["x", "aud"]}, {"aud": "aud"}, None, id="audience-list-match"),
+        pytest.param(
+            {"audience": "aud"},
+            {"aud": "other"},
+            ryjwt.InvalidAudienceError,
+            id="aud-mismatch",
+        ),
+        pytest.param({"audience": "aud"}, {}, ryjwt.InvalidAudienceError, id="aud-missing"),
+        pytest.param(
+            {"audience": []}, {"aud": "aud"}, ryjwt.InvalidAudienceError, id="no-audiences"
+        ),
+        pytest.param(
+            {"issuer": "iss"},
+            {"aud": "aud", "iss": "iss"},
+            ryjwt.InvalidAudienceError,
+            id="aud-without-audience",
+        ),
+        pytest.param({"issuer": "iss"}, {"iss": "iss"}, None, id="iss-match"),
+        pytest.param({"issuer": {"x", "iss"}}, {"iss": "iss"}, None, id="issuer-set-match"),
+        pytest.param(
+            {"issuer": "iss"},
+            {"iss": "other"},
+            ryjwt.InvalidIssuerError,
+            id="iss-mismatch",
+        ),
+        pytest.param({"issuer": "iss"}, {}, ryjwt.InvalidIssuerError, id="iss-missing"),
+        pytest.param({"issuer": "iss"}, {"iss": 1}, ryjwt.InvalidIssuerError, id="iss-int"),
+        pytest.param({"issuer": []}, {"iss": "iss"}, ryjwt.InvalidIssuerError, id="no-issuers"),
+        pytest.param({"audience": "aud"}, {"aud": "aud", "iss": 1}, None, id="iss-unchecked"),
+        pytest.param(
+            {"audience": "aud", "issuer": "iss"},
+            {"aud": "aud", "iss": "iss"},
+            None,
+            id="both-match",
+        ),
+    ],
+)
+def test_audience_and_issuer_set_on_the_key(
+    expected: Expectations,
+    claims: dict[str, Any],
+    error: type[Exception] | None,
+    make_key: KeyMaker,
+) -> None:
+    """The key checks them when `decode` isn't given any, as `decode` checks its own: the same
+    errors, with the same messages."""
+    token = make_key.encode(claims)
+
+    rejection = _rejection(make_key(**expected), token)
+
+    assert rejection == _rejection(make_key(), token, **expected)
+    assert (None if rejection is None else rejection[0]) is error
+
+
+def test_decode_arguments_replace_the_keys_audience_and_issuer(make_key: KeyMaker) -> None:
+    key = make_key(audience="aud", issuer="iss")
+    token = make_key.encode({"aud": "aud", "iss": "iss"})
+    other_token = make_key.encode({"aud": "other-aud", "iss": "other-iss"})
+
+    assert key.decode(token, audience=None, issuer=None) == {"aud": "aud", "iss": "iss"}
+    assert key.decode(other_token, audience="other-aud", issuer=["other-iss"]) == {
+        "aud": "other-aud",
+        "iss": "other-iss",
+    }
+    with pytest.raises(ryjwt.InvalidAudienceError, match="Audience doesn't match"):
+        key.decode(token, audience="other-aud")  # replaces the key's, rather than adding to it
+    with pytest.raises(ryjwt.InvalidIssuerError, match="Issuer doesn't match"):
+        key.decode(token, issuer="other-iss")
+    with pytest.raises(ryjwt.InvalidIssuerError, match="Issuer doesn't match"):
+        key.decode(other_token, audience="other-aud")  # the key's issuer still applies
+    with pytest.raises(ryjwt.InvalidAudienceError, match="Audience doesn't match"):
+        key.decode(other_token, issuer="other-iss")  # and so does its audience
+
+
+def test_key_audience_and_issuer_accept_any_iterable(make_key: KeyMaker) -> None:
+    key = make_key(audience=(a for a in ["x", "aud"]), issuer=iter(["iss"]))
+    token = make_key.encode({"aud": "aud", "iss": "iss"})
+
+    assert key.decode(token) == {"aud": "aud", "iss": "iss"}
+    assert key.decode(token) == {"aud": "aud", "iss": "iss"}  # read once, and kept
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "match"),
+    [
+        pytest.param(
+            {"audience": 1}, "audience must be a str or an iterable of str", id="audience"
+        ),
+        pytest.param(
+            {"audience": ["aud", 1]},
+            "audience must be a str or an iterable of str",
+            id="audience-item",
+        ),
+        pytest.param({"issuer": 1}, "issuer must be a str or an iterable of str", id="issuer"),
+        pytest.param(
+            {"issuer": [b"iss"]},
+            "issuer must be a str or an iterable of str",
+            id="issuer-item",
+        ),
+    ],
+)
+def test_invalid_key_audience_and_issuer(
+    kwargs: dict[str, object], match: str, make_key: KeyMaker
+) -> None:
+    """They're checked when the key is created, raising what `decode` raises for them."""
+    untyped_caller: Any = kwargs  # what an untyped caller could pass
+    token = make_key.encode({"sub": "sub"})
+
+    with pytest.raises(TypeError, match=match):
+        make_key(**untyped_caller)
+    with pytest.raises(TypeError, match=match):
+        make_key().decode(token, **untyped_caller)
 
 
 @pytest.mark.parametrize(

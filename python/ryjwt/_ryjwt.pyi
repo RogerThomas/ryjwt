@@ -21,9 +21,16 @@ class HMAC:
         secret: str | bytes,
         *,
         algorithms: Sequence[HMACAlgorithm],
+        audience: str | Iterable[str] | None = None,
+        issuer: str | Iterable[str] | None = None,
         allow_short_secret: bool = False,
     ) -> None:
-        """`secret` must be at least as long as the hash's output (RFC 7518 §3.2): 32 bytes for
+        """`audience` and `issuer` are what `decode` checks tokens' `aud` and `iss` claims against,
+        unless a call passes its own. Each is a str, or an iterable of them, any one of which may
+        match. Without `audience`, a token that has an `aud` is rejected. Without `issuer`, `iss`
+        isn't checked: set it too, above all if one key signs for several issuers.
+
+        `secret` must be at least as long as the hash's output (RFC 7518 §3.2): 32 bytes for
         HS256, 48 for HS384, 64 for HS512, the longest of them if several are allowed. A `str` is
         measured in UTF-8 bytes. Anyone holding a single token can brute-force a shorter secret
         offline, then forge tokens; generate one with `secrets.token_bytes(32)`.
@@ -66,8 +73,11 @@ class HMAC:
         `algorithms`. Then checks the claims:
 
         - `exp` and `nbf`, if the token has them, allowing `leeway` seconds for clock differences;
-        - `aud` against `audience`. A token with an `aud` is rejected if no `audience` is given;
-        - `iss` against `issuer`, if given.
+        - `aud` against `audience`. A token with an `aud` is rejected if there's no `audience`;
+        - `iss` against `issuer`, if there is one.
+
+        `audience` and `issuer` default to the ones this key was created with. Passing one here
+        replaces the key's for this call. To skip a check the key makes, use another key object.
 
         Every rejection is an `InvalidTokenError`.
 
@@ -94,12 +104,26 @@ class PrivateKey:
     SEC 1 (`BEGIN RSA PRIVATE KEY` / `BEGIN EC PRIVATE KEY`). A public key is rejected.
     """
 
-    def __init__(self, pem: str | bytes, *, algorithms: Sequence[AsymmetricAlgorithm]) -> None: ...
+    def __init__(
+        self,
+        pem: str | bytes,
+        *,
+        algorithms: Sequence[AsymmetricAlgorithm],
+        audience: str | Iterable[str] | None = None,
+        issuer: str | Iterable[str] | None = None,
+    ) -> None:
+        """`audience` and `issuer` are what `decode` checks tokens' `aud` and `iss` claims against,
+        unless a call passes its own. Each is a str, or an iterable of them, any one of which may
+        match. Without `audience`, a token that has an `aud` is rejected. Without `issuer`, `iss`
+        isn't checked: set it too, above all if one key signs for several issuers.
+        """
     @staticmethod
     def from_path(
         path: str | PathLike[str],
         *,
         algorithms: Sequence[AsymmetricAlgorithm],
+        audience: str | Iterable[str] | None = None,
+        issuer: str | Iterable[str] | None = None,
     ) -> PrivateKey:
         """Reads the PEM from the file at `path`.
 
@@ -140,8 +164,11 @@ class PrivateKey:
         `algorithms`. Then checks the claims:
 
         - `exp` and `nbf`, if the token has them, allowing `leeway` seconds for clock differences;
-        - `aud` against `audience`. A token with an `aud` is rejected if no `audience` is given;
-        - `iss` against `issuer`, if given.
+        - `aud` against `audience`. A token with an `aud` is rejected if there's no `audience`;
+        - `iss` against `issuer`, if there is one.
+
+        `audience` and `issuer` default to the ones this key was created with. Passing one here
+        replaces the key's for this call. To skip a check the key makes, use another key object.
 
         Every rejection is an `InvalidTokenError`.
 
@@ -169,12 +196,26 @@ class PublicKey:
     (`BEGIN RSA PUBLIC KEY`). A private key is rejected: pass its public key instead.
     """
 
-    def __init__(self, pem: str | bytes, *, algorithms: Sequence[AsymmetricAlgorithm]) -> None: ...
+    def __init__(
+        self,
+        pem: str | bytes,
+        *,
+        algorithms: Sequence[AsymmetricAlgorithm],
+        audience: str | Iterable[str] | None = None,
+        issuer: str | Iterable[str] | None = None,
+    ) -> None:
+        """`audience` and `issuer` are what `decode` checks tokens' `aud` and `iss` claims against,
+        unless a call passes its own. Each is a str, or an iterable of them, any one of which may
+        match. Without `audience`, a token that has an `aud` is rejected. Without `issuer`, `iss`
+        isn't checked: set it too, above all if one key signs for several issuers.
+        """
     @staticmethod
     def from_path(
         path: str | PathLike[str],
         *,
         algorithms: Sequence[AsymmetricAlgorithm],
+        audience: str | Iterable[str] | None = None,
+        issuer: str | Iterable[str] | None = None,
     ) -> PublicKey:
         """Reads the PEM from the file at `path`.
 
@@ -185,6 +226,8 @@ class PublicKey:
         jwks: str | bytes | Mapping[str, Any],
         *,
         algorithms: Sequence[AsymmetricAlgorithm],
+        audience: str | Iterable[str] | None = None,
+        issuer: str | Iterable[str] | None = None,
     ) -> PublicKey:
         """Takes the keys of a JWKS document (JSON, or the already-parsed Mapping).
 
@@ -213,8 +256,11 @@ class PublicKey:
         `algorithms`. Then checks the claims:
 
         - `exp` and `nbf`, if the token has them, allowing `leeway` seconds for clock differences;
-        - `aud` against `audience`. A token with an `aud` is rejected if no `audience` is given;
-        - `iss` against `issuer`, if given.
+        - `aud` against `audience`. A token with an `aud` is rejected if there's no `audience`;
+        - `iss` against `issuer`, if there is one.
+
+        `audience` and `issuer` default to the ones this key was created with. Passing one here
+        replaces the key's for this call. To skip a check the key makes, use another key object.
 
         Every rejection is an `InvalidTokenError`.
 
@@ -237,6 +283,8 @@ def public_key_from_fetched_jwks(
     jwks: bytes,
     *,
     algorithms: Sequence[AsymmetricAlgorithm],
+    audience: str | Iterable[str] | None = None,
+    issuer: str | Iterable[str] | None = None,
 ) -> PublicKey:
     """`PublicKey.from_jwks` for a document a JWKS client fetched: keys that can't be used (other
     types or curves, a `use` other than `"sig"`, malformed or unsafe key material, an `alg` not in
@@ -247,6 +295,15 @@ def public_key_from_fetched_jwks(
 def validate_jwks_algorithms(algorithms: Sequence[AsymmetricAlgorithm]) -> None:
     """Validates `algorithms` as `PublicKey.from_jwks` does, raising the same errors: a JWKS client
     checks its algorithms when it's built, before it fetches any keys."""
+
+def validate_audience_and_issuer(
+    *,
+    audience: str | Iterable[str] | None,
+    issuer: str | Iterable[str] | None,
+) -> tuple[str | tuple[str, ...] | None, str | tuple[str, ...] | None]:
+    """Validates `audience` and `issuer` as the key classes do, raising the same errors: a JWKS
+    client checks them when it's built, and keeps what this returns (an iterable as a tuple, as it
+    may only be read once) to pass to each `PublicKey` it builds."""
 
 class RYJWTError(Exception):
     """Base class for all ryjwt errors."""
@@ -292,7 +349,7 @@ class ImmatureSignatureError(InvalidTokenError):
 
 class InvalidAudienceError(InvalidTokenError):
     """The token's audience (`aud`) doesn't match `audience`, or is missing or malformed. Also
-    raised when the token has an `aud` but no `audience` was given."""
+    raised when the token has an `aud` but no `audience` was set, on the key or the call."""
 
 class InvalidIssuerError(InvalidTokenError):
     """The token's issuer (`iss`) doesn't match `issuer`, or is missing or malformed."""

@@ -52,6 +52,31 @@ import ryjwt
 ALGORITHMS: list[ryjwt.AsymmetricAlgorithm] = ["RS256", "PS256"]
 ```
 
+### Setting `audience` and `issuer`
+
+Every key class (and [`JWKSClient`](jwks-urls.md)) also takes `audience` and `issuer`: who your
+tokens are for, and who issues them. `decode` checks each token's `aud` and `iss` against them:
+
+```python
+import secrets
+
+import ryjwt
+
+key = ryjwt.HMAC(
+    secrets.token_bytes(32),
+    algorithms=["HS256"],
+    audience="my-api",
+    issuer="https://issuer.example/",
+)
+```
+
+- Each is a `str`, or a list (any iterable) of them, any one of which may match.
+- Without `audience`, a token that has an `aud` is rejected. Without `issuer`, `iss` isn't
+  checked, but set it if you can. [Claims checks](encoding-and-decoding.md#claims-checks) says
+  why.
+- A `decode` call can pass its own `audience` or `issuer`, which replace the key's for that call.
+- Anything else, such as `audience=1`, is a `TypeError`, raised when you create the key.
+
 ## HMAC
 
 [`HMAC`][ryjwt.HMAC] takes a shared secret, as `str` or `bytes`. Whoever holds the secret can

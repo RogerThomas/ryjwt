@@ -37,10 +37,10 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
 token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
-claims = key.decode(token, audience="my-api")  # signature, exp and aud checked
+claims = key.decode(token)  # signature, exp and aud checked
 assert claims["sub"] == "user-1"
 ```
 
