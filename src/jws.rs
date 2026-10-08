@@ -3,10 +3,10 @@
 use std::mem::MaybeUninit;
 
 use base64_simd::{Out, URL_SAFE_NO_PAD};
-use jiter::JsonValue;
+use jiter::{JsonObject, JsonValue};
 use pyo3::PyResult;
 use pyo3::prelude::*;
-use pyo3::types::PyBytes;
+use pyo3::types::{PyBytes, PyDict};
 
 use crate::errors::{DecodeError, InvalidAlgorithmError, InvalidTokenError};
 
@@ -103,7 +103,9 @@ pub fn parse_header(segment: &[u8], want_kid: bool) -> PyResult<(String, Option<
     })
 }
 
-fn parse_header_json(header_bytes: &[u8], want_kid: bool) -> PyResult<(String, Option<String>)> {
+/// The header's parameters, after checking it's a JSON object with at most
+/// `MAX_HEADER_PARAMETERS` of them, none repeated.
+fn header_object(header_bytes: &[u8]) -> PyResult<JsonObject<'_>> {
     let header = match JsonValue::parse(header_bytes, false) {
         Ok(JsonValue::Object(header)) => header,
         Ok(_) => {
@@ -128,6 +130,11 @@ fn parse_header_json(header_bytes: &[u8], want_kid: bool) -> PyResult<(String, O
             "Invalid header: duplicate {dup:?} parameter"
         )));
     }
+    Ok(header)
+}
+
+fn parse_header_json(header_bytes: &[u8], want_kid: bool) -> PyResult<(String, Option<String>)> {
+    let header = header_object(header_bytes)?;
     let mut alg = None;
     let mut kid = None;
     for (name, value) in header.iter() {
@@ -153,6 +160,18 @@ fn parse_header_json(header_bytes: &[u8], want_kid: bool) -> PyResult<(String, O
     }
     let alg = alg.ok_or_else(|| InvalidAlgorithmError::new_err("Header alg is missing"))?;
     Ok((alg, kid))
+}
+
+/// The header as a dict, checked as `parse_header` checks it, but not for its `alg`, `kid` or
+/// `crit`: for reading a token's header without verifying the token.
+pub fn header_dict<'py>(py: Python<'py>, segment: &[u8]) -> PyResult<Bound<'py, PyDict>> {
+    with_b64_decoded::<256, _>(segment, "header", |header| {
+        let dict = PyDict::new(py);
+        for (name, value) in header_object(header)?.iter() {
+            dict.set_item(name.as_ref(), value)?;
+        }
+        Ok(dict)
+    })
 }
 
 /// Splits on the first and last dots. A payload segment containing a further dot is caught later

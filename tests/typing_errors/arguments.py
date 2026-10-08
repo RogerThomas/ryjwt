@@ -1,4 +1,5 @@
-"""`decode`, `encode` and the constructors take only the arguments they declare, of their types."""
+"""`decode`, `encode`, the `unverified_*` functions and the constructors take only the arguments
+they declare, of their types."""
 
 from typing import Any
 
@@ -34,8 +35,11 @@ hmac.decode("token", issuer=1)  # error
 hmac.decode("token", leeway="1")  # error
 hmac.decode(1)  # error
 hmac.encode([1])  # error
-hmac.encode({}, headers=[("kid", "kid")])  # error
-hmac.encode({}, header={"kid": "kid"})  # error
+hmac.encode({}, header=[("kid", "kid")])  # error
+hmac.encode({}, headers={"kid": "kid"})  # error
+ryjwt.unverified_header(1)  # error
+ryjwt.unverified_claims("token", type=Claims)  # error
+ryjwt.unverified_token("token", audience="aud")  # error
 ryjwt.HMAC("secret", algorithm=["HS256"])  # error
 ryjwt.HMAC(1, algorithms=["HS256"])  # error
 ryjwt.PrivateKey("pem", algorithms=["ES256"], allow_short_secret=True)  # error

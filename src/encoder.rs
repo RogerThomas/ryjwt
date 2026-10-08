@@ -12,7 +12,7 @@ use crate::keys::Signer;
 /// One configured algorithm to encode with.
 struct EncodingAlgorithm {
     signer: Signer,
-    /// The encoded header segment `encode` uses when no `headers` are given.
+    /// The encoded header segment `encode` uses when no `header` is given.
     default_header: Box<[u8]>,
 }
 
@@ -25,14 +25,15 @@ pub struct Encoder {
     payload_encoders: Py<PyDict>,
 }
 
-/// The header JSON for `alg`, with the given `headers` and a `"typ": "JWT"` unless they set one.
-fn header_json(alg: &str, headers: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec<u8>> {
+/// The header JSON for `alg`, with the parameters in `header` and a `"typ": "JWT"` unless it sets
+/// one.
+fn header_json(alg: &str, header: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec<u8>> {
     let mut out = Vec::with_capacity(64);
     out.extend_from_slice(b"{\"alg\":");
     json_write::write_str(&mut out, alg);
     let mut has_typ = false;
-    let items = match headers {
-        Some(headers) => headers.items()?.iter().collect(),
+    let items = match header {
+        Some(header) => header.items()?.iter().collect(),
         None => Vec::new(),
     };
     for item in items {
@@ -49,7 +50,7 @@ fn header_json(alg: &str, headers: Option<&Bound<'_, PyMapping>>) -> PyResult<Ve
         match name.to_str()? {
             "alg" => {
                 return Err(PyValueError::new_err(
-                    "Set the algorithm with algorithm=, not headers",
+                    "Set the algorithm with algorithm=, not header",
                 ));
             }
             "typ" => has_typ = true,
@@ -157,15 +158,15 @@ impl Encoder {
         &self,
         claims: &Bound<'py, PyAny>,
         algorithm: Option<&str>,
-        headers: Option<&Bound<'_, PyMapping>>,
+        header: Option<&Bound<'_, PyMapping>>,
     ) -> PyResult<Bound<'py, PyString>> {
         let algorithm = self.algorithm(algorithm)?;
         let payload = self.claims_json(claims)?;
         let mut token = Vec::with_capacity(64 + payload.len() * 4 / 3 + 700);
-        match headers {
+        match header {
             None => token.extend_from_slice(&algorithm.default_header),
-            Some(headers) => jws::b64_encode_append(
-                &header_json(algorithm.signer.algorithm, Some(headers))?,
+            Some(header) => jws::b64_encode_append(
+                &header_json(algorithm.signer.algorithm, Some(header))?,
                 &mut token,
             ),
         }

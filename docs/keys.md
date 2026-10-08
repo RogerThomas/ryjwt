@@ -221,7 +221,7 @@ from pathlib import Path
 import ryjwt
 
 signer = ryjwt.PrivateKey.from_path("private.pem", algorithms=["ES256"])
-token = signer.encode({"sub": "user-1"}, headers={"kid": "key-1"})
+token = signer.encode({"sub": "user-1"}, header={"kid": "key-1"})
 
 # jwks.json lists the public half of private.pem, with the kid "key-1"
 verifier = ryjwt.PublicKey.from_jwks(Path("jwks.json").read_bytes(), algorithms=["RS256", "ES256"])

@@ -46,15 +46,15 @@ class HMAC:
         claims: Claims,
         *,
         algorithm: HMACAlgorithm | None = None,
-        headers: Mapping[str, Any] | None = None,
+        header: Mapping[str, Any] | None = None,
     ) -> str:
         """Signs `claims` (a dict, a msgspec Struct or a pydantic BaseModel) and returns the token.
 
         `algorithm` must be one of `algorithms`, and may be left out when only one is configured.
-        `headers` are added to the token's header, which always has `alg`, and `"typ": "JWT"`
-        unless `headers` sets `typ`; setting `alg` in `headers` is a `ValueError`. A `datetime`
-        under `exp`, `nbf` or `iat` is written as whole seconds since the epoch; a naive one is a
-        `ValueError`.
+        `header`'s fields are added to the token's header, which always has `alg`, and
+        `"typ": "JWT"` unless `header` sets `typ`; setting `alg` in `header` is a `ValueError`. A
+        `datetime` under `exp`, `nbf` or `iat` is written as whole seconds since the epoch; a naive
+        one is a `ValueError`.
         """
     @overload
     def decode(
@@ -137,15 +137,15 @@ class PrivateKey:
         claims: Claims,
         *,
         algorithm: AsymmetricAlgorithm | None = None,
-        headers: Mapping[str, Any] | None = None,
+        header: Mapping[str, Any] | None = None,
     ) -> str:
         """Signs `claims` (a dict, a msgspec Struct or a pydantic BaseModel) and returns the token.
 
         `algorithm` must be one of `algorithms`, and may be left out when only one is configured.
-        `headers` are added to the token's header, which always has `alg`, and `"typ": "JWT"`
-        unless `headers` sets `typ`; setting `alg` in `headers` is a `ValueError`. A `datetime`
-        under `exp`, `nbf` or `iat` is written as whole seconds since the epoch; a naive one is a
-        `ValueError`.
+        `header`'s fields are added to the token's header, which always has `alg`, and
+        `"typ": "JWT"` unless `header` sets `typ`; setting `alg` in `header` is a `ValueError`. A
+        `datetime` under `exp`, `nbf` or `iat` is written as whole seconds since the epoch; a naive
+        one is a `ValueError`.
         """
     @overload
     def decode(
@@ -278,6 +278,29 @@ class PublicKey:
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
     ) -> T: ...
+
+def unverified_header(token: str | bytes) -> dict[str, Any]:
+    """Return a token's header without verifying its signature; use it for routing or logging,
+    never for trust decisions.
+
+    Nothing is checked, but the token must be well formed, as `decode` requires: three parts of
+    unpadded base64url, with a JSON object in the header and in the payload. If not, it raises
+    `DecodeError`.
+    """
+
+def unverified_claims(token: str | bytes) -> dict[str, Any]:
+    """Return a token's claims without verifying its signature or checking exp/nbf/aud/iss; don't
+    trust any value in the result.
+
+    The token must still be well formed, as `decode` requires, or it raises `DecodeError`.
+    """
+
+def unverified_token(token: str | bytes) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Return a token's `(header, claims)` without verifying anything; verify with a key's
+    `decode()` before trusting either.
+
+    The token must still be well formed, as `decode` requires, or it raises `DecodeError`.
+    """
 
 def public_key_from_fetched_jwks(
     jwks: bytes,

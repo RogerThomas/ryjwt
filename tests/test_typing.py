@@ -67,12 +67,25 @@ def test_encode_and_algorithms_types(
     assert_type(hmac_jwt.encode(ClaimsStruct(sub="sub")), str)
     assert_type(hmac_jwt.encode(ClaimsModel(sub="sub")), str)
     assert_type(hmac_jwt.encode({"sub": "sub"}, algorithm="HS256"), str)
+    assert_type(hmac_jwt.encode({"sub": "sub"}, header={"kid": "kid"}), str)
     assert_type(private_key.encode({"sub": "sub"}), str)
     assert_type(private_key.encode(ClaimsStruct(sub="sub")), str)
     assert_type(private_key.encode(ClaimsModel(sub="sub"), algorithm="ES256"), str)
+    assert_type(private_key.encode({"sub": "sub"}, header={"kid": "kid"}), str)
     assert_type(hmac_jwt.algorithms, list[ryjwt.HMACAlgorithm])
     assert_type(private_key.algorithms, list[ryjwt.AsymmetricAlgorithm])
     assert_type(public_key.algorithms, list[ryjwt.AsymmetricAlgorithm])
+
+
+def test_unverified_types(hmac_jwt: ryjwt.HMAC) -> None:
+    token = hmac_jwt.encode({"sub": "sub"}, header={"kid": "kid"})
+
+    assert_type(ryjwt.unverified_header(token), dict[str, Any])
+    assert_type(ryjwt.unverified_header(token.encode()), dict[str, Any])
+    assert_type(ryjwt.unverified_claims(token), dict[str, Any])
+    assert_type(ryjwt.unverified_claims(token.encode()), dict[str, Any])
+    assert_type(ryjwt.unverified_token(token), tuple[dict[str, Any], dict[str, Any]])
+    assert_type(ryjwt.unverified_token(token.encode()), tuple[dict[str, Any], dict[str, Any]])
 
 
 def test_hmac_constructor_types(hmac_key: str) -> None:

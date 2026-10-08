@@ -114,7 +114,7 @@ before you run anything.
 - `algorithms` is empty, has a name the class doesn't support, or mixes algorithms one key can't
   serve;
 - `encode` has no `algorithm` but the key has several, or one the key doesn't have, or `alg` in
-  `headers`;
+  `header`;
 - a `datetime` claim has no timezone;
 - `leeway` is negative or infinite;
 - a `JWKSClient`'s URL isn't [allowed](jwks-urls.md#allowed-urls), or one of its times is

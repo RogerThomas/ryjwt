@@ -299,8 +299,8 @@ def test_deeply_nested_claims_are_rejected(hmac_jwt: ryjwt.HMAC) -> None:
         hmac_jwt.encode(claims)
 
 
-def test_headers(hmac_jwt: ryjwt.HMAC) -> None:
-    token = hmac_jwt.encode({"sub": "sub"}, headers={"kid": "kid", "cty": "cty"})
+def test_header(hmac_jwt: ryjwt.HMAC) -> None:
+    token = hmac_jwt.encode({"sub": "sub"}, header={"kid": "kid", "cty": "cty"})
 
     assert jwt.get_unverified_header(token) == {
         "alg": "HS256",
@@ -309,13 +309,20 @@ def test_headers(hmac_jwt: ryjwt.HMAC) -> None:
         "cty": "cty",
     }
     assert (
-        jwt.get_unverified_header(hmac_jwt.encode({}, headers={"typ": "at+jwt"}))["typ"] == "at+jwt"
+        jwt.get_unverified_header(hmac_jwt.encode({}, header={"typ": "at+jwt"}))["typ"] == "at+jwt"
     )
 
 
 def test_alg_header_is_not_settable(hmac_jwt: ryjwt.HMAC) -> None:
     with pytest.raises(ValueError, match="algorithm="):
-        hmac_jwt.encode({}, headers={"alg": "none"})
+        hmac_jwt.encode({}, header={"alg": "none"})
+
+
+def test_headers_is_not_an_argument(hmac_jwt: ryjwt.HMAC) -> None:
+    untyped_caller: Any = {"headers": {"kid": "kid"}}  # what an untyped caller could pass
+
+    with pytest.raises(TypeError, match="headers"):
+        hmac_jwt.encode({}, **untyped_caller)
 
 
 def test_algorithm_choice(hmac_key: str) -> None:

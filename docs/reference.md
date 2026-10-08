@@ -14,6 +14,14 @@ Everything below is importable from `ryjwt`.
 
 ::: ryjwt.JWKSClient
 
+## Inspecting a token without verifying it
+
+::: ryjwt.unverified_header
+
+::: ryjwt.unverified_claims
+
+::: ryjwt.unverified_token
+
 ## Algorithms
 
 ::: ryjwt.HMACAlgorithm

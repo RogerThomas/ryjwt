@@ -14,7 +14,7 @@ mod mac;
 
 use pyo3::intern;
 use pyo3::prelude::*;
-use pyo3::types::{PyMapping, PyString, PyTuple};
+use pyo3::types::{PyDict, PyMapping, PyString, PyTuple};
 
 use claims::Expected;
 use decoder::Decoder;
@@ -63,14 +63,14 @@ impl Hmac {
         self.decoder.algorithm_names()
     }
 
-    #[pyo3(signature = (claims, *, algorithm=None, headers=None))]
+    #[pyo3(signature = (claims, *, algorithm=None, header=None))]
     fn encode<'py>(
         &self,
         claims: &Bound<'py, PyAny>,
         algorithm: Option<&str>,
-        headers: Option<&Bound<'_, PyMapping>>,
+        header: Option<&Bound<'_, PyMapping>>,
     ) -> PyResult<Bound<'py, PyString>> {
-        self.encoder.encode(claims, algorithm, headers)
+        self.encoder.encode(claims, algorithm, header)
     }
 
     #[pyo3(signature = (token, *, r#type=None, audience=None, issuer=None, leeway=None))]
@@ -144,14 +144,14 @@ impl PrivateKey {
         self.decoder.algorithm_names()
     }
 
-    #[pyo3(signature = (claims, *, algorithm=None, headers=None))]
+    #[pyo3(signature = (claims, *, algorithm=None, header=None))]
     fn encode<'py>(
         &self,
         claims: &Bound<'py, PyAny>,
         algorithm: Option<&str>,
-        headers: Option<&Bound<'_, PyMapping>>,
+        header: Option<&Bound<'_, PyMapping>>,
     ) -> PyResult<Bound<'py, PyString>> {
-        self.encoder.encode(claims, algorithm, headers)
+        self.encoder.encode(claims, algorithm, header)
     }
 
     #[pyo3(signature = (token, *, r#type=None, audience=None, issuer=None, leeway=None))]
@@ -299,6 +299,36 @@ fn validate_audience_and_issuer<'py>(
     Ok((reusable(audience, "audience")?, reusable(issuer, "issuer")?))
 }
 
+/// Return a token's header without verifying its signature; use it for routing or logging, never
+/// for trust decisions.
+#[pyfunction]
+fn unverified_header<'py>(
+    py: Python<'py>,
+    token: &Bound<'py, PyAny>,
+) -> PyResult<Bound<'py, PyDict>> {
+    decoder::unverified(py, token).map(|(header, _)| header)
+}
+
+/// Return a token's claims without verifying its signature or checking exp/nbf/aud/iss; don't
+/// trust any value in the result.
+#[pyfunction]
+fn unverified_claims<'py>(
+    py: Python<'py>,
+    token: &Bound<'py, PyAny>,
+) -> PyResult<Bound<'py, PyDict>> {
+    decoder::unverified(py, token).map(|(_, claims)| claims)
+}
+
+/// Return a token's `(header, claims)` without verifying anything; verify with a key's `decode()`
+/// before trusting either.
+#[pyfunction]
+fn unverified_token<'py>(
+    py: Python<'py>,
+    token: &Bound<'py, PyAny>,
+) -> PyResult<(Bound<'py, PyDict>, Bound<'py, PyDict>)> {
+    decoder::unverified(py, token)
+}
+
 /// Runs without the GIL on free-threaded Python (`gil_used = false`, the default, stated here): the
 /// classes are frozen and hold only `Sync` data, and their caches (`Decoder`'s known headers and
 /// parsers, `Encoder`'s payload encoders) tolerate racing fills, every racer storing an equal entry.
@@ -307,6 +337,9 @@ fn _ryjwt(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(public_key_from_fetched_jwks, m)?)?;
     m.add_function(wrap_pyfunction!(validate_jwks_algorithms, m)?)?;
     m.add_function(wrap_pyfunction!(validate_audience_and_issuer, m)?)?;
+    m.add_function(wrap_pyfunction!(unverified_header, m)?)?;
+    m.add_function(wrap_pyfunction!(unverified_claims, m)?)?;
+    m.add_function(wrap_pyfunction!(unverified_token, m)?)?;
     m.add_class::<Hmac>()?;
     m.add_class::<PrivateKey>()?;
     m.add_class::<PublicKey>()?;

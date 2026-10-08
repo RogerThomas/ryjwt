@@ -19,6 +19,9 @@ from ryjwt._ryjwt import (
     PublicKey,
     RYJWTError,
     UnknownKeyError,
+    unverified_claims,
+    unverified_header,
+    unverified_token,
 )
 
 __all__ = [
@@ -41,4 +44,7 @@ __all__ = [
     "PublicKey",
     "RYJWTError",
     "UnknownKeyError",
+    "unverified_claims",
+    "unverified_header",
+    "unverified_token",
 ]

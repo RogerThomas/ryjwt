@@ -82,7 +82,7 @@ def test_provider_shaped_rsa_jwks(
 
     pyjwt_token = jwt.encode(claims, rsa_key, algorithm="RS256", headers={"kid": "kid"})
     assert verifier.decode(pyjwt_token) == claims
-    assert verifier.decode(signer.encode(claims, headers={"kid": "kid"})) == claims
+    assert verifier.decode(signer.encode(claims, header={"kid": "kid"})) == claims
     old_token = jwt.encode(claims, old_rsa_key, algorithm="RS256", headers={"kid": "old-kid"})
     assert verifier.decode(old_token) == claims
 
@@ -100,7 +100,7 @@ def test_every_key_type(
     token = jwt.encode({"sub": "sub"}, private_key, algorithm=alg, headers={"kid": "kid"})
 
     assert verifier.decode(token) == {"sub": "sub"}
-    assert verifier.decode(signer.encode({"sub": "sub"}, headers={"kid": "kid"})) == {"sub": "sub"}
+    assert verifier.decode(signer.encode({"sub": "sub"}, header={"kid": "kid"})) == {"sub": "sub"}
 
 
 def test_key_rotation(rsa_key: SigningKey, old_rsa_key: SigningKey) -> None:
@@ -418,7 +418,7 @@ def test_token_kid_must_be_a_string(
     private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
 ) -> None:
     signer = ryjwt.PrivateKey(private_pems["ES256"], algorithms=["ES256"])
-    token = signer.encode({"sub": "sub"}, headers={"kid": 1})
+    token = signer.encode({"sub": "sub"}, header={"kid": 1})
 
     with pytest.raises(ryjwt.DecodeError, match="kid must be a string"):
         mixed_jwks.decode(token)

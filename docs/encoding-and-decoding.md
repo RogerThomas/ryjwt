@@ -5,7 +5,7 @@
 
 ## Encoding
 
-`encode(claims, *, algorithm=None, headers=None)` signs `claims` and returns the token, as a
+`encode(claims, *, algorithm=None, header=None)` signs `claims` and returns the token, as a
 `str`.
 
 ```python
@@ -15,7 +15,7 @@ import ryjwt
 
 key = ryjwt.HMAC(secrets.token_bytes(64), algorithms=["HS256", "HS512"])
 
-token = key.encode({"sub": "user-1"}, algorithm="HS512", headers={"kid": "key-1"})
+token = key.encode({"sub": "user-1"}, algorithm="HS512", header={"kid": "key-1"})
 ```
 
 - **`claims`** is a dict, a msgspec `Struct` or a pydantic `BaseModel`. A Struct or model is
@@ -23,9 +23,12 @@ token = key.encode({"sub": "user-1"}, algorithm="HS512", headers={"kid": "key-1"
   fields' aliases, unless its config sets `serialize_by_alias=False`.
 - **`algorithm`** is the algorithm to sign with. It must be one of the key's `algorithms`. You can
   leave it out when the key has only one.
-- **`headers`** are extra fields for the token's header, such as a `kid`. ryjwt always sets `alg`
-  itself; setting it in `headers` is a `ValueError`. It also adds `"typ": "JWT"`, unless `headers`
+- **`header`** holds extra fields for the token's header, such as a `kid`. ryjwt always sets `alg`
+  itself; setting it in `header` is a `ValueError`. It also adds `"typ": "JWT"`, unless `header`
   sets `typ`.
+
+`header` is singular: a token has one header, and these are fields added to it (PyJWT calls this
+argument `headers`).
 
 ## Decoding
 
@@ -183,7 +186,43 @@ key in a [JWKS](keys.md#jwks-documents). It rejects a header that:
 
 It ignores any other fields, including `typ`.
 
-There's no way to read a token's header or claims without verifying it.
+## Inspecting a token without verifying it
+
+`unverified_header`, `unverified_claims` and `unverified_token` read a token without checking
+anything: not the signature, and not `exp`, `nbf`, `aud` or `iss`. Anyone can make a token that
+says anything, so treat what they return as a claim the token makes, not a fact.
+
+```python
+import secrets
+
+import ryjwt
+
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+token = key.encode({"sub": "user-1", "iss": "https://tenant-1.example/"}, header={"kid": "key-1"})
+
+header, claims = ryjwt.unverified_token(token)
+assert header["kid"] == "key-1"
+assert claims["iss"] == "https://tenant-1.example/"
+
+claims = key.decode(token)  # verified: now you can trust it
+```
+
+They're fine for:
+
+- debugging and logging;
+- picking which key or tenant to verify with: for example, reading `iss` when each tenant of a
+  multi-tenant service has its own keys. Then verify the token with that key's `decode`, and set
+  `issuer` on it, so the `iss` you picked by is checked too.
+
+Never use anything they return as a fact, such as `sub` to decide who the user is. Only `decode`
+tells you that.
+
+You don't need them to pick a key by `kid`: [`PublicKey.from_jwks`](keys.md#jwks-documents) and
+[`JWKSClient`](jwks-urls.md) already do that.
+
+The token must still be well formed, as for `decode`: three parts of base64url, with a JSON object
+in both the header and the payload. If it isn't, they raise
+[`DecodeError`][ryjwt.DecodeError]. They return dicts: there's no `type` argument.
 
 ## Typed claims
 
@@ -297,7 +336,8 @@ In a dict, the claims stay numbers.
 `decode` reads the payload into a dict with [msgspec](https://jcristharif.com/msgspec/) if it's
 installed (`uv add 'ryjwt[msgspec]'`), as it's faster for typical tokens. Otherwise it uses
 [jiter](https://github.com/pydantic/jiter), which is built into ryjwt. Each key object picks one
-when you create it.
+when you create it. `unverified_claims` and `unverified_token` read the payload the same way,
+picking at each call.
 
 Both give the same dict for every valid payload, and reject the same malformed ones. They only
 differ on payloads no real token contains:

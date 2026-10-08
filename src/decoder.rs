@@ -151,6 +151,82 @@ fn msgspec_dict_decoder(py: Python<'_>) -> PyResult<Option<Py<PyAny>>> {
     }
 }
 
+/// The payload segment as a dict, parsed with `msgspec_decode` (`msgspec_dict_decoder`'s) if
+/// given, else with jiter. Doesn't validate its claims.
+#[inline]
+fn payload_dict<'py>(
+    py: Python<'py>,
+    segment: &[u8],
+    msgspec_decode: Option<&Py<PyAny>>,
+) -> PyResult<Bound<'py, PyDict>> {
+    let parsed = match msgspec_decode {
+        Some(decoder) => {
+            let payload = jws::b64_decode_to_pybytes(py, segment, "payload")?;
+            decoder.bind(py).call1((payload,)).map_err(|e| {
+                // msgspec's DecodeError and UnicodeDecodeError are both ValueErrors; it
+                // raises RecursionError on deeply nested payloads.
+                if e.is_instance_of::<PyValueError>(py) || e.is_instance_of::<PyRecursionError>(py)
+                {
+                    let err =
+                        DecodeError::new_err(format!("Invalid payload JSON: {}", e.value(py)));
+                    err.set_cause(py, Some(e));
+                    err
+                } else {
+                    e
+                }
+            })?
+        }
+        None => jws::with_b64_decoded::<MAX_STACK_PAYLOAD, _>(segment, "payload", |payload| {
+            PythonParse {
+                allow_inf_nan: false,
+                cache_mode: StringCacheMode::Keys,
+                partial_mode: PartialMode::Off,
+                catch_duplicate_keys: false,
+                float_mode: FloatMode::Float,
+            }
+            .python_parse(py, payload)
+            .map_err(|e| DecodeError::new_err(format!("Invalid payload JSON: {e}")))
+        })?,
+    };
+    parsed
+        .cast_into::<PyDict>()
+        .map_err(|_| DecodeError::new_err("Payload must be a JSON object"))
+}
+
+/// Runs `f` on `token`'s segments. If it fails, and the payload segment holds a dot (so the token
+/// has more than three segments), that's what's reported.
+#[inline]
+fn with_segments<R>(
+    token: &Bound<'_, PyAny>,
+    f: impl FnOnce(&jws::Segments<'_>) -> PyResult<R>,
+) -> PyResult<R> {
+    let token = jws::split(token_bytes(token)?)?;
+    f(&token).map_err(|e| {
+        if memchr::memchr(b'.', token.payload).is_some() {
+            jws::not_three_segments()
+        } else {
+            e
+        }
+    })
+}
+
+/// A token's header and claims, as dicts, without verifying its signature or checking its claims.
+/// The token must still be well formed, as `decode` requires: three segments of unpadded
+/// base64url, with a JSON object for the header (checked as `decode` checks it, but not for its
+/// `alg`, `kid` or `crit`) and for the payload (parsed as `decode` parses it to a dict).
+pub fn unverified<'py>(
+    py: Python<'py>,
+    token: &Bound<'py, PyAny>,
+) -> PyResult<(Bound<'py, PyDict>, Bound<'py, PyDict>)> {
+    let msgspec_decode = msgspec_dict_decoder(py)?;
+    with_segments(token, |token| {
+        let header = jws::header_dict(py, token.header)?;
+        jws::with_b64_decoded::<MAX_STACK_SIGNATURE, _>(token.signature, "signature", |_| Ok(()))?;
+        let claims = payload_dict(py, token.payload, msgspec_decode.as_ref())?;
+        Ok((header, claims))
+    })
+}
+
 impl Decoder {
     /// A decoder for `keys`, checking `audience` and `issuer` (validated as `decode` validates its
     /// own) unless a `decode` call passes its own.
@@ -271,43 +347,7 @@ impl Decoder {
         token: &jws::Segments<'_>,
         checks: &Checks<'_>,
     ) -> PyResult<Bound<'py, PyDict>> {
-        let parsed = match &self.msgspec_decode {
-            Some(decoder) => {
-                let payload = jws::b64_decode_to_pybytes(py, token.payload, "payload")?;
-                decoder.bind(py).call1((payload,)).map_err(|e| {
-                    // msgspec's DecodeError and UnicodeDecodeError are both ValueErrors; it
-                    // raises RecursionError on deeply nested payloads.
-                    if e.is_instance_of::<PyValueError>(py)
-                        || e.is_instance_of::<PyRecursionError>(py)
-                    {
-                        let err =
-                            DecodeError::new_err(format!("Invalid payload JSON: {}", e.value(py)));
-                        err.set_cause(py, Some(e));
-                        err
-                    } else {
-                        e
-                    }
-                })?
-            }
-            None => jws::with_b64_decoded::<MAX_STACK_PAYLOAD, _>(
-                token.payload,
-                "payload",
-                |payload| {
-                    PythonParse {
-                        allow_inf_nan: false,
-                        cache_mode: StringCacheMode::Keys,
-                        partial_mode: PartialMode::Off,
-                        catch_duplicate_keys: false,
-                        float_mode: FloatMode::Float,
-                    }
-                    .python_parse(py, payload)
-                    .map_err(|e| DecodeError::new_err(format!("Invalid payload JSON: {e}")))
-                },
-            )?,
-        };
-        let dict = parsed
-            .cast_into::<PyDict>()
-            .map_err(|_| DecodeError::new_err("Payload must be a JSON object"))?;
+        let dict = payload_dict(py, token.payload, self.msgspec_decode.as_ref())?;
         claims::validate_dict(&dict, checks)?;
         Ok(dict)
     }
@@ -373,15 +413,8 @@ impl Decoder {
         let audience = Expected::parse(audience, "audience")?;
         let issuer = Expected::parse(issuer, "issuer")?;
         let checks = Checks::new(audience.or(&self.audience), issuer.or(&self.issuer), leeway)?;
-        let token = jws::split(token_bytes(token)?)?;
-        self.decode_segments(py, &token, r#type, &checks)
-            .map_err(|e| {
-                // A dot in the payload segment means more than three segments; that's what to report.
-                if memchr::memchr(b'.', token.payload).is_some() {
-                    jws::not_three_segments()
-                } else {
-                    e
-                }
-            })
+        with_segments(token, |token| {
+            self.decode_segments(py, token, r#type, &checks)
+        })
     }
 }

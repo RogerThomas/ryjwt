@@ -60,7 +60,7 @@ class _RoundTrips:
         for n in range(self.rounds):
             sub = f"sub-{thread}-{n}"
             for claims in ({"sub": sub}, ClaimsStruct(sub)):
-                token = self.signer.encode(claims, headers={"kid": f"kid-{n % 8}"})
+                token = self.signer.encode(claims, header={"kid": f"kid-{n % 8}"})
                 for key in self.verifiers:
                     assert key.decode(token) == {"sub": sub}
                     assert key.decode(token, type=ClaimsStruct) == ClaimsStruct(sub)
@@ -118,8 +118,8 @@ def test_jwks_client_through_key_rotation(
     old_key = ryjwt.PrivateKey(private_pems["ES256"], algorithms=["ES256"])
     new_key = ryjwt.PrivateKey(private_pems["EdDSA"], algorithms=["EdDSA"])
     tokens = {
-        "old": old_key.encode({"sub": "old"}, headers={"kid": "old"}),
-        "new": new_key.encode({"sub": "new"}, headers={"kid": "new"}),
+        "old": old_key.encode({"sub": "old"}, header={"kid": "old"}),
+        "new": new_key.encode({"sub": "new"}, header={"kid": "new"}),
     }
     old_jwk = make_jwk(private_keys["ES256"], kid="old")
     new_jwk = make_jwk(private_keys["EdDSA"], kid="new")
