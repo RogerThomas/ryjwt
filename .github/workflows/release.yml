@@ -127,6 +127,9 @@ jobs:
   test-linux:
     name: Test ${{ matrix.platform.name }}
     needs: build-linux
+    # Explicit: on pull requests the release-please job is skipped, and a skip would otherwise
+    # carry down to here even though the build ran.
+    if: ${{ !cancelled() && needs.build-linux.result == 'success' }}
     runs-on: ${{ matrix.platform.runner }}
     timeout-minutes: 60
     strategy:
@@ -260,6 +263,9 @@ jobs:
   test-macos-windows:
     name: Test ${{ matrix.platform.name }}
     needs: build-macos-windows
+    # Explicit: on pull requests the release-please job is skipped, and a skip would otherwise
+    # carry down to here even though the build ran.
+    if: ${{ !cancelled() && needs.build-macos-windows.result == 'success' }}
     runs-on: ${{ matrix.platform.runner }}
     timeout-minutes: 60
     strategy:
@@ -331,6 +337,9 @@ jobs:
   test-sdist:
     name: Test sdist
     needs: build-sdist
+    # Explicit: on pull requests the release-please job is skipped, and a skip would otherwise
+    # carry down to here even though the build ran.
+    if: ${{ !cancelled() && needs.build-sdist.result == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
