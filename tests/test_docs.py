@@ -1,13 +1,20 @@
 """Runs every Python example in the docs (docs/**/*.md) and README.md, so an example can't rot.
 
 Each ```python block runs on its own, in a fresh namespace. A block with a top-level `await` runs
-with `asyncio.run`. An HTML comment on the line just before a block changes how it runs:
+with `asyncio.run`. Blocks in content tabs (`=== "msgspec"`, with the block indented under it) run
+too, each tab's on its own, and so do blocks with attributes (`python {data-uv-extra="..."}`). An
+HTML comment on the line just before a block changes how it runs (in a tab, it goes inside the tab,
+indented like the block):
 
 - `<!-- test: skip, <reason> -->`: the block isn't run, e.g. because it needs a real JWKS URL.
 - `<!-- test: with-key-files -->`: the block runs in a temporary directory holding `private.pem`
   and `public.pem` (an ES256 key pair, PKCS#8 and SubjectPublicKeyInfo), `jwks.json` (a JWKS of
   that public key, with the `kid` `key-1`) and `secret.txt` (a 32-byte HMAC secret, then a
   newline).
+
+A block tagged with `data-uv-extra` gets a "Copy for uv" button (docs/javascripts/extra.js), which
+copies a command that runs it with that extra (or none, for `""`). Each must name a real extra,
+import that extra's library and no other's, and run as is, with no directive.
 
 Also checks that the API reference documents every public name, that the race SVGs the docs show
 are the ones the README shows, and that the docs' favicon is assets/favicon.svg. The docs aren't in
@@ -20,6 +27,7 @@ import asyncio
 import inspect
 import json
 import re
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 from types import CodeType
@@ -41,6 +49,19 @@ class Example:
     code: str
     directive: str
     """What the `<!-- test: ... -->` comment before the block says, if anything."""
+    uv_extra: str | None = None
+    """The block's `data-uv-extra` attribute, if it has one: the extra its "Copy for uv" command
+    installs, or `""` for none."""
+
+    def imported_modules(self) -> set[str]:
+        """The top-level modules the block imports."""
+        modules: set[str] = set()
+        for node in ast.walk(ast.parse(self.code)):
+            if isinstance(node, ast.Import):
+                modules.update(alias.name.partition(".")[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
+                modules.add(node.module.partition(".")[0])
+        return modules
 
     def compiled(self) -> CodeType:
         """The block compiled, its line numbers those of the Markdown file, top-level `await`
@@ -57,10 +78,21 @@ class Markdown:
     docs: Path
 
     fence: ClassVar[re.Pattern[str]] = re.compile(
-        r"^(?P<indent>[ \t]*)```python[^\n]*\n(?P<code>.*?)^(?P=indent)```[ \t]*$",
+        r"^(?P<indent>[ \t]*)```python(?P<attributes>[^\n]*)\n(?P<code>.*?)^(?P=indent)```[ \t]*$",
         re.MULTILINE | re.DOTALL,
     )
+    """A ```python block, maybe indented (in a tab or a list) and with attributes after `python`."""
     directive: ClassVar[re.Pattern[str]] = re.compile(r"<!--\s*test:\s*(?P<directive>.*?)\s*-->")
+    uv_extra: ClassVar[re.Pattern[str]] = re.compile(r'\bdata-uv-extra="(?P<extra>[^"]*)"')
+
+    @staticmethod
+    def _dedent(code: str, indent: str) -> str:
+        """`code` without the block's `indent`. A blank line, which may not have the indent, keeps
+        its line break, so line numbers still match the file's."""
+        return "".join(
+            line.removeprefix(indent) if line.startswith(indent) else line.lstrip(" \t")
+            for line in code.splitlines(keepends=True)
+        )
 
     def _directive(self, before: str) -> str:
         """What the `<!-- test: ... -->` comment on the line before a block says, if any."""
@@ -72,12 +104,16 @@ class Markdown:
         text = path.read_text(encoding="utf-8")
         examples: list[Example] = []
         for match in self.fence.finditer(text):
-            indent = len(match.group("indent"))
-            code = "".join(line[indent:] for line in match.group("code").splitlines(keepends=True))
+            code = self._dedent(match.group("code"), match.group("indent"))
             line = text.count("\n", 0, match.start("code")) + 1
             directive = self._directive(text[: match.start()])
-            examples.append(Example(path, line, code, directive))
+            uv_extra = self.uv_extra.search(match.group("attributes"))
+            extra = uv_extra.group("extra") if uv_extra else None
+            examples.append(Example(path, line, code, directive, extra))
         return examples
+
+    def _all_examples(self) -> list[Example]:
+        return [example for path in self._files() for example in self._examples(path)]
 
     def _files(self) -> list[Path]:
         pages = sorted(self.docs.rglob("*.md")) if self.docs.is_dir() else []
@@ -87,12 +123,20 @@ class Markdown:
     def at(cls, root: Path) -> Self:
         return cls(root, root / "docs")
 
+    def examples(self) -> list[Example]:
+        """Every example, in file order."""
+        return self._all_examples()
+
+    def extras(self) -> set[str]:
+        """The package's extras, from pyproject.toml."""
+        pyproject = tomllib.loads((self.root / "pyproject.toml").read_text(encoding="utf-8"))
+        return set(pyproject["project"]["optional-dependencies"])
+
     def params(self) -> list[Any]:
         """A `pytest.param` per example, and a skipped one for the docs if they aren't here."""
         params: list[Any] = [
             pytest.param(example, id=f"{example.path.relative_to(self.root)}:{example.line}")
-            for path in self._files()
-            for example in self._examples(path)
+            for example in self._all_examples()
         ]
         if not self.docs.is_dir():
             reason = "docs/ isn't here (e.g. in an sdist)"
@@ -148,6 +192,60 @@ def test_an_example_may_await(tmp_path: Path) -> None:
     namespace = _run(Example(tmp_path / "page.md", 1, code, ""))
 
     assert namespace["awaited"] is True
+
+
+def test_examples_in_tabs_are_found_with_their_lines_and_directives(tmp_path: Path) -> None:
+    (tmp_path / "README.md").write_text("")
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs" / "page.md").write_text(
+        '=== "msgspec"\n'
+        "\n"
+        '    ```python {data-uv-extra="msgspec"}\n'
+        "    import msgspec\n"
+        "\n"
+        "    first = 1\n"
+        "    ```\n"
+        "\n"
+        '=== "dict"\n'
+        "\n"
+        "    <!-- test: with-key-files -->\n"
+        "    ```python\n"
+        "    second = 2\n"
+        "    ```\n"
+    )
+
+    first, second = Markdown.at(tmp_path).examples()
+
+    assert (first.line, first.code, first.directive, first.uv_extra) == (
+        4,
+        "import msgspec\n\nfirst = 1\n",
+        "",
+        "msgspec",
+    )
+    assert (second.line, second.code, second.directive, second.uv_extra) == (
+        13,
+        "second = 2\n",
+        "with-key-files",
+        None,
+    )
+
+
+def test_uv_tagged_examples_run_as_is_with_their_extra(markdown: Markdown) -> None:
+    extras = markdown.extras()
+    problems: list[str] = []
+    for example in markdown.examples():
+        if example.uv_extra is None:
+            continue
+        where = f"{example.path.relative_to(markdown.root)}:{example.line}"
+        if example.uv_extra and example.uv_extra not in extras:
+            problems.append(f"{where}: data-uv-extra={example.uv_extra!r} isn't an extra")
+        needed = example.imported_modules() & extras
+        if needed != ({example.uv_extra} if example.uv_extra else set()):
+            problems.append(f"{where}: data-uv-extra={example.uv_extra!r}, but imports {needed}")
+        if example.directive:
+            problems.append(f"{where}: its uv command can't follow `test: {example.directive}`")
+
+    assert not problems, "\n".join(problems)
 
 
 def test_api_reference_documents_every_public_name(markdown: Markdown) -> None:

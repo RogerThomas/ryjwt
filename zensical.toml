@@ -7,6 +7,8 @@ site_name = "ryjwt"
 site_description = "Fast, strictly typed JWTs for Python, written in Rust"
 site_url = "https://rogerthomas.github.io/ryjwt/"
 extra_css = ["stylesheets/extra.css"]
+# The "Copy for uv" button on examples tagged with `data-uv-extra` (see docs/javascripts/extra.js).
+extra_javascript = ["javascripts/extra.js"]
 repo_url = "https://github.com/RogerThomas/ryjwt"
 repo_name = "RogerThomas/ryjwt"
 edit_uri = "edit/main/docs/"
@@ -55,6 +57,7 @@ features = [
   "content.action.edit",
   "content.action.view",
   "content.code.copy",
+  "content.tabs.link", # tabs with the same label (msgspec, pydantic, dict) switch together
   "content.tooltips",
   "navigation.footer",
   "navigation.indexes",
@@ -95,6 +98,11 @@ pymdownx.highlight.line_spans = "__span"
 pymdownx.highlight.pygments_lang_class = true
 pymdownx.inlinehilite = {}
 pymdownx.superfences = {}
+# Tabbed examples (`=== "msgspec"`). Each tab gets an id from its label, after the slug of the
+# heading above it (#a-first-token-pydantic), so a link can open a page on a tab.
+pymdownx.tabbed.alternate_style = true
+pymdownx.tabbed.combine_header_slug = true
+pymdownx.tabbed.slugify = { object = "pymdownx.slugs.slugify", kwds = { case = "lower" } }
 # Pages made of files kept elsewhere: the bench results (bench/results-*.md, which the bench tasks
 # regenerate), and CHANGELOG.md, which Release Please creates on the first release. Paths are
 # looked up in each base path in turn, so until then, docs/.fallback/CHANGELOG.md stands in for it.

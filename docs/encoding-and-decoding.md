@@ -36,18 +36,66 @@ argument `headers`).
 its claims. The token is a `str` or `bytes`. You'd usually set `audience` and `issuer` [on the
 key](#on-the-key-or-for-one-call) instead.
 
-```python
-import secrets
-import time
+=== "msgspec"
 
-import ryjwt
+    ```python {data-uv-extra="msgspec"}
+    import secrets
+    import time
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
-token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
+    import msgspec
+    import ryjwt
 
-claims = key.decode(token)
-assert claims["sub"] == "user-1"
-```
+
+    class Claims(msgspec.Struct):
+        sub: str
+        aud: str
+        exp: int
+
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+    token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
+
+    claims = key.decode(token, type=Claims)
+    assert claims.sub == "user-1"
+    ```
+
+=== "pydantic"
+
+    ```python {data-uv-extra="pydantic"}
+    import secrets
+    import time
+
+    import pydantic
+    import ryjwt
+
+
+    class Claims(pydantic.BaseModel):
+        sub: str
+        aud: str
+        exp: int
+
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+    token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
+
+    claims = key.decode(token, type=Claims)
+    assert claims.sub == "user-1"
+    ```
+
+=== "dict"
+
+    ```python {data-uv-extra=""}
+    import secrets
+    import time
+
+    import ryjwt
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+    token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
+
+    claims = key.decode(token)
+    assert claims["sub"] == "user-1"
+    ```
 
 `decode` works in this order:
 
@@ -229,26 +277,51 @@ in both the header and the payload. If it isn't, they raise
 By default, `decode` returns a dict. Pass a msgspec `Struct` or a pydantic `BaseModel` class as
 `type`, and it returns an instance of that class instead:
 
-```python
-import secrets
-import time
+=== "msgspec"
 
-import pydantic
-import ryjwt
+    ```python {data-uv-extra="msgspec"}
+    import secrets
+    import time
 
-
-class Claims(pydantic.BaseModel):
-    sub: str
-    exp: int
-    roles: list[str] = []
+    import msgspec
+    import ryjwt
 
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
-token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, roles=["admin"]))
+    class Claims(msgspec.Struct):
+        sub: str
+        exp: int
+        roles: list[str] = []
 
-claims = key.decode(token, type=Claims)
-assert claims.roles == ["admin"]
-```
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, roles=["admin"]))
+
+    claims = key.decode(token, type=Claims)
+    assert claims.roles == ["admin"]
+    ```
+
+=== "pydantic"
+
+    ```python {data-uv-extra="pydantic"}
+    import secrets
+    import time
+
+    import pydantic
+    import ryjwt
+
+
+    class Claims(pydantic.BaseModel):
+        sub: str
+        exp: int
+        roles: list[str] = []
+
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, roles=["admin"]))
+
+    claims = key.decode(token, type=Claims)
+    assert claims.roles == ["admin"]
+    ```
 
 A generic Struct works too, parametrised: `type=Claims[int]`. Any other `type` is a `TypeError`.
 
@@ -257,27 +330,53 @@ If the claims don't fit the class, `decode` raises
 missing, or a value has the wrong type or is out of range. The message names the claim. The
 original msgspec or pydantic `ValidationError` is its `__cause__`:
 
-```python
-import secrets
+=== "msgspec"
 
-import msgspec
-import ryjwt
+    ```python {data-uv-extra="msgspec"}
+    import secrets
 
-
-class Claims(msgspec.Struct):
-    sub: str
-    exp: int
+    import msgspec
+    import ryjwt
 
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
-token = key.encode({"sub": "user-1"})  # no exp
+    class Claims(msgspec.Struct):
+        sub: str
+        exp: int
 
-try:
-    key.decode(token, type=Claims)
-except ryjwt.ClaimsValidationError as e:
-    print(e)  # Claims don't match Claims: Object missing required field `exp`
-    assert isinstance(e.__cause__, msgspec.ValidationError)
-```
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    token = key.encode({"sub": "user-1"})  # no exp
+
+    try:
+        key.decode(token, type=Claims)
+    except ryjwt.ClaimsValidationError as e:
+        print(e)  # Claims don't match Claims: Object missing required field `exp`
+        assert isinstance(e.__cause__, msgspec.ValidationError)
+    ```
+
+=== "pydantic"
+
+    ```python {data-uv-extra="pydantic"}
+    import secrets
+
+    import pydantic
+    import ryjwt
+
+
+    class Claims(pydantic.BaseModel):
+        sub: str
+        exp: int
+
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    token = key.encode({"sub": "user-1"})  # no exp
+
+    try:
+        key.decode(token, type=Claims)
+    except ryjwt.ClaimsValidationError as e:
+        print(e)  # Claims don't match Claims: Field required - at `exp`
+        assert isinstance(e.__cause__, pydantic.ValidationError)
+    ```
 
 Your class's own code (a msgspec `__post_init__`, a pydantic validator) only runs for tokens
 whose `exp`, `nbf`, `aud` and `iss` checks passed.
@@ -287,27 +386,53 @@ whose `exp`, `nbf`, `aud` and `iss` checks passed.
 `exp`, `nbf` and `iat` are times. In the token, they're numbers of seconds since 1970. In a
 Struct or model, you can declare them as `datetime`s instead (or `datetime | None`):
 
-```python
-import secrets
-from datetime import UTC, datetime, timedelta
+=== "msgspec"
 
-import msgspec
-import ryjwt
+    ```python {data-uv-extra="msgspec"}
+    import secrets
+    from datetime import UTC, datetime, timedelta
 
-
-class Claims(msgspec.Struct):
-    sub: str
-    exp: datetime
-    iat: datetime
+    import msgspec
+    import ryjwt
 
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
-now = datetime.now(UTC)
-token = key.encode(Claims(sub="user-1", exp=now + timedelta(minutes=15), iat=now))
+    class Claims(msgspec.Struct):
+        sub: str
+        exp: datetime
+        iat: datetime
 
-claims = key.decode(token, type=Claims)
-assert claims.exp.tzinfo is not None  # a datetime, in UTC
-```
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    now = datetime.now(UTC)
+    token = key.encode(Claims(sub="user-1", exp=now + timedelta(minutes=15), iat=now))
+
+    claims = key.decode(token, type=Claims)
+    assert claims.exp.tzinfo is not None  # a datetime, in UTC
+    ```
+
+=== "pydantic"
+
+    ```python {data-uv-extra="pydantic"}
+    import secrets
+    from datetime import UTC, datetime, timedelta
+
+    import pydantic
+    import ryjwt
+
+
+    class Claims(pydantic.BaseModel):
+        sub: str
+        exp: datetime
+        iat: datetime
+
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    now = datetime.now(UTC)
+    token = key.encode(Claims(sub="user-1", exp=now + timedelta(minutes=15), iat=now))
+
+    claims = key.decode(token, type=Claims)
+    assert claims.exp.tzinfo is not None  # a datetime, in UTC
+    ```
 
 **Encoding.** A `datetime` in `exp`, `nbf` or `iat` is written as a number of seconds. That's in
 a Struct or model, or at the top level of a dict. Fractions of a second are dropped.

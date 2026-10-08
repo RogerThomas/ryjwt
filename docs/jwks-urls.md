@@ -24,20 +24,70 @@ It fetches with Python's standard library, so it needs no extra dependencies.
 Create one client per URL, when your service starts, and use it for every request. It's safe to
 share between threads and event loops. Creating it doesn't fetch anything.
 
-<!-- test: skip, needs a JWKS URL and a token it signed -->
-```python
-import ryjwt
+=== "msgspec"
 
-client = ryjwt.JWKSClient(
-    "https://issuer.example/.well-known/jwks.json",
-    algorithms=["RS256"],
-    audience="my-api",
-    issuer="https://issuer.example/",
-)
+    <!-- test: skip, needs a JWKS URL and a token it signed -->
+    ```python
+    import msgspec
+    import ryjwt
 
-claims = client.decode(token)  # in sync code
-claims = await client.adecode(token)  # in async code
-```
+
+    class Claims(msgspec.Struct):
+        sub: str
+        exp: int
+
+
+    client = ryjwt.JWKSClient(
+        "https://issuer.example/.well-known/jwks.json",
+        algorithms=["RS256"],
+        audience="my-api",
+        issuer="https://issuer.example/",
+    )
+
+    claims = client.decode(token, type=Claims)  # in sync code
+    claims = await client.adecode(token, type=Claims)  # in async code
+    ```
+
+=== "pydantic"
+
+    <!-- test: skip, needs a JWKS URL and a token it signed -->
+    ```python
+    import pydantic
+    import ryjwt
+
+
+    class Claims(pydantic.BaseModel):
+        sub: str
+        exp: int
+
+
+    client = ryjwt.JWKSClient(
+        "https://issuer.example/.well-known/jwks.json",
+        algorithms=["RS256"],
+        audience="my-api",
+        issuer="https://issuer.example/",
+    )
+
+    claims = client.decode(token, type=Claims)  # in sync code
+    claims = await client.adecode(token, type=Claims)  # in async code
+    ```
+
+=== "dict"
+
+    <!-- test: skip, needs a JWKS URL and a token it signed -->
+    ```python
+    import ryjwt
+
+    client = ryjwt.JWKSClient(
+        "https://issuer.example/.well-known/jwks.json",
+        algorithms=["RS256"],
+        audience="my-api",
+        issuer="https://issuer.example/",
+    )
+
+    claims = client.decode(token)  # in sync code
+    claims = await client.adecode(token)  # in async code
+    ```
 
 Every decode checks tokens against the client's `audience` and `issuer`. A decode can pass its
 own, which replace the client's for that call: `client.decode(token, audience="admin-api")`.

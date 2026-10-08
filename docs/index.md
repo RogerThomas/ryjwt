@@ -31,74 +31,78 @@ Two optional extras: `ryjwt[msgspec]` makes decoding to a dict faster, and lets 
 
 ## A first token
 
-```python
-import secrets
-import time
+Decode the claims into a msgspec `Struct`, a pydantic model or a dict. Pick a tab: the others on
+the site follow it. Each example is a whole script, and **Copy for uv** above it copies a command
+that runs it, extra and all, with nothing installed first.
 
-import ryjwt
+=== "msgspec"
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+    ```python {data-uv-extra="msgspec"}
+    import secrets
+    from datetime import UTC, datetime, timedelta
 
-token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
-claims = key.decode(token)  # signature, exp and aud checked
-assert claims["sub"] == "user-1"
-```
-
-### Into a msgspec Struct
-
-With `uv add --prerelease allow 'ryjwt[msgspec]'`:
-
-```python
-import secrets
-from datetime import UTC, datetime, timedelta
-
-import msgspec
-import ryjwt
+    import msgspec
+    import ryjwt
 
 
-class Claims(msgspec.Struct):
-    sub: str
-    exp: datetime
+    class Claims(msgspec.Struct):
+        sub: str
+        aud: str
+        exp: datetime
 
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
-# Tokens store exp in whole seconds, so round it for the round trip to compare equal.
-expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
-claims_in = Claims(sub="user-1", exp=expires)
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", aud="my-api", exp=expires)
 
-token = key.encode(claims_in)
-claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
-assert claims_in == claims_out
-```
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    assert claims_in == claims_out
+    ```
 
-### Into a pydantic model
+=== "pydantic"
 
-With `uv add --prerelease allow 'ryjwt[pydantic]'`:
+    ```python {data-uv-extra="pydantic"}
+    import secrets
+    from datetime import UTC, datetime, timedelta
 
-```python
-import secrets
-from datetime import UTC, datetime, timedelta
-
-import pydantic
-import ryjwt
+    import pydantic
+    import ryjwt
 
 
-class Claims(pydantic.BaseModel):
-    sub: str
-    exp: datetime
+    class Claims(pydantic.BaseModel):
+        sub: str
+        aud: str
+        exp: datetime
 
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
-# Tokens store exp in whole seconds, so round it for the round trip to compare equal.
-expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
-claims_in = Claims(sub="user-1", exp=expires)
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", aud="my-api", exp=expires)
 
-token = key.encode(claims_in)
-claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
-assert claims_in == claims_out
-```
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    assert claims_in == claims_out
+    ```
+
+=== "dict"
+
+    ```python {data-uv-extra=""}
+    import secrets
+    import time
+
+    import ryjwt
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+
+    token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
+    claims = key.decode(token)  # a dict: signature, exp and aud checked
+    assert claims["sub"] == "user-1"
+    ```
 
 [Getting started](getting-started.md) goes on from there.
 

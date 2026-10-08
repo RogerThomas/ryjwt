@@ -16,20 +16,75 @@ It checks them once, when you create it. Create it at startup, and use it for ev
 
 ## Encode and decode
 
-With a shared secret, the same `SecretKey` object signs and verifies:
+With a shared secret, the same `SecretKey` object signs and verifies. The claims can be a msgspec
+`Struct`, a pydantic model ([typed claims](#typed-claims)) or a dict:
 
-```python
-import secrets
-import time
+=== "msgspec"
 
-import ryjwt
+    ```python {data-uv-extra="msgspec"}
+    import secrets
+    from datetime import UTC, datetime, timedelta
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    import msgspec
+    import ryjwt
 
-token = key.encode({"sub": "user-1", "exp": int(time.time()) + 900})
-claims = key.decode(token)
-assert claims["sub"] == "user-1"
-```
+
+    class Claims(msgspec.Struct):
+        sub: str
+        exp: datetime
+
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", exp=expires)
+
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)
+    assert claims_in == claims_out
+    ```
+
+=== "pydantic"
+
+    ```python {data-uv-extra="pydantic"}
+    import secrets
+    from datetime import UTC, datetime, timedelta
+
+    import pydantic
+    import ryjwt
+
+
+    class Claims(pydantic.BaseModel):
+        sub: str
+        exp: datetime
+
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", exp=expires)
+
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)
+    assert claims_in == claims_out
+    ```
+
+=== "dict"
+
+    ```python {data-uv-extra=""}
+    import secrets
+    import time
+
+    import ryjwt
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+
+    token = key.encode({"sub": "user-1", "exp": int(time.time()) + 900})
+    claims = key.decode(token)
+    assert claims["sub"] == "user-1"
+    ```
 
 In a real service, the secret comes from your configuration, and is at least 32 bytes long for
 `HS256` (see [HMAC secrets](keys.md#secretkey-hmac-secrets)).
@@ -93,26 +148,51 @@ Pass a msgspec `Struct` or pydantic `BaseModel` class as `type`, and `decode` re
 of it instead of a dict. Claims that don't fit it are rejected too, with
 [`ClaimsValidationError`][ryjwt.ClaimsValidationError]:
 
-```python
-import secrets
-import time
+=== "msgspec"
 
-import msgspec
-import ryjwt
+    ```python {data-uv-extra="msgspec"}
+    import secrets
+    import time
 
-
-class Claims(msgspec.Struct):
-    sub: str
-    exp: int
-    scope: str = ""
+    import msgspec
+    import ryjwt
 
 
-key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
-token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, scope="read"))
+    class Claims(msgspec.Struct):
+        sub: str
+        exp: int
+        scope: str = ""
 
-claims = key.decode(token, type=Claims)
-assert claims.scope == "read"
-```
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, scope="read"))
+
+    claims = key.decode(token, type=Claims)
+    assert claims.scope == "read"
+    ```
+
+=== "pydantic"
+
+    ```python {data-uv-extra="pydantic"}
+    import secrets
+    import time
+
+    import pydantic
+    import ryjwt
+
+
+    class Claims(pydantic.BaseModel):
+        sub: str
+        exp: int
+        scope: str = ""
+
+
+    key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+    token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, scope="read"))
+
+    claims = key.decode(token, type=Claims)
+    assert claims.scope == "read"
+    ```
 
 A required field makes its claim required. Here, a token without `exp` is rejected. Decoded to a
 dict, it would be accepted, and never expire.
