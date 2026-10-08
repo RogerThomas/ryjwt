@@ -169,6 +169,18 @@ class JWKSServer:
         return self.responses >= responses
 
 
+class LocalHTTPServer(ThreadingHTTPServer):
+    """A `ThreadingHTTPServer` for tests, which skips the reverse DNS lookup of its own address
+    that `HTTPServer` does on start (`socket.getfqdn`): on some CI runners that lookup hangs for
+    over 30 s, and the tests never need the name."""
+
+    def server_bind(self) -> None:
+        socketserver.TCPServer.server_bind(self)
+        host, port = self.server_address[:2]
+        self.server_name = str(host)
+        self.server_port = port
+
+
 class JWKSHandler(BaseHTTPRequestHandler):
     """Serves what a `JWKSServer` (its `state`) says."""
 
@@ -232,7 +244,7 @@ class JWKSHandler(BaseHTTPRequestHandler):
 def serve_jwks() -> Iterator[JWKSServer]:
     """A real HTTP server on 127.0.0.1, in a daemon thread, until resumed."""
     state = JWKSServer()
-    httpd = ThreadingHTTPServer(("127.0.0.1", 0), partial(JWKSHandler, state=state))
+    httpd = LocalHTTPServer(("127.0.0.1", 0), partial(JWKSHandler, state=state))
     state.origin = f"http://127.0.0.1:{httpd.server_port}"
     state.url = f"{state.origin}/jwks"
     threading.Thread(target=httpd.serve_forever, args=(0.01,), daemon=True).start()

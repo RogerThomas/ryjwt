@@ -28,7 +28,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import timedelta
 from functools import partial
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Any, NoReturn, Protocol, TypedDict, Unpack
 from urllib.error import URLError
@@ -41,6 +41,7 @@ from _support import (
     ClaimsStruct,
     JWKSHandler,
     JWKSServer,
+    LocalHTTPServer,
     SigningKey,
     make_jwk,
     serve_jwks,
@@ -104,7 +105,7 @@ class MakeClient(Protocol):
     ) -> Caller: ...
 
 
-class _IPv6HTTPServer(ThreadingHTTPServer):
+class _IPv6HTTPServer(LocalHTTPServer):
     address_family = socket.AF_INET6
 
 
@@ -295,7 +296,7 @@ def _proxy(monkeypatch: pytest.MonkeyPatch) -> Iterator[JWKSServer]:
     either case, and no `NO_PROXY`) says to use for every URL. It counts requests, and serves no
     usable keys."""
     state = JWKSServer()
-    httpd = ThreadingHTTPServer(("127.0.0.1", 0), partial(JWKSHandler, state=state))
+    httpd = LocalHTTPServer(("127.0.0.1", 0), partial(JWKSHandler, state=state))
     state.origin = f"http://127.0.0.1:{httpd.server_port}"
     for name in ("HTTP_PROXY", "http_proxy", "HTTPS_PROXY", "https_proxy"):
         monkeypatch.setenv(name, state.origin)
@@ -350,7 +351,7 @@ def _tls_cert(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, Path]:
 def _tls_server(tls_cert: tuple[Path, Path]) -> Iterator[JWKSServer]:
     """`server`, over TLS with `tls_cert`."""
     state = JWKSServer()
-    httpd = ThreadingHTTPServer(("127.0.0.1", 0), partial(JWKSHandler, state=state))
+    httpd = LocalHTTPServer(("127.0.0.1", 0), partial(JWKSHandler, state=state))
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.load_cert_chain(*tls_cert)
     httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
@@ -827,7 +828,7 @@ def test_first_fetch_fails(
 
 
 def test_connection_refused(make_client: MakeClient, old_token: str) -> None:
-    with ThreadingHTTPServer(("127.0.0.1", 0), BaseHTTPRequestHandler) as closed:
+    with LocalHTTPServer(("127.0.0.1", 0), BaseHTTPRequestHandler) as closed:
         port = closed.server_port
     decode = make_client(f"http://127.0.0.1:{port}/jwks").decode
 
@@ -844,7 +845,7 @@ def _dribbled_fetch_times_out(server: JWKSServer, token: str) -> None:
     start = time.monotonic()
     with pytest.raises(ryjwt.JWKSFetchError) as error:
         client.decode(token)
-    assert 2.5 <= time.monotonic() - start < 3
+    assert 2.45 <= time.monotonic() - start < 3  # 50 ms slack for Windows' coarse clock
     message = f"Couldn't fetch the JWKS from {server.origin}: TimeoutError: timed out"
     assert str(error.value) == message
     assert isinstance(error.value.__cause__, TimeoutError)
@@ -875,7 +876,7 @@ def _fetch_hung_in_dns_times_out(caller: Caller, token: str) -> None:
     start = time.monotonic()
     with pytest.raises(ryjwt.JWKSFetchError) as error:
         caller.decode(token)
-    assert 2.5 <= time.monotonic() - start < 3
+    assert 2.45 <= time.monotonic() - start < 3  # 50 ms slack for Windows' coarse clock
     message = "Couldn't fetch the JWKS from https://issuer: TimeoutError: timed out"
     assert str(error.value) == message
     assert isinstance(error.value.__cause__, TimeoutError)
@@ -909,7 +910,7 @@ def _outlives_a_hung_refresh(caller: Caller, old_token: str, new_token: str) -> 
     }  # expired: refreshes in the background, and hangs
     with pytest.raises(ryjwt.UnknownKeyError):
         caller.decode(new_token)  # waits for the refresh, until its deadline
-    assert 2.5 <= time.monotonic() - start < 3
+    assert 2.45 <= time.monotonic() - start < 3  # 50 ms slack for Windows' coarse clock
     # The keys are now over max_stale out of date, and within the cooldown: no fetch, at once.
     start = time.monotonic()
     with pytest.raises(ryjwt.JWKSFetchError, match="TimeoutError: timed out") as error:
