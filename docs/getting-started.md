@@ -144,15 +144,18 @@ except ryjwt.InvalidTokenError as e:
 
 ## Typed claims
 
-Pass a msgspec `Struct` or pydantic `BaseModel` class as `type`, and `decode` returns an instance
-of it instead of a dict. Claims that don't fit it are rejected too, with
-[`ClaimsValidationError`][ryjwt.ClaimsValidationError]:
+With `type=Claims`, as in the msgspec and pydantic tabs [above](#encode-and-decode), `decode`
+returns a `Claims` instead of a dict, and your type checker knows it.
+
+The class also checks the claims. A token whose claims don't fit it is rejected with
+[`ClaimsValidationError`][ryjwt.ClaimsValidationError]. So a required field makes its claim
+required: here, a token without `exp` is rejected. Decoded to a dict, it would be accepted, and
+never expire.
 
 === "msgspec"
 
     ```python {data-uv-extra="msgspec"}
     import secrets
-    import time
 
     import msgspec
     import ryjwt
@@ -161,21 +164,21 @@ of it instead of a dict. Claims that don't fit it are rejected too, with
     class Claims(msgspec.Struct):
         sub: str
         exp: int
-        scope: str = ""
 
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
-    token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, scope="read"))
+    token = key.encode({"sub": "user-1"})  # no exp
 
-    claims = key.decode(token, type=Claims)
-    assert claims.scope == "read"
+    try:
+        key.decode(token, type=Claims)
+    except ryjwt.ClaimsValidationError as e:
+        print(e)  # Claims don't match Claims: Object missing required field `exp`
     ```
 
 === "pydantic"
 
     ```python {data-uv-extra="pydantic"}
     import secrets
-    import time
 
     import pydantic
     import ryjwt
@@ -184,18 +187,16 @@ of it instead of a dict. Claims that don't fit it are rejected too, with
     class Claims(pydantic.BaseModel):
         sub: str
         exp: int
-        scope: str = ""
 
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
-    token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, scope="read"))
+    token = key.encode({"sub": "user-1"})  # no exp
 
-    claims = key.decode(token, type=Claims)
-    assert claims.scope == "read"
+    try:
+        key.decode(token, type=Claims)
+    except ryjwt.ClaimsValidationError as e:
+        print(e)  # Claims don't match Claims: Field required - at `exp`
     ```
-
-A required field makes its claim required. Here, a token without `exp` is rejected. Decoded to a
-dict, it would be accepted, and never expire.
 
 ## Public-key signatures
 
