@@ -1,5 +1,11 @@
 # ryjwt
 
+[![PyPI](https://img.shields.io/pypi/v/ryjwt)](https://pypi.org/project/ryjwt/)
+[![CI](https://github.com/RogerThomas/ryjwt/actions/workflows/ci.yml/badge.svg)](https://github.com/RogerThomas/ryjwt/actions/workflows/ci.yml)
+[![Python versions](https://img.shields.io/pypi/pyversions/ryjwt)](https://pypi.org/project/ryjwt/)
+[![License](https://img.shields.io/pypi/l/ryjwt)](https://github.com/RogerThomas/ryjwt/blob/main/LICENSE)
+[![Docs](https://img.shields.io/badge/docs-rogerthomas.github.io%2Fryjwt-blue)](https://rogerthomas.github.io/ryjwt/)
+
 Fast, strictly typed JSON Web Tokens for Python, written in Rust.
 
 **Documentation: [rogerthomas.github.io/ryjwt](https://rogerthomas.github.io/ryjwt/)**
