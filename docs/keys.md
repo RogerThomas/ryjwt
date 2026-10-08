@@ -239,7 +239,8 @@ If the provider publishes its JWKS at a URL, as most do, use a [`JWKSClient`](jw
 fetches the document for you, and fetches it again when the provider changes its keys.
 
 Verifying with a JWKS is as fast as with a single PEM key. Once a token has verified, ryjwt
-remembers which key its header picked, so the next token with the same header skips the lookup.
+remembers which key its header picked, so the next token with the same header skips the lookup
+(its signature is still checked).
 
 ### Which keys are used
 

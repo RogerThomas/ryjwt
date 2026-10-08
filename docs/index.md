@@ -59,8 +59,9 @@ ryjwt is fast because:
   [aws-lc-rs](https://github.com/aws/aws-lc-rs). The token is split and decoded in Rust too.
 - **Keys are prepared once.** A key object parses its key when you create it, then reuses it for
   every token.
-- **Repeat headers are free.** Tokens from one issuer share a header. After the first, ryjwt
-  remembers which key that header picks, and skips reading it again.
+- **Repeat headers are free.** Tokens from one issuer share a header. After the first verifies,
+  ryjwt remembers which key that header picks, so it doesn't parse it again. The signature and
+  claims are still checked on every token.
 - **Typed claims skip the dict.** With `type=`, your msgspec `Struct` or pydantic model is built
   straight from the payload, with no dict in between. Dicts are built by msgspec if it's
   installed, or by [jiter](https://github.com/pydantic/jiter), which is built in.
