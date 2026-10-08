@@ -16,7 +16,7 @@ import time
 from collections.abc import Callable, Iterable, Sequence  # at runtime: in public signatures
 from datetime import timedelta
 from functools import partial
-from typing import TYPE_CHECKING, Any, ClassVar, NamedTuple, final, overload
+from typing import TYPE_CHECKING, Any, ClassVar, final, overload
 
 from ryjwt._algorithms import AsymmetricAlgorithm  # at runtime: in public signatures
 from ryjwt._ryjwt import (
@@ -110,17 +110,20 @@ def _redacted(scheme: str, host: str) -> str:
     return "an invalid URL" if _hostname(host) is None else f"{scheme}://{host.lower()}"
 
 
-class _Fetch(NamedTuple):
-    """A fetch running on its own thread. (A NamedTuple rather than a dataclass: importing
-    dataclasses would double `import ryjwt`'s time.)"""
+class _Fetch:
+    """A fetch running on its own thread. (A plain class: a dataclass or NamedTuple would add
+    `dataclasses` or `annotationlib` to `import ryjwt`'s time.)"""
 
-    future: "Future[None]"
-    """Done once the fetch's outcome is recorded (or it was abandoned)."""
-    deadline: float
-    """When callers stop waiting for it (`time.monotonic()`): `JWKSClient._timeout` after it
-    started, however late they joined."""
-    number: int
-    """The fetch's number: fetches are numbered in the order they start."""
+    __slots__ = ("deadline", "future", "number")
+
+    def __init__(self, future: "Future[None]", deadline: float, number: int) -> None:
+        self.future = future
+        """Done once the fetch's outcome is recorded (or it was abandoned)."""
+        self.deadline = deadline
+        """When callers stop waiting for it (`time.monotonic()`): `JWKSClient._timeout` after it
+        started, however late they joined."""
+        self.number = number
+        """The fetch's number: fetches are numbered in the order they start."""
 
 
 type _Held = tuple[PublicKey | None, float, float, float]
@@ -132,14 +135,17 @@ type _Held = tuple[PublicKey | None, float, float, float]
 - `stale_at`: when the keys stop being usable, while fetches fail: `max_stale` after they expired;
 - `expiry`: when the keys expire (`needs_refresh`).
 
-(A plain tuple, not a NamedTuple: decodes unpack it, which is quicker for an exact tuple.)"""
+(A plain tuple: decodes unpack it, which is quicker than reading attributes.)"""
 
 
-class _Outcome(NamedTuple):
+class _Outcome:
     """How a fetch ended: what to record (with the lock held), and whether it got keys."""
 
-    record: Callable[[], None]
-    succeeded: bool
+    __slots__ = ("record", "succeeded")
+
+    def __init__(self, record: Callable[[], None], *, succeeded: bool) -> None:
+        self.record = record
+        self.succeeded = succeeded
 
 
 @final
