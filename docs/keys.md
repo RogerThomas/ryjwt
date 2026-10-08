@@ -1,17 +1,29 @@
 # Keys and algorithms
 
+A key object holds one key and the algorithms it may be used with. Create it once, when your app
+starts, and reuse it for every token. Pick the class by the key you have:
+
+- [`SecretKey`](#secretkey-hmac-secrets): a shared secret, for the HMAC algorithms (`HS256` and
+  friends). Whoever can verify a token with it can also make one.
+- [`PrivateKey`](#private-and-public-keys): a private key, to sign tokens (and verify them).
+- [`PublicKey`](#private-and-public-keys): a public key, or a [JWKS document](#jwks-documents), to
+  verify tokens only.
+
+If an identity provider publishes its keys at a URL, use a [`JWKSClient`](jwks-urls.md) instead:
+it fetches the keys and keeps them up to date.
+
 ## Algorithms
 
-| algorithm | signature | key | class |
+| class | algorithm | signature | key |
 | :-- | :-- | :-- | :-- |
-| `HS256`, `HS384`, `HS512` | HMAC with SHA-256, -384, -512 | a shared secret | `SecretKey` |
-| `RS256`, `RS384`, `RS512` | RSA (PKCS#1 v1.5) with SHA-256, -384, -512 | RSA | `PrivateKey`, `PublicKey` |
-| `PS256`, `PS384`, `PS512` | RSA-PSS with SHA-256, -384, -512 | RSA | `PrivateKey`, `PublicKey` |
-| `ES256` | ECDSA with SHA-256 | EC, P-256 curve | `PrivateKey`, `PublicKey` |
-| `ES256K` | ECDSA with SHA-256 | EC, secp256k1 curve | `PrivateKey`, `PublicKey` |
-| `ES384` | ECDSA with SHA-384 | EC, P-384 curve | `PrivateKey`, `PublicKey` |
-| `ES512`, `ES521` | ECDSA with SHA-512 | EC, P-521 curve | `PrivateKey`, `PublicKey` |
-| `EdDSA` | Ed25519 | Ed25519 | `PrivateKey`, `PublicKey` |
+| `SecretKey` | `HS256`, `HS384`, `HS512` | HMAC with SHA-256, -384, -512 | a shared secret |
+| `PrivateKey`, `PublicKey` | `RS256`, `RS384`, `RS512` | RSA (PKCS#1 v1.5) with SHA-256, -384, -512 | RSA |
+| `PrivateKey`, `PublicKey` | `PS256`, `PS384`, `PS512` | RSA-PSS with SHA-256, -384, -512 | RSA |
+| `PrivateKey`, `PublicKey` | `ES256` | ECDSA with SHA-256 | EC, P-256 curve |
+| `PrivateKey`, `PublicKey` | `ES256K` | ECDSA with SHA-256 | EC, secp256k1 curve |
+| `PrivateKey`, `PublicKey` | `ES384` | ECDSA with SHA-384 | EC, P-384 curve |
+| `PrivateKey`, `PublicKey` | `ES512`, `ES521` | ECDSA with SHA-512 | EC, P-521 curve |
+| `PrivateKey`, `PublicKey` | `EdDSA` | Ed25519 | Ed25519 |
 
 `ES512` is the standard name for ECDSA on the P-521 curve. `ES521` is accepted as another name
 for it. `EdDSA` means Ed25519 only: Ed448 isn't supported.
