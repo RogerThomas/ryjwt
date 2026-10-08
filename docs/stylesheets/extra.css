@@ -1,7 +1,7 @@
-/* Keep each table's first column, a class or argument name, on one line. */
-.md-typeset table:not([class]) th:first-child,
-.md-typeset table:not([class]) td:first-child,
-.md-typeset table:not([class]) td:first-child code {
+/* Tables never wrap their cells: a table wider than the page scrolls sideways instead. */
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) td code {
   white-space: nowrap;
   word-break: normal;
 }
