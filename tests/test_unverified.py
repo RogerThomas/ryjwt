@@ -19,7 +19,7 @@ def _dict_parser(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch
 
 @pytest.mark.usefixtures("dict_parser")
 def test_reads_an_hmac_token(hmac_key: str) -> None:
-    key = ryjwt.HMAC(hmac_key, algorithms=["HS256"])
+    key = ryjwt.SecretKey(hmac_key, algorithms=["HS256"])
     token = key.encode({"sub": "sub", "n": 1}, header={"kid": "kid"})
     header = {"alg": "HS256", "typ": "JWT", "kid": "kid"}
 
@@ -43,7 +43,7 @@ def test_reads_a_private_key_token(
     assert ryjwt.unverified_token(token) == (header, {"sub": "sub", "n": 1})
 
 
-def test_takes_str_or_bytes(hmac_jwt: ryjwt.HMAC) -> None:
+def test_takes_str_or_bytes(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub"})
 
     assert ryjwt.unverified_header(token.encode()) == ryjwt.unverified_header(token)
@@ -64,7 +64,7 @@ def test_token_must_be_str_or_bytes() -> None:
 
 @pytest.mark.parametrize("problem", ["expired", "not-yet-valid", "wrong-aud", "wrong-iss"])
 def test_claims_are_not_checked(problem: str, hmac_key: str, past: int, future: int) -> None:
-    key = ryjwt.HMAC(hmac_key, algorithms=["HS256"], audience="aud", issuer="iss")
+    key = ryjwt.SecretKey(hmac_key, algorithms=["HS256"], audience="aud", issuer="iss")
     problems: dict[str, dict[str, Any]] = {
         "expired": {"exp": past, "aud": "aud", "iss": "iss"},
         "not-yet-valid": {"nbf": future, "aud": "aud", "iss": "iss"},
@@ -81,8 +81,8 @@ def test_claims_are_not_checked(problem: str, hmac_key: str, past: int, future: 
 
 
 @pytest.mark.parametrize("tamper", ["other-key", "replaced", "empty"])
-def test_signature_is_not_checked(tamper: str, hmac_jwt: ryjwt.HMAC) -> None:
-    other_key = ryjwt.HMAC("other-key" * 8, algorithms=["HS256"])
+def test_signature_is_not_checked(tamper: str, hmac_jwt: ryjwt.SecretKey) -> None:
+    other_key = ryjwt.SecretKey("other-key" * 8, algorithms=["HS256"])
     token = hmac_jwt.encode({"sub": "sub"})
     tampered = {
         "other-key": other_key.encode({"sub": "sub"}),
@@ -110,7 +110,7 @@ def test_signature_is_not_checked(tamper: str, hmac_jwt: ryjwt.HMAC) -> None:
 def test_header_fields_are_not_checked(
     header: bytes,
     expected: dict[str, Any],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     """Headers `decode` rejects for what their fields say, not for their form."""
@@ -123,7 +123,7 @@ def test_header_fields_are_not_checked(
 
 
 @pytest.mark.parametrize("payload", ["{payload}=", "{payload}!"])
-def test_payload_must_be_unpadded_base64url(payload: str, hmac_jwt: ryjwt.HMAC) -> None:
+def test_payload_must_be_unpadded_base64url(payload: str, hmac_jwt: ryjwt.SecretKey) -> None:
     """`decode` rejects these tokens too, but for their signature, which it checks first."""
     header, original, signature = hmac_jwt.encode({"sub": "sub"}).split(".")
     token = f"{header}.{payload.format(payload=original)}.{signature}"
@@ -136,7 +136,7 @@ def test_payload_must_be_unpadded_base64url(payload: str, hmac_jwt: ryjwt.HMAC) 
         ryjwt.unverified_token(token)
 
 
-def _assert_rejected_as_decode_rejects(key: ryjwt.HMAC, token: str) -> None:
+def _assert_rejected_as_decode_rejects(key: ryjwt.SecretKey, token: str) -> None:
     """Each of the three functions raises the `DecodeError` `key.decode` raises for `token`."""
     with pytest.raises(ryjwt.DecodeError) as decoded:
         key.decode(token)
@@ -167,7 +167,7 @@ def _assert_rejected_as_decode_rejects(key: ryjwt.HMAC, token: str) -> None:
 def test_malformed_tokens_are_rejected_as_decode_rejects_them(
     malformation: str, hmac_key: str
 ) -> None:
-    key = ryjwt.HMAC(hmac_key, algorithms=["HS256"])
+    key = ryjwt.SecretKey(hmac_key, algorithms=["HS256"])
     token = key.encode({"sub": "sub"})
     header, payload, signature = token.split(".")
     malformed = {
@@ -218,6 +218,6 @@ def test_malformed_json_is_rejected_as_decode_rejects_it(
     hmac_key: str,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
-    key = ryjwt.HMAC(hmac_key, algorithms=["HS256"])
+    key = ryjwt.SecretKey(hmac_key, algorithms=["HS256"])
 
     _assert_rejected_as_decode_rejects(key, raw_hs256_token(header, payload))

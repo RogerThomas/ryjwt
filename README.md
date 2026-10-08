@@ -44,7 +44,7 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
 token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
 claims = key.decode(token)  # signature, exp and aud checked
@@ -68,7 +68,7 @@ class Claims(msgspec.Struct):
     exp: datetime
 
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
 # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
 expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
@@ -96,7 +96,7 @@ class Claims(pydantic.BaseModel):
     exp: datetime
 
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
 # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
 expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)

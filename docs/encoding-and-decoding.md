@@ -1,6 +1,6 @@
 # Encoding and decoding
 
-`HMAC` and `PrivateKey` can `encode` and `decode`. `PublicKey` and `JWKSClient` can only
+`SecretKey` and `PrivateKey` can `encode` and `decode`. `PublicKey` and `JWKSClient` can only
 `decode`. The arguments are the same everywhere.
 
 ## Encoding
@@ -13,7 +13,7 @@ import secrets
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(64), algorithms=["HS256", "HS512"])
+key = ryjwt.SecretKey(secrets.token_bytes(64), algorithms=["HS256", "HS512"])
 
 token = key.encode({"sub": "user-1"}, algorithm="HS512", header={"kid": "key-1"})
 ```
@@ -42,7 +42,7 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
 
 claims = key.decode(token)
@@ -99,7 +99,7 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(
+key = ryjwt.SecretKey(
     secrets.token_bytes(32),
     algorithms=["HS256"],
     audience="my-api",
@@ -123,7 +123,7 @@ import secrets
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 token = key.encode({"sub": "user-1", "aud": "admin-api"})
 
 claims = key.decode(token, audience="admin-api")  # checked against "admin-api" only
@@ -154,7 +154,7 @@ from datetime import timedelta
 
 import ryjwt
 
-key = ryjwt.HMAC(
+key = ryjwt.SecretKey(
     secrets.token_bytes(32),
     algorithms=["HS256"],
     audience="my-api",
@@ -197,7 +197,7 @@ import secrets
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 token = key.encode({"sub": "user-1", "iss": "https://tenant-1.example/"}, header={"kid": "key-1"})
 
 header, claims = ryjwt.unverified_token(token)
@@ -243,7 +243,7 @@ class Claims(pydantic.BaseModel):
     roles: list[str] = []
 
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, roles=["admin"]))
 
 claims = key.decode(token, type=Claims)
@@ -269,7 +269,7 @@ class Claims(msgspec.Struct):
     exp: int
 
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 token = key.encode({"sub": "user-1"})  # no exp
 
 try:
@@ -301,7 +301,7 @@ class Claims(msgspec.Struct):
     iat: datetime
 
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 now = datetime.now(UTC)
 token = key.encode(Claims(sub="user-1", exp=now + timedelta(minutes=15), iat=now))
 

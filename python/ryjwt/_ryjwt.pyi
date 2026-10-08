@@ -9,8 +9,9 @@ from ryjwt._compat import BaseModelTyping, StructTyping
 type Claims = dict[str, Any] | StructTyping | BaseModelTyping
 
 @final
-class HMAC:
-    """Encodes and decodes JWTs with a shared secret (HS256, HS384, HS512).
+class SecretKey:
+    """Encodes and decodes JWTs with a shared secret, `str` or `bytes`, for the HMAC algorithms
+    (HS256, HS384, HS512).
 
     `secret` must not be empty, nor look like a public key: a PEM, an SSH key or a JWK (use
     `PrivateKey`/`PublicKey`).
@@ -194,6 +195,8 @@ class PublicKey:
 
     `pem` is a PEM-encoded public key: SubjectPublicKeyInfo (`BEGIN PUBLIC KEY`), or PKCS#1
     (`BEGIN RSA PUBLIC KEY`). A private key is rejected: pass its public key instead.
+
+    Built with `from_jwks`, it may hold several keys, and each token picks one by its `kid`.
     """
 
     def __init__(

@@ -31,15 +31,16 @@ fn read_key_file<'py>(path: &Bound<'py, PyAny>) -> PyResult<Bound<'py, PyAny>> {
         .call_method0(intern!(py, "read_bytes"))
 }
 
-/// Encodes and decodes JWTs with a shared secret (HS256, HS384, HS512).
-#[pyclass(frozen, module = "ryjwt", name = "HMAC")]
-struct Hmac {
+/// Encodes and decodes JWTs with a shared secret, str or bytes, for the HMAC algorithms (HS256,
+/// HS384, HS512).
+#[pyclass(frozen, module = "ryjwt", name = "SecretKey")]
+struct SecretKey {
     decoder: Decoder,
     encoder: Encoder,
 }
 
 #[pymethods]
-impl Hmac {
+impl SecretKey {
     #[new]
     #[pyo3(signature = (secret, *, algorithms, audience=None, issuer=None, allow_short_secret=false))]
     fn new(
@@ -170,6 +171,8 @@ impl PrivateKey {
 }
 
 /// Decodes JWTs with a public key, or the keys of a JWKS (RS*, PS*, ES*, `EdDSA`). It can't encode.
+///
+/// Built from a JWKS, it may hold several keys, and each token picks one by its `kid`.
 #[pyclass(frozen, module = "ryjwt", name = "PublicKey")]
 struct PublicKey {
     decoder: Decoder,
@@ -340,7 +343,7 @@ fn _ryjwt(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(unverified_header, m)?)?;
     m.add_function(wrap_pyfunction!(unverified_claims, m)?)?;
     m.add_function(wrap_pyfunction!(unverified_token, m)?)?;
-    m.add_class::<Hmac>()?;
+    m.add_class::<SecretKey>()?;
     m.add_class::<PrivateKey>()?;
     m.add_class::<PublicKey>()?;
     errors::register(m)?;

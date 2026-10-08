@@ -38,7 +38,7 @@ from typing import Any
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
 
 def authenticate(authorization: str) -> dict[str, Any] | None:

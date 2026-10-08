@@ -25,7 +25,7 @@ class Claims(msgspec.Struct):
     exp: datetime
 
 
-key = ryjwt.HMAC("s" * 32, algorithms=["HS256"])
+key = ryjwt.SecretKey("s" * 32, algorithms=["HS256"])
 token = key.encode(Claims(sub="sub", exp=datetime(2100, 1, 1, tzinfo=UTC)))
 assert key.decode(token, type=Claims).sub == "sub"
 """
@@ -33,7 +33,7 @@ assert key.decode(token, type=Claims).sub == "sub"
 _DICT_ROUND_TRIP = """
 import ryjwt
 
-key = ryjwt.HMAC("s" * 32, algorithms=["HS256"])
+key = ryjwt.SecretKey("s" * 32, algorithms=["HS256"])
 assert key.decode(key.encode({"sub": "sub"})) == {"sub": "sub"}
 """
 

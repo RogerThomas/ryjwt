@@ -1,4 +1,4 @@
-//! Verifying and decoding tokens: what `HMAC`, `PrivateKey` and `PublicKey` share.
+//! Verifying and decoding tokens: what `SecretKey`, `PrivateKey` and `PublicKey` share.
 
 use std::sync::OnceLock;
 

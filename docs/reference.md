@@ -4,7 +4,7 @@ Everything below is importable from `ryjwt`.
 
 ## Keys
 
-::: ryjwt.HMAC
+::: ryjwt.SecretKey
 
 ::: ryjwt.PrivateKey
 

@@ -280,7 +280,7 @@ impl Verifier {
     pub fn public(spec: &AlgSpec, public_key: &[u8], kid: Option<&str>) -> Result<Self, String> {
         let name = spec.name;
         let verification = match spec.family {
-            Family::Hmac(_) => return Err(unusable(name, "it needs an HMAC secret")),
+            Family::Hmac(_) => return Err(unusable(name, "it needs a SecretKey")),
             Family::Rsa { verification, .. } => {
                 let key = aws_lc_rs::rsa::PublicKey::from_der(public_key)
                     .map_err(|e| unusable(name, e))?;
@@ -348,8 +348,8 @@ impl Signer {
 /// The key classes: each takes its own kind of key, for its own algorithms.
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum KeyClass {
-    /// `HMAC`: a shared secret, for HS*.
-    Hmac,
+    /// `SecretKey`: a shared secret, for HS*.
+    Secret,
     /// `PrivateKey`: a private key PEM, for the asymmetric algorithms.
     Private,
     /// `PublicKey`: a public key PEM (or a JWKS), for the asymmetric algorithms.
@@ -359,7 +359,7 @@ pub enum KeyClass {
 impl KeyClass {
     fn name(self) -> &'static str {
         match self {
-            Self::Hmac => "HMAC",
+            Self::Secret => "SecretKey",
             Self::Private => "PrivateKey",
             Self::Public => "PublicKey",
         }
@@ -543,7 +543,7 @@ pub fn algorithm_specs(
     class: KeyClass,
     algorithms: Vec<String>,
 ) -> PyResult<Vec<&'static AlgSpec>> {
-    let hmac = class == KeyClass::Hmac;
+    let hmac = class == KeyClass::Secret;
     let supported = || {
         ALGORITHMS
             .iter()
@@ -555,7 +555,7 @@ pub fn algorithm_specs(
             let hint = match (hmac, ALGORITHMS.iter().any(|s| s.name == name)) {
                 (_, false) => "",
                 (true, true) => " (it needs a PrivateKey or PublicKey)",
-                (false, true) => " (it needs an HMAC secret)",
+                (false, true) => " (it needs a SecretKey)",
             };
             let known: Vec<String> = supported().map(|s| format!("{:?}", s.name)).collect();
             return Err(PyValueError::new_err(format!(
@@ -587,13 +587,14 @@ fn single_key_specs(class: KeyClass, algorithms: Vec<String>) -> PyResult<Vec<&'
     Ok(specs)
 }
 
-/// Validates `algorithms` for `HMAC` and prepares `secret` to sign and verify with each of them.
+/// Validates `algorithms` for `SecretKey` and prepares `secret` to sign and verify with each of
+/// them.
 pub fn prepare_secret(
     secret: &Bound<'_, PyAny>,
     algorithms: Vec<String>,
     allow_short_secret: bool,
 ) -> PyResult<(KeySet, Vec<Signer>)> {
-    let specs = single_key_specs(KeyClass::Hmac, algorithms)?;
+    let specs = single_key_specs(KeyClass::Secret, algorithms)?;
     let secret = hmac_secret(secret, &specs, allow_short_secret)?;
     let (verifiers, signers) = specs
         .iter()
@@ -658,7 +659,7 @@ fn private_key_pair(
         Family::Hmac(_) => {
             return Err(InvalidKeyError::new_err(unusable(
                 spec.name,
-                "it needs an HMAC secret",
+                "it needs a SecretKey",
             )));
         }
         Family::Rsa { signing, .. } => {

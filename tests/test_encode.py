@@ -101,20 +101,20 @@ def _payload(token: str) -> object:
         pytest.param({"l": [1, [2, {"d": None}], (3, 4)], "b": [True, False]}, id="nested"),
     ],
 )
-def test_dict_claims_round_trip_as_json(claims: dict[str, Any], hmac_jwt: ryjwt.HMAC) -> None:
+def test_dict_claims_round_trip_as_json(claims: dict[str, Any], hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode(claims)
 
     assert _payload(token) == json.loads(json.dumps(claims))
     assert hmac_jwt.decode(token) == json.loads(json.dumps(claims))
 
 
-def test_int_subclass_claims_are_written_as_their_digits(hmac_jwt: ryjwt.HMAC) -> None:
+def test_int_subclass_claims_are_written_as_their_digits(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"big": Big(2**70), "small": Big(-1)})
 
     assert _payload(token) == {"big": 2**70, "small": -1}
 
 
-def test_typed_claims(hmac_jwt: ryjwt.HMAC) -> None:
+def test_typed_claims(hmac_jwt: ryjwt.SecretKey) -> None:
     assert _payload(hmac_jwt.encode(ClaimsStruct(sub="sub", exp=1))) == {"sub": "sub", "exp": 1}
     assert _payload(hmac_jwt.encode(RenamedStruct(subject="sub"))) == {"sub": "sub"}
     assert _payload(hmac_jwt.encode(AliasedModel(sub="sub"))) == {"sub": "sub"}
@@ -158,7 +158,7 @@ def test_typed_claims(hmac_jwt: ryjwt.HMAC) -> None:
 )
 def test_datetime_claims_are_encoded_as_numeric_dates(
     claims: dict[str, Any] | msgspec.Struct | pydantic.BaseModel,
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     assert _payload(hmac_jwt.encode(claims)) == {
         "sub": "sub",
@@ -168,7 +168,7 @@ def test_datetime_claims_are_encoded_as_numeric_dates(
     }
 
 
-def test_only_datetime_claims_are_numeric_dates(hmac_jwt: ryjwt.HMAC) -> None:
+def test_only_datetime_claims_are_numeric_dates(hmac_jwt: ryjwt.SecretKey) -> None:
     struct = DatetimeFieldsStruct(
         exp=datetime(2100, 1, 1, tzinfo=UTC),
         issued=datetime(2100, 1, 1, tzinfo=UTC),
@@ -199,7 +199,7 @@ def test_only_datetime_claims_are_numeric_dates(hmac_jwt: ryjwt.HMAC) -> None:
 )
 def test_annotated_datetime_claims_round_trip(
     type_: type[AnnotatedDatetimeStruct | AwareDatetimeModel | AnnotatedDatetimeModel],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     claims = type_(
         exp=datetime(2100, 1, 1, tzinfo=UTC),
@@ -213,7 +213,7 @@ def test_annotated_datetime_claims_round_trip(
     assert hmac_jwt.decode(token, type=type_) == claims
 
 
-def test_generic_struct_datetime_claims_round_trip(hmac_jwt: ryjwt.HMAC) -> None:
+def test_generic_struct_datetime_claims_round_trip(hmac_jwt: ryjwt.SecretKey) -> None:
     """A generic Struct's claim is a datetime only in its parametrisations, which its instances
     don't know of (`type(instance)` is `GenericStruct`): its value says how to encode it."""
     claims = GenericStruct[datetime](sub="sub", exp=datetime(2100, 1, 1, tzinfo=UTC))
@@ -242,7 +242,7 @@ def test_generic_struct_datetime_claims_round_trip(hmac_jwt: ryjwt.HMAC) -> None
 def test_numeric_dates_drop_sub_second_precision(
     value: datetime,
     expected: int,
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     struct = DatetimeClaimsStruct(sub="sub", exp=value, iat=value)
 
@@ -251,7 +251,7 @@ def test_numeric_dates_drop_sub_second_precision(
 
 
 @pytest.mark.parametrize("kind", ["struct", "model", "dict"])
-def test_naive_datetime_claims_are_rejected(kind: str, hmac_jwt: ryjwt.HMAC) -> None:
+def test_naive_datetime_claims_are_rejected(kind: str, hmac_jwt: ryjwt.SecretKey) -> None:
     naive = datetime(2100, 1, 1, tzinfo=UTC).replace(tzinfo=None)
     claims: dict[str, DatetimeClaimsStruct | DatetimeClaimsModel | dict[str, Any]] = {
         "struct": DatetimeClaimsStruct(sub="sub", exp=naive, iat=datetime(2000, 1, 1, tzinfo=UTC)),
@@ -276,21 +276,21 @@ def test_naive_datetime_claims_are_rejected(kind: str, hmac_jwt: ryjwt.HMAC) -> 
 def test_unserialisable_claims(
     claims: dict[str, object] | msgspec.Struct,
     error: type[Exception],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     with pytest.raises(error):
         hmac_jwt.encode(claims)
 
 
 @pytest.mark.parametrize("claims", [{1: "one"}, [1]], ids=["non-str-key", "list"])
-def test_claims_of_the_wrong_type(claims: object, hmac_jwt: ryjwt.HMAC) -> None:
+def test_claims_of_the_wrong_type(claims: object, hmac_jwt: ryjwt.SecretKey) -> None:
     untyped_caller: Any = claims  # what an untyped caller could pass
 
     with pytest.raises(TypeError):
         hmac_jwt.encode(untyped_caller)
 
 
-def test_deeply_nested_claims_are_rejected(hmac_jwt: ryjwt.HMAC) -> None:
+def test_deeply_nested_claims_are_rejected(hmac_jwt: ryjwt.SecretKey) -> None:
     claims: dict[str, Any] = {}
     for _ in range(300):
         claims = {"n": claims}
@@ -299,7 +299,7 @@ def test_deeply_nested_claims_are_rejected(hmac_jwt: ryjwt.HMAC) -> None:
         hmac_jwt.encode(claims)
 
 
-def test_header(hmac_jwt: ryjwt.HMAC) -> None:
+def test_header(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub"}, header={"kid": "kid", "cty": "cty"})
 
     assert jwt.get_unverified_header(token) == {
@@ -313,12 +313,12 @@ def test_header(hmac_jwt: ryjwt.HMAC) -> None:
     )
 
 
-def test_alg_header_is_not_settable(hmac_jwt: ryjwt.HMAC) -> None:
+def test_alg_header_is_not_settable(hmac_jwt: ryjwt.SecretKey) -> None:
     with pytest.raises(ValueError, match="algorithm="):
         hmac_jwt.encode({}, header={"alg": "none"})
 
 
-def test_headers_is_not_an_argument(hmac_jwt: ryjwt.HMAC) -> None:
+def test_headers_is_not_an_argument(hmac_jwt: ryjwt.SecretKey) -> None:
     untyped_caller: Any = {"headers": {"kid": "kid"}}  # what an untyped caller could pass
 
     with pytest.raises(TypeError, match="headers"):
@@ -326,7 +326,7 @@ def test_headers_is_not_an_argument(hmac_jwt: ryjwt.HMAC) -> None:
 
 
 def test_algorithm_choice(hmac_key: str) -> None:
-    several = ryjwt.HMAC(hmac_key, algorithms=["HS256", "HS512"])
+    several = ryjwt.SecretKey(hmac_key, algorithms=["HS256", "HS512"])
 
     with pytest.raises(ValueError, match="algorithm="):
         several.encode({})

@@ -22,7 +22,7 @@ from _support import (
     make_jwk,
 )
 
-type AnyKey = ryjwt.HMAC | ryjwt.PrivateKey | ryjwt.PublicKey
+type AnyKey = ryjwt.SecretKey | ryjwt.PrivateKey | ryjwt.PublicKey
 
 
 class NoClaims(msgspec.Struct):
@@ -172,7 +172,7 @@ class Decode(Protocol):
 class _DecodeTo:
     """`Decode`: `key.decode`, to a dict or (`to` "struct") to a `NoClaims` Struct."""
 
-    key: ryjwt.HMAC
+    key: ryjwt.SecretKey
     to: str
 
     def __call__(self, token: str, **kwargs: Unpack[DecodeOptions]) -> object:
@@ -182,7 +182,7 @@ class _DecodeTo:
 
 
 @pytest.fixture(name="decode", params=["dict", "struct"])
-def _decode(request: pytest.FixtureRequest, hmac_jwt: ryjwt.HMAC) -> Decode:
+def _decode(request: pytest.FixtureRequest, hmac_jwt: ryjwt.SecretKey) -> Decode:
     """`hmac_jwt.decode`, to a dict or to a Struct: claim validation must behave the same either
     way."""
     return _DecodeTo(hmac_jwt, request.param)
@@ -206,7 +206,7 @@ class KeyMaker:
         public_path.write_bytes(self.public_pem)
         match self.source:
             case "hmac":
-                return ryjwt.HMAC(self.hmac_key, algorithms=["HS256"], **expected)
+                return ryjwt.SecretKey(self.hmac_key, algorithms=["HS256"], **expected)
             case "private-key":
                 return ryjwt.PrivateKey(self.private_pem, algorithms=["ES256"], **expected)
             case "private-key-from-path":
@@ -221,7 +221,7 @@ class KeyMaker:
 
     def encode(self, claims: dict[str, Any]) -> str:
         if self.source == "hmac":
-            return ryjwt.HMAC(self.hmac_key, algorithms=["HS256"]).encode(claims)
+            return ryjwt.SecretKey(self.hmac_key, algorithms=["HS256"]).encode(claims)
         return ryjwt.PrivateKey(self.private_pem, algorithms=["ES256"]).encode(claims)
 
 
@@ -268,21 +268,21 @@ def _rejection(
     return None
 
 
-def test_decodes_to_dict_by_default(hmac_jwt: ryjwt.HMAC) -> None:
+def test_decodes_to_dict_by_default(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "n": [1, 2.5, None, True]})
 
     assert hmac_jwt.decode(token) == {"sub": "sub", "n": [1, 2.5, None, True]}
     assert hmac_jwt.decode(token.encode()) == {"sub": "sub", "n": [1, 2.5, None, True]}
 
 
-def test_decodes_to_struct_and_model(hmac_jwt: ryjwt.HMAC) -> None:
+def test_decodes_to_struct_and_model(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "other": "other"})
 
     assert hmac_jwt.decode(token, type=ClaimsStruct) == ClaimsStruct(sub="sub")
     assert hmac_jwt.decode(token, type=ClaimsModel) == ClaimsModel(sub="sub")
 
 
-def test_decodes_to_a_generic_struct(hmac_jwt: ryjwt.HMAC, future: int, past: int) -> None:
+def test_decodes_to_a_generic_struct(hmac_jwt: ryjwt.SecretKey, future: int, past: int) -> None:
     token = hmac_jwt.encode({"sub": 1, "exp": future, "value": "value"})
 
     assert hmac_jwt.decode(token, type=GenericClaims[int]) == GenericClaims(1)
@@ -315,7 +315,7 @@ def test_claims_that_dont_fit_the_type(
     match: str,
     type_: type[DatetimeClaimsStruct | DatetimeClaimsModel],
     cause: type[Exception],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     with pytest.raises(ryjwt.ClaimsValidationError, match=match) as error:
         hmac_jwt.decode(hmac_jwt.encode(claims), type=type_)
@@ -334,7 +334,7 @@ def test_claims_that_dont_fit_the_type(
 def test_claims_that_dont_fit_a_plain_type(
     type_: type[ClaimsStruct | ClaimsModel],
     cause: type[Exception],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     with pytest.raises(ryjwt.ClaimsValidationError, match="sub") as error:
         hmac_jwt.decode(hmac_jwt.encode({"other": "other"}), type=type_)
@@ -343,7 +343,7 @@ def test_claims_that_dont_fit_a_plain_type(
 
 
 def test_payload_only_pydantic_rejects_is_a_decode_error(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     """Nesting just past pydantic's limit, which it reports as a ValidationError (json_invalid)."""
@@ -368,7 +368,7 @@ def test_payload_only_pydantic_rejects_is_a_decode_error(
         list[int],
     ],
 )
-def test_unsupported_type_raises_type_error(type_: object, hmac_jwt: ryjwt.HMAC) -> None:
+def test_unsupported_type_raises_type_error(type_: object, hmac_jwt: ryjwt.SecretKey) -> None:
     untyped_caller: Any = type_  # what an untyped caller could pass
 
     with pytest.raises(TypeError, match="type must be None, a msgspec Struct or a pydantic"):
@@ -376,7 +376,7 @@ def test_unsupported_type_raises_type_error(type_: object, hmac_jwt: ryjwt.HMAC)
 
 
 def test_claims_are_validated_even_when_the_type_omits_them(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     past: int,
 ) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": past})
@@ -441,7 +441,7 @@ def test_registered_claims(
     claims: dict[str, object],
     kwargs: DecodeOptions,
     expected: type[Exception] | None,
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     decode: Decode,
 ) -> None:
     now = int(time.time())
@@ -511,7 +511,7 @@ def test_declared_claims(
     payload: str,
     expected: type[Exception] | None,
     type_: type[DeclaredClaims],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
     future: int,
     past: int,
@@ -526,14 +526,14 @@ def test_declared_claims(
             hmac_jwt.decode(token, type=type_, audience="a")
 
 
-def test_claim_with_default_is_absent_when_missing(hmac_jwt: ryjwt.HMAC, past: int) -> None:
+def test_claim_with_default_is_absent_when_missing(hmac_jwt: ryjwt.SecretKey, past: int) -> None:
     assert hmac_jwt.decode(hmac_jwt.encode({"sub": "sub"}), type=DefaultExp) == DefaultExp()
     with pytest.raises(ryjwt.ExpiredSignatureError):
         hmac_jwt.decode(hmac_jwt.encode({"exp": past}), type=DefaultExp)
 
 
 def test_claim_of_another_type_is_validated_from_the_payload(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     future: int,
 ) -> None:
     token = hmac_jwt.encode({"exp": future})
@@ -541,7 +541,7 @@ def test_claim_of_another_type_is_validated_from_the_payload(
     assert hmac_jwt.decode(token, type=DecimalExp) == DecimalExp(Decimal(future))
 
 
-def test_claims_follow_field_renames(hmac_jwt: ryjwt.HMAC, future: int, past: int) -> None:
+def test_claims_follow_field_renames(hmac_jwt: ryjwt.SecretKey, future: int, past: int) -> None:
     assert hmac_jwt.decode(hmac_jwt.encode({"exp": future}), type=RenamedExp) == RenamedExp(future)
     with pytest.raises(ryjwt.ExpiredSignatureError):
         hmac_jwt.decode(hmac_jwt.encode({"exp": past}), type=RenamedExp)
@@ -549,7 +549,7 @@ def test_claims_follow_field_renames(hmac_jwt: ryjwt.HMAC, future: int, past: in
         hmac_jwt.decode(hmac_jwt.encode({"exp": past, "expires_at": future}), type=ShadowedExp)
 
 
-def test_type_never_sees_invalid_claims(hmac_jwt: ryjwt.HMAC, past: int) -> None:
+def test_type_never_sees_invalid_claims(hmac_jwt: ryjwt.SecretKey, past: int) -> None:
     with pytest.raises(ryjwt.ExpiredSignatureError):
         hmac_jwt.decode(hmac_jwt.encode({"exp": past}), type=Recorded)
 
@@ -557,7 +557,7 @@ def test_type_never_sees_invalid_claims(hmac_jwt: ryjwt.HMAC, past: int) -> None
 
 
 def test_array_like_struct_needs_an_object_payload(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     with pytest.raises(ryjwt.DecodeError):
@@ -567,7 +567,7 @@ def test_array_like_struct_needs_an_object_payload(
 @pytest.mark.parametrize("type_", [DatetimeClaimsStruct, DatetimeClaimsModel])
 def test_datetime_claims_round_trip(
     type_: type[DatetimeClaimsStruct | DatetimeClaimsModel],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     token = hmac_jwt.encode(
         type_(
@@ -598,7 +598,7 @@ def test_datetime_claims_round_trip(
 @pytest.mark.parametrize("type_", [DatetimeClaimsStruct, DatetimeClaimsModel])
 def test_datetime_claims_from_numbers(
     type_: type[DatetimeClaimsStruct | DatetimeClaimsModel],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": 4_102_444_800.5, "iat": 946_684_800})
 
@@ -624,7 +624,7 @@ def test_datetime_claims_are_validated(
     claims: dict[str, object],
     expected: type[Exception],
     type_: type[DatetimeClaimsStruct | DatetimeClaimsModel],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     future: int,
     past: int,
 ) -> None:
@@ -639,7 +639,7 @@ def test_datetime_claims_are_validated(
 
 
 def test_datetime_claim_leaves_the_other_members_alone(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     """A datetime claim decoded from a NumericDate changes how nothing else decodes."""
@@ -659,7 +659,7 @@ def test_datetime_claim_leaves_the_other_members_alone(
     assert dated.amount == numbered.amount == Decimal("0.1000000000000000055511151231257827")
 
 
-def test_far_datetime_claims_in_models(hmac_jwt: ryjwt.HMAC) -> None:
+def test_far_datetime_claims_in_models(hmac_jwt: ryjwt.SecretKey) -> None:
     """NumericDates from 2e10 on, which pydantic would take as milliseconds, are seconds, as
     `decode` validated them: whatever the annotation, by alias, `Optional` or `Annotated`."""
     token = hmac_jwt.encode({"exp": 30_000_000_000.5, "nbf": 0, "iat": 20_000_000_001})
@@ -677,7 +677,7 @@ def test_far_datetime_claims_in_models(hmac_jwt: ryjwt.HMAC) -> None:
     )
 
 
-def test_numeric_date_claims_in_number_fields_are_unchanged(hmac_jwt: ryjwt.HMAC) -> None:
+def test_numeric_date_claims_in_number_fields_are_unchanged(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"exp": 30_000_000_000, "nbf": 0.5, "iat": 20_000_000_001})
 
     claims = hmac_jwt.decode(token, type=NumberModel)
@@ -686,7 +686,7 @@ def test_numeric_date_claims_in_number_fields_are_unchanged(hmac_jwt: ryjwt.HMAC
 
 
 def test_model_datetime_claim_leaves_the_other_members_alone(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     """A datetime claim decoded from a NumericDate changes how nothing else decodes."""
@@ -706,7 +706,7 @@ def test_model_datetime_claim_leaves_the_other_members_alone(
     assert type(dated.nested["exp"][0]) is type(numbered.nested["exp"][0]) is int
 
 
-def test_out_of_range_datetime_claim_in_a_model(hmac_jwt: ryjwt.HMAC) -> None:
+def test_out_of_range_datetime_claim_in_a_model(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": 2**40, "iat": 946_684_800})
 
     with pytest.raises(ryjwt.ClaimsValidationError, match=r"out of range - at `exp`") as error:
@@ -714,7 +714,7 @@ def test_out_of_range_datetime_claim_in_a_model(hmac_jwt: ryjwt.HMAC) -> None:
     assert isinstance(error.value.__cause__, pydantic.ValidationError)
 
 
-def test_expired_datetime_claim_is_rejected(hmac_jwt: ryjwt.HMAC) -> None:
+def test_expired_datetime_claim_is_rejected(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode(
         DatetimeClaimsStruct(
             sub="sub",
@@ -729,7 +729,7 @@ def test_expired_datetime_claim_is_rejected(hmac_jwt: ryjwt.HMAC) -> None:
         hmac_jwt.decode(token, type=DatetimeClaimsModel)
 
 
-def test_out_of_range_datetime_claim(hmac_jwt: ryjwt.HMAC) -> None:
+def test_out_of_range_datetime_claim(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": 2**40, "iat": 946_684_800})
 
     with pytest.raises(ryjwt.ClaimsValidationError, match=r"out of range.*at `\$\.exp`"):
@@ -737,7 +737,7 @@ def test_out_of_range_datetime_claim(hmac_jwt: ryjwt.HMAC) -> None:
 
 
 def test_datetime_claim_among_claims_read_from_the_instance(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     future: int,
     past: int,
 ) -> None:
@@ -754,7 +754,7 @@ def test_datetime_claim_among_claims_read_from_the_instance(
         )
 
 
-def test_audience_accepts_any_iterable(hmac_jwt: ryjwt.HMAC) -> None:
+def test_audience_accepts_any_iterable(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"aud": "aud"})
 
     assert hmac_jwt.decode(token, audience=(a for a in ["x", "aud"])) == {"aud": "aud"}
@@ -778,7 +778,7 @@ def test_audience_accepts_any_iterable(hmac_jwt: ryjwt.HMAC) -> None:
 def test_invalid_arguments(
     kwargs: dict[str, object],
     error: type[Exception],
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     untyped_caller: dict[str, Any] = kwargs  # what an untyped caller could pass
 
@@ -985,7 +985,7 @@ def test_raw_tokens(
 def test_header_parameter_limit(
     parameters: int,
     expected: type[Exception] | None,
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     others = "".join(f',"p{i}":0' for i in range(parameters - 1))
@@ -999,7 +999,7 @@ def test_header_parameter_limit(
 
 
 def test_deeply_nested_payload(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     payload = b'{"a":' + b"[" * 100_000 + b"]" * 100_000 + b"}"
@@ -1026,7 +1026,7 @@ def test_deeply_nested_payload(
         "truncated-signature",
     ],
 )
-def test_malformed_tokens(malformation: str, hmac_jwt: ryjwt.HMAC) -> None:
+def test_malformed_tokens(malformation: str, hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub"})
     header, payload, signature = token.split(".")
     malformed = {
@@ -1045,7 +1045,7 @@ def test_malformed_tokens(malformation: str, hmac_jwt: ryjwt.HMAC) -> None:
 
 
 @pytest.mark.parametrize("tamper", ["replaced", "truncated", "empty"])
-def test_bad_signature(tamper: str, hmac_jwt: ryjwt.HMAC) -> None:
+def test_bad_signature(tamper: str, hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub"})
     signing_input = token.rsplit(".", 1)[0]
     tampered = {
@@ -1058,14 +1058,14 @@ def test_bad_signature(tamper: str, hmac_jwt: ryjwt.HMAC) -> None:
         hmac_jwt.decode(tampered[tamper])
 
 
-def test_wrong_key(hmac_jwt: ryjwt.HMAC) -> None:
-    other = ryjwt.HMAC("other-key" * 8, algorithms=["HS256"])
+def test_wrong_key(hmac_jwt: ryjwt.SecretKey) -> None:
+    other = ryjwt.SecretKey("other-key" * 8, algorithms=["HS256"])
 
     with pytest.raises(ryjwt.InvalidSignatureError):
         hmac_jwt.decode(other.encode({"sub": "sub"}))
 
 
-def test_token_must_be_str_or_bytes(hmac_jwt: ryjwt.HMAC) -> None:
+def test_token_must_be_str_or_bytes(hmac_jwt: ryjwt.SecretKey) -> None:
     untyped_caller: Any = 1  # what an untyped caller could pass
 
     with pytest.raises(TypeError):
@@ -1097,9 +1097,9 @@ def test_dict_decoder_is_msgspec_when_installed(
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     token = raw_hs256_token(b'{"alg":"HS256"}', b'{"a":}')
-    with_msgspec = ryjwt.HMAC(hmac_key, algorithms=["HS256"])
+    with_msgspec = ryjwt.SecretKey(hmac_key, algorithms=["HS256"])
     monkeypatch.setitem(sys.modules, "msgspec.json", None)
-    without_msgspec = ryjwt.HMAC(hmac_key, algorithms=["HS256"])
+    without_msgspec = ryjwt.SecretKey(hmac_key, algorithms=["HS256"])
 
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload JSON") as msgspec_error:
         with_msgspec.decode(token)

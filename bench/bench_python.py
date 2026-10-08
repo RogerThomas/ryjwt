@@ -110,7 +110,7 @@ class PythonBenchmark:
         if self._impl == "pyjwt":
             kwargs = {"key": case.key, "algorithms": [case.alg], "audience": case.audience}
             return Prepared(jwt.decode, kwargs, case.payload)
-        decode = ryjwt.HMAC(case.key, algorithms=[case.alg]).decode
+        decode = ryjwt.SecretKey(case.key, algorithms=[case.alg]).decode
         kwargs: dict[str, Any] = {"audience": case.audience}
         typical = case.name.startswith("typical")
         if self._impl == "ryjwt-msgspec":

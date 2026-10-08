@@ -508,7 +508,7 @@ def test_document_type(ec_key: SigningKey) -> None:
     ("algorithms", "match"),
     [
         pytest.param([], "must not be empty", id="empty"),
-        pytest.param(["HS256"], "needs an HMAC secret", id="hmac"),
+        pytest.param(["HS256"], "needs a SecretKey", id="hmac"),
         pytest.param(["ES999"], "Unsupported algorithm", id="unknown"),
     ],
 )

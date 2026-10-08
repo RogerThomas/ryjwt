@@ -74,11 +74,13 @@ def test_pyjwt_tokens_verify_with_ryjwt(
 @pytest.mark.parametrize("alg", ["HS256", "HS384", "HS512"])
 def test_hmac_interop(alg: ryjwt.HMACAlgorithm, hmac_key: str, future: int) -> None:
     claims = {"sub": "sub", "exp": future}
-    ours = ryjwt.HMAC(hmac_key, algorithms=[alg])
+    ours = ryjwt.SecretKey(hmac_key, algorithms=[alg])
 
     assert jwt.decode(ours.encode(claims), hmac_key, algorithms=[alg]) == claims
     assert ours.decode(jwt.encode(claims, hmac_key, algorithm=alg)) == claims
-    assert ryjwt.HMAC(hmac_key.encode(), algorithms=[alg]).decode(ours.encode(claims)) == claims
+    assert (
+        ryjwt.SecretKey(hmac_key.encode(), algorithms=[alg]).decode(ours.encode(claims)) == claims
+    )
 
 
 @pytest.mark.parametrize("alg", ["HS256", "HS384", "HS512"])
@@ -89,7 +91,7 @@ def test_hmac_key_lengths_interop(alg: ryjwt.HMACAlgorithm, key_len: int, size: 
     """Keys shorter than, equal to and longer than the hash block (longer ones get hashed)."""
     key = bytes(range(256)) * 2
     key = key[:key_len].replace(b"-", b"+")  # never looks like a PEM
-    ours = ryjwt.HMAC(key, algorithms=[alg], allow_short_secret=True)
+    ours = ryjwt.SecretKey(key, algorithms=[alg], allow_short_secret=True)
     claims = {"sub": "x" * size}
 
     assert jwt.decode(ours.encode(claims), key, algorithms=[alg]) == claims

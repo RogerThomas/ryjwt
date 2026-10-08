@@ -3,7 +3,8 @@
 Identity providers (Auth0, Okta, Entra ID, Google, Keycloak, ...) publish the public keys for their
 tokens as a [JWKS](keys.md#jwks-documents) at a URL, and replace the keys from time to time.
 [`JWKSClient`][ryjwt.JWKSClient] verifies tokens with those keys. It fetches them, caches them,
-and fetches them again when they change.
+and fetches them again when they change. Unlike PyJWT's `PyJWKClient`, which only fetches the
+signing key, it decodes and verifies tokens itself.
 
 - **You pass** the JWKS URL, the algorithms to accept, and usually the `audience` and `issuer` to
   check tokens against.

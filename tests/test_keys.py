@@ -27,7 +27,7 @@ def test_invalid_hmac_algorithms(algorithms: list[str], match: str, hmac_key: st
     untyped_caller: Any = algorithms  # what an untyped caller could pass
 
     with pytest.raises(ValueError, match=match):
-        ryjwt.HMAC(hmac_key, algorithms=untyped_caller)
+        ryjwt.SecretKey(hmac_key, algorithms=untyped_caller)
 
 
 @pytest.mark.parametrize("key_class", [ryjwt.PrivateKey, ryjwt.PublicKey])
@@ -37,8 +37,8 @@ def test_invalid_hmac_algorithms(algorithms: list[str], match: str, hmac_key: st
         pytest.param([], "must not be empty", id="empty"),
         pytest.param(["ES999"], "Unsupported algorithm", id="unknown"),
         pytest.param(["none"], "Unsupported algorithm", id="none"),
-        pytest.param(["HS256"], "needs an HMAC secret", id="hmac"),
-        pytest.param(["ES256", "HS256"], "needs an HMAC secret", id="ec-and-hmac"),
+        pytest.param(["HS256"], "needs a SecretKey", id="hmac"),
+        pytest.param(["ES256", "HS256"], "needs a SecretKey", id="ec-and-hmac"),
         pytest.param(["ES256", "ES384"], "same kind of key", id="two-curves"),
         pytest.param(["ES256", "EdDSA"], "same kind of key", id="ec-and-eddsa"),
     ],
@@ -61,7 +61,7 @@ def test_algorithms_must_be_a_sequence(hmac_key: str) -> None:
     untyped_caller: Any = "HS256"  # what an untyped caller could pass
 
     with pytest.raises(TypeError):
-        ryjwt.HMAC(hmac_key, algorithms=untyped_caller)
+        ryjwt.SecretKey(hmac_key, algorithms=untyped_caller)
 
 
 def test_algorithms_property(
@@ -69,7 +69,7 @@ def test_algorithms_property(
     private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
     public_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
 ) -> None:
-    assert ryjwt.HMAC(hmac_key, algorithms=["HS512", "HS256", "HS512"]).algorithms == [
+    assert ryjwt.SecretKey(hmac_key, algorithms=["HS512", "HS256", "HS512"]).algorithms == [
         "HS512",
         "HS256",
     ]
@@ -114,7 +114,7 @@ def test_invalid_hmac_secrets(key: object, match: str, length_check: str) -> Non
     untyped_caller: Any = key  # what an untyped caller could pass
 
     with pytest.raises(ryjwt.InvalidKeyError, match=match):
-        ryjwt.HMAC(
+        ryjwt.SecretKey(
             untyped_caller, algorithms=["HS256"], allow_short_secret=length_check == "skipped"
         )
 
@@ -171,7 +171,7 @@ def test_hmac_rejects_public_key_der(
     der = private_keys[alg].public_key().public_bytes(serialization.Encoding.DER, form)
 
     with pytest.raises(ryjwt.InvalidKeyError, match="looks like an asymmetric key"):
-        ryjwt.HMAC(
+        ryjwt.SecretKey(
             _encoded(der, encoding),
             algorithms=["HS256"],
             allow_short_secret=length_check == "skipped",
@@ -185,7 +185,7 @@ def test_hmac_accepts_random_secrets() -> None:
         digest = hashlib.sha512(b"seed-%d" % seed).digest()
         for secret in (digest[:32], digest, b"\x30" + digest[1:32], b"\x30" + digest[1:]):
             for encoded in (secret, base64.b64encode(secret), base64.urlsafe_b64encode(secret)):
-                ryjwt.HMAC(encoded, algorithms=["HS256"])
+                ryjwt.SecretKey(encoded, algorithms=["HS256"])
 
 
 @pytest.mark.parametrize(("alg", "min_len"), [("HS256", 32), ("HS384", 48), ("HS512", 64)])
@@ -195,32 +195,35 @@ def test_hmac_secret_minimum_length(alg: ryjwt.HMACAlgorithm, min_len: int) -> N
         match=rf'"{alg}" needs a secret of at least {min_len} bytes, got {min_len - 1} \(pass '
         r"allow_short_secret=True to accept it\)",
     ):
-        ryjwt.HMAC(b"s" * (min_len - 1), algorithms=[alg])
+        ryjwt.SecretKey(b"s" * (min_len - 1), algorithms=[alg])
 
-    assert ryjwt.HMAC(b"s" * min_len, algorithms=[alg]).algorithms == [alg]
+    assert ryjwt.SecretKey(b"s" * min_len, algorithms=[alg]).algorithms == [alg]
 
 
 def test_hmac_secret_minimum_length_with_several_algorithms() -> None:
     with pytest.raises(ryjwt.InvalidKeyError, match='"HS512" needs a secret of at least 64 bytes'):
-        ryjwt.HMAC(b"s" * 63, algorithms=["HS256", "HS512", "HS384"])
+        ryjwt.SecretKey(b"s" * 63, algorithms=["HS256", "HS512", "HS384"])
 
-    assert ryjwt.HMAC(b"s" * 64, algorithms=["HS256", "HS512"]).algorithms == ["HS256", "HS512"]
+    assert ryjwt.SecretKey(b"s" * 64, algorithms=["HS256", "HS512"]).algorithms == [
+        "HS256",
+        "HS512",
+    ]
 
 
 def test_hmac_str_secret_length_is_in_utf8_bytes() -> None:
     with pytest.raises(ryjwt.InvalidKeyError, match="got 31"):
-        ryjwt.HMAC("é" * 15 + "s", algorithms=["HS256"])
+        ryjwt.SecretKey("é" * 15 + "s", algorithms=["HS256"])
 
-    assert ryjwt.HMAC("é" * 16, algorithms=["HS256"]).algorithms == ["HS256"]
+    assert ryjwt.SecretKey("é" * 16, algorithms=["HS256"]).algorithms == ["HS256"]
 
 
 def test_hmac_allow_short_secret() -> None:
-    hmac = ryjwt.HMAC("secret", algorithms=["HS256"], allow_short_secret=True)
+    hmac = ryjwt.SecretKey("secret", algorithms=["HS256"], allow_short_secret=True)
     token = hmac.encode({"sub": "sub"})
 
     assert hmac.decode(token) == {"sub": "sub"}
     with pytest.raises(ryjwt.InvalidSignatureError):
-        ryjwt.HMAC("other", algorithms=["HS256"], allow_short_secret=True).decode(token)
+        ryjwt.SecretKey("other", algorithms=["HS256"], allow_short_secret=True).decode(token)
 
 
 @pytest.fixture(name="ed448_key", scope="module")
@@ -438,7 +441,7 @@ def test_from_path_rejects_unusable_contents(
 
 
 def test_hmac_has_no_from_path() -> None:
-    assert not hasattr(ryjwt.HMAC, "from_path")
+    assert not hasattr(ryjwt.SecretKey, "from_path")
 
 
 @pytest.fixture(name="ec_parameters_pem")

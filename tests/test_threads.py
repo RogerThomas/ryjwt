@@ -21,7 +21,7 @@ import sys
 
 import ryjwt
 
-key = ryjwt.HMAC("s" * 32, algorithms=["HS256"])
+key = ryjwt.SecretKey("s" * 32, algorithms=["HS256"])
 assert key.decode(key.encode({"sub": "sub"})) == {"sub": "sub"}
 print(sys._is_gil_enabled())
 """
@@ -52,8 +52,8 @@ class _RoundTrips:
     one of 8 headers (more than a key remembers), decoded by each verifier to a dict, a Struct and
     a model."""
 
-    signer: ryjwt.HMAC | ryjwt.PrivateKey
-    verifiers: list[ryjwt.HMAC | ryjwt.PrivateKey | ryjwt.PublicKey]
+    signer: ryjwt.SecretKey | ryjwt.PrivateKey
+    verifiers: list[ryjwt.SecretKey | ryjwt.PrivateKey | ryjwt.PublicKey]
     rounds: int
 
     def __call__(self, thread: int) -> None:
@@ -94,7 +94,7 @@ class _ClientCalls:
                     self.client.decode_nowait(self.tokens[kid])
 
 
-def test_hmac(hmac_jwt: ryjwt.HMAC) -> None:
+def test_hmac(hmac_jwt: ryjwt.SecretKey) -> None:
     _on_threads(_RoundTrips(hmac_jwt, [hmac_jwt], rounds=500))
 
 

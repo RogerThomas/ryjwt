@@ -1,4 +1,4 @@
-//! Signing and encoding tokens, for `HMAC` and `PrivateKey`.
+//! Signing and encoding tokens, for `SecretKey` and `PrivateKey`.
 
 use pyo3::exceptions::{PyTypeError, PyValueError};
 use pyo3::intern;

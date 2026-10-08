@@ -83,7 +83,7 @@ def _reference(payload: bytes) -> object | None:
 )
 def test_fuzzed_payloads(
     payload: bytes,
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     rng = random.Random(0)
@@ -107,7 +107,7 @@ def test_fuzzed_payloads(
     assert outcomes == {True, False}
 
 
-def _outcome(hmac_jwt: ryjwt.HMAC, token: str, type_: type[Claims]) -> object:
+def _outcome(hmac_jwt: ryjwt.SecretKey, token: str, type_: type[Claims]) -> object:
     """The decoded claims, or the type of the error decoding raised."""
     try:
         return msgspec.structs.asdict(hmac_jwt.decode(token, type=type_, audience="a", issuer="i"))
@@ -116,7 +116,7 @@ def _outcome(hmac_jwt: ryjwt.HMAC, token: str, type_: type[Claims]) -> object:
 
 
 def test_fuzzed_claims(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     """Reading the claims from a decoded Struct must validate them exactly as scanning does."""
@@ -137,7 +137,7 @@ def test_fuzzed_claims(
     assert len({o for o in outcomes if isinstance(o, type)}) > 4
 
 
-def test_fuzzed_tokens(hmac_jwt: ryjwt.HMAC) -> None:
+def test_fuzzed_tokens(hmac_jwt: ryjwt.SecretKey) -> None:
     rng = random.Random(1)
     token = hmac_jwt.encode({"sub": "sub", "aud": "aud"})
     for _ in range(5000):

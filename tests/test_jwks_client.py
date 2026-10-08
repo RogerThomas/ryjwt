@@ -1646,7 +1646,7 @@ def test_invalid_urls(url: str) -> None:
             id="none",
         ),
         pytest.param(
-            {"algorithms": ["HS256"]}, ValueError, "needs an HMAC secret", id="hmac-algorithm"
+            {"algorithms": ["HS256"]}, ValueError, "needs a SecretKey", id="hmac-algorithm"
         ),
         pytest.param({"algorithms": []}, ValueError, "must not be empty", id="no-algorithms"),
         pytest.param(

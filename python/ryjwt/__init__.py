@@ -3,7 +3,6 @@
 from ryjwt._algorithms import AsymmetricAlgorithm, HMACAlgorithm
 from ryjwt._jwks_client import JWKSClient
 from ryjwt._ryjwt import (
-    HMAC,
     ClaimsValidationError,
     DecodeError,
     ExpiredSignatureError,
@@ -18,6 +17,7 @@ from ryjwt._ryjwt import (
     PrivateKey,
     PublicKey,
     RYJWTError,
+    SecretKey,
     UnknownKeyError,
     unverified_claims,
     unverified_header,
@@ -25,7 +25,6 @@ from ryjwt._ryjwt import (
 )
 
 __all__ = [
-    "HMAC",
     "AsymmetricAlgorithm",
     "ClaimsValidationError",
     "DecodeError",
@@ -43,6 +42,7 @@ __all__ = [
     "PrivateKey",
     "PublicKey",
     "RYJWTError",
+    "SecretKey",
     "UnknownKeyError",
     "unverified_claims",
     "unverified_header",

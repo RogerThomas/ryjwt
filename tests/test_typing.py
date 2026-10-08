@@ -21,7 +21,7 @@ class GenericClaims[T](msgspec.Struct):
 
 
 def test_decode_return_types(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
     public_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
 ) -> None:
@@ -45,7 +45,7 @@ def test_decode_return_types(
         assert_type(key.decode(es256_token, type=GenericClaims[str]), GenericClaims[str])
 
 
-def test_decode_datetime_claims_types(hmac_jwt: ryjwt.HMAC) -> None:
+def test_decode_datetime_claims_types(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": 4_102_444_800, "iat": 946_684_800})
 
     claims = hmac_jwt.decode(token, type=DatetimeClaimsStruct)
@@ -56,7 +56,7 @@ def test_decode_datetime_claims_types(hmac_jwt: ryjwt.HMAC) -> None:
 
 
 def test_encode_and_algorithms_types(
-    hmac_jwt: ryjwt.HMAC,
+    hmac_jwt: ryjwt.SecretKey,
     private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
     public_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
 ) -> None:
@@ -77,7 +77,7 @@ def test_encode_and_algorithms_types(
     assert_type(public_key.algorithms, list[ryjwt.AsymmetricAlgorithm])
 
 
-def test_unverified_types(hmac_jwt: ryjwt.HMAC) -> None:
+def test_unverified_types(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub"}, header={"kid": "kid"})
 
     assert_type(ryjwt.unverified_header(token), dict[str, Any])
@@ -89,13 +89,19 @@ def test_unverified_types(hmac_jwt: ryjwt.HMAC) -> None:
 
 
 def test_hmac_constructor_types(hmac_key: str) -> None:
-    assert_type(ryjwt.HMAC(hmac_key, algorithms=["HS256"]), ryjwt.HMAC)
-    assert_type(ryjwt.HMAC(b"secret", algorithms=["HS256"], allow_short_secret=True), ryjwt.HMAC)
+    assert_type(ryjwt.SecretKey(hmac_key, algorithms=["HS256"]), ryjwt.SecretKey)
     assert_type(
-        ryjwt.HMAC(hmac_key, algorithms=["HS256"], audience="aud", issuer=["iss", "other-iss"]),
-        ryjwt.HMAC,
+        ryjwt.SecretKey(b"secret", algorithms=["HS256"], allow_short_secret=True), ryjwt.SecretKey
     )
-    assert_type(ryjwt.HMAC(hmac_key, algorithms=["HS256"], audience=None, issuer=None), ryjwt.HMAC)
+    assert_type(
+        ryjwt.SecretKey(
+            hmac_key, algorithms=["HS256"], audience="aud", issuer=["iss", "other-iss"]
+        ),
+        ryjwt.SecretKey,
+    )
+    assert_type(
+        ryjwt.SecretKey(hmac_key, algorithms=["HS256"], audience=None, issuer=None), ryjwt.SecretKey
+    )
 
 
 def test_audience_and_issuer_constructor_types(

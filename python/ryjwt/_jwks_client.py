@@ -152,6 +152,9 @@ class _Outcome:
 class JWKSClient:
     """Decodes JWTs with the keys published at a JWKS URL, which it fetches and keeps up to date.
 
+    Unlike PyJWT's `PyJWKClient`, which only fetches the signing key, it decodes and verifies
+    tokens itself.
+
     Creating it doesn't fetch anything. Use it in one of two ways:
 
     - Automatic: `decode` (in sync code) or `await adecode` (in async code). They fetch the keys

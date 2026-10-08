@@ -36,8 +36,8 @@ nav = [
 [project.validation]
 invalid_links = true
 invalid_link_anchors = true
-# Off: `[text][ryjwt.HMAC]` links to the API reference are resolved by autorefs (which warns about
-# the ones it can't resolve), not as Markdown reference links.
+# Off: `[text][ryjwt.SecretKey]` links to the API reference are resolved by autorefs (which warns
+# about the ones it can't resolve), not as Markdown reference links.
 unresolved_references = false
 unresolved_footnotes = true
 unused_footnotes = true

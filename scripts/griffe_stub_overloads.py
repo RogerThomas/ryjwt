@@ -3,7 +3,7 @@
 
 A `.pyi` declares an overloaded function with its overloads alone, without the implementation a
 `.py` file has. griffe records overloads when it reads them, and attaches them to the
-implementation that follows; in a stub none follows, so the function (e.g. `HMAC.decode`, in
+implementation that follows; in a stub none follows, so the function (e.g. `SecretKey.decode`, in
 `python/ryjwt/_ryjwt.pyi`) isn't a member, and mkdocstrings leaves it out. This makes it one: its
 overloads are its signatures (the reference shows only those, `overloads_only`), and its docstring
 is the first overload's that has one.

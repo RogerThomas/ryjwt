@@ -270,7 +270,7 @@ class Sources:
             kwargs["type"] = struct
             expected = msgspec.convert(case.payload, struct)
         if source == "hmac":
-            decode = ryjwt.HMAC(str(case.secret), algorithms=["HS256"]).decode
+            decode = ryjwt.SecretKey(str(case.secret), algorithms=["HS256"]).decode
             return Prepared(decode, kwargs, expected)
         alg = _asymmetric(case.key.alg)
         if source == "pem":
@@ -301,7 +301,7 @@ class Sources:
                 "JWKS URL: `PyJWKClient(cache_keys=True)`, its `ssl_context` trusting the test CA",
             ]
         return [
-            "`HMAC`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and `.adecode`",
+            "`SecretKey`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and `.adecode`",
             "JWKS URL: trusting the test CA through `SSL_CERT_FILE`",
         ]
 

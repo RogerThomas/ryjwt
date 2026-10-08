@@ -7,7 +7,7 @@ It checks them once, when you create it. Create it at startup, and use it for ev
 
 | class | key | algorithms | can |
 | :-- | :-- | :-- | :-- |
-| [`HMAC`][ryjwt.HMAC] | a shared secret, `str` or `bytes` | `HS256` `HS384` `HS512` | `encode`, `decode` |
+| [`SecretKey`][ryjwt.SecretKey] | a shared secret, `str` or `bytes` | `HS256` `HS384` `HS512` | `encode`, `decode` |
 | [`PrivateKey`][ryjwt.PrivateKey] | a private key PEM, `str` or `bytes` | `RS*` `PS*` `ES256` `ES256K` `ES384` `ES512` `ES521` `EdDSA` | `encode`, `decode` |
 | [`PublicKey`][ryjwt.PublicKey] | a public key PEM, `str` or `bytes`, or a JWKS | as `PrivateKey` | `decode` |
 | [`JWKSClient`][ryjwt.JWKSClient] | a JWKS URL | as `PrivateKey` | `decode` |
@@ -16,7 +16,7 @@ It checks them once, when you create it. Create it at startup, and use it for ev
 
 ## Encode and decode
 
-With a shared secret, the same `HMAC` object signs and verifies:
+With a shared secret, the same `SecretKey` object signs and verifies:
 
 ```python
 import secrets
@@ -24,7 +24,7 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
 token = key.encode({"sub": "user-1", "exp": int(time.time()) + 900})
 claims = key.decode(token)
@@ -32,7 +32,7 @@ assert claims["sub"] == "user-1"
 ```
 
 In a real service, the secret comes from your configuration, and is at least 32 bytes long for
-`HS256` (see [HMAC secrets](keys.md#hmac)).
+`HS256` (see [HMAC secrets](keys.md#secretkey-hmac-secrets)).
 
 `decode` checks the signature. Then it checks the token's times: it mustn't have expired (its
 `exp` claim), or be used too early (its `nbf` claim). Set `audience` and `issuer` on the key to
@@ -44,7 +44,7 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(
+key = ryjwt.SecretKey(
     secrets.token_bytes(32),
     algorithms=["HS256"],
     audience="my-api",
@@ -76,7 +76,7 @@ import time
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 expired = key.encode({"sub": "user-1", "exp": int(time.time()) - 60})
 
 try:
@@ -107,7 +107,7 @@ class Claims(msgspec.Struct):
     scope: str = ""
 
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, scope="read"))
 
 claims = key.decode(token, type=Claims)

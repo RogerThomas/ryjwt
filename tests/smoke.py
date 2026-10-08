@@ -11,7 +11,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 
 
 def _check_hs256() -> None:
-    hmac = ryjwt.HMAC("secret" * 8, algorithms=["HS256"])
+    hmac = ryjwt.SecretKey("secret" * 8, algorithms=["HS256"])
 
     assert hmac.decode(hmac.encode({"sub": "sub"})) == {"sub": "sub"}
 

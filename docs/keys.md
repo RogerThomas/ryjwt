@@ -4,7 +4,7 @@
 
 | algorithm | signature | key | class |
 | :-- | :-- | :-- | :-- |
-| `HS256`, `HS384`, `HS512` | HMAC with SHA-256, -384, -512 | a shared secret | `HMAC` |
+| `HS256`, `HS384`, `HS512` | HMAC with SHA-256, -384, -512 | a shared secret | `SecretKey` |
 | `RS256`, `RS384`, `RS512` | RSA (PKCS#1 v1.5) with SHA-256, -384, -512 | RSA | `PrivateKey`, `PublicKey` |
 | `PS256`, `PS384`, `PS512` | RSA-PSS with SHA-256, -384, -512 | RSA | `PrivateKey`, `PublicKey` |
 | `ES256` | ECDSA with SHA-256 | EC, P-256 curve | `PrivateKey`, `PublicKey` |
@@ -28,7 +28,7 @@ import secrets
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(64), algorithms=["HS256", "HS512"])
+key = ryjwt.SecretKey(secrets.token_bytes(64), algorithms=["HS256", "HS512"])
 assert key.algorithms == ["HS256", "HS512"]
 ```
 
@@ -62,7 +62,7 @@ import secrets
 
 import ryjwt
 
-key = ryjwt.HMAC(
+key = ryjwt.SecretKey(
     secrets.token_bytes(32),
     algorithms=["HS256"],
     audience="my-api",
@@ -77,11 +77,12 @@ key = ryjwt.HMAC(
 - A `decode` call can pass its own `audience` or `issuer`, which replace the key's for that call.
 - Anything else, such as `audience=1`, is a `TypeError`, raised when you create the key.
 
-## HMAC
+## SecretKey: HMAC secrets
 
-[`HMAC`][ryjwt.HMAC] takes a shared secret, as `str` or `bytes`. Whoever holds the secret can
-both sign and verify tokens. That suits a service that verifies its own tokens. When other
-services need to verify them, use a [key pair](#private-and-public-keys) instead.
+[`SecretKey`][ryjwt.SecretKey] takes a shared secret for the HMAC algorithms (`HS256`, `HS384`,
+`HS512`), as `str` or `bytes`. Whoever holds the secret can both sign and verify tokens. That
+suits a service that verifies its own tokens. When other services need to verify them, use a
+[key pair](#private-and-public-keys) instead.
 
 ### Secret length
 
@@ -102,10 +103,10 @@ import secrets
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
 try:
-    ryjwt.HMAC(b"too short", algorithms=["HS256"])
+    ryjwt.SecretKey(b"too short", algorithms=["HS256"])
 except ryjwt.InvalidKeyError as e:
     print(e)  # "HS256" needs a secret of at least 32 bytes, got 9 (...)
 ```
@@ -116,7 +117,7 @@ If you can't change a short secret (an identity provider gave it to you, say), p
 ```python
 import ryjwt
 
-key = ryjwt.HMAC("legacy-secret", algorithms=["HS256"], allow_short_secret=True)
+key = ryjwt.SecretKey("legacy-secret", algorithms=["HS256"], allow_short_secret=True)
 ```
 
 ### Secrets that are rejected
@@ -128,8 +129,8 @@ key = ryjwt.HMAC("legacy-secret", algorithms=["HS256"], allow_short_secret=True)
 
 ### Reading a secret from a file
 
-`HMAC` has no `from_path`. Secret files usually end with a newline, and only you know whether it's
-part of the secret. Read the file yourself:
+`SecretKey` has no `from_path`. Secret files usually end with a newline, and only you know whether
+it's part of the secret. Read the file yourself:
 
 <!-- test: with-key-files -->
 ```python
@@ -137,7 +138,7 @@ from pathlib import Path
 
 import ryjwt
 
-key = ryjwt.HMAC(Path("secret.txt").read_bytes().strip(), algorithms=["HS256"])
+key = ryjwt.SecretKey(Path("secret.txt").read_bytes().strip(), algorithms=["HS256"])
 ```
 
 ## Private and public keys
@@ -211,8 +212,8 @@ document with a list of keys, each with an ID, its `kid`. A token's header names
 key that signed it.
 
 [`PublicKey.from_jwks`][ryjwt.PublicKey.from_jwks] takes such a document, as JSON (`str` or
-`bytes`) or already parsed (a `Mapping`). It returns a `PublicKey` that verifies each token with
-the key its `kid` names:
+`bytes`) or already parsed (a `Mapping`). It returns a `PublicKey` that may hold several keys,
+and verifies each token with the key its `kid` names:
 
 <!-- test: with-key-files -->
 ```python

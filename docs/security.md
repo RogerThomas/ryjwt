@@ -12,7 +12,7 @@ because the key is public.
 ryjwt doesn't let the token choose:
 
 - Each key object only accepts the algorithms you gave it. A token with any other is rejected.
-- An `HMAC` secret that looks like a public key is rejected when you create it.
+- A `SecretKey` whose secret looks like a public key is rejected when you create it.
 - A `PrivateKey` or `PublicKey` only accepts algorithms for its own kind of key.
 - In a JWKS, each key only verifies algorithms for its own kind of key, and only the one it names,
   if it names one.

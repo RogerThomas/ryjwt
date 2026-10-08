@@ -62,12 +62,13 @@ def _hmac_jwt(
     request: pytest.FixtureRequest,
     monkeypatch: pytest.MonkeyPatch,
     hmac_key: str,
-) -> ryjwt.HMAC:
-    """An HS256 HMAC decoding dicts with msgspec, or with jiter as when msgspec isn't installed."""
+) -> ryjwt.SecretKey:
+    """An HS256 `SecretKey` decoding dicts with msgspec, or with jiter as when msgspec isn't
+    installed."""
     with monkeypatch.context() as m:
         if request.param == "jiter":
             m.setitem(sys.modules, "msgspec.json", None)
-        return ryjwt.HMAC(hmac_key, algorithms=["HS256"])
+        return ryjwt.SecretKey(hmac_key, algorithms=["HS256"])
 
 
 @pytest.fixture(name="future")

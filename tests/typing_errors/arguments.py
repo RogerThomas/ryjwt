@@ -15,7 +15,7 @@ class DictClaims(dict[str, Any]):
     pass
 
 
-hmac = ryjwt.HMAC("secret", algorithms=["HS256"])
+hmac = ryjwt.SecretKey("secret", algorithms=["HS256"])
 public_key = ryjwt.PublicKey("pem", algorithms=["ES256"])
 jwks_client = ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"])
 
@@ -40,11 +40,11 @@ hmac.encode({}, headers={"kid": "kid"})  # error
 ryjwt.unverified_header(1)  # error
 ryjwt.unverified_claims("token", type=Claims)  # error
 ryjwt.unverified_token("token", audience="aud")  # error
-ryjwt.HMAC("secret", algorithm=["HS256"])  # error
-ryjwt.HMAC(1, algorithms=["HS256"])  # error
+ryjwt.SecretKey("secret", algorithm=["HS256"])  # error
+ryjwt.SecretKey(1, algorithms=["HS256"])  # error
 ryjwt.PrivateKey("pem", algorithms=["ES256"], allow_short_secret=True)  # error
-ryjwt.HMAC("secret", algorithms=["HS256"], audience=1)  # error
-ryjwt.HMAC("secret", algorithms=["HS256"], audiences="aud")  # error
+ryjwt.SecretKey("secret", algorithms=["HS256"], audience=1)  # error
+ryjwt.SecretKey("secret", algorithms=["HS256"], audiences="aud")  # error
 ryjwt.PrivateKey("pem", algorithms=["ES256"], issuer=[1])  # error
 ryjwt.PrivateKey.from_path("private.pem", algorithms=["ES256"], audience=b"aud")  # error
 ryjwt.PublicKey("pem", algorithms=["ES256"], audience=1)  # error

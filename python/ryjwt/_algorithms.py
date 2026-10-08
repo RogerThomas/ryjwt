@@ -3,7 +3,7 @@
 from typing import Literal
 
 type HMACAlgorithm = Literal["HS256", "HS384", "HS512"]
-"""The algorithms `HMAC` takes."""
+"""The algorithms `SecretKey` takes."""
 
 type AsymmetricAlgorithm = Literal[
     "RS256",

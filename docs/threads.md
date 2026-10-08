@@ -1,6 +1,6 @@
 # Threads and free-threaded Python
 
-`HMAC`, `PrivateKey`, `PublicKey` and `JWKSClient` objects are safe to share between threads:
+`SecretKey`, `PrivateKey`, `PublicKey` and `JWKSClient` objects are safe to share between threads:
 create one per key (or JWKS URL), and use it from every thread. The key classes are immutable
 once created, apart from internal caches (of token headers, and of how to decode each `type`),
 which threads may fill concurrently; a `JWKSClient` guards the keys it fetches with a lock.
@@ -11,7 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import ryjwt
 
-key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 tokens = [key.encode({"sub": f"user-{i}"}) for i in range(100)]
 
 with ThreadPoolExecutor(max_workers=4) as pool:
