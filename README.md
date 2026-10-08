@@ -44,6 +44,54 @@ claims = key.decode(token, audience="my-api")  # signature, exp and aud checked
 assert claims["sub"] == "user-1"
 ```
 
+### Into a msgspec Struct
+
+With `uv add --prerelease allow 'ryjwt[msgspec]'`:
+
+```python
+import secrets
+from datetime import UTC, datetime, timedelta
+
+import msgspec
+import ryjwt
+
+
+class Claims(msgspec.Struct):
+    sub: str
+    exp: datetime
+
+
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+
+token = key.encode(Claims(sub="user-1", exp=datetime.now(UTC) + timedelta(minutes=15)))
+claims = key.decode(token, type=Claims)  # a Claims, with exp checked
+assert claims.sub == "user-1"
+```
+
+### Into a pydantic model
+
+With `uv add --prerelease allow 'ryjwt[pydantic]'`:
+
+```python
+import secrets
+from datetime import UTC, datetime, timedelta
+
+import pydantic
+import ryjwt
+
+
+class Claims(pydantic.BaseModel):
+    sub: str
+    exp: datetime
+
+
+key = ryjwt.HMAC(secrets.token_bytes(32), algorithms=["HS256"])
+
+token = key.encode(Claims(sub="user-1", exp=datetime.now(UTC) + timedelta(minutes=15)))
+claims = key.decode(token, type=Claims)  # a Claims, with exp checked
+assert claims.sub == "user-1"
+```
+
 ## Highlights
 
 - **Fast.** HS256 tokens decode around 30 times faster than with PyJWT.
