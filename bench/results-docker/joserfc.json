@@ -1,0 +1,162 @@
+[
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "small-k32",
+    "token_len": 231,
+    "key_len": 32,
+    "ops_per_sec": 86855.17496703574,
+    "mean_us": 11.513418750000001,
+    "p50_us": 11.708,
+    "p99_us": 16.5
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "small-k64",
+    "token_len": 231,
+    "key_len": 64,
+    "ops_per_sec": 86468.97469625103,
+    "mean_us": 11.56484165,
+    "p50_us": 11.541,
+    "p99_us": 16.458009999999998
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "small-k256",
+    "token_len": 231,
+    "key_len": 256,
+    "ops_per_sec": 85947.95684474015,
+    "mean_us": 11.634947899999998,
+    "p50_us": 11.583,
+    "p99_us": 16.20801
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "small-k4096",
+    "token_len": 231,
+    "key_len": 4096,
+    "ops_per_sec": 76836.2543198879,
+    "mean_us": 13.0146896,
+    "p50_us": 13.083,
+    "p99_us": 18.458
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "typical-k32",
+    "token_len": 661,
+    "key_len": 32,
+    "ops_per_sec": 67234.7064801822,
+    "mean_us": 14.87327085,
+    "p50_us": 14.916,
+    "p99_us": 19.79241
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "typical-k64",
+    "token_len": 661,
+    "key_len": 64,
+    "ops_per_sec": 67914.73184528602,
+    "mean_us": 14.724345849999999,
+    "p50_us": 14.667,
+    "p99_us": 19.5
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "typical-k256",
+    "token_len": 661,
+    "key_len": 256,
+    "ops_per_sec": 66794.16938867101,
+    "mean_us": 14.97136665,
+    "p50_us": 14.875,
+    "p99_us": 19.875
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "typical-k4096",
+    "token_len": 661,
+    "key_len": 4096,
+    "ops_per_sec": 61836.5452708718,
+    "mean_us": 16.1716667,
+    "p50_us": 16.167,
+    "p99_us": 21.208
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "medium-k32",
+    "token_len": 2244,
+    "key_len": 32,
+    "ops_per_sec": 41656.97560521894,
+    "mean_us": 24.005583350000002,
+    "p50_us": 24.125,
+    "p99_us": 32.084669999999996
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "medium-k64",
+    "token_len": 2244,
+    "key_len": 64,
+    "ops_per_sec": 41371.039646303754,
+    "mean_us": 24.17149795,
+    "p50_us": 24.084,
+    "p99_us": 29.91741
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "medium-k256",
+    "token_len": 2244,
+    "key_len": 256,
+    "ops_per_sec": 41154.13334717429,
+    "mean_us": 24.29889585,
+    "p50_us": 24.0,
+    "p99_us": 29.084
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "medium-k4096",
+    "token_len": 2244,
+    "key_len": 4096,
+    "ops_per_sec": 39104.57369537977,
+    "mean_us": 25.57245625,
+    "p50_us": 25.375,
+    "p99_us": 32.79101
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "large-k32",
+    "token_len": 20884,
+    "key_len": 32,
+    "ops_per_sec": 7440.230762506975,
+    "mean_us": 134.40443340000002,
+    "p50_us": 133.042,
+    "p99_us": 160.37957999999998
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "large-k64",
+    "token_len": 20884,
+    "key_len": 64,
+    "ops_per_sec": 7424.664362293388,
+    "mean_us": 134.68622299999998,
+    "p50_us": 133.083,
+    "p99_us": 152.7525
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "large-k256",
+    "token_len": 20884,
+    "key_len": 256,
+    "ops_per_sec": 7428.033035823352,
+    "mean_us": 134.6251417,
+    "p50_us": 133.25,
+    "p99_us": 152.83382999999998
+  },
+  {
+    "impl": "joserfc 1.7.5",
+    "name": "large-k4096",
+    "token_len": 20884,
+    "key_len": 4096,
+    "ops_per_sec": 7307.759005889821,
+    "mean_us": 136.8408563,
+    "p50_us": 134.292,
+    "p99_us": 150.5
+  }
+]

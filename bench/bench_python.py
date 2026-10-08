@@ -1,6 +1,6 @@
 #!yeet
-"""Benchmark Python JWT decoding (PyJWT, or ryjwt into a dict / msgspec Struct / pydantic model)
-over the fixture matrix.
+"""Benchmark Python JWT decoding (PyJWT, python-jose, joserfc, jwcrypto, or ryjwt into a dict /
+msgspec Struct / pydantic model) over the fixture matrix.
 
 Each call verifies the signature and validates exp/aud, as a real caller would.
 """
@@ -18,13 +18,21 @@ import jwt
 import msgspec
 import pydantic
 import ryjwt
+from jose import jwk as jose_jwk
+from jose import jwt as jose_jwt
+from joserfc import jwt as joserfc_jwt
+from joserfc.jwk import ECKey, KeySet, OctKey, OKPKey, RSAKey
+from jwcrypto import jwk as jwcrypto_jwk
+from jwcrypto import jwt as jwcrypto_jwt
 from rich.console import Console
 from rich.table import Table
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-type Impl = Literal["pyjwt", "ryjwt", "ryjwt-msgspec", "ryjwt-pydantic"]
+type Impl = Literal[
+    "pyjwt", "python-jose", "joserfc", "jwcrypto", "ryjwt", "ryjwt-msgspec", "ryjwt-pydantic"
+]
 
 
 class BaseClaimsStruct(msgspec.Struct):
@@ -63,6 +71,41 @@ class TypicalClaimsModel(BaseClaimsModel):
     scope: str
     roles: list[str]
     amr: list[str]
+
+
+def joserfc_decode(
+    token: str,
+    *,
+    key: OctKey | RSAKey | ECKey | OKPKey | KeySet,
+    algorithms: list[str],
+    claims_registry: joserfc_jwt.JWTClaimsRegistry,
+) -> dict[str, Any]:
+    """joserfc, as its docs show: `decode` verifies the signature (a `KeySet` picks the key by the
+    token's `kid`), then the claims registry checks `exp` and `aud`."""
+    decoded = joserfc_jwt.decode(token, key, algorithms=algorithms)
+    claims_registry.validate(decoded.claims)
+    return decoded.claims
+
+
+def joserfc_claims(audience: str) -> joserfc_jwt.JWTClaimsRegistry:
+    """A claims registry that requires `exp` (and checks it) and `aud`, matching `audience`."""
+    return joserfc_jwt.JWTClaimsRegistry(
+        exp={"essential": True}, aud={"essential": True, "value": audience}
+    )
+
+
+def jwcrypto_decode(
+    token: str,
+    *,
+    key: jwcrypto_jwk.JWK | jwcrypto_jwk.JWKSet,
+    algs: list[str],
+    check_claims: dict[str, str | None],
+) -> dict[str, Any]:
+    """jwcrypto: `JWT(jwt=..., key=...)` verifies the signature (a `JWKSet` picks the key by the
+    token's `kid`) and checks the claims (`exp` always, when present; `"exp": None` requires it);
+    its claims are the payload's JSON."""
+    verified = jwcrypto_jwt.JWT(jwt=token, key=key, algs=algs, check_claims=check_claims)
+    return json.loads(verified.claims)
 
 
 @dataclass(frozen=True, slots=True)
@@ -110,6 +153,24 @@ class PythonBenchmark:
         if self._impl == "pyjwt":
             kwargs = {"key": case.key, "algorithms": [case.alg], "audience": case.audience}
             return Prepared(jwt.decode, kwargs, case.payload)
+        if self._impl == "python-jose":
+            key = jose_jwk.construct(case.key, case.alg)
+            kwargs = {"key": key, "algorithms": [case.alg], "audience": case.audience}
+            return Prepared(jose_jwt.decode, kwargs, case.payload)
+        if self._impl == "joserfc":
+            kwargs = {
+                "key": OctKey.import_key(case.key),
+                "algorithms": [case.alg],
+                "claims_registry": joserfc_claims(case.audience),
+            }
+            return Prepared(joserfc_decode, kwargs, case.payload)
+        if self._impl == "jwcrypto":
+            kwargs = {
+                "key": jwcrypto_jwk.JWK.from_password(case.key),
+                "algs": [case.alg],
+                "check_claims": {"exp": None, "aud": case.audience},
+            }
+            return Prepared(jwcrypto_decode, kwargs, case.payload)
         decode = ryjwt.SecretKey(case.key, algorithms=[case.alg]).decode
         kwargs: dict[str, Any] = {"audience": case.audience}
         typical = case.name.startswith("typical")
@@ -181,8 +242,8 @@ def _load_cases(path: Path) -> list[Case]:
 
 
 def _label(impl: Impl) -> str:
-    if impl == "pyjwt":
-        return f"pyjwt {version('pyjwt')}"
+    if not impl.startswith("ryjwt"):
+        return f"{impl} {version(impl)}"
     target = {"ryjwt": "dict", "ryjwt-msgspec": "Struct", "ryjwt-pydantic": "BaseModel"}[impl]
     return f"ryjwt {version('ryjwt')} → {target}"
 

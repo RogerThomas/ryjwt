@@ -21,7 +21,7 @@ ryjwt signs and verifies JWTs, checks their claims, and decodes them into a dict
 `Struct` or a pydantic `BaseModel`. It also fetches and caches the keys an identity provider publishes
 at a JWKS URL.
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and PyJWT over three seconds](https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and the other Python libraries from about one and a half to over four seconds](https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/perf-race.svg)
 
 Each bar is one library decoding 100,000 HS256 tokens, in real time. See the
 [benchmarks](https://rogerthomas.github.io/ryjwt/benchmarks/) for how they were measured.

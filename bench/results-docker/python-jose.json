@@ -1,0 +1,162 @@
+[
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "small-k32",
+    "token_len": 231,
+    "key_len": 32,
+    "ops_per_sec": 96362.99926404686,
+    "mean_us": 10.3774271,
+    "p50_us": 10.333,
+    "p99_us": 14.959
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "small-k64",
+    "token_len": 231,
+    "key_len": 64,
+    "ops_per_sec": 98267.92512960889,
+    "mean_us": 10.17626045,
+    "p50_us": 10.25,
+    "p99_us": 14.70884
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "small-k256",
+    "token_len": 231,
+    "key_len": 256,
+    "ops_per_sec": 96311.29752997446,
+    "mean_us": 10.3829979,
+    "p50_us": 10.541,
+    "p99_us": 15.125
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "small-k4096",
+    "token_len": 231,
+    "key_len": 4096,
+    "ops_per_sec": 84041.70581416867,
+    "mean_us": 11.89885415,
+    "p50_us": 11.958,
+    "p99_us": 16.708009999999998
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "typical-k32",
+    "token_len": 661,
+    "key_len": 32,
+    "ops_per_sec": 72584.57804543342,
+    "mean_us": 13.77703125,
+    "p50_us": 13.75,
+    "p99_us": 18.583
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "typical-k64",
+    "token_len": 661,
+    "key_len": 64,
+    "ops_per_sec": 72236.66546190357,
+    "mean_us": 13.843385399999999,
+    "p50_us": 14.083,
+    "p99_us": 19.208419999999997
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "typical-k256",
+    "token_len": 661,
+    "key_len": 256,
+    "ops_per_sec": 71433.98229760911,
+    "mean_us": 13.99893955,
+    "p50_us": 14.208,
+    "p99_us": 19.33441
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "typical-k4096",
+    "token_len": 661,
+    "key_len": 4096,
+    "ops_per_sec": 64492.897650316394,
+    "mean_us": 15.50558335,
+    "p50_us": 15.458,
+    "p99_us": 20.5
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "medium-k32",
+    "token_len": 2244,
+    "key_len": 32,
+    "ops_per_sec": 50428.336144002875,
+    "mean_us": 19.83012085,
+    "p50_us": 19.875,
+    "p99_us": 24.875
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "medium-k64",
+    "token_len": 2244,
+    "key_len": 64,
+    "ops_per_sec": 50178.12192085875,
+    "mean_us": 19.92900415,
+    "p50_us": 19.917,
+    "p99_us": 25.25
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "medium-k256",
+    "token_len": 2244,
+    "key_len": 256,
+    "ops_per_sec": 49835.48583511285,
+    "mean_us": 20.0660229,
+    "p50_us": 19.959,
+    "p99_us": 24.958
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "medium-k4096",
+    "token_len": 2244,
+    "key_len": 4096,
+    "ops_per_sec": 46668.17880899643,
+    "mean_us": 21.4278771,
+    "p50_us": 21.5,
+    "p99_us": 27.70941
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "large-k32",
+    "token_len": 20884,
+    "key_len": 32,
+    "ops_per_sec": 9667.99383584762,
+    "mean_us": 103.43407505,
+    "p50_us": 101.625,
+    "p99_us": 115.37541999999999
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "large-k64",
+    "token_len": 20884,
+    "key_len": 64,
+    "ops_per_sec": 9747.563288776659,
+    "mean_us": 102.5897417,
+    "p50_us": 101.458,
+    "p99_us": 109.208
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "large-k256",
+    "token_len": 20884,
+    "key_len": 256,
+    "ops_per_sec": 9696.266859834273,
+    "mean_us": 103.13247505,
+    "p50_us": 101.667,
+    "p99_us": 115.66601
+  },
+  {
+    "impl": "python-jose 3.5.0",
+    "name": "large-k4096",
+    "token_len": 20884,
+    "key_len": 4096,
+    "ops_per_sec": 9620.08307320765,
+    "mean_us": 103.9492063,
+    "p50_us": 102.834,
+    "p99_us": 116.95925
+  }
+]

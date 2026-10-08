@@ -10,5 +10,6 @@ bench/bun/node_modules
 bench/rust/target
 bench/results
 bench/results-docker
-bench/matrix/keys
+# the signing keys sign the tokens bench_matrix.py checks each library rejects; not the decoys
+bench/matrix/keys/*-decoy-*.pem
 bench/results-matrix

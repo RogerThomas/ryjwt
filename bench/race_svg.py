@@ -18,6 +18,7 @@ back to it for the rest of the loop, so the bars would drain away instead of hol
 """
 
 import json
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, ClassVar
@@ -57,18 +58,25 @@ class Race:
 
 @dataclass(frozen=True, slots=True)
 class RaceSVG:
-    """An animated race of `lanes`, each decoding `decodes` tokens."""
+    """An animated race of `lanes`, each decoding `decodes` tokens. `fitted` makes one whose
+    tracks start right of the longest lane name."""
 
     race: Race
     lanes: list[Lane]  # fastest first
     decodes: int
     token_bytes: int
+    track_x: int
+    track_width: int
 
     width: ClassVar[int] = 780
     lane_height: ClassVar[int] = 36
     lane_gap: ClassVar[int] = 6
-    track_x: ClassVar[int] = 210
-    track_width: ClassVar[int] = 470
+    name_x: ClassVar[int] = 36
+    # px per character of a lane name (13px, semibold), on the generous side, so names never
+    # reach the track
+    name_char_width: ClassVar[float] = 7.4
+    name_gap: ClassVar[int] = 14
+    badge_room: ClassVar[int] = 90  # right of the track, for the finish time
     header_height: ClassVar[int] = 58
     hold_seconds: ClassVar[float] = 3.0
     axis_ticks: ClassVar[int] = 6
@@ -121,8 +129,8 @@ class RaceSVG:
     <rect id="bar-{lane.key}" x="{self.track_x}" y="{y}" width="0" height="26" rx="4" \
 fill="{lane.color}" />
     <rect x="20" y="{middle - 5:.1f}" width="10" height="10" rx="2" fill="{lane.color}" />
-    <text x="36" y="{middle - 3:.1f}" class="name">{lane.name}</text>
-    <text x="36" y="{middle + 10:.1f}" class="rate">{rate:,.0f} decodes/s</text>
+    <text x="{self.name_x}" y="{middle - 3:.1f}" class="name">{lane.name}</text>
+    <text x="{self.name_x}" y="{middle + 10:.1f}" class="rate">{rate:,.0f} decodes/s</text>
     <g id="badge-{lane.key}" opacity="0">
       <text x="{badge_x}" y="{middle + 4:.1f}" class="badge" fill="{lane.color}">\
 &#x2713; {self._seconds(lane):.2f}s</text>
@@ -151,6 +159,15 @@ fill="{lane.color}" />
             f'  <text x="20" y="{y + 16 * i}" class="caption">{line}</text>'
             for i, line in enumerate(self.race.footnote)
         )
+
+    @classmethod
+    def fitted(cls, race: Race, lanes: list[Lane], decodes: int, token_bytes: int) -> RaceSVG:
+        """The race, its tracks starting right of the longest lane name, and ending far enough
+        from the right edge for the finish times."""
+        longest = max(len(lane.name) for lane in lanes)
+        track_x = cls.name_x + math.ceil(longest * cls.name_char_width) + cls.name_gap
+        track_width = cls.width - track_x - cls.badge_room
+        return cls(race, lanes, decodes, token_bytes, track_x, track_width)
 
     def render(self) -> str:
         loop = self._loop_seconds()
@@ -222,14 +239,18 @@ class Races:
     results: dict[str, dict[str, Any]]  # by file name, without .json
 
     # A fixed colour per library, whatever its place; ryjwt's variants on one green ramp, the
-    # lightest for the least work (a dict).
+    # lightest for the least work (a dict), and no other library green.
     lane_names: ClassVar[dict[str, tuple[str, str]]] = {
         "ryjwt-msgspec": ("ryjwt → Struct", "#009e00"),
+        "ryjwt-pydantic": ("ryjwt → BaseModel", "#007a00"),
         "ryjwt": ("ryjwt → dict", "#00c200"),
         "jsonwebtoken": ("jsonwebtoken", "#eb6834"),
         "fast-jwt": ("fast-jwt", "#4a3aa7"),
         "jose": ("jose", "#eda100"),
         "pyjwt": ("PyJWT", "#2a78d6"),
+        "python-jose": ("python-jose", "#c2378e"),
+        "joserfc": ("joserfc", "#8a5a2b"),
+        "jwcrypto": ("jwcrypto", "#5f6b7a"),
     }
     runtimes: ClassVar[dict[str, str]] = {"CPython": "Python", "Bun": "Bun", "Rust": "Rust"}
     races: ClassVar[list[Race]] = [
@@ -274,7 +295,7 @@ class Races:
     def svg(self, race: Race, decodes: int) -> str:
         lanes = sorted((self._lane(key, race) for key in self.lane_names), key=_mean_us)
         token_bytes: int = self._row("pyjwt", race)["token_len"]
-        return RaceSVG(race, lanes, decodes, token_bytes).render()
+        return RaceSVG.fitted(race, lanes, decodes, token_bytes).render()
 
 
 def _mean_us(lane: Lane) -> float:

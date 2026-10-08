@@ -79,7 +79,7 @@ tasks:
       - docker compose build
       - |
         set -eu
-        for service in pyjwt ryjwt ryjwt-msgspec ryjwt-pydantic jose fast-jwt jsonwebtoken; do
+        for service in pyjwt python-jose joserfc jwcrypto ryjwt ryjwt-msgspec ryjwt-pydantic jose fast-jwt jsonwebtoken; do
           echo "──── ${service} ────"
           docker compose run --rm "${service}"
         done
@@ -101,7 +101,7 @@ tasks:
       - defer: docker compose rm --stop --force jwks
       - |
         set -eu
-        for service in matrix-pyjwt matrix-ryjwt matrix-ryjwt-msgspec matrix-jose matrix-fast-jwt matrix-jsonwebtoken; do
+        for service in matrix-pyjwt matrix-python-jose matrix-joserfc matrix-jwcrypto matrix-ryjwt matrix-ryjwt-msgspec matrix-ryjwt-pydantic matrix-jose matrix-fast-jwt matrix-jsonwebtoken; do
           echo "──── ${service} ────"
           docker compose run --rm "${service}"
         done

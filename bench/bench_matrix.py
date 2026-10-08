@@ -1,6 +1,7 @@
 #!yeet
-"""Benchmark Python JWT decoding (PyJWT, or ryjwt into a dict / msgspec Struct) over the full
-matrix in `matrix/fixtures.json`: every algorithm and key size, payload size and key source.
+"""Benchmark Python JWT decoding (PyJWT, python-jose, joserfc, jwcrypto, or ryjwt into a dict,
+msgspec Struct or pydantic BaseModel) over the full matrix in `matrix/fixtures.json`: every
+algorithm and key size, payload size and key source.
 
 Key sources:
 
@@ -12,8 +13,10 @@ Key sources:
   (a fresh client: connect, TLS, GET, parse the keys, verify) is timed on its own.
 
 Each decode verifies the signature and checks `exp` and `aud`, and is checked once against the
-fixture's payload before timing. A case's iteration counts follow from its cost, measured in the
-warm-up, so slow cases (RSA 4096, P-521) run fewer iterations in about the same time.
+fixture's payload before timing. Before that, each library must reject two tokens signed with the
+case's key (from `matrix/keys/`, or the HMAC secret): an expired one and one for another audience.
+A case's iteration counts follow from its cost, measured in the warm-up, so slow cases (RSA 4096,
+P-521) run fewer iterations in about the same time.
 """
 
 import json
@@ -29,15 +32,35 @@ from typing import TYPE_CHECKING, Any, ClassVar, Literal
 import jwt
 import msgspec
 import ryjwt
-from bench_python import BaseClaimsStruct, TypicalClaimsStruct
+from bench_python import (
+    BaseClaimsModel,
+    BaseClaimsStruct,
+    TypicalClaimsModel,
+    TypicalClaimsStruct,
+    joserfc_claims,
+    joserfc_decode,
+    jwcrypto_decode,
+)
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
+from jose import jwk as jose_jwk
+from jose import jwt as jose_jwt
+from jose.exceptions import ExpiredSignatureError as JoseExpiredSignatureError
+from jose.exceptions import JWTClaimsError
+from joserfc.errors import ExpiredTokenError, InvalidClaimError
+from joserfc.jwk import ECKey, KeySet, OctKey, OKPKey, RSAKey
+from jwcrypto import jwk as jwcrypto_jwk
+from jwcrypto import jwt as jwcrypto_jwt
 from rich.console import Console
 from rich.table import Table
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-type Impl = Literal["pyjwt", "ryjwt", "ryjwt-msgspec"]
+    from jose.backends.base import Key as JoseKey
+
+type Impl = Literal[
+    "pyjwt", "python-jose", "joserfc", "jwcrypto", "ryjwt", "ryjwt-msgspec", "ryjwt-pydantic"
+]
 type Source = Literal["hmac", "pem", "jwks", "jwks-url-sync", "jwks-url-async"]
 
 
@@ -226,6 +249,27 @@ def _pyjwt_client_decode(
     return jwt.decode(token, key, algorithms=algorithms, audience=audience)
 
 
+def _python_jose_jwks_decode(
+    token: str, *, keys: dict[str, JoseKey], algorithms: list[str], audience: str
+) -> dict[str, Any]:
+    """python-jose with a JWKS document: pick the key by the token's `kid`, then verify with it.
+    (Given the document itself, python-jose would try each of its keys in turn.)"""
+    key = keys[jose_jwt.get_unverified_header(token)["kid"]]
+    return jose_jwt.decode(token, key, algorithms=algorithms, audience=audience)
+
+
+def _joserfc_key(alg: str, pem: str) -> RSAKey | ECKey | OKPKey:
+    match alg:
+        case "RS256":
+            return RSAKey.import_key(pem)
+        case "ES256" | "ES384" | "ES512":
+            return ECKey.import_key(pem)
+        case "EdDSA":
+            return OKPKey.import_key(pem)
+        case _:
+            raise ValueError(f"not an asymmetric algorithm in the matrix: {alg}")
+
+
 @dataclass(frozen=True, slots=True)
 class Sources:
     """Builds each implementation's decode for a case and key source. Every case gets its own URL
@@ -234,8 +278,77 @@ class Sources:
     _impl: Impl
     _jwks_url: str
     _ca_pem: bytes
+    _private_keys: Path
+    """`matrix/keys/`, for signing the tokens each library must reject."""
     first_fetch_case: ClassVar[str] = "typical-rs3072"
     first_fetch_trials: ClassVar[int] = 5
+    # what each implementation raises for an expired token, and for another audience's
+    rejections: ClassVar[dict[Impl, tuple[type[Exception], type[Exception]]]] = {
+        "pyjwt": (jwt.ExpiredSignatureError, jwt.InvalidAudienceError),
+        "python-jose": (JoseExpiredSignatureError, JWTClaimsError),
+        "joserfc": (ExpiredTokenError, InvalidClaimError),
+        "jwcrypto": (jwcrypto_jwt.JWTExpired, jwcrypto_jwt.JWTInvalidClaimValue),
+        "ryjwt": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
+        "ryjwt-msgspec": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
+        "ryjwt-pydantic": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
+    }
+    notes_by_impl: ClassVar[dict[Impl, tuple[str, ...]]] = {
+        "pyjwt": (
+            "PEM: the key loaded once, with `load_pem_public_key`",
+            "JWKS document: `PyJWKSet`, picking the key by `get_unverified_header`'s `kid`",
+            "JWKS URL: `PyJWKClient(cache_keys=True)`, its `ssl_context` trusting the test CA",
+        ),
+        "python-jose": (
+            (
+                "`jose.jwt.decode(token, key, algorithms=[...], audience=...)`, the key built once"
+                " with `jwk.construct` (from the secret or the PEM)"
+            ),
+            (
+                "JWKS document: each key built once with `jwk.construct`, picking the key by"
+                " `get_unverified_header`'s `kid` (given the document itself, python-jose tries"
+                " each key in turn)"
+            ),
+        ),
+        "joserfc": (
+            (
+                "`jwt.decode(token, key, algorithms=[...])`, then"
+                " `JWTClaimsRegistry(exp=..., aud=...).validate(token.claims)`, both essential"
+            ),
+            (
+                "keys imported once (`OctKey`, `RSAKey`, `ECKey`, `OKPKey`); JWKS document: a"
+                " `KeySet`, which picks the key by `kid`"
+            ),
+            (
+                "EdDSA: joserfc warns on every decode (`SecurityWarning`: RFC 9864 deprecates"
+                " `EdDSA`), as it does by default"
+            ),
+        ),
+        "jwcrypto": (
+            (
+                '`jwt.JWT(jwt=token, key=key, algs=[...], check_claims={"exp": None, "aud": ...})`,'
+                " then `json.loads` of its `claims`"
+            ),
+            (
+                "keys built once (`JWK.from_password`, `JWK.from_pem`); JWKS document: a `JWKSet`,"
+                " which picks the key by `kid`"
+            ),
+        ),
+        **dict.fromkeys(
+            ("ryjwt", "ryjwt-msgspec", "ryjwt-pydantic"),
+            (
+                (
+                    "`SecretKey`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and"
+                    " `.adecode`"
+                ),
+                "JWKS URL: trusting the test CA through `SSL_CERT_FILE`",
+            ),
+        ),
+    }
+    no_url_client: ClassVar[dict[Impl, str]] = {
+        "python-jose": "python-jose has no JWKS URL client",
+        "joserfc": "joserfc has no JWKS URL client",
+        "jwcrypto": "jwcrypto has no JWKS URL client",
+    }
 
     def _url(self, key: Key) -> str:
         return f"{self._jwks_url}/{key.id}.json"
@@ -262,6 +375,42 @@ class Sources:
         client = self._pyjwt_client(case.key)
         return Prepared(_pyjwt_client_decode, kwargs | {"client": client}, case.payload)
 
+    def _python_jose(self, source: Source, case: Case) -> Prepared:
+        alg = case.key.alg
+        kwargs: dict[str, Any] = {"algorithms": [alg], "audience": case.audience}
+        if source == "jwks":
+            jwks: list[dict[str, str]] = json.loads(str(case.key.jwks))["keys"]
+            keys = {jwk["kid"]: jose_jwk.construct(jwk, alg) for jwk in jwks}
+            return Prepared(_python_jose_jwks_decode, kwargs | {"keys": keys}, case.payload)
+        key = jose_jwk.construct(str(case.secret if source == "hmac" else case.key.pem), alg)
+        return Prepared(jose_jwt.decode, kwargs | {"key": key}, case.payload)
+
+    def _joserfc(self, source: Source, case: Case) -> Prepared:
+        kwargs: dict[str, Any] = {
+            "algorithms": [case.key.alg],
+            "claims_registry": joserfc_claims(case.audience),
+        }
+        key: OctKey | RSAKey | ECKey | OKPKey | KeySet
+        if source == "hmac":
+            key = OctKey.import_key(str(case.secret))
+        elif source == "pem":
+            key = _joserfc_key(case.key.alg, str(case.key.pem))
+        else:
+            key = KeySet.import_key_set(json.loads(str(case.key.jwks)))
+        return Prepared(joserfc_decode, kwargs | {"key": key}, case.payload)
+
+    def _jwcrypto(self, source: Source, case: Case) -> Prepared:
+        check_claims: dict[str, str | None] = {"exp": None, "aud": case.audience}
+        kwargs: dict[str, Any] = {"algs": [case.key.alg], "check_claims": check_claims}
+        key: jwcrypto_jwk.JWK | jwcrypto_jwk.JWKSet
+        if source == "hmac":
+            key = jwcrypto_jwk.JWK.from_password(str(case.secret))
+        elif source == "pem":
+            key = jwcrypto_jwk.JWK.from_pem(str(case.key.pem).encode())
+        else:
+            key = jwcrypto_jwk.JWKSet.from_json(str(case.key.jwks))
+        return Prepared(jwcrypto_decode, kwargs | {"key": key}, case.payload)
+
     def _ryjwt(self, source: Source, case: Case) -> Prepared:
         kwargs: dict[str, Any] = {"audience": case.audience}
         expected: object = case.payload
@@ -269,6 +418,10 @@ class Sources:
             struct = TypicalClaimsStruct if case.payload_size == "typical" else BaseClaimsStruct
             kwargs["type"] = struct
             expected = msgspec.convert(case.payload, struct)
+        if self._impl == "ryjwt-pydantic":
+            model = TypicalClaimsModel if case.payload_size == "typical" else BaseClaimsModel
+            kwargs["type"] = model
+            expected = model.model_validate(case.payload)
         if source == "hmac":
             decode = ryjwt.SecretKey(str(case.secret), algorithms=["HS256"]).decode
             return Prepared(decode, kwargs, expected)
@@ -284,29 +437,71 @@ class Sources:
         return Prepared(self._client(case.key).adecode, kwargs, expected, is_async=True)
 
     def _prepare(self, source: Source, case: Case) -> Prepared:
-        if self._impl == "pyjwt":
-            return self._pyjwt(source, case)
-        return self._ryjwt(source, case)
+        match self._impl:
+            case "pyjwt":
+                return self._pyjwt(source, case)
+            case "python-jose":
+                return self._python_jose(source, case)
+            case "joserfc":
+                return self._joserfc(source, case)
+            case "jwcrypto":
+                return self._jwcrypto(source, case)
+            case _:
+                return self._ryjwt(source, case)
+
+    def _signed(self, case: Case, claims: dict[str, Any]) -> str:
+        """A token of `case`'s payload with `claims` changed, signed with its key (and `kid`)."""
+        key = case.secret or (self._private_keys / f"{case.key.id}.pem").read_text()
+        headers = {"kid": case.key.kid} if case.key.kid else None
+        return jwt.encode(case.payload | claims, key, algorithm=case.key.alg, headers=headers)
+
+    async def _decode(self, prepared: Prepared, token: str) -> object:
+        decoded = prepared.decode(token, **prepared.kwargs)
+        return await decoded if prepared.is_async else decoded
+
+    async def _rejects(self, prepared: Prepared, token: str, error: type[Exception]) -> bool:
+        try:
+            await self._decode(prepared, token)
+        except error:
+            return True
+        return False
+
+    async def _prove_checks(self, prepared: Prepared, case: Case) -> None:
+        """Fails unless the decode rejects an expired token and one for another audience."""
+        expired_error, audience_error = self.rejections[self._impl]
+        expired = self._signed(case, {"exp": case.payload["iat"] + 60})
+        if not await self._rejects(prepared, expired, expired_error):
+            raise AssertionError(f"{self._impl}, {case.name}: accepted an expired token")
+        wrong_audience = self._signed(case, {"aud": "another-audience"})
+        if not await self._rejects(prepared, wrong_audience, audience_error):
+            raise AssertionError(f"{self._impl}, {case.name}: accepted another audience's token")
 
     def not_applicable(self) -> list[NotApplicable]:
         if self._impl == "pyjwt":
             return [NotApplicable("jwks-url-async", "*", "PyJWT has no async JWKS client")]
-        return []
+        url = [
+            NotApplicable(source, "*", self.no_url_client[self._impl])
+            for source in ("jwks-url-sync", "jwks-url-async")
+            if self._impl in self.no_url_client
+        ]
+        if self._impl == "python-jose":
+            no_eddsa = "python-jose has no EdDSA"
+            return [
+                *url,
+                NotApplicable("pem", "EdDSA", no_eddsa),
+                NotApplicable("jwks", "EdDSA", no_eddsa),
+            ]
+        return url
 
     def notes(self) -> list[str]:
-        if self._impl == "pyjwt":
-            return [
-                "PEM: the key loaded once, with `load_pem_public_key`",
-                "JWKS document: `PyJWKSet`, picking the key by `get_unverified_header`'s `kid`",
-                "JWKS URL: `PyJWKClient(cache_keys=True)`, its `ssl_context` trusting the test CA",
-            ]
-        return [
-            "`SecretKey`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and `.adecode`",
-            "JWKS URL: trusting the test CA through `SSL_CERT_FILE`",
-        ]
+        return list(self.notes_by_impl[self._impl])
 
-    def prepare(self, source: Source, case: Case) -> Prepared:
-        return self._prepare(source, case)
+    async def prepare(self, source: Source, case: Case) -> Prepared:
+        """`case`'s decode for `source`, once it has rejected an expired token and one for another
+        audience."""
+        prepared = self._prepare(source, case)
+        await self._prove_checks(prepared, case)
+        return prepared
 
     async def first_fetch(self, source: Source, case: Case) -> list[float]:
         """Milliseconds to the first decode of a fresh client (HTTP client included), per trial."""
@@ -353,9 +548,10 @@ def _load(path: Path) -> list[Case]:
 
 
 def _label(impl: Impl) -> str:
-    if impl == "pyjwt":
-        return f"pyjwt {version('pyjwt')}"
-    return f"ryjwt {version('ryjwt')} → {'Struct' if impl == 'ryjwt-msgspec' else 'dict'}"
+    if not impl.startswith("ryjwt"):
+        return f"{impl} {version(impl)}"
+    target = {"ryjwt": "dict", "ryjwt-msgspec": "Struct", "ryjwt-pydantic": "BaseModel"}[impl]
+    return f"ryjwt {version('ryjwt')} → {target}"
 
 
 def _print_table(console: Console, label: str, source: str, rows: list[Row]) -> None:
@@ -388,11 +584,15 @@ async def main(
     bench_dir = Path(__file__).parent
     label = _label(impl)
     sources = Sources(
-        impl, jwks_url.rstrip("/"), (bench_dir / "matrix" / "tls" / "ca.pem").read_bytes()
+        impl,
+        jwks_url.rstrip("/"),
+        (bench_dir / "matrix" / "tls" / "ca.pem").read_bytes(),
+        bench_dir / "matrix" / "keys",
     )
     measure = Measure(Timing(0.1 * budget, 0.2 * budget, 0.3 * budget))
     not_applicable = sources.not_applicable()
-    skipped: set[Source] = {n.source for n in not_applicable}
+    skipped: set[Source] = {n.source for n in not_applicable if n.alg == "*"}
+    skipped_algs: set[tuple[Source, str]] = {(n.source, n.alg) for n in not_applicable}
     all_sources: list[Source] = ["hmac", "pem", "jwks", "jwks-url-sync", "jwks-url-async"]
     by_name: dict[str, Source] = {s: s for s in all_sources}
     requested: list[Source] = (
@@ -418,11 +618,13 @@ async def main(
         for case in cases:
             if (case.key.alg == "HS256") != (source == "hmac"):
                 continue
+            if (source, case.key.alg) in skipped_algs:
+                continue
             if url and case.name == sources.first_fetch_case:
                 trials = await sources.first_fetch(source, case)
                 first_fetch.append(FirstFetch(source, case.name, statistics.median(trials), trials))
             with console.status(f"{source}: {case.name}..."):
-                prepared = sources.prepare(source, case)
+                prepared = await sources.prepare(source, case)
                 if prepared.is_async:
                     stats = await measure.async_(prepared, case)
                 else:

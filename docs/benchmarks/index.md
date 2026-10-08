@@ -3,6 +3,8 @@
 The benchmarks time decoding, which a service does on every request. They compare ryjwt with:
 
 - [PyJWT](https://github.com/jpadilla/pyjwt), on Python;
+- [python-jose](https://github.com/mpdavis/python-jose), [joserfc](https://github.com/authlib/joserfc)
+  (Authlib's) and [jwcrypto](https://github.com/latchset/jwcrypto), also on Python;
 - [jose](https://github.com/panva/jose) and [fast-jwt](https://github.com/nearform/fast-jwt), on
   Bun (JavaScript);
 - [jsonwebtoken](https://github.com/Keats/jsonwebtoken), in Rust.
@@ -22,7 +24,7 @@ There are two sets of results:
 Each bar is one library decoding 100,000 tokens, filling in real time. A library's time is
 100,000 times its mean time per decode, from the full matrix.
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and PyJWT over three seconds](../assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and the other Python libraries from about one and a half to over four seconds](../assets/perf-race.svg)
 
 With HS256, ryjwt decodes around 30 times faster than PyJWT. It's about three times faster than
 the fastest JavaScript and Rust libraries.
@@ -47,7 +49,7 @@ on an M3, in nanoseconds):
 Decoding into a typed Rust struct with the mimalloc allocator, jsonwebtoken's fastest setup, still
 takes 2.35 µs: about 2.4 times ryjwt's decode into a msgspec `Struct`.
 
-![A race to decode 100,000 ES256 tokens: ryjwt finishes first in about 3.2 seconds, just ahead of the Rust and Bun libraries, and PyJWT takes over 7 seconds](../assets/perf-race-es256.svg)
+![A race to decode 100,000 ES256 tokens: ryjwt finishes first in about 3.2 seconds, just ahead of the Rust and Bun libraries, and the other Python libraries take from about five and a half to over eight seconds](../assets/perf-race-es256.svg)
 
 With ES256, most of the time goes into checking the signature. Every library hands that to a
 native crypto library, so the gaps are smaller. ryjwt is about twice as fast as PyJWT, and a

@@ -108,7 +108,7 @@ that runs it, extra and all, with nothing installed first.
 
 ## Why it's fast
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and PyJWT over three seconds](assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and the other Python libraries from about one and a half to over four seconds](assets/perf-race.svg)
 
 Each bar is one library decoding 100,000 HS256 tokens, in real time. The
 [benchmarks](benchmarks/index.md) say how they were measured.

@@ -1,4 +1,5 @@
-# PyJWT and ryjwt (dict / msgspec Struct / pydantic BaseModel). Build context: the repo root.
+# PyJWT, python-jose, joserfc, jwcrypto and ryjwt (dict / msgspec Struct / pydantic BaseModel).
+# Build context: the repo root.
 # The entrypoint runs the HS256 bench (bench_python.py); the matrix services run bench_matrix.py.
 
 FROM python:3.14.8-slim AS build
@@ -23,4 +24,6 @@ WORKDIR /app/bench
 COPY bench/fixtures.json bench/bench_python.py bench/bench_matrix.py ./
 COPY bench/matrix/fixtures.json matrix/
 COPY bench/matrix/tls/ca.pem matrix/tls/
+# the private keys sign the expired and wrong-audience tokens each library must reject
+COPY bench/matrix/keys matrix/keys/
 ENTRYPOINT ["yeet", "./bench_python.py"]
