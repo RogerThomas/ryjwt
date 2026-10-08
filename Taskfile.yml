@@ -60,6 +60,12 @@ tasks:
     desc: 'Build the documentation site in strict mode, as CI does: any warning (a broken link or anchor, an unresolved API reference, a missing included file) fails it'
     cmd: uv run --only-group docs zensical build --strict --clean
 
+  icons:
+    desc: 'Render the raster icons (assets/favicon-32.png, favicon.ico, apple-touch-icon.png) from assets/favicon.svg, and copy it to docs/assets/ (needs rsvg-convert: brew install librsvg)'
+    dir: assets
+    # --only-group: the script needs Pillow and yeetr, not the extension built and installed.
+    cmd: uv run --only-group icons yeet ./build_icons.py
+
   licenses:
     desc: 'Regenerate THIRD_PARTY_LICENSES, the licenses of the crates compiled into the extension (needs cargo-about: cargo install --locked --features cli cargo-about@0.9.2)'
     cmds:

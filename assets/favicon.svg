@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="190 170 580 580" width="580" height="580">
+<title>ryjwt</title>
+<style>@media (prefers-color-scheme:dark){.a{stop-color:#d8f05a}.b{stop-color:#8fd03e}.c{stop-color:#4cad34}}</style>
+<defs>
+<linearGradient id="g" gradientUnits="userSpaceOnUse" x1="640" y1="190" x2="250" y2="680">
+<stop class="a" offset="0" stop-color="#8fc42a"/><stop class="b" offset=".5" stop-color="#4b9a22"/><stop class="c" offset="1" stop-color="#2a7420"/>
+</linearGradient>
+<path id="b" d="M286 296C292 300 314 308 324 322C334 336 340 360 344 380C348 400 349 419 348 440C347 461 343 484 338 505C333 526 326 545 318 565C310 585 300 608 288 625C276 642 263 657 248 668C233 679 208 686 200 690C204 679 219 644 226 625C233 606 238 593 244 575C250 557 255 536 260 518C265 500 269 484 272 465C275 446 278 424 279 404C280 384 279 363 280 345C281 327 285 304 286 296Z"/>
+<path id="r" d="M200 690C206 685 226 672 238 660C250 648 259 637 270 618C281 599 293 572 305 548C317 524 328 497 342 474C356 451 371 427 388 410C405 393 426 379 445 370C464 361 485 358 505 358C525 358 556 370 566 372C561 380 551 405 538 418C525 431 501 441 486 452C471 463 456 471 446 482C436 493 431 506 425 520C419 534 415 548 410 565C405 582 402 603 397 620C392 637 389 656 382 668C375 680 370 690 356 695C342 700 326 701 300 700C274 699 217 692 200 690Z"/>
+<path id="l2" d="M560 290C601 221 700 185 760 200C735 263 643 315 560 290Z"/>
+<path id="l1" d="M452 372C464 292 540 212 600 196C609 270 547 361 452 372Z"/>
+<path id="l3" d="M420 400C461 308 571 280 640 318C604 370 501 416 420 400Z"/>
+<path id="l0" d="M352 500C341 409 396 293 452 252C481 327 444 450 352 500Z"/>
+<mask id="m" maskUnits="userSpaceOnUse" x="190" y="170" width="580" height="580">
+<use href="#b" fill="#fff" stroke="#000" stroke-width="18"/>
+<path d="M345 500C351 488 364 452 380 430C396 408 417 387 440 365C463 343 493 318 520 300C547 282 570 269 600 255C630 241 683 222 700 215" fill="none" stroke="#fff" stroke-width="16"/>
+<use href="#l2" fill="#fff" stroke="#000" stroke-width="18"/>
+<use href="#l1" fill="#fff" stroke="#000" stroke-width="18"/>
+<use href="#l3" fill="#fff" stroke="#000" stroke-width="18"/>
+<use href="#l0" fill="#fff" stroke="#000" stroke-width="18"/>
+<use href="#r" fill="#fff" stroke="#000" stroke-width="18"/>
+</mask>
+</defs>
+<g mask="url(#m)" fill="url(#g)">
+<use href="#b"/>
+<path d="M345 500C351 488 364 452 380 430C396 408 417 387 440 365C463 343 493 318 520 300C547 282 570 269 600 255C630 241 683 222 700 215" fill="none" stroke="url(#g)" stroke-width="16"/>
+<use href="#l2"/>
+<use href="#l1"/>
+<use href="#l3"/>
+<use href="#l0"/>
+<use href="#r"/>
+</g>
+</svg>

@@ -9,9 +9,10 @@ with `asyncio.run`. An HTML comment on the line just before a block changes how 
   that public key, with the `kid` `key-1`) and `secret.txt` (a 32-byte HMAC secret, then a
   newline).
 
-Also checks that the API reference documents every public name, and that the race SVGs the docs
-show are the ones the README shows. The docs aren't in the sdist: without docs/, those tests (and
-the docs' examples) are skipped; README.md's examples still run.
+Also checks that the API reference documents every public name, that the race SVGs the docs show
+are the ones the README shows, and that the docs' favicon is assets/favicon.svg. The docs aren't in
+the sdist: without docs/, those tests (and the docs' examples) are skipped; README.md's examples
+still run.
 """
 
 import ast
@@ -171,3 +172,13 @@ def test_docs_show_the_readmes_race_svgs(markdown: Markdown) -> None:
         assert (docs_assets / name).read_bytes() == (assets / name).read_bytes(), (
             f"docs/assets/{name} differs from assets/{name}: run task race-svg"
         )
+
+
+def test_docs_favicon_is_the_repos(markdown: Markdown) -> None:
+    assets, docs_assets = markdown.root / "assets", markdown.docs / "assets"
+    if not (assets.is_dir() and docs_assets.is_dir()):
+        pytest.skip("assets/ or docs/assets/ isn't here (e.g. in an sdist)")
+
+    assert (docs_assets / "favicon.svg").read_bytes() == (assets / "favicon.svg").read_bytes(), (
+        "docs/assets/favicon.svg differs from assets/favicon.svg: run task icons"
+    )

@@ -44,6 +44,11 @@ unused_definitions = true
 shadowed_definitions = true
 
 [project.theme]
+# The leaf "r" mark (assets/favicon.svg, copied to docs/assets/ by `task icons`). The header takes a
+# single logo, not a light and a dark one, so it shows the mark, which reads on both palettes,
+# rather than the wordmark (assets/logo-light.svg, assets/logo-dark.svg).
+favicon = "assets/favicon.svg"
+logo = "assets/favicon.svg"
 language = "en"
 features = [
   "content.action.edit",

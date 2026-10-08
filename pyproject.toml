@@ -96,6 +96,12 @@ docs = [
     "ruff==0.16.10", # formats the API reference's signatures; the version dev's ruff is locked at
     "zensical==0.0.68",
 ]
+# The raster icons rendered from assets/favicon.svg (assets/build_icons.py): `task icons`.
+icons = [
+    "pillow==12.3.0",
+    "rich==15.0.0",
+    "yeetr==2026.9.18",
+]
 
 [tool.ruff]
 target-version = "py312"
@@ -188,6 +194,9 @@ exempt-modules = ["typing", "typing_extensions", "collections.abc", "ryjwt._algo
 "tests/test_docs.py" = [
     "S307", # evaluates the examples of the repo's own docs
 ]
+"assets/build_icons.py" = [
+    "S603", # runs rsvg-convert (found on PATH) on the repo's own favicon.svg
+]
 "scripts/**" = [
     "INP001", # loaded by path (zensical.toml), not imported as a package
 ]
@@ -227,6 +236,7 @@ project-excludes = ["tests/typing_errors"] # code that must not type-check: test
 [tool.uv.dependency-groups]
 # yeetr, which runs the bench scripts, needs Python 3.13+; the bench runs on 3.14.
 bench = { requires-python = ">=3.13" }
+icons = { requires-python = ">=3.13" } # yeetr, which runs assets/build_icons.py
 
 [tool.uv]
 # Rebuild the extension when the Rust sources change.

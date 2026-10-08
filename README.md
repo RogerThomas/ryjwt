@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/logo-dark.svg">
+    <img src="https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/logo-light.svg" alt="ryjwt" width="300">
+  </picture>
+</p>
+
 # ryjwt
 
 [![PyPI](https://img.shields.io/pypi/v/ryjwt)](https://pypi.org/project/ryjwt/)
