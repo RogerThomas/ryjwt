@@ -26,12 +26,10 @@ at a JWKS URL.
 Each bar is one library decoding 100,000 HS256 tokens, in real time. See the
 [benchmarks](https://rogerthomas.github.io/ryjwt/benchmarks/) for how they were measured.
 
-> **Alpha.** The API may still change between releases.
-
 ## Install
 
 ```console
-uv add --prerelease allow ryjwt
+uv add ryjwt
 ```
 
 ryjwt supports Python 3.12, 3.13 and 3.14, including free-threaded 3.14t.
@@ -53,7 +51,7 @@ assert claims["sub"] == "user-1"
 
 ### Into a msgspec Struct
 
-With `uv add --prerelease allow 'ryjwt[msgspec]'`:
+With `uv add 'ryjwt[msgspec]'`:
 
 ```python
 import secrets
@@ -81,7 +79,7 @@ assert claims_in == claims_out
 
 ### Into a pydantic `BaseModel`
 
-With `uv add --prerelease allow 'ryjwt[pydantic]'`:
+With `uv add 'ryjwt[pydantic]'`:
 
 ```python
 import secrets

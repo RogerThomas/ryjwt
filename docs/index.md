@@ -12,14 +12,10 @@ registered claims (`exp`, `nbf`, `aud`, `iss`), and decodes the claims into a di
 [msgspec](https://jcristharif.com/msgspec/) `Struct` or a [pydantic](https://docs.pydantic.dev/)
 `BaseModel`. It also fetches, caches and refreshes the keys an identity provider publishes at a JWKS URL.
 
-!!! warning "Alpha"
-
-    The API may still change between releases.
-
 ## Install
 
 ```console
-uv add --prerelease allow ryjwt
+uv add ryjwt
 ```
 
 ryjwt supports Python 3.12, 3.13 and 3.14, including free-threaded 3.14t

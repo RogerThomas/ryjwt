@@ -404,9 +404,9 @@ jobs:
           mv -- *.sha256 ../checksums/ # only the distributions are uploaded
       - name: Check the release's version is the version built
         env:
-          VERSION: ${{ needs.release-please.outputs.version }} # semver, e.g. 0.0.0-alpha.0
+          VERSION: ${{ needs.release-please.outputs.version }} # semver, e.g. 0.1.0 or 0.2.0-beta.0
         run: |
-          # The sdist is named with the PEP 440 form maturin makes of it (0.0.0a0).
+          # The sdist is named with the PEP 440 form maturin makes of it (0.2.0b0 for 0.2.0-beta.0).
           python_version=$(printf '%s' "$VERSION" | sed -E 's/-alpha\.?/a/; s/-beta\.?/b/; s/-rc\.?/rc/')
           test -f "dist/ryjwt-${python_version}.tar.gz" \
             || { echo "::error::Release ${VERSION} doesn't match the version built (from Cargo.toml)"; exit 1; }
