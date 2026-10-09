@@ -19,7 +19,7 @@ base64-simd = "0.8.0"
 itoa = "1.0.17"
 jiter = { version = "0.17.0", features = ["python", "num-bigint"] }
 memchr = "2.8.3"
-num-bigint = "0.4"
+num-bigint = "0.5"
 pem = "4.0.0"
 pyo3 = "0.29.3"
 ryu = "1.0.23"
