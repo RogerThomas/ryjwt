@@ -24,6 +24,10 @@ updates:
     ignore:
       - dependency-name: aws-lc-rs
       - dependency-name: aws-lc-sys
+      # num-bigint is the version jiter hands us big integers in (src/claims.rs): a new major only
+      # builds once jiter itself moves to it.
+      - dependency-name: num-bigint
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
     groups:
       cargo:
         patterns: ["*"]
