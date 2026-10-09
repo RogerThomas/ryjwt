@@ -218,6 +218,7 @@ or non-ASCII characters, and backslashes. (Some parsers read `http://evil.exampl
 - `https://` fetches use `HTTPS_PROXY` unless `NO_PROXY` excludes the host, and on macOS and
   Windows the system proxy settings. `http://` fetches (to this machine) never use a proxy.
 - Redirects aren't followed: like any non-2xx status, a redirect is a failed fetch.
+- A response over 1 MiB is a failed fetch. The rest isn't read.
 
 ### Which documents it accepts
 

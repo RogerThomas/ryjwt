@@ -66,7 +66,8 @@ A [`JWKSClient`](jwks-urls.md):
   (`localhost`, `127.0.0.1` or `[::1]`), which never goes through a proxy;
 - rejects URLs that different parsers could read as different hosts;
 - doesn't follow redirects;
-- gives up on a fetch after 2.5 seconds, even if the server keeps trickling bytes;
+- gives up on a fetch after 2.5 seconds, even if the server keeps trickling bytes, and on a
+  response over 1 MiB;
 - refetches for an unknown `kid` at most once per `cooldown`, so made-up `kid`s can't flood the
   provider;
 - stops using expired keys after `max_stale`, if it can't fetch new ones;
