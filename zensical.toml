@@ -1,0 +1,130 @@
+# The documentation site, built with Zensical (https://zensical.org): `task docs` serves it locally,
+# `task docs-test` builds it strictly (as CI does), and the Release workflow deploys it to GitHub
+# Pages. The API reference is read statically from the sources (python/ryjwt, the Rust classes from
+# python/ryjwt/_ryjwt.pyi): the extension isn't built or imported.
+[project]
+site_name = "ryjwt"
+site_description = "Fast, strictly typed JWTs for Python, written in Rust"
+site_url = "https://rogerthomas.github.io/ryjwt/"
+extra_css = ["stylesheets/extra.css"]
+# The "Copy for uv" button on examples tagged with `data-uv-extra` (see docs/javascripts/extra.js).
+extra_javascript = ["javascripts/extra.js"]
+repo_url = "https://github.com/RogerThomas/ryjwt"
+repo_name = "RogerThomas/ryjwt"
+edit_uri = "edit/main/docs/"
+copyright = "Copyright &copy; Roger Thomas, MIT License"
+nav = [
+  { "Home" = "index.md" },
+  { "Getting started" = "getting-started.md" },
+  { "Guide" = [
+    { "Keys and algorithms" = "keys.md" },
+    { "Encoding and decoding" = "encoding-and-decoding.md" },
+    { "JWKS URLs" = "jwks-urls.md" },
+    { "Errors" = "errors.md" },
+    { "Threads and free-threaded Python" = "threads.md" },
+    { "Security notes" = "security.md" },
+  ] },
+  { "Benchmarks" = [
+    "benchmarks/index.md",
+    { "Full matrix" = "benchmarks/matrix.md" },
+    { "HS256 by token and key size" = "benchmarks/docker.md" },
+  ] },
+  { "API reference" = "reference.md" },
+  { "Changelog" = "changelog.md" },
+  { "Development" = "development.md" },
+]
+
+# What `zensical build --strict` (task docs-test) fails on, besides any other warning.
+[project.validation]
+invalid_links = true
+invalid_link_anchors = true
+# Off: `[text][ryjwt.SecretKey]` links to the API reference are resolved by autorefs (which warns
+# about the ones it can't resolve), not as Markdown reference links.
+unresolved_references = false
+unresolved_footnotes = true
+unused_footnotes = true
+unused_definitions = true
+shadowed_definitions = true
+
+[project.theme]
+# The leaf "r" mark (assets/favicon.svg, copied to docs/assets/ by `task icons`). The header takes a
+# single logo, not a light and a dark one, so it shows the mark, which reads on both palettes,
+# rather than the wordmark (assets/logo-light.svg, assets/logo-dark.svg).
+favicon = "assets/favicon.svg"
+logo = "assets/favicon.svg"
+language = "en"
+features = [
+  "content.action.edit",
+  "content.action.view",
+  "content.code.copy",
+  "content.tabs.link", # tabs with the same label (msgspec, pydantic, dict) switch together
+  "content.tooltips",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "toc.follow",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+md_in_html = {}
+tables = {}
+toc.permalink = true
+pymdownx.details = {}
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.superfences = {}
+# Tabbed examples (`=== "msgspec"`). Each tab gets an id from its label, after the slug of the
+# heading above it (#a-first-token-pydantic), so a link can open a page on a tab.
+pymdownx.tabbed.alternate_style = true
+pymdownx.tabbed.combine_header_slug = true
+pymdownx.tabbed.slugify = { object = "pymdownx.slugs.slugify", kwds = { case = "lower" } }
+# Pages made of files kept elsewhere: the bench results (bench/results-*.md, which the bench tasks
+# regenerate), and CHANGELOG.md, which Release Please creates on the first release. Paths are
+# looked up in each base path in turn, so until then, docs/.fallback/CHANGELOG.md stands in for it.
+pymdownx.snippets.base_path = [".", "docs/.fallback"]
+pymdownx.snippets.check_paths = true # a missing file fails the build
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["python"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+allow_inspection = false # read the sources and stubs; never import (the extension may not be built)
+extensions = ["scripts/griffe_stub_overloads.py:StubOverloads"]
+heading_level = 3
+members_order = "source"
+merge_init_into_class = true
+overloads_only = true
+separate_signature = true
+show_if_no_docstring = true
+show_root_heading = true
+show_signature_annotations = true
+show_signature_type_parameters = true
+show_source = false # the Rust classes' source is a stub
+show_symbol_type_heading = true
+show_symbol_type_toc = true
+signature_crossrefs = true

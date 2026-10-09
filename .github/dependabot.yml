@@ -1,0 +1,39 @@
+# Weekly, one grouped PR per ecosystem. A Cargo.lock change also needs THIRD_PARTY_LICENSES
+# regenerated (task licenses), which CI checks.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    # aws-lc-sys is pinned (Cargo.toml) to exactly the version aws-lc-rs links, as src/mac.rs uses
+    # its FFI directly: a PR bumping either alone can't resolve or links two copies. Update them by
+    # hand, together: bump aws-lc-rs, then pin aws-lc-sys to what `cargo tree -i aws-lc-sys` shows.
+    ignore:
+      - dependency-name: aws-lc-rs
+      - dependency-name: aws-lc-sys
+    groups:
+      cargo:
+        patterns: ["*"]
+
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      uv:
+        patterns: ["*"]

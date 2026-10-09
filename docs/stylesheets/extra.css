@@ -1,0 +1,36 @@
+/* Tables never wrap their cells: a table wider than the page scrolls sideways instead. */
+.md-typeset table:not([class]) th,
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) td code {
+  white-space: nowrap;
+  word-break: normal;
+}
+
+/* The "Copy for uv" button above tagged examples (docs/javascripts/extra.js). */
+.md-typeset .md-uv-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0 0 0.4em;
+  padding: 0.25em 0.6em;
+  border: none;
+  border-radius: 0.2rem;
+  background-color: var(--md-code-bg-color);
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: color 0.25s, background-color 0.25s;
+}
+
+.md-typeset .md-uv-run:hover,
+.md-typeset .md-uv-run:focus-visible,
+.md-typeset .md-uv-run--copied {
+  color: var(--md-accent-fg-color);
+}
+
+.md-typeset .md-uv-run svg {
+  width: 1em;
+  height: 1em;
+  fill: currentcolor;
+}

@@ -1,0 +1,250 @@
+[project]
+name = "ryjwt"
+dynamic = ["version"] # from Cargo.toml (0.0.0-alpha.0 is 0.0.0a0), by maturin
+description = "Fast, strictly typed JWTs for Python, written in Rust: HMAC, RSA, ECDSA and EdDSA, msgspec and pydantic claims, JWKS URLs"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_LICENSES"]
+authors = [
+    { name = "Roger Thomas", email = "roger.thomas87@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+keywords = ["jwt", "jws", "jwks", "jose", "token", "authentication", "msgspec", "pydantic", "rust"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Free Threading :: 2 - Beta",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Rust",
+    "Topic :: Security",
+    "Topic :: Security :: Cryptography",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/RogerThomas/ryjwt"
+Repository = "https://github.com/RogerThomas/ryjwt"
+Issues = "https://github.com/RogerThomas/ryjwt/issues"
+
+[project.optional-dependencies]
+msgspec = ["msgspec>=0.22"]
+pydantic = ["pydantic>=2.12"]
+
+[build-system]
+requires = ["maturin>=1.15,<2"]
+build-backend = "maturin"
+
+[tool.maturin]
+python-source = "python"
+module-name = "ryjwt._ryjwt"
+# Keep the sdist to what builds and tests the package.
+exclude = [
+    { path = ".dockerignore", format = "sdist" },
+    { path = ".github/**/*", format = "sdist" },
+    { path = "assets/**/*", format = "sdist" },
+    { path = "docs/**/*", format = "sdist" }, # tests/test_docs.py skips the docs without it
+    { path = "scripts/**/*", format = "sdist" },
+    { path = "zensical.toml", format = "sdist" },
+    { path = "bench/**/*", format = "sdist" },
+    { path = "jwks_server.py", format = "sdist" },
+    { path = "main.py", format = "sdist" },
+    { path = "plans/**/*", format = "sdist" },
+    { path = ".release-please-manifest.json", format = "sdist" },
+    { path = "release-please-config.json", format = "sdist" },
+    { path = "run_jwks.py", format = "sdist" },
+    { path = "Taskfile.tmp.yml", format = "sdist" },
+]
+
+[dependency-groups]
+bench = [
+    "cryptography>=46",
+    "joserfc==1.7.5",
+    "jwcrypto==1.6.1",
+    "msgspec>=0.22.0",
+    "pydantic>=2.13.5",
+    "pyjwt>=2.15.1",
+    "python-jose[cryptography]==3.5.0",
+    "pyreqwest>=0.14.0",
+    "rich>=15.0.0",
+    "yeetr>=2026.9.18",
+]
+dev = [
+    "cryptography>=46",
+    "pytest>=9",
+    "rich>=15.0.0",
+    "pyright>=1.1.414",
+    "ruff>=0.16.10",
+    "msgspec>=0.22.0",
+    "pydantic>=2.13.5",
+    "pyjwt>=2.15.1",
+    "mypy>=2.4.0",
+    "ty>=0.0.84",
+    "zuban>=0.10.0",
+    "pyrefly>=1.3.2",
+    "pytest-timeout>=2.4.0",
+]
+# The documentation site (zensical.toml): `task docs`, `task docs-test`.
+docs = [
+    "mkdocstrings==1.0.6",
+    "mkdocstrings-python==2.0.9",
+    "ruff==0.16.10", # formats the API reference's signatures; the version dev's ruff is locked at
+    "zensical==0.0.68",
+]
+# The raster icons rendered from assets/favicon.svg (assets/build_icons.py): `task icons`.
+icons = [
+    "pillow==12.3.0",
+    "rich==15.0.0",
+    "yeetr==2026.9.18",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+fix = true
+force-exclude = true
+extend-exclude = ["main.py"] # a scratch file
+# The bench runs on Python 3.14 only (with yeetr, which needs 3.13+).
+per-file-target-version = { "bench/**/*.py" = "py314" }
+
+[tool.ruff.lint]
+select = [
+    "A",     # builtins shadowing
+    "ANN",   # type annotations
+    "ARG",   # unused arguments
+    "ASYNC", # blocking calls inside async functions
+    "B",     # bugbear (common bugs & bad patterns)
+    "BLE",   # blind excepts
+    "C4",    # comprehensions
+    "C90",   # mccabe complexity
+    "COM",   # commas
+    "DTZ",   # datetime timezone
+    "E",     # pycodestyle errors
+    "EM",    # error messages via a msg variable, not literals in raise
+    "ERA",   # eradicate commented-out code
+    "F",     # pyflakes
+    "FA",    # future annotations
+    "FBT",   # boolean trap
+    "FURB",  # refurb modernizations
+    "G",     # logging format misuse
+    "I",     # import sorting
+    "ICN",   # import conventions
+    "INP",   # missing __init__.py in packages
+    "ISC",   # implicit str concat
+    "LOG",   # logging correctness
+    "N",     # naming conventions
+    "NPY",   # numpy rules
+    "PERF",  # perflint (copies, try/except in loops, etc.)
+    "PGH",   # pygrep-hooks
+    "PIE",   # misc lints (duplicate fields, pointless placeholders, etc.)
+    "PLE",   # pylint errors
+    "PLW",   # pylint warnings
+    "PT",    # pytest style
+    "PTH",   # pathlib
+    "RET",   # return statements
+    "RUF",   # Ruff extra rules
+    "S",     # security
+    "SIM",   # simplifications
+    "SLF",   # private member access outside the owning class
+    "T10",   # debugger statements
+    "T20",   # stray print statements
+    "TC",    # typing under TYPE_CHECKING
+    "TD",    # TODOs must be annotated
+    "TID",   # tidy imports
+    "TRY",   # tryceratops
+    "UP",    # pyupgrade / newer syntax
+    "W",     # pycodestyle warnings
+    "YTT",   # flake8-2020
+]
+ignore = [
+    "COM812", # missing-trailing-comma conflicts with the formatter
+    "EM101",  # inline string literals in raises are fine; msg= indirection helps nobody
+    "EM102",  # same for f-strings in raises
+    "TRY003", # same as EM101: messages belong inline at the raise site
+]
+
+[tool.ruff.lint.flake8-type-checking]
+# msgspec and pydantic resolve field annotations at runtime, so their imports must stay.
+runtime-evaluated-base-classes = ["msgspec.Struct", "pydantic.BaseModel"]
+# Names in public signatures are imported at runtime, so `inspect.signature` and
+# `typing.get_type_hints` can resolve them (annotations are evaluated lazily, on use).
+exempt-modules = ["typing", "typing_extensions", "collections.abc", "ryjwt._algorithms"]
+
+[tool.ruff.lint.per-file-ignores]
+"python/ryjwt/_jwks_client.py" = [
+    "A002", # `decode(type=...)` is the public keyword, as on the Rust classes
+]
+"python/ryjwt/_http.py" = [
+    "S310", # the URL is checked (https, or http to localhost) when a client is built, and the opener has no file: handler
+]
+"tests/test_typing_errors.py" = [
+    "S603", # runs the venv's own type checkers, on the repo's own files
+]
+"tests/test_imports.py" = [
+    "S603", # runs the venv's own Python on the test's own code
+]
+"tests/test_threads.py" = [
+    "S603", # runs the venv's own Python on the test's own code
+]
+"tests/test_docs.py" = [
+    "S307", # evaluates the examples of the repo's own docs
+]
+"assets/build_icons.py" = [
+    "S603", # runs rsvg-convert (found on PATH) on the repo's own favicon.svg
+]
+"scripts/**" = [
+    "INP001", # loaded by path (zensical.toml), not imported as a package
+]
+"tests/**" = [
+    "INP001", # pytest test dirs are not packages; no __init__.py needed
+    "S101",   # assert is how pytest tests
+    "S311",   # seeded random for reproducible fuzzing, not crypto
+]
+
+[tool.ruff.format]
+preview = true
+docstring-code-format = true
+quote-style = "double"
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+exclude = ["tests/typing_errors"]
+# The bench runs on Python 3.14 only, as ruff's per-file-target-version says.
+executionEnvironments = [{ root = "bench", pythonVersion = "3.14" }]
+
+[tool.mypy]
+python_version = "3.12"
+exclude = ["^tests/typing_errors/"]
+
+[tool.ty.environment]
+python-version = "3.12"
+
+[tool.ty.src]
+exclude = ["tests/typing_errors"]
+
+[tool.pyrefly]
+python-version = "3.12.0"
+search-path = ["tests"] # where pytest imports tests/_support.py from, as the other checkers infer
+project-excludes = ["tests/typing_errors"] # code that must not type-check: test_typing_errors.py
+
+[tool.uv.dependency-groups]
+# yeetr, which runs the bench scripts, needs Python 3.13+; the bench runs on 3.14.
+bench = { requires-python = ">=3.13" }
+icons = { requires-python = ">=3.13" } # yeetr, which runs assets/build_icons.py
+
+[tool.uv]
+# Rebuild the extension when the Rust sources change.
+cache-keys = [{ file = "pyproject.toml" }, { file = "Cargo.toml" }, { file = "Cargo.lock" }, { file = "rust-toolchain.toml" }, { file = "src/**/*.rs" }]
+
+[tool.pytest.ini_options]
+# A hung test (e.g. an HTTP fetch that never completes) fails instead of stalling the suite.
+timeout = 30

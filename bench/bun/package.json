@@ -1,0 +1,17 @@
+{
+  "name": "ryjwt-bench-bun",
+  "module": "bench.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "fast-jwt": "^6.3.3",
+    "get-jwks": "^11.0.3",
+    "jose": "^6.2.12"
+  }
+}

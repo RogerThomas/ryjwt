@@ -1,0 +1,5 @@
+# The Rust toolchain for local dev, CI and the wheel builds (keep bench/docker/*.Dockerfile in step).
+[toolchain]
+channel = "1.98.1"
+profile = "minimal"
+components = ["rustfmt", "clippy"]

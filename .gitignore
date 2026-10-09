@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv
+# A venv per other interpreter: UV_PROJECT_ENVIRONMENT=.venv-312 uv run --python 3.12 ...
+.venv-*
+
+# Tool caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.pyrefly/
+.zuban/
+.coverage
+htmlcov/
+
+# Rust (the extension maturin builds into python/ryjwt for local development)
+target/
+*.so
+*.pyd
+
+# Bench
+node_modules/
+
+# The built documentation site (task docs-test)
+site/
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+
+# Local
+.claude/settings.local.json
+.claude/worktrees/
+.env
+.env.*
+.in
+.out
+
+# Kept local for now, not published
+plans/
+jwks_server.py
+run_jwks.py
+Taskfile.tmp.yml
+main.py
