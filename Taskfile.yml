@@ -83,15 +83,15 @@ tasks:
           echo "──── ${service} ────"
           docker compose run --rm "${service}"
         done
-      - uv run yeet ./compare.py results-docker
-      - uv run yeet ./compare.py results-docker markdown "Run in Docker, one container per library, each limited to 1 CPU core (pinned) and 500 MB with no swap."
+      - uv run --group bench yeet ./compare.py results-docker
+      - uv run --group bench yeet ./compare.py results-docker markdown "Run in Docker, one container per library, each limited to 1 CPU (pinned) and 500 MB with no swap."
 
   bench-fixtures:
     desc: 'Regenerate the bench fixtures (bench/fixtures.json, and the full matrix in bench/matrix, reusing its stored keys) and the JWKS server''s test TLS certificates'
     dir: bench
     cmds:
-      - uv run yeet ./gen_fixtures.py
-      - uv run yeet ./gen_tls.py
+      - uv run --group bench yeet ./gen_fixtures.py
+      - uv run --group bench yeet ./gen_tls.py
 
   bench-matrix:
     desc: 'Benchmark the full matrix (algorithm x key size x payload x key source) in Docker, one library container after another (1 core, 500 MB), against an HTTPS JWKS server; results in bench/results-matrix, page in bench/results-matrix.md'
@@ -105,7 +105,7 @@ tasks:
           echo "──── ${service} ────"
           docker compose run --rm "${service}"
         done
-      - uv run yeet ./compare.py:matrix results-matrix "Run in Docker, one container per library, each limited to 1 CPU core (pinned) and 500 MB with no swap; the JWKS server runs in a container of its own, outside that limit."
+      - uv run --group bench yeet ./compare.py:matrix results-matrix "Run in Docker, one container per library, each limited to 1 CPU (pinned) and 500 MB with no swap; the JWKS server runs in a container of its own, outside that limit."
 
   bench-race:
     desc: 'Benchmark just the races'' two cases of the matrix (HS256 typical-k64 from the secret, ES256 typical-es256 from the PEM), as bench-matrix does, into bench/results-race; then redraw the races'
@@ -151,4 +151,4 @@ tasks:
   race-svg:
     desc: 'Redraw the decode races (assets/perf-race.svg, HS256, and assets/perf-race-es256.svg, ES256; copied to docs/assets/) from bench-race''s results in bench/results-race'
     dir: bench
-    cmd: uv run yeet ./race_svg.py {{.CLI_ARGS}}
+    cmd: uv run --group bench yeet ./race_svg.py {{.CLI_ARGS}}
