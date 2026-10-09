@@ -599,11 +599,19 @@ def test_zero_cache_lifetime_fetches_once_per_cooldown(
     server.cache_control = "max-age=0"
     decode = make_client(server.url, min_cache_lifetime=0, cooldown=0.3).decode
 
+    # Decoding all along: the refresh comes no sooner than a cooldown after the first fetch...
     start = time.monotonic()
-    while time.monotonic() - start < 0.45:
+    while server.requests < 2:
+        assert time.monotonic() - start < 5, "no refresh within 5 s"
         assert decode(old_token) == {"sub": "old"}
         time.sleep(0.002)
-    assert 2 <= server.requests <= 3  # the first fetch, and one refresh a cooldown later
+    assert time.monotonic() - start >= 0.3
+    # ...and the refreshed keys stay fresh for a cooldown too, however many decodes.
+    refreshed = time.monotonic()
+    while time.monotonic() - refreshed < 0.2:
+        assert decode(old_token) == {"sub": "old"}
+        time.sleep(0.002)
+    assert server.requests == 2
 
 
 @pytest.mark.parametrize(
