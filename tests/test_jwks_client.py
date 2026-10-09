@@ -12,6 +12,7 @@ import asyncio
 import base64
 import datetime
 import http.client
+import importlib.metadata
 import inspect
 import ipaddress
 import json
@@ -470,6 +471,20 @@ def test_fetches_once_on_first_decode(
     assert decode(old_token) == {"sub": "old"}
     assert decode(old_token) == {"sub": "old"}
     assert server.requests == 1
+
+
+def test_fetches_say_they_are_from_ryjwt(
+    server: JWKSServer,
+    make_client: MakeClient,
+    old_key: ec.EllipticCurvePrivateKey,
+    old_token: str,
+) -> None:
+    """Not urllib's default `Python-urllib/3.x`, which some firewalls (e.g. Cloudflare's) refuse."""
+    server.serve(make_jwk(old_key, kid="old"))
+    make_client(server.url).decode(old_token)
+
+    [headers] = server.request_headers
+    assert headers["user-agent"] == f"ryjwt/{importlib.metadata.version('ryjwt')}"
 
 
 @pytest.mark.parametrize(

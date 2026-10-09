@@ -135,9 +135,11 @@ key = ryjwt.SecretKey("legacy-secret", algorithms=["HS256"], allow_short_secret=
 ### Secrets that are rejected
 
 - An empty secret.
-- A secret that looks like a public key: a PEM, an SSH public key, a JWK, or a public key's
-  binary (DER) form, raw or base64-encoded. A public key is no secret: if it were used as an HMAC
-  secret, anyone who has it could sign tokens. This is the classic "algorithm confusion" attack.
+- A secret that looks like a public key: a PEM, an SSH public key, a JWK or JWKS, or a public
+  key's or certificate's binary (DER) form, raw or base64-encoded. A public key is no secret: if
+  it were used as an HMAC secret, anyone who has it could sign tokens. This is the classic
+  "algorithm confusion" attack. The check also sees through how a file may have been saved: a
+  byte-order mark, leading spaces, or UTF-16 or UTF-32 text.
 
 ### Reading a secret from a file
 

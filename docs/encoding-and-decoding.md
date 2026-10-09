@@ -25,7 +25,8 @@ token = key.encode({"sub": "user-1"}, algorithm="HS512", header={"kid": "key-1"}
   leave it out when the key has only one.
 - **`header`** holds extra fields for the token's header, such as a `kid`. ryjwt always sets `alg`
   itself; setting it in `header` is a `ValueError`. It also adds `"typ": "JWT"`, unless `header`
-  sets `typ`.
+  sets `typ`. `encode` won't make a token `decode` would reject: `crit` and `b64` are a
+  `ValueError`, and so is a header of over 64 fields. A `kid` must be a str.
 
 `header` is singular: a token has one header, and these are fields added to it (PyJWT calls this
 argument `headers`).

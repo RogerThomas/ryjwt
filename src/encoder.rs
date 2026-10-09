@@ -36,6 +36,7 @@ fn header_json(alg: &str, header: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec
         Some(header) => header.items()?.iter().collect(),
         None => Vec::new(),
     };
+    let parameters = items.len();
     for item in items {
         let (name, value): (Bound<'_, PyAny>, Bound<'_, PyAny>) = item.extract()?;
         let name = match name.cast_into::<PyString>() {
@@ -53,6 +54,23 @@ fn header_json(alg: &str, header: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec
                     "Set the algorithm with algorithm=, not header",
                 ));
             }
+            // What `decode` would reject: tokens it can't decode aren't made.
+            "crit" => {
+                return Err(PyValueError::new_err(
+                    "Critical headers (crit) aren't supported: decode rejects them",
+                ));
+            }
+            "b64" => {
+                return Err(PyValueError::new_err(
+                    "Unencoded payloads (b64) aren't supported",
+                ));
+            }
+            "kid" if !value.is_instance_of::<PyString>() => {
+                return Err(PyTypeError::new_err(format!(
+                    "Header kid must be str, got {}",
+                    value.get_type().name()?
+                )));
+            }
             "typ" => has_typ = true,
             _ => {}
         }
@@ -63,6 +81,13 @@ fn header_json(alg: &str, header: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec
     }
     if !has_typ {
         out.extend_from_slice(b",\"typ\":\"JWT\"");
+    }
+    // With `alg`, and `typ` if added.
+    if parameters + 1 + usize::from(!has_typ) > jws::MAX_HEADER_PARAMETERS {
+        return Err(PyValueError::new_err(format!(
+            "Header has more parameters than decode takes ({} with alg and typ)",
+            jws::MAX_HEADER_PARAMETERS
+        )));
     }
     out.push(b'}');
     Ok(out)

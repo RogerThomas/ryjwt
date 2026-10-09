@@ -53,9 +53,10 @@ class SecretKey:
 
         `algorithm` must be one of `algorithms`, and may be left out when only one is configured.
         `header`'s fields are added to the token's header, which always has `alg`, and
-        `"typ": "JWT"` unless `header` sets `typ`; setting `alg` in `header` is a `ValueError`. A
-        `datetime` under `exp`, `nbf` or `iat` is written as whole seconds since the epoch; a naive
-        one is a `ValueError`.
+        `"typ": "JWT"` unless `header` sets `typ`. Setting `alg`, `crit` or `b64` in `header`, or
+        more fields than `decode` takes (64, with `alg` and `typ`), is a `ValueError`; a `kid` that
+        isn't a str is a `TypeError`. A `datetime` under `exp`, `nbf` or `iat` is written as whole
+        seconds since the epoch; a naive one is a `ValueError`.
         """
     @overload
     def decode(
@@ -144,9 +145,10 @@ class PrivateKey:
 
         `algorithm` must be one of `algorithms`, and may be left out when only one is configured.
         `header`'s fields are added to the token's header, which always has `alg`, and
-        `"typ": "JWT"` unless `header` sets `typ`; setting `alg` in `header` is a `ValueError`. A
-        `datetime` under `exp`, `nbf` or `iat` is written as whole seconds since the epoch; a naive
-        one is a `ValueError`.
+        `"typ": "JWT"` unless `header` sets `typ`. Setting `alg`, `crit` or `b64` in `header`, or
+        more fields than `decode` takes (64, with `alg` and `typ`), is a `ValueError`; a `kid` that
+        isn't a str is a `TypeError`. A `datetime` under `exp`, `nbf` or `iat` is written as whole
+        seconds since the epoch; a naive one is a `ValueError`.
         """
     @overload
     def decode(

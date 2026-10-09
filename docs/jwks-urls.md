@@ -17,7 +17,8 @@ signing key, it decodes and verifies tokens itself.
     - no keys to verify with, because fetching them failed, raises
       [`JWKSFetchError`][ryjwt.JWKSFetchError]: respond 503 (see [Errors](#errors)).
 
-It fetches with Python's standard library, so it needs no extra dependencies.
+It fetches with Python's standard library, so it needs no extra dependencies. Its requests say
+they're from ryjwt (`User-Agent: ryjwt/<version>`), as some firewalls refuse urllib's default.
 
 ## Using it
 

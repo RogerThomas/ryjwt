@@ -384,17 +384,15 @@ fn key_bytes<'a>(key: &'a Bound<'_, PyAny>, what: &str) -> Option<PyResult<&'a [
     key.cast::<PyBytes>().ok().map(|b| Ok(b.as_bytes()))
 }
 
-/// Whether `secret` looks like a public key: a PEM, an OpenSSH (including FIDO `sk-`) or RFC 4716
-/// (SSH2) key, or a JWK, after any leading whitespace.
+/// Whether `secret` looks like a public key: a PEM, or an OpenSSH (including FIDO `sk-`) or RFC
+/// 4716 (SSH2) key.
 fn looks_like_public_key(secret: &[u8]) -> bool {
-    let secret = secret.trim_ascii_start();
     memchr::memmem::find(secret, b"-----BEGIN").is_some()
         || secret.starts_with(b"ssh-")
         || secret.starts_with(b"ecdsa-sha2-")
         || secret.starts_with(b"sk-ssh-")
         || secret.starts_with(b"sk-ecdsa-sha2-")
         || secret.starts_with(b"---- BEGIN SSH2")
-        || (secret.starts_with(b"{") && memchr::memmem::find(secret, b"\"kty\"").is_some())
 }
 
 /// Whether `der` parses as a public key, as `PublicKey` parses the DER of its PEMs: a
@@ -431,12 +429,190 @@ fn base64_decoded(data: &[u8]) -> Option<Vec<u8>> {
     base64_simd::forgiving_decode_to_vec(&standard).ok()
 }
 
-/// Whether `secret` is a public key: `looks_like_public_key`, or its DER, raw or in base64 (as
-/// Keycloak shows a realm's public key).
+/// The DER element at the start of `der`: its tag, its contents, and what follows it.
+fn der_element(der: &[u8]) -> Option<(u8, &[u8], &[u8])> {
+    let (&tag, rest) = der.split_first()?;
+    let (&first, rest) = rest.split_first()?;
+    let (len, rest) = if first < 0x80 {
+        (usize::from(first), rest)
+    } else {
+        let size = usize::from(first & 0x7f);
+        if size == 0 || size > 4 || rest.len() < size {
+            return None;
+        }
+        let (size_bytes, rest) = rest.split_at(size);
+        let len = size_bytes
+            .iter()
+            .fold(0, |len, &byte| len << 8 | usize::from(byte));
+        (len, rest)
+    };
+    (rest.len() >= len).then(|| (tag, &rest[..len], &rest[len..]))
+}
+
+/// Whether `der` is an X.509 certificate: a SEQUENCE holding the certificate's fields (a SEQUENCE
+/// ending in its `SubjectPublicKeyInfo`, after an optional version and five other fields), with
+/// nothing after it. Its key needn't be one ryjwt supports.
+fn is_certificate(der: &[u8]) -> bool {
+    const SEQUENCE: u8 = 0x30;
+    let Some((SEQUENCE, certificate, [])) = der_element(der) else {
+        return false;
+    };
+    let Some((SEQUENCE, mut fields, _)) = der_element(certificate) else {
+        return false;
+    };
+    if fields.first() == Some(&0xa0) {
+        fields = der_element(fields).map_or(&[], |(_, _, rest)| rest);
+    }
+    // The serial number, signature algorithm, issuer, validity and subject.
+    for _ in 0..5 {
+        let Some((_, _, rest)) = der_element(fields) else {
+            return false;
+        };
+        fields = rest;
+    }
+    matches!(der_element(fields), Some((SEQUENCE, _, _)))
+}
+
+/// Whether `der` is a public key ryjwt parses, or a certificate.
+fn is_public_key_der(der: &[u8]) -> bool {
+    parses_as_public_key(der) || is_certificate(der)
+}
+
+/// The first character of `bytes`, if they start with one in UTF-8.
+fn first_char(bytes: &[u8]) -> Option<char> {
+    bytes[..bytes.len().min(4)]
+        .utf8_chunks()
+        .next()?
+        .valid()
+        .chars()
+        .next()
+}
+
+/// `text` without what can come before a key in a file: UTF-8 byte-order marks and Unicode
+/// whitespace (a no-break space, say).
+fn trim_start_text(mut text: &[u8]) -> &[u8] {
+    while let Some(c) = first_char(text).filter(|&c| c == '\u{feff}' || c.is_whitespace()) {
+        text = &text[c.len_utf8()..];
+    }
+    text
+}
+
+/// For the JSON string starting `bytes` (just after its opening quote): whether it is `kty`,
+/// however escaped (`"kty"`), and what follows its closing quote (None if it has none).
+fn json_string_is_kty(bytes: &[u8]) -> (bool, Option<&[u8]>) {
+    let mut decoded = [0u8; 4];
+    let mut len = 0;
+    let mut i = 0;
+    while let Some(&byte) = bytes.get(i) {
+        let c = match byte {
+            b'"' => return (decoded[..len] == *b"kty", Some(&bytes[i + 1..])),
+            b'\\' if bytes.get(i + 1) == Some(&b'u') => {
+                let code = bytes
+                    .get(i + 2..i + 6)
+                    .and_then(|hex| std::str::from_utf8(hex).ok())
+                    .and_then(|hex| u32::from_str_radix(hex, 16).ok());
+                i += 6;
+                // Anything but ASCII isn't in "kty".
+                code.and_then(|code| u8::try_from(code).ok())
+                    .filter(u8::is_ascii)
+                    .unwrap_or(0)
+            }
+            b'\\' => {
+                i += 2;
+                match bytes.get(i - 1) {
+                    Some(b'b') => 0x08,
+                    Some(b'f') => 0x0c,
+                    Some(b'n') => b'\n',
+                    Some(b'r') => b'\r',
+                    Some(b't') => b'\t',
+                    Some(&escaped) => escaped,
+                    None => 0,
+                }
+            }
+            byte => {
+                i += 1;
+                byte
+            }
+        };
+        if len < decoded.len() {
+            decoded[len] = c;
+            len += 1;
+        }
+    }
+    (false, None)
+}
+
+/// Whether `text` is a JSON object or array with a member named `kty` anywhere in it: a JWK, a
+/// JWKS, or JWKs in an array. Scanned rather than parsed, so no nesting is too deep for it.
+fn has_jwk_member(text: &[u8]) -> bool {
+    if !matches!(text.first(), Some(b'{' | b'[')) {
+        return false;
+    }
+    let mut rest = text;
+    while let Some(quote) = memchr::memchr(b'"', rest) {
+        let (is_kty, after) = json_string_is_kty(&rest[quote + 1..]);
+        let Some(after) = after else {
+            return false;
+        };
+        if is_kty && after.trim_ascii_start().first() == Some(&b':') {
+            return true;
+        }
+        rest = after;
+    }
+    false
+}
+
+/// `bytes` as text, if they're UTF-16 or UTF-32 (as some Windows tools save files): known by their
+/// byte-order mark, or else by the zero bytes ASCII has in those encodings, as JSON's are told
+/// apart (RFC 4627 §3). Unpaired surrogates and invalid code points become U+FFFD.
+fn wide_text(bytes: &[u8]) -> Option<String> {
+    let (unit, big_endian, bom) = match bytes {
+        [0, 0, 0xfe, 0xff, ..] => (4, true, 4),
+        [0xff, 0xfe, 0, 0, ..] => (4, false, 4),
+        [0xfe, 0xff, ..] => (2, true, 2),
+        [0xff, 0xfe, ..] => (2, false, 2),
+        [0, 0, 0, _, ..] => (4, true, 0),
+        [_, 0, 0, 0, ..] => (4, false, 0),
+        [0, _, ..] => (2, true, 0),
+        [_, 0, ..] => (2, false, 0),
+        _ => return None,
+    };
+    let units = bytes[bom..].chunks_exact(unit).map(|chunk| {
+        let mut code = [0u8; 4];
+        code[4 - unit..].copy_from_slice(chunk);
+        if !big_endian {
+            code[4 - unit..].reverse();
+        }
+        u32::from_be_bytes(code)
+    });
+    Some(if unit == 2 {
+        // Each unit is 16 bits, so the conversion can't fail.
+        char::decode_utf16(units.map(|u| u16::try_from(u).unwrap_or(0xfffd)))
+            .map(|c| c.unwrap_or(char::REPLACEMENT_CHARACTER))
+            .collect()
+    } else {
+        units
+            .map(|u| char::from_u32(u).unwrap_or(char::REPLACEMENT_CHARACTER))
+            .collect()
+    })
+}
+
+/// Whether `text` (UTF-8, or binary) is a public key: as text (`looks_like_public_key`, or a JSON
+/// JWK), or as DER, raw or in base64 (as Keycloak shows a realm's public key, and a JWK's `x5c` a
+/// certificate), after any byte-order mark and leading whitespace.
+fn is_public_key_text(text: &[u8]) -> bool {
+    let text = trim_start_text(text);
+    looks_like_public_key(text)
+        || has_jwk_member(text)
+        || is_public_key_der(text)
+        || base64_decoded(text).is_some_and(|der| is_public_key_der(&der))
+}
+
+/// Whether `secret` is a public key (`is_public_key_text`), read as UTF-8 or binary, or as UTF-16
+/// or UTF-32 text.
 fn is_public_key(secret: &[u8]) -> bool {
-    looks_like_public_key(secret)
-        || parses_as_public_key(secret)
-        || base64_decoded(secret).is_some_and(|der| parses_as_public_key(&der))
+    is_public_key_text(secret)
+        || wide_text(secret).is_some_and(|text| is_public_key_text(text.as_bytes()))
 }
 
 /// `key` as an HMAC secret for `specs`: at least as long as the longest of their tags (RFC 7518

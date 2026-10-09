@@ -1,5 +1,6 @@
 import math
 import random
+import string
 import sys
 import time
 from collections import OrderedDict
@@ -435,11 +436,21 @@ def test_claims_are_validated_even_when_the_type_omits_them(
         pytest.param({"exp": 4_102_444_800.5}, {}, None, id="exp-float"),
         pytest.param({"exp": 2**80}, {}, None, id="exp-huge"),
         pytest.param({"exp": -(2**80)}, {}, ryjwt.ExpiredSignatureError, id="exp-huge-negative"),
+        pytest.param({"exp": "now"}, {}, ryjwt.ExpiredSignatureError, id="exp-now-is-expired"),
         pytest.param({"exp": "exp"}, {}, ryjwt.DecodeError, id="exp-string"),
+        pytest.param({"exp": "4102444800"}, {}, ryjwt.DecodeError, id="exp-numeric-string"),
         pytest.param({"exp": True}, {}, ryjwt.DecodeError, id="exp-bool"),
+        pytest.param({"exp": [4_102_444_800]}, {}, ryjwt.DecodeError, id="exp-list"),
+        pytest.param({"exp": {"exp": 4_102_444_800}}, {}, ryjwt.DecodeError, id="exp-object"),
         pytest.param({"nbf": "past"}, {}, None, id="nbf-valid"),
+        pytest.param({"nbf": "now"}, {}, None, id="nbf-now-is-valid"),
         pytest.param({"nbf": "future"}, {}, ryjwt.ImmatureSignatureError, id="nbf-future"),
+        pytest.param({"nbf": "soon"}, {"leeway": 120}, None, id="nbf-within-leeway"),
+        pytest.param(
+            {"nbf": "soon"}, {"leeway": 10}, ryjwt.ImmatureSignatureError, id="nbf-past-leeway"
+        ),
         pytest.param({"nbf": None}, {}, ryjwt.DecodeError, id="nbf-null"),
+        pytest.param({"nbf": "1"}, {}, ryjwt.DecodeError, id="nbf-numeric-string"),
         pytest.param({"iat": "future"}, {}, None, id="iat-future-is-not-checked"),
         pytest.param({"aud": "aud"}, {"audience": "aud"}, None, id="aud-match"),
         pytest.param({"aud": ["x", "aud"]}, {"audience": "aud"}, None, id="aud-list-match"),
@@ -452,7 +463,19 @@ def test_claims_are_validated_even_when_the_type_omits_them(
         ),
         pytest.param({"aud": "aud"}, {}, ryjwt.InvalidAudienceError, id="aud-without-audience"),
         pytest.param({}, {"audience": "aud"}, ryjwt.InvalidAudienceError, id="aud-missing"),
+        pytest.param(
+            {"aud": "urn"}, {"audience": "urn:me"}, ryjwt.InvalidAudienceError, id="aud-prefix"
+        ),
+        pytest.param(
+            {"aud": "urn:me:x"},
+            {"audience": "urn:me"},
+            ryjwt.InvalidAudienceError,
+            id="audience-prefix",
+        ),
         pytest.param({"aud": 1}, {"audience": "aud"}, ryjwt.InvalidAudienceError, id="aud-int"),
+        pytest.param({"aud": None}, {}, ryjwt.InvalidAudienceError, id="aud-null"),
+        pytest.param({"aud": []}, {}, ryjwt.InvalidAudienceError, id="aud-empty-without-audience"),
+        pytest.param({"aud": []}, {"audience": "aud"}, ryjwt.InvalidAudienceError, id="aud-empty"),
         pytest.param(
             {"aud": ["aud", 1]},
             {"audience": "aud"},
@@ -467,6 +490,9 @@ def test_claims_are_validated_even_when_the_type_omits_them(
             ryjwt.InvalidIssuerError,
             id="iss-mismatch",
         ),
+        pytest.param(
+            {"iss": "urn:"}, {"issuer": "urn:expected"}, ryjwt.InvalidIssuerError, id="iss-prefix"
+        ),
         pytest.param({}, {"issuer": "iss"}, ryjwt.InvalidIssuerError, id="iss-missing"),
         pytest.param({"iss": 1}, {"issuer": "iss"}, ryjwt.InvalidIssuerError, id="iss-int"),
         pytest.param({"iss": 1}, {}, None, id="iss-unchecked-without-issuer"),
@@ -480,7 +506,13 @@ def test_registered_claims(
     decode: Decode,
 ) -> None:
     now = int(time.time())
-    times = {"future": now + 3600, "past": now - 3600, "recent": now - 60}
+    times = {
+        "now": now,
+        "soon": now + 60,
+        "future": now + 3600,
+        "recent": now - 60,
+        "past": now - 3600,
+    }
     payload = {"sub": "sub"} | {
         k: times.get(v, v) if isinstance(v, str) else v for k, v in claims.items()
     }
@@ -1028,7 +1060,15 @@ def test_key_audience_and_issuer_accept_any_iterable(make_key: KeyMaker) -> None
             "audience must be a str or an iterable of str",
             id="audience-item",
         ),
+        pytest.param(
+            {"audience": b"aud"},
+            "audience must be a str or an iterable of str",
+            id="audience-bytes",
+        ),
         pytest.param({"issuer": 1}, "issuer must be a str or an iterable of str", id="issuer"),
+        pytest.param(
+            {"issuer": b"iss"}, "issuer must be a str or an iterable of str", id="issuer-bytes"
+        ),
         pytest.param(
             {"issuer": [b"iss"]},
             "issuer must be a str or an iterable of str",
@@ -1143,6 +1183,17 @@ def test_header_parameter_limit(
             hmac_jwt.decode(token)
 
 
+def test_deeply_nested_header(
+    hmac_jwt: ryjwt.SecretKey,
+    raw_hs256_token: Callable[[bytes, bytes], str],
+) -> None:
+    header = b'{"alg":"HS256","x":' + b"[" * 100_000 + b"]" * 100_000 + b"}"
+    token = raw_hs256_token(header, b'{"sub":"sub"}')
+
+    with pytest.raises(ryjwt.DecodeError, match="Invalid header JSON"):
+        hmac_jwt.decode(token)
+
+
 def test_deeply_nested_payload(
     hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
@@ -1158,6 +1209,15 @@ def test_deeply_nested_payload(
         hmac_jwt.decode(token, type=ClaimsModel)
 
 
+def _with_stray_bit(segment: str) -> str:
+    """`segment` with the lowest bit of its last character set, a bit that's past the end of the
+    data in a segment whose length isn't a multiple of 4: base64 decoders that ignore it decode
+    the same bytes."""
+    assert len(segment) % 4
+    alphabet = string.ascii_uppercase + string.ascii_lowercase + string.digits + "-_"
+    return segment[:-1] + alphabet[alphabet.index(segment[-1]) | 1]
+
+
 @pytest.mark.parametrize(
     "malformation",
     [
@@ -1169,6 +1229,8 @@ def test_deeply_nested_payload(
         "non-base64url-payload",
         "non-ascii",
         "truncated-signature",
+        "stray-bits-payload",
+        "stray-bits-signature",
     ],
 )
 def test_malformed_tokens(malformation: str, hmac_jwt: ryjwt.SecretKey) -> None:
@@ -1183,6 +1245,9 @@ def test_malformed_tokens(malformation: str, hmac_jwt: ryjwt.SecretKey) -> None:
         "non-base64url-payload": f"{header}.{payload}!.{signature}",
         "non-ascii": token + "é",
         "truncated-signature": token[:-2],
+        # The same bytes, encoded otherwise: one signature mustn't make several tokens.
+        "stray-bits-payload": f"{header}.{_with_stray_bit(payload)}.{signature}",
+        "stray-bits-signature": f"{header}.{payload}.{_with_stray_bit(signature)}",
     }
 
     with pytest.raises(ryjwt.DecodeError):
