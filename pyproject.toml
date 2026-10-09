@@ -1,6 +1,6 @@
 [project]
 name = "ryjwt"
-dynamic = ["version"] # from Cargo.toml (0.0.0-alpha.0 is 0.0.0a0), by maturin
+dynamic = ["version"] # from Cargo.toml (a pre-release such as 0.2.0-beta.0 is 0.2.0b0), by maturin
 description = "Fast, strictly typed JWTs for Python, written in Rust: HMAC, RSA, ECDSA and EdDSA, msgspec and pydantic claims, JWKS URLs"
 readme = "README.md"
 license = "MIT"
@@ -12,7 +12,7 @@ requires-python = ">=3.12"
 dependencies = []
 keywords = ["jwt", "jws", "jwks", "jose", "token", "authentication", "msgspec", "pydantic", "rust"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",

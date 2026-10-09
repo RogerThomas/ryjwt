@@ -6,9 +6,6 @@
       "package-name": "ryjwt",
       "include-component-in-tag": false,
       "changelog-path": "CHANGELOG.md",
-      "prerelease": true,
-      "versioning": "prerelease",
-      "prerelease-type": "alpha",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     }

@@ -2,12 +2,12 @@
 // tabbed msgspec, pydantic and dict examples, e.g. docs/index.md's "A first token"). It copies a
 // `uv run` command that runs that exact snippet, with nothing installed beforehand:
 //
-//     uv run --prerelease allow --with 'ryjwt[msgspec]' python - <<'PYEOF'
+//     uv run --with 'ryjwt[msgspec]' python - <<'PYEOF'
 //     ...the snippet...
 //     PYEOF
 //
 // `data-uv-extra` names the extra the snippet needs (`msgspec` or `pydantic`), or is empty for
-// plain `ryjwt`. ryjwt is an alpha, so `--prerelease allow` lets uv pick a pre-release.
+// plain `ryjwt`.
 // tests/test_docs.py checks every tagged block names a real extra, and runs it.
 //
 // The button is our own, inserted just above the block, rather than added to Zensical's copy
@@ -21,7 +21,7 @@
   function buildCommand(extra, code) {
     const target = extra ? `ryjwt[${extra}]` : "ryjwt"
     const body = code.replace(/\n+$/, "")
-    return `uv run --prerelease allow --with '${target}' python - <<'${HEREDOC_MARKER}'\n${body}\n${HEREDOC_MARKER}\n`
+    return `uv run --with '${target}' python - <<'${HEREDOC_MARKER}'\n${body}\n${HEREDOC_MARKER}\n`
   }
 
   function copyToClipboard(text) {

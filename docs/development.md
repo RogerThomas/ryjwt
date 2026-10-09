@@ -26,7 +26,7 @@ Releases use [Release Please](https://github.com/googleapis/release-please), so 
 follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat: …`, `fix: …`,
 `feat!: …` for a breaking change). On every push to `main`, the Release workflow
 (`.github/workflows/release.yml`) keeps a release PR open that bumps the version in `Cargo.toml`
-(the package's version comes from it: `0.0.0-alpha.0` is `0.0.0a0`) and updates `CHANGELOG.md`.
+(the package's version comes from it) and updates `CHANGELOG.md`.
 
 Merging that PR tags the release, and the same workflow run builds the wheels (cp312, cp313, cp314
 and cp314t, for each platform) and the sdist, tests each wheel on its own Python, in jobs of their
