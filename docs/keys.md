@@ -32,8 +32,7 @@ There is no `none` algorithm. Every token ryjwt makes or accepts is signed.
 
 ### Choosing `algorithms`
 
-Every key class takes `algorithms`: the algorithms the key may be used with. List only the ones
-your tokens use.
+Every key class takes `algorithms`: the ones your tokens use.
 
 ```python
 import secrets
@@ -41,22 +40,16 @@ import secrets
 import ryjwt
 
 key = ryjwt.SecretKey(secrets.token_bytes(64), algorithms=["HS256", "HS512"])
-assert key.algorithms == ["HS256", "HS512"]
 ```
 
-- `decode` rejects a token signed with any other algorithm, with
-  [`InvalidAlgorithmError`][ryjwt.InvalidAlgorithmError].
-- `encode` signs with `algorithm=`, which must be one of them. You can leave it out when there's
-  only one.
-- An empty list, or a name the class doesn't support, is a `ValueError`. Its message lists the
-  supported names.
-- A `PrivateKey` or `PublicKey` holds one key, so its algorithms must all suit that key. An RSA
-  key can be used for both `RS256` and `PS256`, but not for `ES256`. A P-256 key can't be used for
-  `ES384`. Asking for both is a `ValueError`.
+- `decode` rejects any other algorithm, with [`InvalidAlgorithmError`][ryjwt.InvalidAlgorithmError].
+- `encode` signs with `algorithm=`, one of them. It's optional when there's only one.
+- A `PrivateKey` or `PublicKey` holds one key, so every algorithm must suit it: an RSA key takes
+  `RS256` and `PS256`, not `ES256`. A mismatch, an empty list or an unknown name is a `ValueError`.
 
-The names are typed as Literals: [`HMACAlgorithm`][ryjwt.HMACAlgorithm] and
-[`AsymmetricAlgorithm`][ryjwt.AsymmetricAlgorithm]. A type checker catches a name the class
-doesn't take, or a typo. Use them in your own annotations too:
+The names are Literal types, [`HMACAlgorithm`][ryjwt.HMACAlgorithm] and
+[`AsymmetricAlgorithm`][ryjwt.AsymmetricAlgorithm], so a type checker catches typos. Annotate your
+own lists with them, as a `list[str]` won't type-check:
 
 ```python
 import ryjwt
