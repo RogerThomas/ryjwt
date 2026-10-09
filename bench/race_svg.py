@@ -50,8 +50,9 @@ class Race:
     """The key the tokens were verified with, for the caption."""
     output: str
     """The SVG's file name, in assets/."""
-    starred: str = ""
-    """The lane (a results key) to mark with an asterisk, explained by `footnote`."""
+    marks: tuple[tuple[str, str], ...] = ()
+    """(lane, mark) pairs: lanes (results keys) marked after their name, e.g. with an asterisk,
+    each explained by a `footnote` line starting with the same mark."""
     footnote: tuple[str, ...] = ()
     """Lines under the caption, starting with the asterisk."""
 
@@ -260,7 +261,7 @@ class Races:
             "HS256",
             "a 64-byte secret",
             "perf-race.svg",
-            starred="jsonwebtoken",
+            marks=(("jsonwebtoken", "*"), ("ryjwt-pydantic", "\u2020")),
             footnote=(
                 (
                     "* Same token, checks and crypto library (aws-lc) on both sides. Per token, "
@@ -270,6 +271,11 @@ class Races:
                     "twice, re-keys the HMAC and deserialises the claims twice; ryjwt keys the "
                     "HMAC once and parses each part once."
                 ),
+                (
+                    "\u2020 Into a pydantic BaseModel, pydantic parses and validates the claims "
+                    "itself, which takes about twice as long"
+                ),
+                "as msgspec. ryjwt checks exp and aud first, before any of the model's code runs.",
             ),
         ),
         Race("pem", "typical-es256", "ES256", "a PEM public key", "perf-race-es256.svg"),
@@ -285,8 +291,8 @@ class Races:
         row = self._row(key, race)
         name, color = self.lane_names[key]
         runtime = self.runtimes[results["runtime"].split()[0]]
-        star = "*" if key == race.starred else ""
-        return Lane(key, f"{name} ({runtime}){star}", color, row["mean_us"], results["impl"])
+        mark = dict(race.marks).get(key, "")
+        return Lane(key, f"{name} ({runtime}){mark}", color, row["mean_us"], results["impl"])
 
     @classmethod
     def load(cls, results_dir: Path) -> Races:
