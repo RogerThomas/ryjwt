@@ -7,6 +7,10 @@
   key comes with its public PEM and a 3-key JWKS document, with the signing key in the middle; the
   documents are also written to `matrix/jwks/<key>.json`, which the JWKS server serves.
 
+Every case also has two tokens, signed the same way, that every library must reject before it's
+timed: `expired_token` (`exp` a minute after `iat`, in 2023) and `wrong_audience_token` (`aud`
+another audience's). They show each one checks `exp` and `aud`, not just the signature.
+
 Asymmetric private keys are generated once into `matrix/keys/` and then reused (delete them to make
 new ones). RSA and EdDSA signatures are deterministic; ECDSA ones aren't, so re-running changes the
 ES tokens (not the keys).
@@ -16,7 +20,9 @@ import base64
 import json
 import random
 import string
+from collections.abc import Callable
 from dataclasses import dataclass
+from functools import partial
 from pathlib import Path
 from typing import Any, ClassVar
 
@@ -172,7 +178,8 @@ class AsymmetricFixtures:
                 "jwks": jwks,
             }
             for p_name, payload in payloads.items():
-                token = jwt.encode(payload, private_key, algorithm=key.alg, headers={"kid": kid})
+                sign = partial(jwt.encode, key=private_key, algorithm=key.alg, headers={"kid": kid})
+                token = sign(payload)
                 cases.append({
                     "name": f"{p_name}-{key.id}",
                     "key": key.id,
@@ -182,6 +189,7 @@ class AsymmetricFixtures:
                     "token_len": len(token),
                     "audience": audience,
                     "payload": payload,
+                    **_rejected_tokens(sign, payload),
                 })
         return keys, cases
 
@@ -197,6 +205,16 @@ def _payload(extra: int, rng: random.Random) -> dict[str, Any]:
     for i in range(extra):
         payload[f"claim_{i}"] = "".join(rng.choices(string.ascii_letters, k=24))
     return payload
+
+
+def _rejected_tokens(
+    sign: Callable[[dict[str, Any]], str], payload: dict[str, Any]
+) -> dict[str, str]:
+    """The tokens a case's decode must reject, signed by `sign` as its own token is."""
+    return {
+        "expired_token": sign(payload | {"exp": payload["iat"] + 60}),
+        "wrong_audience_token": sign(payload | {"aud": "another-audience"}),
+    }
 
 
 def _key_size_order(case: dict[str, Any]) -> int:
@@ -217,7 +235,8 @@ def main(seed: int = 42) -> None:
         for k_name, k_len in FixtureMatrix.key_sizes.items():
             key = "".join(rng.choices(string.ascii_letters + string.digits, k=k_len))
             headers = {"kid": "2024-10-key-1"} if p_name == "typical" else None
-            token = jwt.encode(payload, key, algorithm="HS256", headers=headers)
+            sign = partial(jwt.encode, key=key, algorithm="HS256", headers=headers)
+            token = sign(payload)
             cases.append(
                 {
                     "name": f"{p_name}-{k_name}",
@@ -227,6 +246,7 @@ def main(seed: int = 42) -> None:
                     "token_len": len(token),
                     "audience": "ryjwt-bench",
                     "payload": payload,
+                    **_rejected_tokens(sign, payload),
                 },
             )
     (bench_dir / "fixtures.json").write_text(json.dumps(cases, indent=2))
@@ -252,6 +272,8 @@ def main(seed: int = 42) -> None:
             "token_len": c["token_len"],
             "audience": c["audience"],
             "payload": c["payload"],
+            "expired_token": c["expired_token"],
+            "wrong_audience_token": c["wrong_audience_token"],
         }
         for c in sorted(cases, key=_key_size_order)
     ]

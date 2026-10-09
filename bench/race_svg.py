@@ -287,7 +287,11 @@ class Races:
                 ),
                 (
                     "twice, re-keys the HMAC and deserialises the claims twice; ryjwt keys the "
-                    "HMAC once and parses each part once."
+                    "HMAC once, parses the payload once"
+                ),
+                (
+                    "and skips headers it has already verified. jsonwebtoken decodes into a "
+                    "serde_json::Value here."
                 ),
                 (
                     "\u2020 Into a pydantic BaseModel, pydantic parses and validates the claims "

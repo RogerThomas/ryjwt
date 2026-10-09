@@ -107,7 +107,7 @@ assert claims_in == claims_out
 
 ## Highlights
 
-- **Fast.** HS256 tokens decode around 30 times faster than with PyJWT.
+- **Fast.** A typical HS256 token decodes around 30 times faster than with PyJWT 2.15, on one core.
 - **Every common algorithm.** HMAC, RSA, RSA-PSS, ECDSA and Ed25519 (`HS*`, `RS*`, `PS*`, `ES*`,
   `EdDSA`).
 - **Typed.** Algorithm names are Literals, and `decode(token, type=Claims)` returns a `Claims`. A

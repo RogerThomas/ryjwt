@@ -123,5 +123,6 @@ ryjwt is fast because:
   installed, or by [jiter](https://github.com/pydantic/jiter), which is built in.
 
 With RSA, ECDSA and EdDSA keys, most of the time goes into checking the signature itself, so the
-gaps are smaller. For ES256, ryjwt decodes about twice as fast as PyJWT, and a little faster than
-the Rust and Bun libraries.
+gaps are smaller. For ES256, ryjwt decodes about twice as fast as PyJWT, and about as fast as the
+Rust and Bun libraries. For RS256, the Bun libraries are faster in the
+[published numbers](benchmarks/index.md#rs256).

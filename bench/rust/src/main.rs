@@ -1,12 +1,13 @@
 //! Benchmark `jsonwebtoken::decode` (HS256 verify + exp/aud validation, aws-lc-rs backend)
-//! over the shared fixture matrix. Mirrors `bench/bench_pyjwt.py` methodology.
+//! over the shared fixture matrix. Mirrors `bench/bench_python.py` methodology.
 
 use std::fmt::Write as _;
 use std::hint::black_box;
 use std::path::PathBuf;
 use std::time::Instant;
 
-use jsonwebtoken::{Algorithm, DecodingKey, Validation, decode};
+use jsonwebtoken::errors::{Error, ErrorKind};
+use jsonwebtoken::{Algorithm, DecodingKey, TokenData, Validation, decode};
 use serde::Serialize;
 use serde_json::Value;
 
@@ -22,6 +23,8 @@ struct Case {
     token_len: u64,
     audience: String,
     payload: Value,
+    expired_token: String,
+    wrong_audience_token: String,
 }
 
 /// One output row; field order matches `results/pyjwt.json`.
@@ -75,9 +78,42 @@ fn load_cases() -> Vec<Case> {
                 token_len: c["token_len"].as_u64().expect("token_len"),
                 audience: s("audience"),
                 payload: c["payload"].clone(),
+                expired_token: s("expired_token"),
+                wrong_audience_token: s("wrong_audience_token"),
             }
         })
         .collect()
+}
+
+/// Panics unless `verify` rejects `expired_token` as expired and `wrong_audience_token` as for
+/// another audience, so the timed decode is known to check both. `label` starts each message.
+fn assert_rejects(
+    label: &str,
+    expired_token: &str,
+    wrong_audience_token: &str,
+    verify: impl Fn(&str) -> Result<TokenData<Value>, Error>,
+) {
+    for (token, expected, what) in [
+        (
+            expired_token,
+            ErrorKind::ExpiredSignature,
+            "an expired token",
+        ),
+        (
+            wrong_audience_token,
+            ErrorKind::InvalidAudience,
+            "another audience's token",
+        ),
+    ] {
+        match verify(token) {
+            Ok(_) => panic!("{label}: accepted {what}"),
+            Err(e) if *e.kind() == expected => {}
+            Err(e) => panic!(
+                "{label}: rejected {what} with {:?}, not {expected:?}",
+                e.kind()
+            ),
+        }
+    }
 }
 
 /// Python `statistics.median` on sorted data.
@@ -160,6 +196,9 @@ fn main() {
     for case in &cases {
         let mut validation = Validation::new(Algorithm::HS256);
         validation.set_audience(&[&case.audience]);
+        // ryjwt checks nbf, with no leeway, by default; so do the Python libraries.
+        validation.validate_nbf = true;
+        validation.leeway = 0;
         assert!(validation.validate_exp, "exp must be validated");
         let key_bytes = case.key.as_bytes();
         let key = DecodingKey::from_secret(key_bytes);
@@ -171,6 +210,13 @@ fn main() {
             decoded.claims, case.payload,
             "{}: payload mismatch",
             case.name
+        );
+        // And it must reject an expired token and one for another audience.
+        assert_rejects(
+            &format!("{impl_name} {}", case.name),
+            &case.expired_token,
+            &case.wrong_audience_token,
+            |token| decode::<Value>(token, &key, &validation),
         );
 
         // Headline: key + validation built once, outside the timed loop.
