@@ -993,8 +993,10 @@ def test_background_refresh_past_its_deadline(
     2.5 s after it started. It then counts as failed (timed out), so the cooldown applies. A sync
     and an async caller, each with a client of its own, at once (to share the wait)."""
     server.serve(make_jwk(old_key, kid="old"))
+    # Stale 1.5 s after expiring: well after the refresh starts (sleep(1.05) on a slow runner can
+    # overshoot by more than 0.5 s), and well before it times out (2.5 s after starting).
     callers = [
-        _ClientMaker(kind, runner)(server.url, cache_lifetime=1, max_stale=0.5, cooldown=1)
+        _ClientMaker(kind, runner)(server.url, cache_lifetime=1, max_stale=1.5, cooldown=1)
         for kind in ("sync", "async")
     ]
     for caller in callers:

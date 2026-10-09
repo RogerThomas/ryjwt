@@ -68,6 +68,7 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       version: ${{ steps.release.outputs.version }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - id: release
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
@@ -220,9 +221,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # The x86_64 wheels are built on an arm64 runner too: it compiles for x86_64 as fast as for
+        # itself, where an Intel runner takes twice as long. PyO3 doesn't count x86_64 from arm64 on
+        # macOS as cross-compiling, so the arm64 Pythons below serve for both.
         platform:
           - name: macOS x86_64
-            runner: macos-15-intel
+            runner: macos-15
             target: x86_64-apple-darwin
           - name: macOS arm64
             runner: macos-15
@@ -273,33 +277,39 @@ jobs:
           if-no-files-found: error
 
   test-macos-windows:
-    name: Test ${{ matrix.platform.name }}
+    name: Test ${{ matrix.name }}, Python ${{ matrix.pythons }}
     needs: build-macos-windows
     # Explicit: on pull requests the release-please job is skipped, and a skip would otherwise
     # carry down to here even though the build ran.
     if: ${{ !cancelled() && needs.build-macos-windows.result == 'success' }}
-    runs-on: ${{ matrix.platform.runner }}
-    timeout-minutes: 60
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - name: macOS x86_64
-            runner: macos-15-intel
-            target: x86_64-apple-darwin
-          - name: macOS arm64
-            runner: macos-15
-            target: aarch64-apple-darwin
-          - name: Windows x64
-            runner: windows-2025
-            target: x86_64-pc-windows-msvc
+        # Each wheel on its own architecture, unlike the builds: an arm64 runner can't test the
+        # x86_64 wheels under Rosetta, as cryptography (which the tests use) has no x86_64 macOS
+        # wheels and can't be built for x86_64 there. On the slow Intel runner, where building
+        # cryptography takes as long as the tests, each Python in a job of its own, in parallel;
+        # on the arm64 one, all four in one job, as GitHub runs at most 5 macOS jobs at once.
+        # Windows, which has no such limit, as Intel.
+        include:
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.12" }
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.13" }
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14" }
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14t" }
+          - { name: macOS arm64, runner: macos-15, target: aarch64-apple-darwin, pythons: "3.12 3.13 3.14 3.14t" }
+          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.12" }
+          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.13" }
+          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.14" }
+          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.14t" }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: dist-${{ matrix.platform.target }}
+          name: dist-${{ matrix.target }}
           path: dist
       - name: Check the SHA-256
         run: sh .github/scripts/sha256.sh check dist/*.sha256
@@ -312,7 +322,8 @@ jobs:
         # a request for 3.14 could find its free-threaded 3.14t, which can't load a cp314 wheel.
         env:
           UV_PYTHON_PREFERENCE: only-managed
-        run: sh .github/scripts/test-wheel.sh dist 3.12 3.13 3.14 3.14t
+          PYTHONS: ${{ matrix.pythons }}
+        run: sh .github/scripts/test-wheel.sh dist $PYTHONS # unquoted: one argument per Python
 
   build-sdist:
     name: Build sdist
@@ -386,6 +397,8 @@ jobs:
       url: https://pypi.org/project/ryjwt/
     permissions:
       id-token: write # PyPI trusted publishing
+    outputs:
+      python_version: ${{ steps.version.outputs.python_version }}
     steps:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -403,6 +416,7 @@ jobs:
           mkdir ../checksums
           mv -- *.sha256 ../checksums/ # only the distributions are uploaded
       - name: Check the release's version is the version built
+        id: version
         env:
           VERSION: ${{ needs.release-please.outputs.version }} # semver, e.g. 0.1.0 or 0.2.0-beta.0
         run: |
@@ -410,7 +424,33 @@ jobs:
           python_version=$(printf '%s' "$VERSION" | sed -E 's/-alpha\.?/a/; s/-beta\.?/b/; s/-rc\.?/rc/')
           test -f "dist/ryjwt-${python_version}.tar.gz" \
             || { echo "::error::Release ${VERSION} doesn't match the version built (from Cargo.toml)"; exit 1; }
+          echo "python_version=$python_version" >> "$GITHUB_OUTPUT"
       - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+
+  link-pypi:
+    name: Link the release to PyPI
+    needs:
+      - release-please
+      - publish
+    if: ${{ !cancelled() && needs.publish.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write # edit the release's notes
+    steps:
+      - name: Add the PyPI link to the release's notes
+        # At the top of the notes Release Please wrote; once, should the job be re-run.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+          VERSION: ${{ needs.publish.outputs.python_version }}
+        run: |
+          url="https://pypi.org/project/ryjwt/$VERSION/"
+          notes=$(gh release view "$TAG" --json body --jq .body)
+          case $notes in *"$url"*) exit 0 ;; esac
+          printf 'Install from [PyPI](%s): `uv add ryjwt==%s`\n\n%s\n' "$url" "$VERSION" "$notes" > notes.md
+          gh release edit "$TAG" --notes-file notes.md
 
   docs:
     name: Deploy the docs
