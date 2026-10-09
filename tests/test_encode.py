@@ -318,6 +318,46 @@ def test_alg_header_is_not_settable(hmac_jwt: ryjwt.SecretKey) -> None:
         hmac_jwt.encode({}, header={"alg": "none"})
 
 
+@pytest.mark.parametrize(
+    ("header", "error", "match"),
+    [
+        pytest.param({"crit": ["exp"]}, ValueError, r"crit\) aren't supported", id="crit"),
+        pytest.param({"b64": False}, ValueError, r"b64\) aren't supported", id="b64"),
+        pytest.param({"kid": 1}, TypeError, "kid must be str, got int", id="kid-int"),
+        pytest.param({"kid": None}, TypeError, "kid must be str, got NoneType", id="kid-null"),
+        pytest.param({f"x{i}": i for i in range(63)}, ValueError, "more parameters", id="65"),
+        pytest.param({"x": object()}, TypeError, "object", id="unserialisable"),
+        pytest.param({1: "x"}, TypeError, "names must be str", id="non-str-name"),
+    ],
+)
+def test_headers_decode_would_reject(
+    header: dict[Any, Any], error: type[Exception], match: str, hmac_jwt: ryjwt.SecretKey
+) -> None:
+    """`encode` doesn't make tokens that `decode` rejects."""
+    with pytest.raises(error, match=match):
+        hmac_jwt.encode({}, header=header)
+
+
+def test_largest_header_decode_takes(hmac_jwt: ryjwt.SecretKey) -> None:
+    """64 parameters, with `alg` and `typ`."""
+    without_typ = {f"x{i}": i for i in range(62)}
+    with_typ = {**without_typ, "typ": "at+jwt"}
+
+    for header in (without_typ, with_typ):
+        assert len(ryjwt.unverified_header(hmac_jwt.encode({}, header=header))) == 64
+        assert hmac_jwt.decode(hmac_jwt.encode({}, header=header)) == {}
+
+
+def test_encode_leaves_its_arguments_unchanged(hmac_jwt: ryjwt.SecretKey) -> None:
+    claims = {"sub": "sub", "exp": datetime(2100, 1, 1, tzinfo=UTC)}
+    header = {"kid": "kid"}
+
+    hmac_jwt.encode(claims, header=header)
+
+    assert claims == {"sub": "sub", "exp": datetime(2100, 1, 1, tzinfo=UTC)}
+    assert header == {"kid": "kid"}
+
+
 def test_headers_is_not_an_argument(hmac_jwt: ryjwt.SecretKey) -> None:
     untyped_caller: Any = {"headers": {"kid": "kid"}}  # what an untyped caller could pass
 

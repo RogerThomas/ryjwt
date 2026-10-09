@@ -413,12 +413,9 @@ def test_header_cache_with_interleaved_kids(
             assert verifier.decode(token) == {"sub": kid}
 
 
-def test_token_kid_must_be_a_string(
-    mixed_jwks: ryjwt.PublicKey,
-    private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],
-) -> None:
-    signer = ryjwt.PrivateKey(private_pems["ES256"], algorithms=["ES256"])
-    token = signer.encode({"sub": "sub"}, header={"kid": 1})
+def test_token_kid_must_be_a_string(mixed_jwks: ryjwt.PublicKey) -> None:
+    """Checked before the signature, which picking the key by `kid` comes before."""
+    token = f"{b64(b'{"alg":"ES256","kid":1}')}.{b64(b'{"sub":"sub"}')}.{b64(bytes(64))}"
 
     with pytest.raises(ryjwt.DecodeError, match="kid must be a string"):
         mixed_jwks.decode(token)

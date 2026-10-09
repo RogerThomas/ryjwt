@@ -19,7 +19,7 @@ pub struct Segments<'a> {
 
 /// Real headers have a handful of parameters; capping them bounds the duplicate check (quadratic,
 /// but cheaper than hashing at this size) on attacker-controlled input.
-const MAX_HEADER_PARAMETERS: usize = 64;
+pub const MAX_HEADER_PARAMETERS: usize = 64;
 
 pub fn not_three_segments() -> PyErr {
     DecodeError::new_err("Token must have exactly three segments")

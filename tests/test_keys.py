@@ -1,4 +1,5 @@
 import base64
+import datetime
 import hashlib
 from pathlib import Path
 from typing import Any
@@ -6,8 +7,10 @@ from typing import Any
 import pytest
 import ryjwt
 from _support import ASYMMETRIC_ALGORITHMS, SigningKey, private_pem, public_pem
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import ed448, rsa
+from cryptography import x509
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import ec, ed448, rsa
+from cryptography.x509.oid import NameOID
 
 type KeyClass = type[ryjwt.PrivateKey] | type[ryjwt.PublicKey]
 
@@ -106,6 +109,15 @@ def test_algorithms_property(
         pytest.param("sk-ssh-ed25519@openssh.com AAAA", "asymmetric", id="ssh-fido"),
         pytest.param("sk-ecdsa-sha2-nistp256@openssh.com AAAA", "asymmetric", id="ssh-fido-ecdsa"),
         pytest.param("\n  ssh-rsa AAAA", "asymmetric", id="leading-whitespace"),
+        pytest.param("\u00a0ssh-rsa AAAA", "asymmetric", id="leading-no-break-space"),
+        pytest.param(b"\xef\xbb\xbfssh-rsa AAAA", "asymmetric", id="ssh-after-bom"),
+        pytest.param(b'\xef\xbb\xbf{"keys": [{"kty": "OKP"}]}', "asymmetric", id="jwks-after-bom"),
+        pytest.param('[{"kty": "OKP"}]', "asymmetric", id="jwk-array"),
+        pytest.param('[[{"kty": "OKP"}]]', "asymmetric", id="jwk-nested-array"),
+        pytest.param('{"\\u006bty": "OKP"}', "asymmetric", id="jwk-escaped-kty"),
+        pytest.param(
+            b"[" * 20_000 + b'{"kty": "OKP"}' + b"]" * 20_000, "asymmetric", id="jwk-deep-array"
+        ),
         pytest.param("\ud800" * 40, "lone surrogate", id="lone-surrogate"),
     ],
 )
@@ -176,6 +188,66 @@ def test_hmac_rejects_public_key_der(
             algorithms=["HS256"],
             allow_short_secret=length_check == "skipped",
         )
+
+
+@pytest.mark.parametrize(
+    "encoding",
+    ["utf-8-sig", "utf-16", "utf-16-le", "utf-16-be", "utf-32", "utf-32-le", "utf-32-be"],
+)
+@pytest.mark.parametrize(
+    "key",
+    [
+        pytest.param('{"kty": "OKP", "crv": "Ed25519", "x": "x"}', id="jwk"),
+        pytest.param("-----BEGIN PUBLIC KEY-----\nMII=\n-----END PUBLIC KEY-----", id="pem"),
+        pytest.param("ssh-ed25519 AAAA", id="ssh"),
+    ],
+)
+def test_hmac_rejects_public_keys_in_any_text_encoding(key: str, encoding: str) -> None:
+    """As a file saved by a Windows tool can be: with a byte-order mark, or in UTF-16 or 32."""
+    with pytest.raises(ryjwt.InvalidKeyError, match="looks like an asymmetric key"):
+        ryjwt.SecretKey((" \n" + key).encode(encoding), algorithms=["HS256"])
+
+
+@pytest.fixture(name="certificate_der", scope="module")
+def _certificate_der(private_keys: dict[ryjwt.AsymmetricAlgorithm, SigningKey]) -> bytes:
+    """A self-signed certificate, as DER."""
+    key = private_keys["ES256"]
+    assert isinstance(key, ec.EllipticCurvePrivateKey)
+    name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "common-name")])
+    now = datetime.datetime.now(datetime.UTC)
+    certificate = (
+        x509
+        .CertificateBuilder()
+        .subject_name(name)
+        .issuer_name(name)
+        .public_key(key.public_key())
+        .serial_number(x509.random_serial_number())
+        .not_valid_before(now)
+        .not_valid_after(now + datetime.timedelta(days=1))
+        .sign(key, hashes.SHA256())
+    )
+    return certificate.public_bytes(serialization.Encoding.DER)
+
+
+@pytest.mark.parametrize("encoding", ["der", "base64", "base64url", "base64-lines"])
+def test_hmac_rejects_certificates(encoding: str, certificate_der: bytes) -> None:
+    """A certificate as DER, raw or in base64 (as a JWK's `x5c` holds it)."""
+    with pytest.raises(ryjwt.InvalidKeyError, match="looks like an asymmetric key"):
+        ryjwt.SecretKey(_encoded(certificate_der, encoding), algorithms=["HS256"])
+
+
+@pytest.mark.parametrize(
+    "secret",
+    [
+        pytest.param('{"this": "is just a json-shaped secret"}', id="json-without-kty"),
+        pytest.param('{"name": "kty", "secret": "a json-shaped secret"}', id="kty-as-a-value"),
+        pytest.param('{"k\\ty": "a json-shaped secret, k-tab-y"}', id="k-escaped-tab-y"),
+        pytest.param(b'["kty",' + b"[" * 20_000 + b"0" + b"]" * 20_000 + b"]", id="deep-array"),
+        pytest.param(b"\x30\x82not a DER key, just starting like one", id="der-like"),
+    ],
+)
+def test_hmac_accepts_secrets_that_only_look_like_keys(secret: str | bytes) -> None:
+    ryjwt.SecretKey(secret, algorithms=["HS256"])
 
 
 def test_hmac_accepts_random_secrets() -> None:

@@ -1,12 +1,14 @@
 """`JWKSClient`'s HTTP GET, with the standard library (`urllib.request`): one deadline for the
 whole fetch, and redirects aren't followed. https:// URLs go through the proxy urllib finds
 (`HTTPS_PROXY`/`NO_PROXY`, or the system settings on macOS and Windows); http:// ones, which are
-always to this machine, never go through a proxy.
+always to this machine, never go through a proxy. Requests say they're from ryjwt (`User-Agent:
+ryjwt/<version>`): some firewalls refuse urllib's default, `Python-urllib/<version>`.
 
 Imported on a client's first fetch only: `ssl` and `urllib.request` take ~25 ms to import.
 """
 
 import http.client
+import importlib.metadata
 import io
 import socket
 import ssl
@@ -19,6 +21,8 @@ from typing import ClassVar
 
 type Response = tuple[int, str | None, str | None, bytes]
 """What a fetch got: the status, the `Cache-Control` and `Age` headers, and the body."""
+
+USER_AGENT = f"ryjwt/{importlib.metadata.version('ryjwt')}"
 
 
 class _DeadlineReader(io.RawIOBase):
@@ -109,6 +113,7 @@ class HTTPGetter:
 
     def __post_init__(self) -> None:
         self._opener = urllib.request.OpenerDirector()
+        self._opener.addheaders = [("User-Agent", USER_AGENT)]
         proxies: dict[str, str] | None = {} if self._scheme == "http" else None  # None: urllib's
         self._opener.add_handler(urllib.request.ProxyHandler(proxies))
         self._opener.add_handler(_HTTPHandler())
