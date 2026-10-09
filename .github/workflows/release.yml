@@ -220,9 +220,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # The x86_64 wheels are built on an arm64 runner too: it compiles for x86_64 as fast as for
+        # itself, where an Intel runner takes twice as long. PyO3 doesn't count x86_64 from arm64 on
+        # macOS as cross-compiling, so the arm64 Pythons below serve for both.
         platform:
           - name: macOS x86_64
-            runner: macos-15-intel
+            runner: macos-15
             target: x86_64-apple-darwin
           - name: macOS arm64
             runner: macos-15
@@ -273,16 +276,20 @@ jobs:
           if-no-files-found: error
 
   test-macos-windows:
-    name: Test ${{ matrix.platform.name }}
+    name: Test ${{ matrix.platform.name }}, Python ${{ matrix.python }}
     needs: build-macos-windows
     # Explicit: on pull requests the release-please job is skipped, and a skip would otherwise
     # carry down to here even though the build ran.
     if: ${{ !cancelled() && needs.build-macos-windows.result == 'success' }}
     runs-on: ${{ matrix.platform.runner }}
-    timeout-minutes: 60
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
+        # Each wheel on its own architecture, unlike the builds: an arm64 runner can't test the
+        # x86_64 wheels under Rosetta, as cryptography (which the tests use) has no x86_64 macOS
+        # wheels and can't be built for x86_64 there. Each Python in a job of its own, in parallel:
+        # on the slow Intel runner, building cryptography takes as long as the tests.
         platform:
           - name: macOS x86_64
             runner: macos-15-intel
@@ -293,6 +300,7 @@ jobs:
           - name: Windows x64
             runner: windows-2025
             target: x86_64-pc-windows-msvc
+        python: ["3.12", "3.13", "3.14", "3.14t"]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -312,7 +320,8 @@ jobs:
         # a request for 3.14 could find its free-threaded 3.14t, which can't load a cp314 wheel.
         env:
           UV_PYTHON_PREFERENCE: only-managed
-        run: sh .github/scripts/test-wheel.sh dist 3.12 3.13 3.14 3.14t
+          PYTHON: ${{ matrix.python }}
+        run: sh .github/scripts/test-wheel.sh dist "$PYTHON"
 
   build-sdist:
     name: Build sdist
