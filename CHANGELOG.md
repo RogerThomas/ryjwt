@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/RogerThomas/ryjwt/compare/v0.0.0-alpha.1...v0.1.0) (2026-10-09)
+
+
+### Miscellaneous Chores
+
+* release 0.1.0, the first non-pre-release version ([#11](https://github.com/RogerThomas/ryjwt/issues/11)) ([9d5cb2c](https://github.com/RogerThomas/ryjwt/commit/9d5cb2c0f04ea32fa6859dd842e27292e8c07fe6))
+
 ## [0.0.0-alpha.1](https://github.com/RogerThomas/ryjwt/compare/v0.0.0-alpha.0...v0.0.0-alpha.1) (2026-10-09)
 
 
