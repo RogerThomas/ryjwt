@@ -11,10 +11,10 @@
       "payload_size": "typical",
       "token_len": 661,
       "iterations": 20000,
-      "ops_per_sec": 861292.4287184697,
-      "mean_us": 1.16104585,
-      "p50_us": 1.208,
-      "p99_us": 1.541
+      "ops_per_sec": 636493.6228271818,
+      "mean_us": 1.5711076499999999,
+      "p50_us": 1.622,
+      "p99_us": 1.903
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -24,11 +24,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 6133,
-      "ops_per_sec": 30719.507926877755,
-      "mean_us": 32.55260476112832,
-      "p50_us": 31.875,
-      "p99_us": 41.417410000000004
+      "iterations": 5584,
+      "ops_per_sec": 28038.554156806287,
+      "mean_us": 35.66517711318051,
+      "p50_us": 35.744,
+      "p99_us": 41.7632
     }
   ],
   "first_fetch": [],

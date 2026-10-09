@@ -11,10 +11,10 @@
       "payload_size": "typical",
       "token_len": 661,
       "iterations": 20000,
-      "ops_per_sec": 303947.898710153,
-      "mean_us": 3.29003755,
-      "p50_us": 3.209,
-      "p99_us": 4.208
+      "ops_per_sec": 291744.38372368587,
+      "mean_us": 3.4276581,
+      "p50_us": 3.405,
+      "p99_us": 3.535
     },
     {
       "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
@@ -24,11 +24,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 5604,
-      "ops_per_sec": 28838.57086602522,
-      "mean_us": 34.675782119914345,
-      "p50_us": 33.959,
-      "p99_us": 42.208
+      "iterations": 5272,
+      "ops_per_sec": 26345.573690758414,
+      "mean_us": 37.9570402124431,
+      "p50_us": 37.697,
+      "p99_us": 43.546
     }
   ],
   "first_fetch": [],

@@ -11,10 +11,10 @@
       "payload_size": "small",
       "token_len": 231,
       "iterations": 20000,
-      "ops_per_sec": 1773213.4475542866,
-      "mean_us": 0.5639479000000001,
-      "p50_us": 0.625,
-      "p99_us": 0.708
+      "ops_per_sec": 1255417.2825011527,
+      "mean_us": 0.7965479,
+      "p50_us": 0.841,
+      "p99_us": 1.05101
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -25,10 +25,10 @@
       "payload_size": "typical",
       "token_len": 661,
       "iterations": 20000,
-      "ops_per_sec": 877269.9359592946,
-      "mean_us": 1.1399000000000001,
-      "p50_us": 1.167,
-      "p99_us": 1.292
+      "ops_per_sec": 670570.684487038,
+      "mean_us": 1.4912671,
+      "p50_us": 1.532,
+      "p99_us": 1.613
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -39,10 +39,10 @@
       "payload_size": "medium",
       "token_len": 2244,
       "iterations": 20000,
-      "ops_per_sec": 317017.7104163048,
-      "mean_us": 3.1543978999999998,
-      "p50_us": 3.208,
-      "p99_us": 3.375
+      "ops_per_sec": 259716.2073211116,
+      "mean_us": 3.85035655,
+      "p50_us": 4.016,
+      "p99_us": 5.1085
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -52,11 +52,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 6130,
-      "ops_per_sec": 31334.435409216505,
-      "mean_us": 31.913771125611746,
-      "p50_us": 31.875,
-      "p99_us": 36.583
+      "iterations": 5438,
+      "ops_per_sec": 27696.98697629406,
+      "mean_us": 36.10501029790364,
+      "p50_us": 35.884,
+      "p99_us": 42.00409
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -67,10 +67,10 @@
       "payload_size": "small",
       "token_len": 231,
       "iterations": 20000,
-      "ops_per_sec": 1816001.2958985248,
-      "mean_us": 0.5506603999999999,
-      "p50_us": 0.625,
-      "p99_us": 0.792
+      "ops_per_sec": 1276295.435080499,
+      "mean_us": 0.78351765,
+      "p50_us": 0.861,
+      "p99_us": 1.1220899999999998
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -81,10 +81,10 @@
       "payload_size": "typical",
       "token_len": 661,
       "iterations": 20000,
-      "ops_per_sec": 872589.2703543772,
-      "mean_us": 1.14601455,
-      "p50_us": 1.208,
-      "p99_us": 1.542
+      "ops_per_sec": 650645.9206046062,
+      "mean_us": 1.53693425,
+      "p50_us": 1.563,
+      "p99_us": 1.843
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -95,10 +95,10 @@
       "payload_size": "medium",
       "token_len": 2244,
       "iterations": 20000,
-      "ops_per_sec": 310187.72499078896,
-      "mean_us": 3.2238542000000003,
-      "p50_us": 3.25,
-      "p99_us": 4.208
+      "ops_per_sec": 257472.83359075038,
+      "mean_us": 3.8839049,
+      "p50_us": 3.876,
+      "p99_us": 4.186
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -108,11 +108,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 5893,
-      "ops_per_sec": 31235.741206143684,
-      "mean_us": 32.01460767011709,
-      "p50_us": 31.916,
-      "p99_us": 36.5
+      "iterations": 5635,
+      "ops_per_sec": 27830.604617045447,
+      "mean_us": 35.93166637089619,
+      "p50_us": 35.754,
+      "p99_us": 41.915800000000004
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -123,10 +123,10 @@
       "payload_size": "small",
       "token_len": 231,
       "iterations": 20000,
-      "ops_per_sec": 1857182.6539140122,
-      "mean_us": 0.5384500000000001,
-      "p50_us": 0.584,
-      "p99_us": 0.625
+      "ops_per_sec": 1183166.4753092087,
+      "mean_us": 0.8451896000000001,
+      "p50_us": 0.852,
+      "p99_us": 1.122
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -137,10 +137,10 @@
       "payload_size": "typical",
       "token_len": 661,
       "iterations": 20000,
-      "ops_per_sec": 816619.5803816618,
-      "mean_us": 1.2245604,
-      "p50_us": 1.25,
-      "p99_us": 1.292
+      "ops_per_sec": 664551.3553990079,
+      "mean_us": 1.5047746,
+      "p50_us": 1.533,
+      "p99_us": 1.80201
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -151,10 +151,10 @@
       "payload_size": "medium",
       "token_len": 2244,
       "iterations": 20000,
-      "ops_per_sec": 316643.7886251989,
-      "mean_us": 3.1581229,
-      "p50_us": 3.208,
-      "p99_us": 4.042
+      "ops_per_sec": 249079.36530393187,
+      "mean_us": 4.0147846,
+      "p50_us": 4.066,
+      "p99_us": 4.457
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -164,11 +164,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 6160,
-      "ops_per_sec": 31255.311753976046,
-      "mean_us": 31.994561688311688,
-      "p50_us": 31.959,
-      "p99_us": 36.542
+      "iterations": 5484,
+      "ops_per_sec": 26947.023419705227,
+      "mean_us": 37.109850109409194,
+      "p50_us": 37.587,
+      "p99_us": 44.177099999999996
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -179,10 +179,10 @@
       "payload_size": "small",
       "token_len": 231,
       "iterations": 20000,
-      "ops_per_sec": 1837805.9096854392,
-      "mean_us": 0.5441271000000001,
-      "p50_us": 0.625,
-      "p99_us": 0.75
+      "ops_per_sec": 1205435.1382775742,
+      "mean_us": 0.8295759500000001,
+      "p50_us": 0.881,
+      "p99_us": 1.151
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -193,10 +193,10 @@
       "payload_size": "typical",
       "token_len": 661,
       "iterations": 20000,
-      "ops_per_sec": 859945.3453136332,
-      "mean_us": 1.1628646,
-      "p50_us": 1.208,
-      "p99_us": 1.33301
+      "ops_per_sec": 644346.6906080123,
+      "mean_us": 1.55195955,
+      "p50_us": 1.553,
+      "p99_us": 1.80201
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -207,10 +207,10 @@
       "payload_size": "medium",
       "token_len": 2244,
       "iterations": 20000,
-      "ops_per_sec": 312217.66254344216,
-      "mean_us": 3.2028937500000003,
-      "p50_us": 3.25,
-      "p99_us": 3.375
+      "ops_per_sec": 260743.33936680385,
+      "mean_us": 3.83518905,
+      "p50_us": 3.976,
+      "p99_us": 4.3070900000000005
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -220,11 +220,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 6158,
-      "ops_per_sec": 31081.512103349265,
-      "mean_us": 32.17346687236116,
-      "p50_us": 32.0,
-      "p99_us": 38.04309
+      "iterations": 5648,
+      "ops_per_sec": 28209.922298745856,
+      "mean_us": 35.44852018413597,
+      "p50_us": 36.605,
+      "p99_us": 45.031510000000004
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -234,11 +234,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 12424,
-      "ops_per_sec": 62339.85208615669,
-      "mean_us": 16.041103187379264,
-      "p50_us": 15.959,
-      "p99_us": 20.08441
+      "iterations": 15566,
+      "ops_per_sec": 77815.6056692633,
+      "mean_us": 12.85089271489143,
+      "p50_us": 12.72,
+      "p99_us": 18.2781
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -248,11 +248,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 11910,
-      "ops_per_sec": 60226.51937286121,
-      "mean_us": 16.603981276238454,
-      "p50_us": 16.584,
-      "p99_us": 21.16601
+      "iterations": 14549,
+      "ops_per_sec": 74999.58734504317,
+      "mean_us": 13.333406694618187,
+      "p50_us": 13.13,
+      "p99_us": 18.768
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -262,11 +262,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 10221,
-      "ops_per_sec": 52589.68354748344,
-      "mean_us": 19.015136288034437,
-      "p50_us": 18.709,
-      "p99_us": 23.75
+      "iterations": 12502,
+      "ops_per_sec": 63535.73391311884,
+      "mean_us": 15.739174452087665,
+      "p50_us": 16.395,
+      "p99_us": 22.344189999999998
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -276,11 +276,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 4127,
-      "ops_per_sec": 20781.295959482606,
-      "mean_us": 48.1201943300218,
-      "p50_us": 47.917,
-      "p99_us": 54.667
+      "iterations": 4113,
+      "ops_per_sec": 20459.945850537184,
+      "mean_us": 48.87598468271335,
+      "p50_us": 50.226,
+      "p99_us": 57.69711
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -290,11 +290,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 5464,
-      "ops_per_sec": 27024.893834554372,
-      "mean_us": 37.00292057101025,
-      "p50_us": 36.5,
-      "p99_us": 45.375
+      "iterations": 7708,
+      "ops_per_sec": 38780.160102291076,
+      "mean_us": 25.786381421899325,
+      "p50_us": 25.678,
+      "p99_us": 31.36809
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -304,11 +304,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 5260,
-      "ops_per_sec": 26879.356439117702,
-      "mean_us": 37.2032716730038,
-      "p50_us": 37.083,
-      "p99_us": 41.75
+      "iterations": 7221,
+      "ops_per_sec": 39535.20743539155,
+      "mean_us": 25.29391053870655,
+      "p50_us": 26.34,
+      "p99_us": 32.810190000000006
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -318,11 +318,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 4736,
-      "ops_per_sec": 25545.1814214901,
-      "mean_us": 39.146326013513516,
-      "p50_us": 39.0,
-      "p99_us": 44.875
+      "iterations": 6837,
+      "ops_per_sec": 34760.10754351225,
+      "mean_us": 28.768610647945007,
+      "p50_us": 28.654,
+      "p99_us": 57.955529999999996
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -332,11 +332,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 2880,
-      "ops_per_sec": 14496.425365226993,
-      "mean_us": 68.98252326388888,
-      "p50_us": 68.708,
-      "p99_us": 88.625
+      "iterations": 2433,
+      "ops_per_sec": 16138.422854617565,
+      "mean_us": 61.96392355117139,
+      "p50_us": 61.102,
+      "p99_us": 67.59778999999999
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -346,11 +346,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 3123,
-      "ops_per_sec": 15739.139234186101,
-      "mean_us": 63.53587608069164,
-      "p50_us": 63.042,
-      "p99_us": 74.603
+      "iterations": 4522,
+      "ops_per_sec": 22840.535809068275,
+      "mean_us": 43.78181003980539,
+      "p50_us": 43.746,
+      "p99_us": 49.635
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -360,11 +360,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 3099,
-      "ops_per_sec": 15640.63716735837,
-      "mean_us": 63.936014198128426,
-      "p50_us": 63.542,
-      "p99_us": 70.94216
+      "iterations": 4379,
+      "ops_per_sec": 22370.936186488172,
+      "mean_us": 44.70085613153688,
+      "p50_us": 44.267,
+      "p99_us": 50.4763
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -374,11 +374,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 2944,
-      "ops_per_sec": 14895.82035778273,
-      "mean_us": 67.13292561141304,
-      "p50_us": 65.625,
-      "p99_us": 75.61828
+      "iterations": 4249,
+      "ops_per_sec": 20836.04153244383,
+      "mean_us": 47.99376112026359,
+      "p50_us": 48.063,
+      "p99_us": 54.7936
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -388,11 +388,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 2020,
-      "ops_per_sec": 10204.116014070425,
-      "mean_us": 97.9996698019802,
-      "p50_us": 97.709,
-      "p99_us": 107.86311
+      "iterations": 2461,
+      "ops_per_sec": 12467.145323317456,
+      "mean_us": 80.21082405526208,
+      "p50_us": 81.754,
+      "p99_us": 176.05774
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -402,11 +402,11 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 6290,
-      "ops_per_sec": 31898.310822161213,
-      "mean_us": 31.34962241653418,
-      "p50_us": 31.167,
-      "p99_us": 39.41601
+      "iterations": 5651,
+      "ops_per_sec": 29070.8534429886,
+      "mean_us": 34.39871491771368,
+      "p50_us": 33.831,
+      "p99_us": 66.341
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -416,11 +416,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 6142,
-      "ops_per_sec": 31157.315293758445,
-      "mean_us": 32.095191468577006,
-      "p50_us": 31.792,
-      "p99_us": 35.875
+      "iterations": 5722,
+      "ops_per_sec": 28595.789751219978,
+      "mean_us": 34.970182977979725,
+      "p50_us": 35.013,
+      "p99_us": 41.433
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -430,11 +430,11 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 5611,
-      "ops_per_sec": 28908.13321389172,
-      "mean_us": 34.592340937444305,
-      "p50_us": 33.792,
-      "p99_us": 37.917
+      "iterations": 5224,
+      "ops_per_sec": 26692.94320540839,
+      "mean_us": 37.46308499234303,
+      "p50_us": 37.317,
+      "p99_us": 43.5761
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -444,11 +444,11 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 3104,
-      "ops_per_sec": 15735.700338204508,
-      "mean_us": 63.5497612757732,
-      "p50_us": 63.458,
-      "p99_us": 68.083
+      "iterations": 2810,
+      "ops_per_sec": 14306.89984408432,
+      "mean_us": 69.89634448398577,
+      "p50_us": 69.155,
+      "p99_us": 87.02686
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -458,11 +458,11 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 1257,
-      "ops_per_sec": 6773.927999353454,
-      "mean_us": 147.62483452665074,
-      "p50_us": 149.834,
-      "p99_us": 184.91616
+      "iterations": 1107,
+      "ops_per_sec": 7696.157856915786,
+      "mean_us": 129.93496476964768,
+      "p50_us": 134.624,
+      "p99_us": 144.8584
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -472,11 +472,11 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 1305,
-      "ops_per_sec": 6807.063436745494,
-      "mean_us": 146.90622605363984,
-      "p50_us": 145.5,
-      "p99_us": 161.96148000000002
+      "iterations": 1466,
+      "ops_per_sec": 7545.992489647656,
+      "mean_us": 132.52067257844473,
+      "p50_us": 136.506,
+      "p99_us": 147.31322
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -486,11 +486,11 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 1286,
-      "ops_per_sec": 6652.5169803168055,
-      "mean_us": 150.31904510108865,
-      "p50_us": 149.458,
-      "p99_us": 161.39264
+      "iterations": 1418,
+      "ops_per_sec": 7347.715804757926,
+      "mean_us": 136.09671720733428,
+      "p50_us": 137.698,
+      "p99_us": 178.039
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -500,11 +500,11 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 1074,
-      "ops_per_sec": 5396.143207631618,
-      "mean_us": 185.31754283054005,
-      "p50_us": 184.417,
-      "p99_us": 209.60211999999999
+      "iterations": 1087,
+      "ops_per_sec": 5440.71558053166,
+      "mean_us": 183.79935234590616,
+      "p50_us": 186.713,
+      "p99_us": 224.01170000000002
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -514,445 +514,445 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
+      "iterations": 832,
+      "ops_per_sec": 4129.348486235688,
+      "mean_us": 242.168953125,
+      "p50_us": 241.02,
+      "p99_us": 294.60676
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "pem",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 834,
+      "ops_per_sec": 4201.832113671791,
+      "mean_us": 237.99142206235013,
+      "p50_us": 239.402,
+      "p99_us": 265.6675
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "pem",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 826,
+      "ops_per_sec": 4139.988882375618,
+      "mean_us": 241.54654237288133,
+      "p50_us": 243.699,
+      "p99_us": 278.65755
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "pem",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 694,
+      "ops_per_sec": 3454.4372592536597,
+      "mean_us": 289.48275072046107,
+      "p50_us": 286.3935,
+      "p99_us": 317.93156
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "pem",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 8104,
+      "ops_per_sec": 41371.218403772094,
+      "mean_us": 24.171393509378085,
+      "p50_us": 23.996,
+      "p99_us": 29.895
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "pem",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 7875,
+      "ops_per_sec": 39820.70216868095,
+      "mean_us": 25.11256571428571,
+      "p50_us": 24.978,
+      "p99_us": 30.987099999999998
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "pem",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 7039,
+      "ops_per_sec": 35213.353904322015,
+      "mean_us": 28.398317374627077,
+      "p50_us": 29.195,
+      "p99_us": 35.604099999999995
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "pem",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 2673,
+      "ops_per_sec": 13539.233073308302,
+      "mean_us": 73.85942723531612,
+      "p50_us": 71.559,
+      "p99_us": 81.7132
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 15741,
+      "ops_per_sec": 83085.07964410323,
+      "mean_us": 12.03585534591195,
+      "p50_us": 11.928,
+      "p99_us": 17.176
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 14910,
+      "ops_per_sec": 74011.47033837686,
+      "mean_us": 13.51141918175721,
+      "p50_us": 13.721,
+      "p99_us": 19.2991
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 12136,
+      "ops_per_sec": 64337.81142560964,
+      "mean_us": 15.542959541858933,
+      "p50_us": 15.954,
+      "p99_us": 21.632009999999998
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 3990,
+      "ops_per_sec": 20813.385867779853,
+      "mean_us": 48.0460030075188,
+      "p50_us": 48.153,
+      "p99_us": 88.36272
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 7958,
+      "ops_per_sec": 39840.57521980703,
+      "mean_us": 25.10003920583061,
+      "p50_us": 26.17,
+      "p99_us": 137.95246
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 7567,
+      "ops_per_sec": 37871.10953487486,
+      "mean_us": 26.405352583586627,
+      "p50_us": 26.3695,
+      "p99_us": 32.179
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 6887,
+      "ops_per_sec": 34613.07144575196,
+      "mean_us": 28.890819515028312,
+      "p50_us": 28.613,
+      "p99_us": 34.65231
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 3250,
+      "ops_per_sec": 16382.204472000063,
+      "mean_us": 61.04184584615385,
+      "p50_us": 59.45,
+      "p99_us": 76.046
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 4587,
+      "ops_per_sec": 23075.41749212932,
+      "mean_us": 43.33616067146283,
+      "p50_us": 41.673,
+      "p99_us": 48.123599999999996
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 4692,
+      "ops_per_sec": 22955.923501586585,
+      "mean_us": 43.561741261722084,
+      "p50_us": 43.816,
+      "p99_us": 50.23601
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 4256,
+      "ops_per_sec": 21993.581532899098,
+      "mean_us": 45.467810620300746,
+      "p50_us": 46.01,
+      "p99_us": 52.649010000000004
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 2507,
+      "ops_per_sec": 13042.264939602348,
+      "mean_us": 76.67379896290386,
+      "p50_us": 76.636,
+      "p99_us": 98.503
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 5791,
+      "ops_per_sec": 29064.340922480602,
+      "mean_us": 34.406422724917974,
+      "p50_us": 32.609,
+      "p99_us": 38.5281
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 5953,
+      "ops_per_sec": 29874.884455634918,
+      "mean_us": 33.47293280698807,
+      "p50_us": 33.982,
+      "p99_us": 41.25211
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 5409,
+      "ops_per_sec": 28100.42702986154,
+      "mean_us": 35.58664780920688,
+      "p50_us": 37.016,
+      "p99_us": 177.36184
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 2852,
+      "ops_per_sec": 14353.891459506554,
+      "mean_us": 69.6675185834502,
+      "p50_us": 69.545,
+      "p99_us": 88.0015
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 1481,
+      "ops_per_sec": 7413.783108849053,
+      "mean_us": 134.88390276839974,
+      "p50_us": 130.6075,
+      "p99_us": 310.45509999999996
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 1494,
+      "ops_per_sec": 7559.263449049145,
+      "mean_us": 132.28802074966532,
+      "p50_us": 133.162,
+      "p99_us": 143.1826
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 1461,
+      "ops_per_sec": 7300.419789628186,
+      "mean_us": 136.978424366872,
+      "p50_us": 136.406,
+      "p99_us": 195.1284
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 1131,
+      "ops_per_sec": 5583.434633671816,
+      "mean_us": 179.10122811671087,
+      "p50_us": 181.345,
+      "p99_us": 197.35048
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 823,
+      "ops_per_sec": 4240.645294923921,
+      "mean_us": 235.81316767922235,
+      "p50_us": 231.996,
+      "p99_us": 243.14347
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 846,
+      "ops_per_sec": 4273.006507228268,
+      "mean_us": 234.02725886524823,
+      "p50_us": 235.096,
+      "p99_us": 248.23760000000001
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 830,
+      "ops_per_sec": 4227.226998677489,
+      "mean_us": 236.56169879518072,
+      "p50_us": 241.997,
+      "p99_us": 261.15676
+    },
+    {
+      "impl": "ryjwt 0.1.0 \u2192 dict",
+      "source": "jwks",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
       "iterations": 704,
-      "ops_per_sec": 3618.970557299567,
-      "mean_us": 276.3216732954545,
-      "p50_us": 274.875,
-      "p99_us": 305.43940000000003
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "pem",
-      "name": "typical-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "typical",
-      "token_len": 794,
-      "iterations": 718,
-      "ops_per_sec": 3612.629365842463,
-      "mean_us": 276.80669637883005,
-      "p50_us": 274.25,
-      "p99_us": 299.03891999999996
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "pem",
-      "name": "medium-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "medium",
-      "token_len": 2407,
-      "iterations": 704,
-      "ops_per_sec": 3556.9665035664475,
-      "mean_us": 281.13843607954544,
-      "p50_us": 284.083,
-      "p99_us": 408.00647999999995
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "pem",
-      "name": "large-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "large",
-      "token_len": 21047,
-      "iterations": 639,
-      "ops_per_sec": 3203.617057124082,
-      "mean_us": 312.1471705790297,
-      "p50_us": 316.458,
-      "p99_us": 443.49125
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "pem",
-      "name": "small-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "small",
-      "token_len": 306,
-      "iterations": 5962,
-      "ops_per_sec": 32007.0220034855,
-      "mean_us": 31.243144079168065,
-      "p50_us": 31.0,
-      "p99_us": 35.959410000000005
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "pem",
-      "name": "typical-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "typical",
-      "token_len": 706,
-      "iterations": 6232,
-      "ops_per_sec": 31380.256609027216,
-      "mean_us": 31.867170892169447,
-      "p50_us": 31.667,
-      "p99_us": 36.041419999999995
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "pem",
-      "name": "medium-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "medium",
-      "token_len": 2319,
-      "iterations": 5797,
-      "ops_per_sec": 29113.822550884932,
-      "mean_us": 34.34794583405209,
-      "p50_us": 34.208,
-      "p99_us": 41.375
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "pem",
-      "name": "large-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "large",
-      "token_len": 20959,
-      "iterations": 2925,
-      "ops_per_sec": 14670.070711546377,
-      "mean_us": 68.16599726495726,
-      "p50_us": 68.125,
-      "p99_us": 77.27324
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "small-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 561,
-      "iterations": 12362,
-      "ops_per_sec": 62125.662978620894,
-      "mean_us": 16.096407701019253,
-      "p50_us": 16.0,
-      "p99_us": 20.125
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "typical-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 961,
-      "iterations": 11843,
-      "ops_per_sec": 60161.630623925026,
-      "mean_us": 16.621889892763658,
-      "p50_us": 16.625,
-      "p99_us": 21.25084
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "medium-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2574,
-      "iterations": 10429,
-      "ops_per_sec": 53458.60022779135,
-      "mean_us": 18.70606405216224,
-      "p50_us": 18.666,
-      "p99_us": 30.25042
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "large-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21214,
-      "iterations": 4122,
-      "ops_per_sec": 20757.107279860957,
-      "mean_us": 48.17626977195536,
-      "p50_us": 48.0,
-      "p99_us": 53.5
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "small-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 731,
-      "iterations": 5443,
-      "ops_per_sec": 27387.60476456972,
-      "mean_us": 36.51286808745177,
-      "p50_us": 36.375,
-      "p99_us": 40.583
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "typical-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 1131,
-      "iterations": 5329,
-      "ops_per_sec": 26955.806105111213,
-      "mean_us": 37.09775905423157,
-      "p50_us": 37.084,
-      "p99_us": 44.585080000000005
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "medium-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2744,
-      "iterations": 5080,
-      "ops_per_sec": 25394.630051529304,
-      "mean_us": 39.378403937007874,
-      "p50_us": 38.958,
-      "p99_us": 43.79101
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "large-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21384,
-      "iterations": 2891,
-      "ops_per_sec": 14505.676159891627,
-      "mean_us": 68.93853061224489,
-      "p50_us": 68.708,
-      "p99_us": 77.86030000000001
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "small-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 902,
-      "iterations": 3077,
-      "ops_per_sec": 15836.83137130845,
-      "mean_us": 63.14394442638934,
-      "p50_us": 63.792,
-      "p99_us": 78.1375
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "typical-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 1302,
-      "iterations": 3052,
-      "ops_per_sec": 15672.516945421106,
-      "mean_us": 63.80596068152032,
-      "p50_us": 63.708,
-      "p99_us": 76.21724
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "medium-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2915,
-      "iterations": 3019,
-      "ops_per_sec": 15099.319009209394,
-      "mean_us": 66.2281523683339,
-      "p50_us": 65.875,
-      "p99_us": 77.74691
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "large-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21555,
-      "iterations": 2086,
-      "ops_per_sec": 10443.567917914075,
-      "mean_us": 95.75271668264622,
-      "p50_us": 95.125,
-      "p99_us": 100.69624
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "small-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "small",
-      "token_len": 304,
-      "iterations": 6375,
-      "ops_per_sec": 32035.632105434106,
-      "mean_us": 31.215241725490195,
-      "p50_us": 31.084,
-      "p99_us": 36.33301
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "typical-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "typical",
-      "token_len": 704,
-      "iterations": 6133,
-      "ops_per_sec": 31330.86580500264,
-      "mean_us": 31.917407141692482,
-      "p50_us": 31.791,
-      "p99_us": 38.75
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "medium-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "medium",
-      "token_len": 2317,
-      "iterations": 5861,
-      "ops_per_sec": 29468.99495693534,
-      "mean_us": 33.93397031223341,
-      "p50_us": 33.792,
-      "p99_us": 38.58342
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "large-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "large",
-      "token_len": 20957,
-      "iterations": 3132,
-      "ops_per_sec": 15724.601932480276,
-      "mean_us": 63.594614623243935,
-      "p50_us": 63.375,
-      "p99_us": 68.0
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "small-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "small",
-      "token_len": 346,
-      "iterations": 1351,
-      "ops_per_sec": 6746.513459521566,
-      "mean_us": 148.22470984455958,
-      "p50_us": 146.958,
-      "p99_us": 164.72484
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "typical-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "typical",
-      "token_len": 746,
-      "iterations": 1361,
-      "ops_per_sec": 6831.273384845417,
-      "mean_us": 146.38559221160912,
-      "p50_us": 145.5,
-      "p99_us": 169.02419
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "medium-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "medium",
-      "token_len": 2359,
-      "iterations": 1242,
-      "ops_per_sec": 6649.339907392577,
-      "mean_us": 150.39086795491144,
-      "p50_us": 149.417,
-      "p99_us": 171.1955
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "large-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "large",
-      "token_len": 20999,
-      "iterations": 1080,
-      "ops_per_sec": 5405.255475846611,
-      "mean_us": 185.00513148148147,
-      "p50_us": 187.75,
-      "p99_us": 226.36070999999998
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "small-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "small",
-      "token_len": 394,
-      "iterations": 688,
-      "ops_per_sec": 3622.8409993693253,
-      "mean_us": 276.0264665697674,
-      "p50_us": 275.084,
-      "p99_us": 312.83198
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "typical-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "typical",
-      "token_len": 794,
-      "iterations": 725,
-      "ops_per_sec": 3622.3737790102177,
-      "mean_us": 276.0620689655172,
-      "p50_us": 274.291,
-      "p99_us": 311.01079
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "medium-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "medium",
-      "token_len": 2407,
-      "iterations": 712,
-      "ops_per_sec": 3537.478800403775,
-      "mean_us": 282.6872064606742,
-      "p50_us": 278.875,
-      "p99_us": 298.40264
-    },
-    {
-      "impl": "ryjwt 0.1.0 \u2192 dict",
-      "source": "jwks",
-      "name": "large-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "large",
-      "token_len": 21047,
-      "iterations": 640,
-      "ops_per_sec": 3204.2101879975708,
-      "mean_us": 312.0893890625,
-      "p50_us": 310.375,
-      "p99_us": 332.82756
+      "ops_per_sec": 3640.194245108333,
+      "mean_us": 274.7106150568182,
+      "p50_us": 274.055,
+      "p99_us": 296.36064
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -962,11 +962,11 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 6393,
-      "ops_per_sec": 32000.56719040661,
-      "mean_us": 31.249446112936024,
-      "p50_us": 30.959,
-      "p99_us": 39.625
+      "iterations": 8048,
+      "ops_per_sec": 41734.08439474014,
+      "mean_us": 23.961230119284295,
+      "p50_us": 24.748,
+      "p99_us": 30.8871
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -976,11 +976,11 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 6222,
-      "ops_per_sec": 31319.50793338187,
-      "mean_us": 31.928981838637092,
-      "p50_us": 31.708,
-      "p99_us": 40.333
+      "iterations": 7911,
+      "ops_per_sec": 40183.740113573236,
+      "mean_us": 24.885687523701176,
+      "p50_us": 25.178,
+      "p99_us": 31.33701
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -990,11 +990,11 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 5723,
-      "ops_per_sec": 28482.266656106545,
-      "mean_us": 35.109565262973966,
-      "p50_us": 34.167,
-      "p99_us": 38.5
+      "iterations": 6882,
+      "ops_per_sec": 34825.525987144516,
+      "mean_us": 28.71456989247312,
+      "p50_us": 29.4645,
+      "p99_us": 35.9441
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1004,11 +1004,11 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 2927,
-      "ops_per_sec": 14709.248018314527,
-      "mean_us": 67.98444072429108,
-      "p50_us": 67.833,
-      "p99_us": 80.92110000000001
+      "iterations": 2650,
+      "ops_per_sec": 13415.165233780213,
+      "mean_us": 74.54250339622641,
+      "p50_us": 74.153,
+      "p99_us": 85.844
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1018,11 +1018,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 12197,
-      "ops_per_sec": 61378.19145648888,
-      "mean_us": 16.292431827498564,
-      "p50_us": 16.208,
-      "p99_us": 20.333
+      "iterations": 15512,
+      "ops_per_sec": 78816.91261562495,
+      "mean_us": 12.687632220216607,
+      "p50_us": 12.699,
+      "p99_us": 18.15701
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1032,11 +1032,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 10976,
-      "ops_per_sec": 59208.73843300169,
-      "mean_us": 16.88939887026239,
-      "p50_us": 16.833,
-      "p99_us": 21.042
+      "iterations": 14777,
+      "ops_per_sec": 77018.68303232807,
+      "mean_us": 12.983862624348651,
+      "p50_us": 13.461,
+      "p99_us": 19.049
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1046,11 +1046,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 10461,
-      "ops_per_sec": 52697.331634015245,
-      "mean_us": 18.976292897428543,
-      "p50_us": 18.916,
-      "p99_us": 23.167
+      "iterations": 12641,
+      "ops_per_sec": 64314.26412942816,
+      "mean_us": 15.54865026501068,
+      "p50_us": 15.914,
+      "p99_us": 21.462
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1060,11 +1060,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 4090,
-      "ops_per_sec": 20495.392991443518,
-      "mean_us": 48.791452811735944,
-      "p50_us": 48.458,
-      "p99_us": 55.12584
+      "iterations": 4235,
+      "ops_per_sec": 20764.30377012438,
+      "mean_us": 48.15957284533648,
+      "p50_us": 48.383,
+      "p99_us": 55.1541
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1074,11 +1074,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 5388,
-      "ops_per_sec": 27027.21343936716,
-      "mean_us": 36.99974480326652,
-      "p50_us": 36.667,
-      "p99_us": 46.33342
+      "iterations": 7799,
+      "ops_per_sec": 38431.780337563985,
+      "mean_us": 26.020132068213872,
+      "p50_us": 25.178,
+      "p99_us": 31.56809
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1088,11 +1088,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 5192,
-      "ops_per_sec": 26731.395635971978,
-      "mean_us": 37.40919530046225,
-      "p50_us": 37.209,
-      "p99_us": 41.45801
+      "iterations": 7295,
+      "ops_per_sec": 37610.36515473033,
+      "mean_us": 26.58841507882111,
+      "p50_us": 27.081,
+      "p99_us": 32.9201
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1102,11 +1102,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 5035,
-      "ops_per_sec": 25294.209459173282,
-      "mean_us": 39.5347402184707,
-      "p50_us": 39.292,
-      "p99_us": 47.75041
+      "iterations": 6842,
+      "ops_per_sec": 34320.629288050244,
+      "mean_us": 29.136994884536684,
+      "p50_us": 29.314,
+      "p99_us": 35.6241
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1116,11 +1116,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 2535,
-      "ops_per_sec": 14417.628722992176,
-      "mean_us": 69.35953333333335,
-      "p50_us": 68.75,
-      "p99_us": 74.12332
+      "iterations": 3223,
+      "ops_per_sec": 16456.74437415752,
+      "mean_us": 60.76536022339435,
+      "p50_us": 61.323,
+      "p99_us": 69.01480000000001
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1130,11 +1130,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 3003,
-      "ops_per_sec": 15062.736372228777,
-      "mean_us": 66.38899966699967,
-      "p50_us": 66.083,
-      "p99_us": 77.90449000000001
+      "iterations": 4531,
+      "ops_per_sec": 22867.49851671644,
+      "mean_us": 43.73018759655705,
+      "p50_us": 44.067,
+      "p99_us": 50.01609
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1144,11 +1144,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 3071,
-      "ops_per_sec": 15608.098347466286,
-      "mean_us": 64.06930413546077,
-      "p50_us": 64.0,
-      "p99_us": 77.48752
+      "iterations": 4494,
+      "ops_per_sec": 22877.930079822545,
+      "mean_us": 43.71024810858923,
+      "p50_us": 44.417,
+      "p99_us": 50.33611
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1158,11 +1158,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 2976,
-      "ops_per_sec": 14916.230928275545,
-      "mean_us": 67.04106451612903,
-      "p50_us": 65.917,
-      "p99_us": 80.01476
+      "iterations": 4240,
+      "ops_per_sec": 21585.142840293644,
+      "mean_us": 46.32816226415095,
+      "p50_us": 44.918,
+      "p99_us": 51.0471
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1172,11 +1172,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 2025,
-      "ops_per_sec": 10437.911144809785,
-      "mean_us": 95.80460938271605,
-      "p50_us": 95.375,
-      "p99_us": 108.27688
+      "iterations": 2496,
+      "ops_per_sec": 12678.968517145866,
+      "mean_us": 78.87076923076924,
+      "p50_us": 79.29,
+      "p99_us": 104.35516
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1186,11 +1186,11 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 6304,
-      "ops_per_sec": 31483.701810508628,
-      "mean_us": 31.76246573604061,
-      "p50_us": 31.375,
-      "p99_us": 40.12542
+      "iterations": 5732,
+      "ops_per_sec": 28824.78234498374,
+      "mean_us": 34.69236950453594,
+      "p50_us": 35.164,
+      "p99_us": 41.30201
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1200,11 +1200,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 6191,
-      "ops_per_sec": 31198.31440612076,
-      "mean_us": 32.05301372960749,
-      "p50_us": 32.0,
-      "p99_us": 37.292
+      "iterations": 5563,
+      "ops_per_sec": 29054.876315198642,
+      "mean_us": 34.41763059500269,
+      "p50_us": 34.372,
+      "p99_us": 40.1211
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1214,11 +1214,11 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 5807,
-      "ops_per_sec": 29250.239201424447,
-      "mean_us": 34.18775460650939,
-      "p50_us": 34.041,
-      "p99_us": 40.833
+      "iterations": 5465,
+      "ops_per_sec": 27459.174588567355,
+      "mean_us": 36.41770064043916,
+      "p50_us": 36.004,
+      "p99_us": 41.7131
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1228,11 +1228,11 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 3116,
-      "ops_per_sec": 15596.041230227143,
-      "mean_us": 64.11883536585366,
-      "p50_us": 63.542,
-      "p99_us": 72.55307
+      "iterations": 2768,
+      "ops_per_sec": 14670.662832259972,
+      "mean_us": 68.16324602601156,
+      "p50_us": 68.954,
+      "p99_us": 79.0445
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1242,11 +1242,11 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 1348,
-      "ops_per_sec": 6765.774794169246,
-      "mean_us": 147.8027321958457,
-      "p50_us": 147.167,
-      "p99_us": 173.86639000000002
+      "iterations": 1475,
+      "ops_per_sec": 7432.615367380245,
+      "mean_us": 134.54214305084747,
+      "p50_us": 134.223,
+      "p99_us": 145.07667999999998
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1256,11 +1256,11 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 1341,
-      "ops_per_sec": 6775.827145203505,
-      "mean_us": 147.58345786726323,
-      "p50_us": 145.709,
-      "p99_us": 158.5747
+      "iterations": 1431,
+      "ops_per_sec": 7291.629681985482,
+      "mean_us": 137.14355276030747,
+      "p50_us": 135.825,
+      "p99_us": 168.30448
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1270,11 +1270,11 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 1321,
-      "ops_per_sec": 6602.159684881967,
-      "mean_us": 151.46558819076458,
-      "p50_us": 149.708,
-      "p99_us": 178.7246
+      "iterations": 1433,
+      "ops_per_sec": 7223.77570927534,
+      "mean_us": 138.4317620376832,
+      "p50_us": 137.468,
+      "p99_us": 152.5666
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1284,11 +1284,11 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 1073,
-      "ops_per_sec": 5388.091338944464,
-      "mean_us": 185.59447809878844,
-      "p50_us": 184.667,
-      "p99_us": 204.83056
+      "iterations": 1082,
+      "ops_per_sec": 5438.184806688714,
+      "mean_us": 183.88488724584104,
+      "p50_us": 184.4995,
+      "p99_us": 200.77897000000002
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1298,11 +1298,11 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 712,
-      "ops_per_sec": 3611.3374184897175,
-      "mean_us": 276.90572331460675,
-      "p50_us": 274.875,
-      "p99_us": 312.54133
+      "iterations": 847,
+      "ops_per_sec": 4228.99676992522,
+      "mean_us": 236.4627012987013,
+      "p50_us": 236.739,
+      "p99_us": 393.2928
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1312,11 +1312,11 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 718,
-      "ops_per_sec": 3613.952973119836,
-      "mean_us": 276.70531615598884,
-      "p50_us": 274.125,
-      "p99_us": 317.41376
+      "iterations": 643,
+      "ops_per_sec": 4247.327859401848,
+      "mean_us": 235.44214930015553,
+      "p50_us": 235.186,
+      "p99_us": 263.90856
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1326,11 +1326,11 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 708,
-      "ops_per_sec": 3566.2730186300896,
-      "mean_us": 280.40477966101696,
-      "p50_us": 278.875,
-      "p99_us": 311.125
+      "iterations": 824,
+      "ops_per_sec": 4178.548674932265,
+      "mean_us": 239.31754247572815,
+      "p50_us": 240.554,
+      "p99_us": 252.55115
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1340,11 +1340,11 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 636,
-      "ops_per_sec": 3207.656009153924,
-      "mean_us": 311.75412735849056,
-      "p50_us": 310.375,
-      "p99_us": 324.077
+      "iterations": 698,
+      "ops_per_sec": 3468.173328610257,
+      "mean_us": 288.33622349570203,
+      "p50_us": 285.032,
+      "p99_us": 332.3632
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1354,11 +1354,11 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 6311,
-      "ops_per_sec": 31798.657210878355,
-      "mean_us": 31.447868800507052,
-      "p50_us": 31.125,
-      "p99_us": 36.20925
+      "iterations": 8077,
+      "ops_per_sec": 40871.604448002516,
+      "mean_us": 24.466864306054227,
+      "p50_us": 24.557,
+      "p99_us": 30.7273
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1368,11 +1368,11 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 6188,
-      "ops_per_sec": 31129.03104099645,
-      "mean_us": 32.12435358758888,
-      "p50_us": 31.875,
-      "p99_us": 36.25
+      "iterations": 7753,
+      "ops_per_sec": 38916.0284364384,
+      "mean_us": 25.6963528956533,
+      "p50_us": 25.959,
+      "p99_us": 32.409099999999995
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1382,11 +1382,11 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 5765,
-      "ops_per_sec": 28990.44484492438,
-      "mean_us": 34.494124024284474,
-      "p50_us": 34.375,
-      "p99_us": 40.12667
+      "iterations": 6782,
+      "ops_per_sec": 34449.51646100961,
+      "mean_us": 29.02798363314656,
+      "p50_us": 29.5245,
+      "p99_us": 45.619099999999996
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1396,11 +1396,11 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 2888,
-      "ops_per_sec": 14548.721358067523,
-      "mean_us": 68.73456267313018,
-      "p50_us": 68.25,
-      "p99_us": 73.33369
+      "iterations": 2653,
+      "ops_per_sec": 13353.141415857795,
+      "mean_us": 74.88874481718808,
+      "p50_us": 75.304,
+      "p99_us": 86.96342
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1410,11 +1410,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 11622,
-      "ops_per_sec": 61265.00759423575,
-      "mean_us": 16.322531233866805,
-      "p50_us": 16.25,
-      "p99_us": 20.417
+      "iterations": 14948,
+      "ops_per_sec": 78366.66054521062,
+      "mean_us": 12.760528431897244,
+      "p50_us": 12.789,
+      "p99_us": 18.33721
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1424,11 +1424,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 10968,
-      "ops_per_sec": 58956.64794259145,
-      "mean_us": 16.961615609044493,
-      "p50_us": 16.916,
-      "p99_us": 22.167
+      "iterations": 14489,
+      "ops_per_sec": 73841.87599849809,
+      "mean_us": 13.542451169852992,
+      "p50_us": 13.621,
+      "p99_us": 19.2991
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1438,11 +1438,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 10323,
-      "ops_per_sec": 52670.606653904324,
-      "mean_us": 18.9859214375666,
-      "p50_us": 18.917,
-      "p99_us": 23.333
+      "iterations": 12208,
+      "ops_per_sec": 62340.450791827134,
+      "mean_us": 16.040949131716907,
+      "p50_us": 16.325,
+      "p99_us": 22.053099999999997
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1452,11 +1452,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 4053,
-      "ops_per_sec": 20334.57382930113,
-      "mean_us": 49.17732765852455,
-      "p50_us": 48.708,
-      "p99_us": 54.50041
+      "iterations": 3181,
+      "ops_per_sec": 20510.36308500878,
+      "mean_us": 48.755840930525,
+      "p50_us": 49.434,
+      "p99_us": 55.80341000000001
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1466,11 +1466,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 5403,
-      "ops_per_sec": 27057.90368853614,
-      "mean_us": 36.957778086248375,
-      "p50_us": 36.667,
-      "p99_us": 45.667410000000004
+      "iterations": 7572,
+      "ops_per_sec": 38570.57706284903,
+      "mean_us": 25.92649828314844,
+      "p50_us": 25.929,
+      "p99_us": 31.888099999999998
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1480,11 +1480,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 5319,
-      "ops_per_sec": 26647.79594571745,
-      "mean_us": 37.52655574356082,
-      "p50_us": 37.292,
-      "p99_us": 41.5
+      "iterations": 6609,
+      "ops_per_sec": 36509.54295869215,
+      "mean_us": 27.390099107277955,
+      "p50_us": 27.422,
+      "p99_us": 33.441
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1494,11 +1494,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 5025,
-      "ops_per_sec": 25178.404402874672,
-      "mean_us": 39.71657552238806,
-      "p50_us": 39.334,
-      "p99_us": 43.708
+      "iterations": 6616,
+      "ops_per_sec": 33340.28930562347,
+      "mean_us": 29.99374093107618,
+      "p50_us": 29.775,
+      "p99_us": 35.734
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1508,11 +1508,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 2630,
-      "ops_per_sec": 14478.372586880556,
-      "mean_us": 69.068536121673,
-      "p50_us": 68.709,
-      "p99_us": 73.417
+      "iterations": 3133,
+      "ops_per_sec": 15720.5039904264,
+      "mean_us": 63.61119214810086,
+      "p50_us": 63.516,
+      "p99_us": 72.6802
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1522,11 +1522,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 3142,
-      "ops_per_sec": 15672.480708084075,
-      "mean_us": 63.80610821133036,
-      "p50_us": 63.25,
-      "p99_us": 77.32767
+      "iterations": 4410,
+      "ops_per_sec": 22090.661507463636,
+      "mean_us": 45.2679970521542,
+      "p50_us": 44.888,
+      "p99_us": 50.857099999999996
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1536,11 +1536,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 3104,
-      "ops_per_sec": 15575.78076486417,
-      "mean_us": 64.20223904639175,
-      "p50_us": 63.916,
-      "p99_us": 76.06003999999999
+      "iterations": 4346,
+      "ops_per_sec": 22376.122969492342,
+      "mean_us": 44.69049447768062,
+      "p50_us": 44.817,
+      "p99_us": 53.043510000000005
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1550,11 +1550,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 2975,
-      "ops_per_sec": 14936.410454125718,
-      "mean_us": 66.95049008403362,
-      "p50_us": 65.875,
-      "p99_us": 71.86554
+      "iterations": 4234,
+      "ops_per_sec": 21631.277695405104,
+      "mean_us": 46.229354274917334,
+      "p50_us": 46.571,
+      "p99_us": 52.65901
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1564,11 +1564,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 1970,
-      "ops_per_sec": 10129.587139829931,
-      "mean_us": 98.72070659898478,
-      "p50_us": 98.208,
-      "p99_us": 111.06086
+      "iterations": 2592,
+      "ops_per_sec": 12669.130695280133,
+      "mean_us": 78.93201388888889,
+      "p50_us": 79.21,
+      "p99_us": 86.2849
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1578,11 +1578,11 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 5875,
-      "ops_per_sec": 31655.174958098112,
-      "mean_us": 31.59041140425532,
-      "p50_us": 31.416,
-      "p99_us": 38.25125
+      "iterations": 5781,
+      "ops_per_sec": 29198.191449576563,
+      "mean_us": 34.24869659228507,
+      "p50_us": 34.212,
+      "p99_us": 43.987190000000005
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1592,11 +1592,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 6084,
-      "ops_per_sec": 30803.048693772264,
-      "mean_us": 32.46431903353057,
-      "p50_us": 32.958,
-      "p99_us": 40.792
+      "iterations": 5537,
+      "ops_per_sec": 28017.717540309142,
+      "mean_us": 35.69170110167961,
+      "p50_us": 35.704,
+      "p99_us": 41.743300000000005
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1606,11 +1606,11 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 5671,
-      "ops_per_sec": 29046.14086780086,
-      "mean_us": 34.42798148474696,
-      "p50_us": 34.0,
-      "p99_us": 38.334410000000005
+      "iterations": 5158,
+      "ops_per_sec": 26391.8260042888,
+      "mean_us": 37.890519581233036,
+      "p50_us": 36.355,
+      "p99_us": 43.676
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1620,11 +1620,11 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 3088,
-      "ops_per_sec": 15623.069804002365,
-      "mean_us": 64.00790705958549,
-      "p50_us": 63.75,
-      "p99_us": 77.04525
+      "iterations": 2767,
+      "ops_per_sec": 14207.674257535542,
+      "mean_us": 70.38449656667872,
+      "p50_us": 67.042,
+      "p99_us": 74.1525
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1634,11 +1634,11 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 1351,
-      "ops_per_sec": 6775.3316523590065,
-      "mean_us": 147.59425092524057,
-      "p50_us": 146.709,
-      "p99_us": 164.08184
+      "iterations": 1521,
+      "ops_per_sec": 7688.10448858835,
+      "mean_us": 130.07107297830376,
+      "p50_us": 129.927,
+      "p99_us": 139.18209
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1648,11 +1648,11 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 1343,
-      "ops_per_sec": 6820.861163534596,
-      "mean_us": 146.60905361131793,
-      "p50_us": 145.25,
-      "p99_us": 184.64723999999998
+      "iterations": 1533,
+      "ops_per_sec": 7670.049538763597,
+      "mean_us": 130.3772544031311,
+      "p50_us": 138.069,
+      "p99_us": 151.48382
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1662,11 +1662,11 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 1329,
-      "ops_per_sec": 6658.426417241179,
-      "mean_us": 150.18563506395785,
-      "p50_us": 151.9375,
-      "p99_us": 175.55362
+      "iterations": 1414,
+      "ops_per_sec": 7132.413036162505,
+      "mean_us": 140.20500424328148,
+      "p50_us": 139.07,
+      "p99_us": 150.6075
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1676,11 +1676,11 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 1060,
-      "ops_per_sec": 5413.39827000763,
-      "mean_us": 184.72684811320755,
-      "p50_us": 183.875,
-      "p99_us": 199.24101000000002
+      "iterations": 1048,
+      "ops_per_sec": 5369.6870162125915,
+      "mean_us": 186.2305935114504,
+      "p50_us": 200.213,
+      "p99_us": 230.77524
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1690,11 +1690,11 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 721,
-      "ops_per_sec": 3541.1479326974827,
-      "mean_us": 282.39430235783635,
-      "p50_us": 279.167,
-      "p99_us": 298.74375
+      "iterations": 775,
+      "ops_per_sec": 3987.0224323309303,
+      "mean_us": 250.81373806451614,
+      "p50_us": 249.448,
+      "p99_us": 268.48217999999997
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1704,11 +1704,11 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 711,
-      "ops_per_sec": 3563.500427371959,
-      "mean_us": 280.6229493670886,
-      "p50_us": 283.125,
-      "p99_us": 319.77855999999997
+      "iterations": 797,
+      "ops_per_sec": 4011.082929129494,
+      "mean_us": 249.30923086574657,
+      "p50_us": 248.827,
+      "p99_us": 267.04904999999997
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1718,11 +1718,11 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 680,
-      "ops_per_sec": 3513.658053898481,
-      "mean_us": 284.60367647058825,
-      "p50_us": 283.042,
-      "p99_us": 330.25694
+      "iterations": 783,
+      "ops_per_sec": 3938.0031166754834,
+      "mean_us": 253.93580715197956,
+      "p50_us": 253.2635,
+      "p99_us": 270.88964
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1732,11 +1732,11 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 636,
-      "ops_per_sec": 3144.867241407308,
-      "mean_us": 317.9784465408805,
-      "p50_us": 315.375,
-      "p99_us": 352.05622999999997
+      "iterations": 658,
+      "ops_per_sec": 3310.310426171326,
+      "mean_us": 302.0864726443769,
+      "p50_us": 300.355,
+      "p99_us": 503.15621999999996
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1746,11 +1746,11 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 6086,
-      "ops_per_sec": 31072.40250146625,
-      "mean_us": 32.18289927702924,
-      "p50_us": 31.792,
-      "p99_us": 48.16683999999999
+      "iterations": 7602,
+      "ops_per_sec": 38382.574274926315,
+      "mean_us": 26.053489607997893,
+      "p50_us": 25.909,
+      "p99_us": 31.929
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1760,11 +1760,11 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 6088,
-      "ops_per_sec": 30624.88488001142,
-      "mean_us": 32.65318396846255,
-      "p50_us": 32.542,
-      "p99_us": 40.958
+      "iterations": 7293,
+      "ops_per_sec": 36786.73141891377,
+      "mean_us": 27.18371438365556,
+      "p50_us": 27.081,
+      "p99_us": 33.7311
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1774,11 +1774,11 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 5539,
-      "ops_per_sec": 27924.516206244298,
-      "mean_us": 35.810826322440874,
-      "p50_us": 35.959,
-      "p99_us": 57.37542
+      "iterations": 6388,
+      "ops_per_sec": 33916.2471513246,
+      "mean_us": 29.484394176581088,
+      "p50_us": 29.164,
+      "p99_us": 35.184290000000004
     },
     {
       "impl": "ryjwt 0.1.0 \u2192 dict",
@@ -1788,36 +1788,36 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 2739,
-      "ops_per_sec": 13776.554308429497,
-      "mean_us": 72.58709090909092,
-      "p50_us": 69.917,
-      "p99_us": 85.57719
+      "iterations": 2665,
+      "ops_per_sec": 13476.79820766776,
+      "mean_us": 74.20160075046905,
+      "p50_us": 75.2535,
+      "p99_us": 83.1293
     }
   ],
   "first_fetch": [
     {
       "source": "jwks-url-sync",
       "name": "typical-rs3072",
-      "ms": 1.513542,
+      "ms": 1.889692,
       "trials_ms": [
-        2.438083,
-        1.539375,
-        1.513542,
-        1.411584,
-        1.26025
+        3.09744,
+        2.11309,
+        1.889692,
+        1.797091,
+        1.739825
       ]
     },
     {
       "source": "jwks-url-async",
       "name": "typical-rs3072",
-      "ms": 1.480125,
+      "ms": 1.836701,
       "trials_ms": [
-        2.67325,
-        1.629375,
-        1.480125,
-        1.239083,
-        1.319208
+        3.241008,
+        2.036824,
+        1.836701,
+        1.761958,
+        1.667946
       ]
     }
   ],

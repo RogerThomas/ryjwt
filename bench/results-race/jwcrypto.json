@@ -10,11 +10,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 4144,
-      "ops_per_sec": 22269.946521765123,
-      "mean_us": 44.9035653957529,
-      "p50_us": 44.167,
-      "p99_us": 61.54267
+      "iterations": 3164,
+      "ops_per_sec": 16035.405282882515,
+      "mean_us": 62.36200347661188,
+      "p50_us": 62.375,
+      "p99_us": 77.22074
     },
     {
       "impl": "jwcrypto 1.6.1",
@@ -24,11 +24,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 2162,
-      "ops_per_sec": 11485.386190107642,
-      "mean_us": 87.0671637372803,
-      "p50_us": 85.25,
-      "p99_us": 116.50713999999999
+      "iterations": 1864,
+      "ops_per_sec": 9310.729213814513,
+      "mean_us": 107.40297317596567,
+      "p50_us": 107.3575,
+      "p99_us": 123.59455
     }
   ],
   "first_fetch": [],

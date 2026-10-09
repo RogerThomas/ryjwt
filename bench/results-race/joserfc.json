@@ -10,11 +10,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 12887,
-      "ops_per_sec": 65656.42853493903,
-      "mean_us": 15.230801039807558,
-      "p50_us": 14.792,
-      "p99_us": 19.708
+      "iterations": 10685,
+      "ops_per_sec": 55292.738386297184,
+      "mean_us": 18.08555751052878,
+      "p50_us": 18.558,
+      "p99_us": 24.477
     },
     {
       "impl": "joserfc 1.7.5",
@@ -24,11 +24,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 3426,
-      "ops_per_sec": 17364.13733323586,
-      "mean_us": 57.58996147110333,
-      "p50_us": 56.0,
-      "p99_us": 70.583
+      "iterations": 3124,
+      "ops_per_sec": 16140.699698608601,
+      "mean_us": 61.95518277848912,
+      "p50_us": 62.304,
+      "p99_us": 76.46214
     }
   ],
   "first_fetch": [],

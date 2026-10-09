@@ -4,159 +4,159 @@
     "name": "small-k32",
     "token_len": 231,
     "key_len": 32,
-    "ops_per_sec": 1723314.6026269174,
-    "mean_us": 0.5802771,
-    "p50_us": 0.625,
-    "p99_us": 0.875
+    "ops_per_sec": 1148028.058035344,
+    "mean_us": 0.87105885,
+    "p50_us": 0.922,
+    "p99_us": 1.092
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "small-k64",
     "token_len": 231,
     "key_len": 64,
-    "ops_per_sec": 1704164.244623234,
-    "mean_us": 0.5867979,
-    "p50_us": 0.666,
-    "p99_us": 0.75
+    "ops_per_sec": 1126434.1830420627,
+    "mean_us": 0.88775715,
+    "p50_us": 0.941,
+    "p99_us": 1.152
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "small-k256",
     "token_len": 231,
     "key_len": 256,
-    "ops_per_sec": 1667627.9151907812,
-    "mean_us": 0.59965415,
-    "p50_us": 0.666,
-    "p99_us": 0.875
+    "ops_per_sec": 1153011.3514544058,
+    "mean_us": 0.86729415,
+    "p50_us": 0.912,
+    "p99_us": 1.172
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "small-k4096",
     "token_len": 231,
     "key_len": 4096,
-    "ops_per_sec": 1661324.9531672494,
-    "mean_us": 0.6019292,
-    "p50_us": 0.625,
-    "p99_us": 0.875
+    "ops_per_sec": 1154428.474209202,
+    "mean_us": 0.8662295,
+    "p50_us": 0.902,
+    "p99_us": 1.152
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "typical-k32",
     "token_len": 661,
     "key_len": 32,
-    "ops_per_sec": 900295.9587920135,
-    "mean_us": 1.11074585,
-    "p50_us": 1.1665,
-    "p99_us": 1.584
+    "ops_per_sec": 677180.8703040511,
+    "mean_us": 1.47671035,
+    "p50_us": 1.523,
+    "p99_us": 1.823
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "typical-k64",
     "token_len": 661,
     "key_len": 64,
-    "ops_per_sec": 906053.570417351,
-    "mean_us": 1.1036875,
-    "p50_us": 1.125,
-    "p99_us": 1.542
+    "ops_per_sec": 681437.3203049786,
+    "mean_us": 1.4674864,
+    "p50_us": 1.533,
+    "p99_us": 1.862
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "typical-k256",
     "token_len": 661,
     "key_len": 256,
-    "ops_per_sec": 923444.5534570741,
-    "mean_us": 1.08290205,
-    "p50_us": 1.166,
-    "p99_us": 1.541
+    "ops_per_sec": 670062.947723498,
+    "mean_us": 1.4923970999999998,
+    "p50_us": 1.563,
+    "p99_us": 1.9521099999999998
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "typical-k4096",
     "token_len": 661,
     "key_len": 4096,
-    "ops_per_sec": 913965.3772549753,
-    "mean_us": 1.0941333500000001,
-    "p50_us": 1.166,
-    "p99_us": 1.542
+    "ops_per_sec": 661317.7086002715,
+    "mean_us": 1.5121324999999999,
+    "p50_us": 1.613,
+    "p99_us": 1.893
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "medium-k32",
     "token_len": 2244,
     "key_len": 32,
-    "ops_per_sec": 457854.9340668291,
-    "mean_us": 2.1840979000000003,
-    "p50_us": 2.208,
-    "p99_us": 2.833
+    "ops_per_sec": 387073.80947901955,
+    "mean_us": 2.5834866,
+    "p50_us": 2.624,
+    "p99_us": 2.905
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "medium-k64",
     "token_len": 2244,
     "key_len": 64,
-    "ops_per_sec": 453878.3874163851,
-    "mean_us": 2.20323335,
-    "p50_us": 2.25,
-    "p99_us": 3.042
+    "ops_per_sec": 384215.99209160544,
+    "mean_us": 2.6027027,
+    "p50_us": 2.634,
+    "p99_us": 2.934
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "medium-k256",
     "token_len": 2244,
     "key_len": 256,
-    "ops_per_sec": 445912.238897482,
-    "mean_us": 2.24259375,
-    "p50_us": 2.25,
-    "p99_us": 3.0
+    "ops_per_sec": 390159.833462616,
+    "mean_us": 2.56305215,
+    "p50_us": 2.634,
+    "p99_us": 2.944
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "medium-k4096",
     "token_len": 2244,
     "key_len": 4096,
-    "ops_per_sec": 447263.02646296547,
-    "mean_us": 2.23582085,
-    "p50_us": 2.208,
-    "p99_us": 2.958
+    "ops_per_sec": 379142.7650328306,
+    "mean_us": 2.6375289,
+    "p50_us": 2.694,
+    "p99_us": 3.6161
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "large-k32",
     "token_len": 20884,
     "key_len": 32,
-    "ops_per_sec": 57333.805909139664,
-    "mean_us": 17.4417167,
-    "p50_us": 16.458,
-    "p99_us": 25.210240000000002
+    "ops_per_sec": 57878.084601304945,
+    "mean_us": 17.27769685,
+    "p50_us": 17.196,
+    "p99_us": 22.895
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "large-k64",
     "token_len": 20884,
     "key_len": 64,
-    "ops_per_sec": 57644.52924595191,
-    "mean_us": 17.3477,
-    "p50_us": 16.5,
-    "p99_us": 24.16866
+    "ops_per_sec": 57685.665742567304,
+    "mean_us": 17.3353291,
+    "p50_us": 17.476,
+    "p99_us": 23.29619
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "large-k256",
     "token_len": 20884,
     "key_len": 256,
-    "ops_per_sec": 57593.85122515311,
-    "mean_us": 17.362964599999998,
-    "p50_us": 16.709,
-    "p99_us": 32.62584
+    "ops_per_sec": 57045.56788268127,
+    "mean_us": 17.52984565,
+    "p50_us": 17.316,
+    "p99_us": 102.73482000000001
   },
   {
     "impl": "ryjwt 0.1.0 \u2192 Struct",
     "name": "large-k4096",
     "token_len": 20884,
     "key_len": 4096,
-    "ops_per_sec": 59497.18931261626,
-    "mean_us": 16.80751665,
-    "p50_us": 16.417,
-    "p99_us": 21.25
+    "ops_per_sec": 58082.71900959717,
+    "mean_us": 17.216824850000002,
+    "p50_us": 17.206,
+    "p99_us": 22.915
   }
 ]

@@ -23,10 +23,10 @@ Each bar is one library decoding 100,000 tokens, filling in real time. Its time 
 its mean time per decode, measured as in the full matrix, but in a run of just the races' two cases
 (`task bench-race`). So race times can differ a little from the matrix page.
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and the other Python libraries from about one and a half to over four seconds](../assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.15 seconds, jsonwebtoken (Rust) and fast-jwt (Bun) take two to three and a half times as long, and the other libraries from about 1.8 to over 6 seconds](../assets/perf-race.svg)
 
-With HS256, ryjwt decodes a typical token around 30 times faster than PyJWT 2.15, and about three
-times faster than the fastest JavaScript and Rust libraries.
+With HS256, ryjwt decodes a typical token about 24 times faster than PyJWT 2.15 (22 times into a
+dict), 2.4 times faster than jsonwebtoken (Rust) and 3.5 times faster than fast-jwt (Bun).
 
 ### Why it's faster than jsonwebtoken (Rust)
 
@@ -39,26 +39,28 @@ building the result.
 Here, jsonwebtoken decodes into a `serde_json::Value`, the nearest thing to a Python dict. A typed
 Rust struct would be faster.
 
-![A race to decode 100,000 ES256 tokens: ryjwt finishes first in about 3.2 seconds, just ahead of the Rust and Bun libraries, and the other Python libraries take from about five and a half to over eight seconds](../assets/perf-race-es256.svg)
+![A race to decode 100,000 ES256 tokens: ryjwt finishes first in about 3.6 seconds, just ahead of jsonwebtoken (Rust) and fast-jwt (Bun) at 3.8 and 4.0, and the other libraries take from about 6 to over 10 seconds](../assets/perf-race-es256.svg)
 
 With ES256, most of the time goes on the signature check, which every library hands to native
 crypto, so the gaps are smaller. ryjwt is about twice as fast as PyJWT, and about as fast as
-jsonwebtoken and fast-jwt: a little ahead, by under 10%, close to the run-to-run variation. The
-race uses ES256 because the [Apple Silicon](#apple-silicon) slowdown doesn't affect it, so it's
-fair to every library.
+jsonwebtoken and fast-jwt: a little ahead, by 6% and 11%, not far beyond the run-to-run
+variation.
 
 ### RS256
 
-Most identity providers sign with RS256 by default. In the published numbers, fast-jwt and jose
-(on Bun) decode RS256 faster than ryjwt ([full matrix](matrix.md#pem-public-key)). Part of that is
-the [Apple Silicon](#apple-silicon) slowdown, which affects ryjwt and jsonwebtoken but not Bun.
-There are no published numbers from a machine without it yet.
+Most identity providers sign with RS256 by default. With a 3072-bit key, ryjwt decodes a typical
+token in about 25 µs, against 32 for jsonwebtoken, 34 for fast-jwt and 48 for jose
+([full matrix](matrix.md#pem-public-key)). On an Apple Silicon Mac, in Docker, the
+[slowdown below](#apple-silicon) puts fast-jwt and jose ahead.
 
 ## How they're measured
 
 - Each decode checks the signature, `exp` and `aud`, as a real service would.
 - Before timing, each library's result is checked against the token's claims, and each is shown
   to reject an expired token and one for another audience.
+- The published numbers come from GitHub's x86_64 Linux runner (the machine is on each results
+  page), from the [Benchmarks workflow](#running-them). It's a shared virtual machine, so expect a
+  few percent of variation between runs.
 - Each library runs in its own Docker container, with one CPU (pinned to one of Docker's virtual
   CPUs) and 500 MB of memory. The containers run one after another, so they never compete.
 - jose and fast-jwt run on [Bun](https://bun.sh), whose crypto is BoringSSL. On Node (OpenSSL),
@@ -82,10 +84,11 @@ Each results page says when it was made, and with which versions.
 
 ## Apple Silicon
 
-The published results come from Docker on an Apple Silicon Mac. There, aws-lc (the crypto library
-under ryjwt and jsonwebtoken) runs RSA, Ed25519, P-384 and P-521 checks slower than natively.
-HS256 and ES256 aren't affected, and neither is Linux on x86_64 or AWS Graviton. The
-[full matrix](matrix.md#apple-silicon-caveat) has the details.
+In Docker on an Apple Silicon Mac, aws-lc (the crypto library under ryjwt and jsonwebtoken) runs
+RSA, Ed25519, P-384 and P-521 checks about 1.6 to 1.8 times slower than natively, as it doesn't
+recognise the CPU. HS256 and ES256 aren't affected. Neither is Linux on x86_64, where the
+published numbers come from, or on Neoverse Arm servers such as AWS Graviton. Results made on a
+Mac carry a note saying so.
 
 ## Running them
 

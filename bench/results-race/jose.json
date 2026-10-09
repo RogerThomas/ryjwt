@@ -10,11 +10,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 8982,
-      "ops_per_sec": 100534,
-      "mean_us": 9.947,
-      "p50_us": 11.333,
-      "p99_us": 20.417
+      "iterations": 5747,
+      "ops_per_sec": 38865,
+      "mean_us": 25.73,
+      "p50_us": 25.198,
+      "p99_us": 38.769
     },
     {
       "impl": "jose 6.2.12",
@@ -24,11 +24,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 4015,
-      "ops_per_sec": 23953,
-      "mean_us": 41.748,
-      "p50_us": 40.291,
-      "p99_us": 76.417
+      "iterations": 2784,
+      "ops_per_sec": 16452,
+      "mean_us": 60.781,
+      "p50_us": 58.879,
+      "p99_us": 79.51
     }
   ],
   "first_fetch": [],
@@ -40,6 +40,6 @@
     }
   ],
   "notes": [
-    "`importSPKI`, `createLocalJWKSet`, `createRemoteJWKSet`"
+    "HMAC secret imported once (`crypto.subtle.importKey`); `importSPKI`, `createLocalJWKSet`, `createRemoteJWKSet`"
   ]
 }

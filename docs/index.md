@@ -94,7 +94,7 @@ example, extra and all, with nothing installed first.
 
 ## Why it's fast
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and the other Python libraries from about one and a half to over four seconds](assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.15 seconds, jsonwebtoken (Rust) and fast-jwt (Bun) take two to three and a half times as long, and the other libraries from about 1.8 to over 6 seconds](assets/perf-race.svg)
 
 One bar per library, decoding 100,000 HS256 tokens in real time
 ([benchmarks](benchmarks/index.md)).
@@ -110,5 +110,5 @@ One bar per library, decoding 100,000 HS256 tokens in real time
   [jiter](https://github.com/pydantic/jiter).
 
 With RSA, ECDSA and EdDSA, most of the time goes on the signature check, so the gaps are smaller.
-For ES256, ryjwt is about twice as fast as PyJWT, and about as fast as the Rust and Bun libraries.
-For RS256, the Bun libraries are faster in the [published numbers](benchmarks/index.md#rs256).
+For ES256, ryjwt is about twice as fast as PyJWT, and about as fast as jsonwebtoken and fast-jwt.
+For RS256, it's the fastest of them ([benchmarks](benchmarks/index.md#rs256)).

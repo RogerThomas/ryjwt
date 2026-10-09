@@ -10,11 +10,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 20000,
-      "ops_per_sec": 270362,
-      "mean_us": 3.699,
-      "p50_us": 3.208,
-      "p99_us": 6.084
+      "iterations": 15987,
+      "ops_per_sec": 198990,
+      "mean_us": 5.025,
+      "p50_us": 4.236,
+      "p99_us": 23.756
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -24,20 +24,15 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 5163,
-      "ops_per_sec": 27161,
-      "mean_us": 36.818,
-      "p50_us": 35.75,
-      "p99_us": 145.167
+      "iterations": 4449,
+      "ops_per_sec": 25159,
+      "mean_us": 39.747,
+      "p50_us": 38.068,
+      "p99_us": 58.088
     }
   ],
   "first_fetch": [],
   "not_applicable": [
-    {
-      "source": "jwks",
-      "alg": "*",
-      "reason": "fast-jwt takes JWKS only from a URL (via get-jwks), not a document"
-    },
     {
       "source": "jwks-url-sync",
       "alg": "*",
@@ -50,6 +45,7 @@
     }
   ],
   "notes": [
-    "JWKS URL via get-jwks 11.0.3 (fast-jwt's documented integration): it converts the cached JWK to a PEM, which fast-jwt parses, on every verify"
+    "JWKS document: a verifier per key, made once, picked by the token's `kid` (read with `createDecoder`)",
+    "JWKS URL rows are fast-jwt + get-jwks 11.0.3 (fast-jwt's documented integration), so they time both: on every verify get-jwks converts the cached JWK to a PEM (with jwk-to-pem) and fast-jwt imports that PEM (`createPublicKey`), which is why they're slow"
   ]
 }

@@ -10,11 +10,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 13041,
-      "ops_per_sec": 71044.66392414615,
-      "mean_us": 14.075652480637988,
-      "p50_us": 14.125,
-      "p99_us": 19.54101
+      "iterations": 10944,
+      "ops_per_sec": 56437.26433129673,
+      "mean_us": 17.71878938230994,
+      "p50_us": 17.627,
+      "p99_us": 23.57629
     },
     {
       "impl": "python-jose 3.5.0",
@@ -24,11 +24,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 3415,
-      "ops_per_sec": 18093.14659157437,
-      "mean_us": 55.269546120058564,
-      "p50_us": 54.583,
-      "p99_us": 66.87541
+      "iterations": 3309,
+      "ops_per_sec": 16560.12983141788,
+      "mean_us": 60.386,
+      "p50_us": 59.861,
+      "p99_us": 77.5202
     }
   ],
   "first_fetch": [],
