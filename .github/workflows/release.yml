@@ -68,6 +68,7 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       version: ${{ steps.release.outputs.version }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - id: release
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
@@ -395,6 +396,8 @@ jobs:
       url: https://pypi.org/project/ryjwt/
     permissions:
       id-token: write # PyPI trusted publishing
+    outputs:
+      python_version: ${{ steps.version.outputs.python_version }}
     steps:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -412,6 +415,7 @@ jobs:
           mkdir ../checksums
           mv -- *.sha256 ../checksums/ # only the distributions are uploaded
       - name: Check the release's version is the version built
+        id: version
         env:
           VERSION: ${{ needs.release-please.outputs.version }} # semver, e.g. 0.1.0 or 0.2.0-beta.0
         run: |
@@ -419,7 +423,33 @@ jobs:
           python_version=$(printf '%s' "$VERSION" | sed -E 's/-alpha\.?/a/; s/-beta\.?/b/; s/-rc\.?/rc/')
           test -f "dist/ryjwt-${python_version}.tar.gz" \
             || { echo "::error::Release ${VERSION} doesn't match the version built (from Cargo.toml)"; exit 1; }
+          echo "python_version=$python_version" >> "$GITHUB_OUTPUT"
       - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+
+  link-pypi:
+    name: Link the release to PyPI
+    needs:
+      - release-please
+      - publish
+    if: ${{ !cancelled() && needs.publish.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write # edit the release's notes
+    steps:
+      - name: Add the PyPI link to the release's notes
+        # At the top of the notes Release Please wrote; once, should the job be re-run.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+          VERSION: ${{ needs.publish.outputs.python_version }}
+        run: |
+          url="https://pypi.org/project/ryjwt/$VERSION/"
+          notes=$(gh release view "$TAG" --json body --jq .body)
+          case $notes in *"$url"*) exit 0 ;; esac
+          printf 'Install from [PyPI](%s): `uv add ryjwt==%s`\n\n%s\n' "$url" "$VERSION" "$notes" > notes.md
+          gh release edit "$TAG" --notes-file notes.md
 
   docs:
     name: Deploy the docs
