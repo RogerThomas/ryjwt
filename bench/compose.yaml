@@ -75,7 +75,7 @@ services:
   # from the test CA in matrix/tls (made by gen_tls.py). Not CPU-limited: it's only hit when a
   # client fetches keys, never while decodes are timed.
   jwks:
-    image: joseluisq/static-web-server:2.44.0-alpine
+    image: ghcr.io/static-web-server/static-web-server:2.44.0-alpine # its GitHub copy: no Docker Hub pull limit
     volumes:
       - ./matrix/jwks:/srv/jwks:ro
       - ./matrix/tls:/srv/tls:ro
