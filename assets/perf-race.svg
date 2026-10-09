@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="780" height="614" viewBox="0 0 780 614">
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="630" viewBox="0 0 780 630">
   <title>Decoding 100,000 HS256 tokens</title>
   <desc>10 JWT libraries each decode 100,000 tokens (HS256 with a 64-byte secret, a typical 661-byte token), the bars filling in real time. ryjwt → Struct (Python) finishes in 0.11s, jwcrypto (Python) in 4.49s. Versions: ryjwt 0.1.0 → Struct, ryjwt 0.1.0 → dict, ryjwt 0.1.0 → BaseModel, jsonwebtoken 11.1.0 (aws-lc-rs), fast-jwt 6.3.3, jose 6.2.12, python-jose 3.5.0, joserfc 1.7.5, pyjwt 2.15.1, jwcrypto 1.6.1.</desc>
   <style>
@@ -65,7 +65,7 @@
     }
   </style>
 
-  <rect width="780" height="614" fill="#fcfcfb" />
+  <rect width="780" height="630" fill="#fcfcfb" />
   <text x="20" y="26" class="title">Decoding 100,000 HS256 tokens</text>
 
   <g>
@@ -192,7 +192,8 @@
   <text x="20" y="514" class="caption">Measured in Docker, one container per library, each on one pinned CPU core.</text>
   <text x="20" y="530" class="caption">~N&#215;: how many times faster than PyJWT.</text>
   <text x="20" y="546" class="caption">* Same token, checks and crypto library (aws-lc) on both sides. Per token, jsonwebtoken 11 parses the header</text>
-  <text x="20" y="562" class="caption">twice, re-keys the HMAC and deserialises the claims twice; ryjwt keys the HMAC once and parses each part once.</text>
-  <text x="20" y="578" class="caption">† Into a pydantic BaseModel, pydantic parses and validates the claims itself, which takes about twice as long</text>
-  <text x="20" y="594" class="caption">as msgspec. ryjwt checks exp and aud first, before any of the model's code runs.</text>
+  <text x="20" y="562" class="caption">twice, re-keys the HMAC and deserialises the claims twice; ryjwt keys the HMAC once, parses the payload once</text>
+  <text x="20" y="578" class="caption">and skips headers it has already verified. jsonwebtoken decodes into a serde_json::Value here.</text>
+  <text x="20" y="594" class="caption">† Into a pydantic BaseModel, pydantic parses and validates the claims itself, which takes about twice as long</text>
+  <text x="20" y="610" class="caption">as msgspec. ryjwt checks exp and aud first, before any of the model's code runs.</text>
 </svg>
