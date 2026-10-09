@@ -1,162 +1,162 @@
 [
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "small-k32",
     "token_len": 231,
     "key_len": 32,
-    "ops_per_sec": 840139.0547755121,
-    "mean_us": 1.19027915,
-    "p50_us": 1.208,
-    "p99_us": 1.542
+    "ops_per_sec": 843972.343195108,
+    "mean_us": 1.18487295,
+    "p50_us": 1.25,
+    "p99_us": 1.709
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "small-k64",
     "token_len": 231,
     "key_len": 64,
-    "ops_per_sec": 857369.4353883608,
-    "mean_us": 1.1663583499999999,
-    "p50_us": 1.208,
-    "p99_us": 1.5
+    "ops_per_sec": 847318.5017290594,
+    "mean_us": 1.18019375,
+    "p50_us": 1.292,
+    "p99_us": 1.70801
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "small-k256",
     "token_len": 231,
     "key_len": 256,
-    "ops_per_sec": 859540.3607920666,
-    "mean_us": 1.1634125,
-    "p50_us": 1.208,
-    "p99_us": 1.625
+    "ops_per_sec": 817271.6969903071,
+    "mean_us": 1.2235833,
+    "p50_us": 1.292,
+    "p99_us": 1.75
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "small-k4096",
     "token_len": 231,
     "key_len": 4096,
-    "ops_per_sec": 866928.2853948722,
-    "mean_us": 1.15349795,
-    "p50_us": 1.208,
-    "p99_us": 1.542
+    "ops_per_sec": 815207.699636723,
+    "mean_us": 1.2266812500000002,
+    "p50_us": 1.25,
+    "p99_us": 1.667
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "typical-k32",
     "token_len": 661,
     "key_len": 32,
-    "ops_per_sec": 455580.86560364463,
-    "mean_us": 2.195,
-    "p50_us": 2.291,
-    "p99_us": 3.125
+    "ops_per_sec": 447927.9201557732,
+    "mean_us": 2.23250205,
+    "p50_us": 2.292,
+    "p99_us": 3.04241
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "typical-k64",
     "token_len": 661,
     "key_len": 64,
-    "ops_per_sec": 442737.4456263074,
-    "mean_us": 2.258675,
+    "ops_per_sec": 447431.4570802269,
+    "mean_us": 2.2349792,
     "p50_us": 2.25,
-    "p99_us": 2.916
+    "p99_us": 3.041
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "typical-k256",
     "token_len": 661,
     "key_len": 256,
-    "ops_per_sec": 443636.8676078452,
-    "mean_us": 2.2540958,
+    "ops_per_sec": 442815.86609248206,
+    "mean_us": 2.2582750000000003,
     "p50_us": 2.25,
-    "p99_us": 2.834
+    "p99_us": 3.042
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "typical-k4096",
     "token_len": 661,
     "key_len": 4096,
-    "ops_per_sec": 455304.7269167617,
-    "mean_us": 2.19633125,
+    "ops_per_sec": 444386.83216047054,
+    "mean_us": 2.2502917,
     "p50_us": 2.208,
-    "p99_us": 2.834
+    "p99_us": 2.875
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "medium-k32",
     "token_len": 2244,
     "key_len": 32,
-    "ops_per_sec": 285008.5516103389,
-    "mean_us": 3.5086666500000003,
-    "p50_us": 3.541,
-    "p99_us": 4.709
+    "ops_per_sec": 281113.5610938831,
+    "mean_us": 3.55728125,
+    "p50_us": 3.625,
+    "p99_us": 4.958
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "medium-k64",
     "token_len": 2244,
     "key_len": 64,
-    "ops_per_sec": 285236.68540823815,
-    "mean_us": 3.5058604,
-    "p50_us": 3.542,
-    "p99_us": 4.708
+    "ops_per_sec": 270509.5542486758,
+    "mean_us": 3.6967271,
+    "p50_us": 3.625,
+    "p99_us": 4.875
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "medium-k256",
     "token_len": 2244,
     "key_len": 256,
-    "ops_per_sec": 286087.0489651716,
-    "mean_us": 3.4954396,
-    "p50_us": 3.541,
-    "p99_us": 4.708
+    "ops_per_sec": 272183.2143604626,
+    "mean_us": 3.67399585,
+    "p50_us": 3.708,
+    "p99_us": 4.875
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "medium-k4096",
     "token_len": 2244,
     "key_len": 4096,
-    "ops_per_sec": 286244.34891039296,
-    "mean_us": 3.4935187500000002,
-    "p50_us": 3.541,
-    "p99_us": 3.666
+    "ops_per_sec": 279203.19930011575,
+    "mean_us": 3.5816208499999997,
+    "p50_us": 3.625,
+    "p99_us": 4.875
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "large-k32",
     "token_len": 20884,
     "key_len": 32,
-    "ops_per_sec": 40219.53495310056,
-    "mean_us": 24.8635396,
-    "p50_us": 24.459,
-    "p99_us": 31.75
+    "ops_per_sec": 40052.91655154874,
+    "mean_us": 24.966970850000003,
+    "p50_us": 24.625,
+    "p99_us": 31.58441
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "large-k64",
     "token_len": 20884,
     "key_len": 64,
-    "ops_per_sec": 40095.85242307727,
-    "mean_us": 24.94023545,
-    "p50_us": 24.5,
-    "p99_us": 32.375
+    "ops_per_sec": 40340.89394702919,
+    "mean_us": 24.7887417,
+    "p50_us": 24.708,
+    "p99_us": 32.333
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "large-k256",
     "token_len": 20884,
     "key_len": 256,
-    "ops_per_sec": 40245.30519649896,
-    "mean_us": 24.847618750000002,
-    "p50_us": 24.5,
-    "p99_us": 32.20801
+    "ops_per_sec": 40331.677633942134,
+    "mean_us": 24.79440625,
+    "p50_us": 25.958,
+    "p99_us": 32.45842
   },
   {
-    "impl": "ryjwt 0.0.0a0 \u2192 BaseModel",
+    "impl": "ryjwt 0.1.0 \u2192 BaseModel",
     "name": "large-k4096",
     "token_len": 20884,
     "key_len": 4096,
-    "ops_per_sec": 40122.5476614891,
-    "mean_us": 24.92364165,
-    "p50_us": 24.541,
-    "p99_us": 32.25042
+    "ops_per_sec": 40314.56779969362,
+    "mean_us": 24.8049292,
+    "p50_us": 24.625,
+    "p99_us": 31.87541
   }
 ]

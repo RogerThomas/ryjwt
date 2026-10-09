@@ -1,0 +1,52 @@
+{
+  "impl": "joserfc 1.7.5",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 12887,
+      "ops_per_sec": 65656.42853493903,
+      "mean_us": 15.230801039807558,
+      "p50_us": 14.792,
+      "p99_us": 19.708
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 3426,
+      "ops_per_sec": 17364.13733323586,
+      "mean_us": 57.58996147110333,
+      "p50_us": 56.0,
+      "p99_us": 70.583
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "joserfc has no JWKS URL client"
+    },
+    {
+      "source": "jwks-url-async",
+      "alg": "*",
+      "reason": "joserfc has no JWKS URL client"
+    }
+  ],
+  "notes": [
+    "`jwt.decode(token, key, algorithms=[...])`, then `JWTClaimsRegistry(exp=..., aud=...).validate(token.claims)`, both essential",
+    "keys imported once (`OctKey`, `RSAKey`, `ECKey`, `OKPKey`); JWKS document: a `KeySet`, which picks the key by `kid`",
+    "EdDSA: joserfc warns on every decode (`SecurityWarning`: RFC 9864 deprecates `EdDSA`), as it does by default"
+  ]
+}

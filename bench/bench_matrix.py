@@ -33,6 +33,7 @@ import jwt
 import msgspec
 import ryjwt
 from bench_python import (
+    REJECTIONS,
     BaseClaimsModel,
     BaseClaimsStruct,
     TypicalClaimsModel,
@@ -44,12 +45,8 @@ from bench_python import (
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from jose import jwk as jose_jwk
 from jose import jwt as jose_jwt
-from jose.exceptions import ExpiredSignatureError as JoseExpiredSignatureError
-from jose.exceptions import JWTClaimsError
-from joserfc.errors import ExpiredTokenError, InvalidClaimError
 from joserfc.jwk import ECKey, KeySet, OctKey, OKPKey, RSAKey
 from jwcrypto import jwk as jwcrypto_jwk
-from jwcrypto import jwt as jwcrypto_jwt
 from rich.console import Console
 from rich.table import Table
 
@@ -282,16 +279,6 @@ class Sources:
     """`matrix/keys/`, for signing the tokens each library must reject."""
     first_fetch_case: ClassVar[str] = "typical-rs3072"
     first_fetch_trials: ClassVar[int] = 5
-    # what each implementation raises for an expired token, and for another audience's
-    rejections: ClassVar[dict[Impl, tuple[type[Exception], type[Exception]]]] = {
-        "pyjwt": (jwt.ExpiredSignatureError, jwt.InvalidAudienceError),
-        "python-jose": (JoseExpiredSignatureError, JWTClaimsError),
-        "joserfc": (ExpiredTokenError, InvalidClaimError),
-        "jwcrypto": (jwcrypto_jwt.JWTExpired, jwcrypto_jwt.JWTInvalidClaimValue),
-        "ryjwt": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
-        "ryjwt-msgspec": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
-        "ryjwt-pydantic": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
-    }
     notes_by_impl: ClassVar[dict[Impl, tuple[str, ...]]] = {
         "pyjwt": (
             "PEM: the key loaded once, with `load_pem_public_key`",
@@ -468,7 +455,7 @@ class Sources:
 
     async def _prove_checks(self, prepared: Prepared, case: Case) -> None:
         """Fails unless the decode rejects an expired token and one for another audience."""
-        expired_error, audience_error = self.rejections[self._impl]
+        expired_error, audience_error = REJECTIONS[self._impl]
         expired = self._signed(case, {"exp": case.payload["iat"] + 60})
         if not await self._rejects(prepared, expired, expired_error):
             raise AssertionError(f"{self._impl}, {case.name}: accepted an expired token")

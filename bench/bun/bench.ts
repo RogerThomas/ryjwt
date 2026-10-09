@@ -14,6 +14,8 @@ interface Fixture {
   token_len: number;
   audience: string;
   payload: Record<string, unknown>;
+  expired_token: string; // exp a minute after iat, long past
+  wrong_audience_token: string; // aud is another audience
 }
 
 interface Result {
@@ -27,14 +29,20 @@ interface Result {
   p99_us: number;
 }
 
-type VerifyFn = () => unknown;
+// Verifies a token, returning its payload (a promise of it if `async`).
+type VerifyFn = (token: string) => unknown;
+
+// The fields (e.g. `code`) the error a rejection throws must carry.
+type ExpectedError = Record<string, string>;
 
 interface Impl {
   id: string; // results file stem
   label: string; // "<lib> <version>"
   async: boolean;
+  // What each case's verify must throw for its expired and wrong-audience tokens.
+  rejects: { expired: ExpectedError; wrongAudience: ExpectedError };
   // Builds the per-case verify closure; all setup happens here, outside timing.
-  prepare(c: Fixture): VerifyFn;
+  prepare(c: Fixture): Promise<VerifyFn>;
 }
 
 const WARMUP = 1_000;
@@ -46,22 +54,40 @@ const BENCH_DIR = join(import.meta.dir, "..");
 const FIXTURES = join(BENCH_DIR, "fixtures.json");
 const RESULTS_DIR = join(BENCH_DIR, "results");
 
+const HMAC_HASHES: Record<string, string> = { HS256: "SHA-256", HS384: "SHA-384", HS512: "SHA-512" };
+
+// jose imports a raw (Uint8Array) secret with crypto.subtle.importKey on every verify; a CryptoKey
+// is imported once, as importSPKI does for a PEM.
+function hmacKey(secret: string, alg: string): Promise<CryptoKey> {
+  const hash = HMAC_HASHES[alg];
+  if (hash === undefined) throw new Error(`not an HMAC algorithm: ${alg}`);
+  return crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash }, false, ["verify"]);
+}
+
 const impls: Impl[] = [
   {
     id: "jose",
     label: `jose ${josePkg.version}`,
     async: true,
-    prepare(c) {
-      const secret = new TextEncoder().encode(c.key);
+    rejects: {
+      expired: { code: "ERR_JWT_EXPIRED" },
+      wrongAudience: { code: "ERR_JWT_CLAIM_VALIDATION_FAILED", claim: "aud" },
+    },
+    async prepare(c) {
+      const key = await hmacKey(c.key, c.alg);
       const opts = { algorithms: [c.alg], audience: c.audience };
-      return () => jwtVerify(c.token, secret, opts).then((r) => r.payload);
+      return (token) => jwtVerify(token, key, opts).then((r) => r.payload);
     },
   },
   {
     id: "fast-jwt",
     label: `fast-jwt ${fastJwtPkg.version}`,
     async: false,
-    prepare(c) {
+    rejects: {
+      expired: { code: "FAST_JWT_EXPIRED" },
+      wrongAudience: { code: "FAST_JWT_INVALID_CLAIM_VALUE" },
+    },
+    async prepare(c) {
       const verify = createVerifier({
         key: c.key,
         // fixtures are all HS256; fast-jwt's Algorithm union is narrower than string
@@ -69,17 +95,17 @@ const impls: Impl[] = [
         allowedAud: c.audience,
         cache: false,
       });
-      return () => verify(c.token);
+      return (token) => verify(token);
     },
   },
 ];
 
-async function runBatch(fn: VerifyFn, n: number, isAsync: boolean): Promise<number> {
+async function runBatch(fn: VerifyFn, token: string, n: number, isAsync: boolean): Promise<number> {
   const t0 = Bun.nanoseconds();
   if (isAsync) {
-    for (let i = 0; i < n; i++) await fn();
+    for (let i = 0; i < n; i++) await fn(token);
   } else {
-    for (let i = 0; i < n; i++) fn();
+    for (let i = 0; i < n; i++) fn(token);
   }
   return Bun.nanoseconds() - t0;
 }
@@ -89,20 +115,39 @@ function percentile(sorted: number[], p: number): number {
   return sorted[idx]!;
 }
 
-async function benchCase(impl: Impl, c: Fixture): Promise<Result> {
-  const fn = impl.prepare(c);
-
-  // Correctness check.
-  const decoded = await fn();
-  if (!Bun.deepEquals(decoded, c.payload, true)) {
-    throw new Error(`${impl.label} ${c.name}: decoded payload mismatch`);
+// Throws unless `fn` rejects `token` with an error carrying every field of `expected`.
+async function checkRejects(fn: VerifyFn, token: string, expected: ExpectedError, where: string, what: string): Promise<void> {
+  let error: unknown;
+  try {
+    await fn(token);
+  } catch (e) {
+    error = e;
   }
+  if (error === undefined) throw new Error(`${where}: accepted ${what}`);
+  const fields = error as Record<string, unknown>;
+  if (!Object.entries(expected).every(([k, v]) => fields[k] === v)) {
+    throw new Error(`${where}: rejected ${what} with the wrong error (wanted ${JSON.stringify(expected)}): ${error}`);
+  }
+}
 
-  await runBatch(fn, WARMUP, impl.async);
+async function benchCase(impl: Impl, c: Fixture): Promise<Result> {
+  const fn = await impl.prepare(c);
+  const token = c.token;
+  const where = `${impl.label} ${c.name}`;
+
+  // Correctness checks: decodes the token, rejects an expired one and another audience's.
+  const decoded = await fn(token);
+  if (!Bun.deepEquals(decoded, c.payload, true)) {
+    throw new Error(`${where}: decoded payload mismatch`);
+  }
+  await checkRejects(fn, c.expired_token, impl.rejects.expired, where, "an expired token");
+  await checkRejects(fn, c.wrong_audience_token, impl.rejects.wrongAudience, where, "another audience's token");
+
+  await runBatch(fn, token, WARMUP, impl.async);
 
   let best = Infinity;
   for (let b = 0; b < BATCHES; b++) {
-    best = Math.min(best, await runBatch(fn, BATCH_SIZE, impl.async));
+    best = Math.min(best, await runBatch(fn, token, BATCH_SIZE, impl.async));
   }
   const meanNs = best / BATCH_SIZE;
 
@@ -110,13 +155,13 @@ async function benchCase(impl: Impl, c: Fixture): Promise<Result> {
   if (impl.async) {
     for (let i = 0; i < SAMPLES; i++) {
       const t0 = Bun.nanoseconds();
-      await fn();
+      await fn(token);
       samples[i] = Bun.nanoseconds() - t0;
     }
   } else {
     for (let i = 0; i < SAMPLES; i++) {
       const t0 = Bun.nanoseconds();
-      fn();
+      fn(token);
       samples[i] = Bun.nanoseconds() - t0;
     }
   }

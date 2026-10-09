@@ -106,9 +106,49 @@ tasks:
           docker compose run --rm "${service}"
         done
       - uv run yeet ./compare.py:matrix results-matrix "Run in Docker, one container per library, each limited to 1 CPU core (pinned) and 500 MB with no swap; the JWKS server runs in a container of its own, outside that limit."
+
+  bench-race:
+    desc: 'Benchmark just the races'' two cases of the matrix (HS256 typical-k64 from the secret, ES256 typical-es256 from the PEM), as bench-matrix does, into bench/results-race; then redraw the races'
+    dir: bench
+    env:
+      MATRIX_RESULTS: results-race
+    vars:
+      # The races' cases (race_svg.py's Races.races): the sources and cases to run.
+      SOURCES: hmac,pem
+      CASES: typical-k64,typical-es256
+    cmds:
+      - docker compose build
+      - |
+        set -eu
+        for impl in pyjwt python-jose joserfc jwcrypto ryjwt ryjwt-msgspec ryjwt-pydantic; do
+          echo "──── ${impl} ────"
+          docker compose run --rm --no-deps "matrix-${impl}" "${impl}" https://jwks:8443 {{.SOURCES}} {{.CASES}}
+        done
+        for impl in jose fast-jwt; do
+          echo "──── ${impl} ────"
+          docker compose run --rm --no-deps "matrix-${impl}" "${impl}" https://jwks:8443 {{.SOURCES}} {{.CASES}}
+        done
+        echo "──── jsonwebtoken ────"
+        docker compose run --rm --no-deps matrix-jsonwebtoken 1 {{.SOURCES}} {{.CASES}}
       - task: race-svg
 
+  bench-download:
+    desc: 'Put a Benchmarks workflow run''s results in place (the results files and pages, and the races in assets/ and docs/assets/), from its artifact, and show the machine they ran on (needs gh): task bench-download -- <run id>'
+    cmds:
+      - |
+        set -eu
+        dir=$(mktemp -d)
+        trap 'rm -rf "$dir"' EXIT
+        gh run download {{.CLI_ARGS}} --dir "$dir"
+        machine=$(find "$dir" -name machine.txt | head -n 1)
+        test -n "$machine" || { echo "No benchmark results in run {{.CLI_ARGS}}" >&2; exit 1; }
+        artifact=$(dirname "$machine")
+        cat "$machine"
+        parts=$(cd "$artifact" && ls -d bench assets 2>/dev/null || true)
+        tar -C "$artifact" -cf - $parts | tar -xvf -
+        if [ -d "$artifact/assets" ]; then cp "$artifact"/assets/perf-race*.svg docs/assets/; fi
+
   race-svg:
-    desc: 'Redraw the decode races (assets/perf-race.svg, HS256, and assets/perf-race-es256.svg, ES256; copied to docs/assets/) from the full matrix''s results in bench/results-matrix'
+    desc: 'Redraw the decode races (assets/perf-race.svg, HS256, and assets/perf-race-es256.svg, ES256; copied to docs/assets/) from bench-race''s results in bench/results-race'
     dir: bench
     cmd: uv run yeet ./race_svg.py {{.CLI_ARGS}}

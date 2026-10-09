@@ -9,6 +9,7 @@ Markdown page written to bench/<results>.md.
 import json
 import math
 import platform
+import subprocess
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from functools import partial
@@ -22,6 +23,27 @@ type Output = Literal["terminal", "markdown"]
 type Rows = dict[str, dict[str, Any]]
 
 HEADLINE_CASE = "typical-k64"
+
+
+def _machine() -> str:
+    """The CPU and OS the page is made on (the benchmarks' host): `Apple M3 Max, macOS 26.0`."""
+    if platform.system() == "Darwin":
+        cpu = subprocess.run(
+            ["/usr/sbin/sysctl", "-n", "machdep.cpu.brand_string"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        return f"{cpu}, macOS {platform.mac_ver()[0]}"
+    cpu = next(
+        (
+            line.split(":", 1)[1].strip()
+            for line in Path("/proc/cpuinfo").read_text().splitlines()
+            if line.startswith("model name")
+        ),
+        platform.machine(),
+    )
+    return f"{cpu} ({platform.machine()}), {platform.system()}"
 
 
 def _load(results_dir: Path) -> dict[str, Rows]:
@@ -66,12 +88,12 @@ def _markdown(by_impl: dict[str, Rows], baseline: str, results: str, note: str) 
     lines = [
         "# JWT decode benchmarks",
         "",
-        f"Generated {generated} from `bench/{results}/` by `bench/compare.py`.",
+        f"Generated {generated} from `bench/{results}/` by `bench/compare.py`, on {_machine()}.",
         *([note] if note else []),
         "",
         "Each decode verifies an HS256 signature and checks `exp` and `aud`, as a real caller",
-        "would. Times are the mean µs per decode (lower is better); `(Nx)` is the speed-up vs",
-        f"{baseline}.",
+        "would. Times are µs per decode, the mean over the fastest of 5 batches (lower is",
+        f"better); `(Nx)` is the speed-up vs {baseline}.",
         "",
         f"## Typical token ({base[HEADLINE_CASE]['token_len']} B, 64-byte key)",
         "",
@@ -284,15 +306,8 @@ class MatrixPage:
             "and P-521 verification about 1.6-1.8x slower than the same machine runs them",
             "natively. ES256 and HMAC are unaffected, and so is Linux on x86_64 and on",
             "Graviton 3/4, which aws-lc detects. BoringSSL (Bun's fast-jwt and jose) always",
-            "uses the fast multiply.",
-            "",
-            "The same machine natively (macOS, M3 Max), RS256 decode in µs:",
-            "",
-            "| key | ryjwt | fast-jwt |",
-            "| :-- | --: | --: |",
-            "| RSA 2048 | 10.5 | 15.1 |",
-            "| RSA 3072 | 21.8 | 27.1 |",
-            "| RSA 4096 | 37.4 | 43.5 |",
+            "uses the fast multiply. So on this page, those algorithms put ryjwt and",
+            "jsonwebtoken behind where they'd be on x86_64 or Graviton.",
             "",
         ]
 
@@ -324,15 +339,17 @@ class MatrixPage:
             "\n".join([
                 "# JWT decode benchmarks: the full matrix",
                 "",
-                f"Generated {generated} from `bench/{results}/` by `bench/compare.py`.",
+                f"Generated {generated} from `bench/{results}/` by `bench/compare.py`, on",
+                f"{_machine()}.",
                 *([note] if note else []),
                 f"Runtimes: {runtimes}.",
                 "",
                 "Each decode verifies the signature and checks `exp` and `aud`, as a real",
                 "caller would, and each library's result is checked against the token's claims",
-                "before timing. Times are the mean µs per decode (lower is better); `(Nx)` is the",
-                f"speed-up vs {self._baseline}. Each case runs about a second (a warm-up, then",
-                "the best of 5 batches), so slow ones (RSA 4096, P-521) run fewer iterations.",
+                "before timing. Times are µs per decode, the mean over the fastest of 5 batches",
+                f"(lower is better); `(Nx)` is the speed-up vs {self._baseline}. Each case runs",
+                "about a second (a warm-up, then the 5 batches), so slow ones (RSA 4096, P-521)",
+                "run fewer iterations.",
                 "Fastest per row in bold; n/a where the library can't (see the end).",
                 "",
                 "Key sources: an HMAC secret (HS256 only); a PEM public key, parsed once; a",

@@ -7,15 +7,18 @@
 //! `JwkSet`, each key turned into a `DecodingKey` with `DecodingKey::from_jwk` once, then picked per
 //! token by the `kid` from `decode_header`). jsonwebtoken doesn't fetch JWKS URLs.
 //!
-//! Usage: `jwt_matrix [budget]` (1.0: 0.1 s warm-up, 5 batches of 0.2 s, 0.3 s of samples per case).
+//! Usage: `jwt_matrix [budget] [only_sources] [only_cases]`: `budget` scales each case's time (1.0:
+//! 0.1 s warm-up, 5 batches of 0.2 s, 0.3 s of samples); `only_sources` and `only_cases` are
+//! comma-separated filters, as bench_matrix.py's (empty: all).
 
 use std::collections::HashMap;
 use std::hint::black_box;
 use std::path::PathBuf;
 use std::time::{Duration, Instant};
 
+use jsonwebtoken::errors::{Error, ErrorKind};
 use jsonwebtoken::jwk::JwkSet;
-use jsonwebtoken::{Algorithm, DecodingKey, Validation, decode, decode_header};
+use jsonwebtoken::{Algorithm, DecodingKey, TokenData, Validation, decode, decode_header};
 use serde::Serialize;
 use serde_json::Value;
 
@@ -163,10 +166,54 @@ fn jwks_keys(jwks: &str) -> HashMap<String, DecodingKey> {
         .collect()
 }
 
+/// Panics unless `verify` rejects `expired_token` as expired and `wrong_audience_token` as for
+/// another audience, so the timed decode is known to check both. `label` starts each message.
+fn assert_rejects(
+    label: &str,
+    expired_token: &str,
+    wrong_audience_token: &str,
+    verify: impl Fn(&str) -> Result<TokenData<Value>, Error>,
+) {
+    for (token, expected, what) in [
+        (
+            expired_token,
+            ErrorKind::ExpiredSignature,
+            "an expired token",
+        ),
+        (
+            wrong_audience_token,
+            ErrorKind::InvalidAudience,
+            "another audience's token",
+        ),
+    ] {
+        match verify(token) {
+            Ok(_) => panic!("{label}: accepted {what}"),
+            Err(e) if *e.kind() == expected => {}
+            Err(e) => panic!(
+                "{label}: rejected {what} with {:?}, not {expected:?}",
+                e.kind()
+            ),
+        }
+    }
+}
+
+/// The comma-separated filter at argument `n`: `None` (everything) if it's missing or empty.
+fn filter_arg(n: usize) -> Option<Vec<String>> {
+    let arg = std::env::args().nth(n).filter(|s| !s.is_empty())?;
+    Some(arg.split(',').map(str::to_owned).collect())
+}
+
+/// Whether `filter` (from `filter_arg`) takes `name`.
+fn selected(filter: Option<&Vec<String>>, name: &str) -> bool {
+    filter.is_none_or(|names| names.iter().any(|n| n == name))
+}
+
 fn main() {
     let budget_scale: f64 = std::env::args()
         .nth(1)
         .map_or(1.0, |s| s.parse().expect("budget"));
+    let only_sources = filter_arg(2);
+    let only_cases = filter_arg(3);
     let budget = Budget {
         warmup: Duration::from_secs_f64(0.1 * budget_scale),
         batch: Duration::from_secs_f64(0.2 * budget_scale),
@@ -197,6 +244,9 @@ fn main() {
 
     let mut rows = Vec::new();
     for source in ["hmac", "pem", "jwks"] {
+        if !selected(only_sources.as_ref(), source) {
+            continue;
+        }
         println!(
             "\n{source}\n{:<16} {:>9} {:>10} {:>10} {:>9} {:>9}",
             "case", "token_len", "iterations", "mean µs", "p50 µs", "p99 µs"
@@ -204,20 +254,33 @@ fn main() {
         for case in fixtures["cases"].as_array().expect("cases") {
             let s = |k: &str| case[k].as_str().expect(k).to_owned();
             let (name, alg_name, token) = (s("name"), s("alg"), s("token"));
-            if (alg_name == "HS256") != (source == "hmac") || alg_name == "ES512" {
+            if (alg_name == "HS256") != (source == "hmac")
+                || alg_name == "ES512"
+                || !selected(only_cases.as_ref(), &name)
+            {
                 continue;
             }
             let key = &fixtures["keys"][s("key")];
             let alg: Algorithm = alg_name.parse().expect("algorithm");
             let mut validation = Validation::new(alg);
             validation.set_audience(&[s("audience")]);
+            // ryjwt checks nbf, with no leeway, by default; so do the Python libraries.
+            validation.validate_nbf = true;
+            validation.leeway = 0;
             assert!(validation.validate_exp, "exp must be validated");
+            // Each source must also reject an expired token and one for another audience.
+            let label = format!("{impl_name} {source} {name}");
+            let (expired_token, wrong_audience_token) =
+                (s("expired_token"), s("wrong_audience_token"));
 
             let stats = match source {
                 "hmac" => {
                     let key = DecodingKey::from_secret(s("secret").as_bytes());
                     let decoded = decode::<Value>(&token, &key, &validation).expect("decode");
                     assert_eq!(decoded.claims, case["payload"], "{name}: payload mismatch");
+                    assert_rejects(&label, &expired_token, &wrong_audience_token, |t| {
+                        decode::<Value>(t, &key, &validation)
+                    });
                     measure(&budget, || {
                         black_box(
                             decode::<Value>(black_box(&token), &key, &validation).expect("decode"),
@@ -228,6 +291,9 @@ fn main() {
                     let key = pem_key(alg, key["pem"].as_str().expect("pem"));
                     let decoded = decode::<Value>(&token, &key, &validation).expect("decode");
                     assert_eq!(decoded.claims, case["payload"], "{name}: payload mismatch");
+                    assert_rejects(&label, &expired_token, &wrong_audience_token, |t| {
+                        decode::<Value>(t, &key, &validation)
+                    });
                     measure(&budget, || {
                         black_box(
                             decode::<Value>(black_box(&token), &key, &validation).expect("decode"),
@@ -238,15 +304,16 @@ fn main() {
                     let keys = jwks_keys(key["jwks"].as_str().expect("jwks"));
                     let verify = |token: &str| {
                         let kid = decode_header(token).expect("header").kid.expect("kid");
-                        decode::<Value>(token, &keys[&kid], &validation).expect("decode")
+                        decode::<Value>(token, &keys[&kid], &validation)
                     };
                     assert_eq!(
-                        verify(&token).claims,
+                        verify(&token).expect("decode").claims,
                         case["payload"],
                         "{name}: payload mismatch"
                     );
+                    assert_rejects(&label, &expired_token, &wrong_audience_token, verify);
                     measure(&budget, || {
-                        black_box(verify(black_box(&token)));
+                        black_box(verify(black_box(&token)).expect("decode"));
                     })
                 }
             };

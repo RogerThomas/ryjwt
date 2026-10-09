@@ -4,28 +4,28 @@
     "name": "small-k32",
     "token_len": 231,
     "key_len": 32,
-    "ops_per_sec": 644862.2614513431,
-    "mean_us": 1.55071875,
-    "p50_us": 1.542,
-    "p99_us": 2.042
+    "ops_per_sec": 627766.0943532439,
+    "mean_us": 1.59295,
+    "p50_us": 1.584,
+    "p99_us": 2.12541
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "small-k64",
     "token_len": 231,
     "key_len": 64,
-    "ops_per_sec": 637899.198913428,
-    "mean_us": 1.5676458,
+    "ops_per_sec": 627544.4968269782,
+    "mean_us": 1.5935125,
     "p50_us": 1.542,
-    "p99_us": 2.083
+    "p99_us": 1.75
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "small-k256",
     "token_len": 231,
     "key_len": 256,
-    "ops_per_sec": 587662.0298075698,
-    "mean_us": 1.70165835,
+    "ops_per_sec": 584578.1047206202,
+    "mean_us": 1.7106354,
     "p50_us": 1.667,
     "p99_us": 2.209
   },
@@ -34,19 +34,19 @@
     "name": "small-k4096",
     "token_len": 231,
     "key_len": 4096,
-    "ops_per_sec": 330799.49739647564,
-    "mean_us": 3.0229792000000004,
+    "ops_per_sec": 330844.1884827944,
+    "mean_us": 3.02257085,
     "p50_us": 3.0,
-    "p99_us": 4.042
+    "p99_us": 4.0
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "typical-k32",
     "token_len": 661,
     "key_len": 32,
-    "ops_per_sec": 303142.447363558,
-    "mean_us": 3.2987792,
-    "p50_us": 3.25,
+    "ops_per_sec": 296163.93953481474,
+    "mean_us": 3.3765083,
+    "p50_us": 3.334,
     "p99_us": 4.375
   },
   {
@@ -54,9 +54,9 @@
     "name": "typical-k64",
     "token_len": 661,
     "key_len": 64,
-    "ops_per_sec": 305411.1215459911,
-    "mean_us": 3.2742750000000003,
-    "p50_us": 3.208,
+    "ops_per_sec": 292217.6948772412,
+    "mean_us": 3.4221062499999997,
+    "p50_us": 3.334,
     "p99_us": 4.25
   },
   {
@@ -64,99 +64,99 @@
     "name": "typical-k256",
     "token_len": 661,
     "key_len": 256,
-    "ops_per_sec": 298542.18269682943,
-    "mean_us": 3.3496104,
+    "ops_per_sec": 293311.39872477297,
+    "mean_us": 3.4093458500000002,
     "p50_us": 3.333,
-    "p99_us": 4.50041
+    "p99_us": 4.45801
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "typical-k4096",
     "token_len": 661,
     "key_len": 4096,
-    "ops_per_sec": 214754.62641059697,
-    "mean_us": 4.6564771,
-    "p50_us": 4.584,
-    "p99_us": 5.958
+    "ops_per_sec": 213482.01245394288,
+    "mean_us": 4.6842353999999995,
+    "p50_us": 4.625,
+    "p99_us": 6.084
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "medium-k32",
     "token_len": 2244,
     "key_len": 32,
-    "ops_per_sec": 114515.34503619467,
-    "mean_us": 8.732454149999999,
-    "p50_us": 8.584,
-    "p99_us": 11.58926
+    "ops_per_sec": 114091.2161440805,
+    "mean_us": 8.76491665,
+    "p50_us": 8.75,
+    "p99_us": 12.54101
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "medium-k64",
     "token_len": 2244,
     "key_len": 64,
-    "ops_per_sec": 114595.61290979398,
-    "mean_us": 8.72633755,
-    "p50_us": 8.625,
-    "p99_us": 12.45801
+    "ops_per_sec": 110736.27374609276,
+    "mean_us": 9.0304646,
+    "p50_us": 8.75,
+    "p99_us": 12.792
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "medium-k256",
     "token_len": 2244,
     "key_len": 256,
-    "ops_per_sec": 112886.27411164738,
-    "mean_us": 8.8584729,
-    "p50_us": 8.75,
-    "p99_us": 12.583
+    "ops_per_sec": 110736.81023404351,
+    "mean_us": 9.03042085,
+    "p50_us": 8.791,
+    "p99_us": 12.54241
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "medium-k4096",
     "token_len": 2244,
     "key_len": 4096,
-    "ops_per_sec": 97976.279374501,
-    "mean_us": 10.206552100000001,
-    "p50_us": 10.084,
-    "p99_us": 13.917
+    "ops_per_sec": 97116.94179216457,
+    "mean_us": 10.296864600000001,
+    "p50_us": 10.167,
+    "p99_us": 14.083
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "large-k32",
     "token_len": 20884,
     "key_len": 32,
-    "ops_per_sec": 11841.855276918583,
-    "mean_us": 84.4462271,
-    "p50_us": 82.541,
-    "p99_us": 101.66684
+    "ops_per_sec": 11849.266071656206,
+    "mean_us": 84.39341255,
+    "p50_us": 82.125,
+    "p99_us": 98.91866
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "large-k64",
     "token_len": 20884,
     "key_len": 64,
-    "ops_per_sec": 11886.14234061127,
-    "mean_us": 84.13158545,
-    "p50_us": 81.667,
-    "p99_us": 101.62583000000001
+    "ops_per_sec": 12081.014982027902,
+    "mean_us": 82.77450209999999,
+    "p50_us": 81.583,
+    "p99_us": 103.46133999999999
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "large-k256",
     "token_len": 20884,
     "key_len": 256,
-    "ops_per_sec": 11738.90818152362,
-    "mean_us": 85.186798,
-    "p50_us": 86.791,
-    "p99_us": 104.75041999999999
+    "ops_per_sec": 11934.128676934359,
+    "mean_us": 83.79329795,
+    "p50_us": 83.625,
+    "p99_us": 101.91642
   },
   {
     "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
     "name": "large-k4096",
     "token_len": 20884,
     "key_len": 4096,
-    "ops_per_sec": 11544.329434530639,
-    "mean_us": 86.62261465,
-    "p50_us": 84.666,
-    "p99_us": 104.58384
+    "ops_per_sec": 11713.120774815256,
+    "mean_us": 85.3743438,
+    "p50_us": 84.166,
+    "p99_us": 102.00167
   }
 ]

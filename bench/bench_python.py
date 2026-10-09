@@ -20,7 +20,10 @@ import pydantic
 import ryjwt
 from jose import jwk as jose_jwk
 from jose import jwt as jose_jwt
+from jose.exceptions import ExpiredSignatureError as JoseExpiredSignatureError
+from jose.exceptions import JWTClaimsError
 from joserfc import jwt as joserfc_jwt
+from joserfc.errors import ExpiredTokenError, InvalidClaimError
 from joserfc.jwk import ECKey, KeySet, OctKey, OKPKey, RSAKey
 from jwcrypto import jwk as jwcrypto_jwk
 from jwcrypto import jwt as jwcrypto_jwt
@@ -33,6 +36,18 @@ if TYPE_CHECKING:
 type Impl = Literal[
     "pyjwt", "python-jose", "joserfc", "jwcrypto", "ryjwt", "ryjwt-msgspec", "ryjwt-pydantic"
 ]
+
+
+REJECTIONS: dict[Impl, tuple[type[Exception], type[Exception]]] = {
+    "pyjwt": (jwt.ExpiredSignatureError, jwt.InvalidAudienceError),
+    "python-jose": (JoseExpiredSignatureError, JWTClaimsError),
+    "joserfc": (ExpiredTokenError, InvalidClaimError),
+    "jwcrypto": (jwcrypto_jwt.JWTExpired, jwcrypto_jwt.JWTInvalidClaimValue),
+    "ryjwt": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
+    "ryjwt-msgspec": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
+    "ryjwt-pydantic": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
+}
+"""What each implementation raises for an expired token, and for another audience's."""
 
 
 class BaseClaimsStruct(msgspec.Struct):
@@ -129,6 +144,8 @@ class Case:
     audience: str
     payload: dict[str, Any]
     token_len: int
+    expired_token: str
+    wrong_audience_token: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -202,11 +219,27 @@ class PythonBenchmark:
             samples.append(clock() - t0)
         return samples
 
+    def _rejects(self, prepared: Prepared, token: str, error: type[Exception]) -> bool:
+        try:
+            prepared.decode(token, **prepared.kwargs)
+        except error:
+            return True
+        return False
+
+    def _prove_checks(self, prepared: Prepared, case: Case) -> None:
+        """Fails unless the decode rejects an expired token and one for another audience."""
+        expired_error, audience_error = REJECTIONS[self._impl]
+        if not self._rejects(prepared, case.expired_token, expired_error):
+            raise AssertionError(f"{self._impl}, {case.name}: accepted an expired token")
+        if not self._rejects(prepared, case.wrong_audience_token, audience_error):
+            raise AssertionError(f"{self._impl}, {case.name}: accepted another audience's token")
+
     def run(self, case: Case) -> Result:
         prepared = self._prepare(case)
         if prepared.decode(case.token, **prepared.kwargs) != prepared.expected:
             msg = f"{case.name}: decoded payload does not match fixture"
             raise AssertionError(msg)
+        self._prove_checks(prepared, case)
 
         self._batch_ns(prepared, case.token, self._warmup)
         best_ns = min(
@@ -236,6 +269,8 @@ def _load_cases(path: Path) -> list[Case]:
             audience=c["audience"],
             payload=c["payload"],
             token_len=c["token_len"],
+            expired_token=c["expired_token"],
+            wrong_audience_token=c["wrong_audience_token"],
         )
         for c in json.loads(path.read_text())
     ]

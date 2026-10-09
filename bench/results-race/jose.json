@@ -1,0 +1,45 @@
+{
+  "impl": "jose 6.2.12",
+  "runtime": "Bun 1.3.14",
+  "rows": [
+    {
+      "impl": "jose 6.2.12",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 8982,
+      "ops_per_sec": 100534,
+      "mean_us": 9.947,
+      "p50_us": 11.333,
+      "p99_us": 20.417
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 4015,
+      "ops_per_sec": 23953,
+      "mean_us": 41.748,
+      "p50_us": 40.291,
+      "p99_us": 76.417
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "jose's API is async only"
+    }
+  ],
+  "notes": [
+    "`importSPKI`, `createLocalJWKSet`, `createRemoteJWKSet`"
+  ]
+}
