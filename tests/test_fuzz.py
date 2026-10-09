@@ -4,6 +4,7 @@ import contextlib
 import json
 import random
 from collections.abc import Callable
+from datetime import datetime
 from typing import NoReturn, TypeGuard
 
 import msgspec
@@ -29,6 +30,13 @@ class ScannedClaims(Claims):
 
     def __post_init__(self) -> None:
         pass
+
+
+class DatedClaims(msgspec.Struct):
+    exp: datetime
+    iat: datetime
+    nbf: datetime | None = None
+    sub: str = ""
 
 
 def _mutate(data: bytes, rng: random.Random) -> bytes:
@@ -135,6 +143,41 @@ def test_fuzzed_claims(
     decoded = sum(isinstance(o, dict) for o in outcomes)
     assert decoded > 1000
     assert len({o for o in outcomes if isinstance(o, type)}) > 4
+
+
+def _dated_outcome(hmac_jwt: ryjwt.SecretKey, token: str) -> object:
+    """The decoded claims, or the error decoding raised: its type, and its message if it's about
+    the claims (not where in the payload its JSON is malformed)."""
+    try:
+        return msgspec.structs.asdict(hmac_jwt.decode(token, type=DatedClaims))
+    except ryjwt.ClaimsValidationError as e:
+        return type(e), str(e)
+    except Exception as e:  # noqa: BLE001 - comparing whatever is raised
+        return type(e)
+
+
+def test_fuzzed_datetime_claims(
+    hmac_jwt: ryjwt.SecretKey,
+    raw_hs256_token: Callable[[bytes, bytes], str],
+) -> None:
+    """Datetime claims must decode the same however their member names are spelled (escaped or
+    not), as JSON says they do."""
+    rng = random.Random(3)
+    payload = (
+        b'{"exp":4102444800,"iat":946684800,"nbf":1000000000.5,"sub":"s",'
+        b'"l":[true,false,null,-1.5e3],"o":{"exp":1,"k":"\xc3\xa9"}}'
+    )
+    outcomes: list[object] = []
+    for _ in range(20000):
+        mutated = _mutate(payload, rng)
+        escaped = mutated.replace(b'"exp"', b'"\\u0065xp"').replace(b'"iat"', b'"\\u0069at"')
+        outcome = _dated_outcome(hmac_jwt, raw_hs256_token(b'{"alg":"HS256"}', mutated))
+        token = raw_hs256_token(b'{"alg":"HS256"}', escaped)
+        assert outcome == _dated_outcome(hmac_jwt, token), mutated
+        outcomes.append(outcome)
+    decoded = sum(isinstance(o, dict) for o in outcomes)
+    assert decoded > 1000
+    assert len({o for o in outcomes if not isinstance(o, dict)}) > 4
 
 
 def test_fuzzed_tokens(hmac_jwt: ryjwt.SecretKey) -> None:

@@ -1,4 +1,5 @@
 import math
+import random
 import sys
 import time
 from collections import OrderedDict
@@ -23,6 +24,9 @@ from _support import (
 )
 
 type AnyKey = ryjwt.SecretKey | ryjwt.PrivateKey | ryjwt.PublicKey
+
+EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
+Y2K = datetime(2000, 1, 1, tzinfo=UTC)
 
 
 class NoClaims(msgspec.Struct):
@@ -106,6 +110,37 @@ class DeclaredClaimsWithDatetime(DeclaredClaims):
     """`DeclaredClaims` (read from the instance), plus a datetime `iat`, renamed."""
 
     issued: datetime = msgspec.field(name="iat")
+
+
+class Issued(msgspec.Struct):
+    """A datetime `iat` (which `decode` doesn't validate, so any NumericDate decodes)."""
+
+    iat: datetime
+    sub: str = ""
+
+
+class DatedSession(msgspec.Struct, frozen=True, forbid_unknown_fields=True, kw_only=True):
+    """Frozen, forbidding unknown members: a renamed datetime `exp`, an optional datetime `nbf`, and
+    a default for a member that isn't a claim."""
+
+    expires: datetime = msgspec.field(name="exp")
+    nbf: datetime | None = None
+    sub: str = "anonymous"
+
+
+class GenericDated[T](msgspec.Struct):
+    exp: datetime
+    value: T
+
+
+class RecordedDated(msgspec.Struct):
+    """Records every instance msgspec builds."""
+
+    built: ClassVar[list["RecordedDated"]] = []  # quoted: Python < 3.14 evaluates it at once
+    exp: datetime
+
+    def __post_init__(self) -> None:
+        RecordedDated.built.append(self)
 
 
 class DictClaims(dict[str, Any]):
@@ -752,6 +787,116 @@ def test_datetime_claim_among_claims_read_from_the_instance(
             type=DeclaredClaimsWithDatetime,
             audience="aud",
         )
+
+
+@pytest.mark.parametrize(
+    ("payload", "expected"),
+    [
+        pytest.param(b'{"iat":0}', Issued(EPOCH), id="epoch"),
+        pytest.param(
+            b'{"iat":253402300799}',
+            Issued(datetime(9999, 12, 31, 23, 59, 59, tzinfo=UTC)),
+            id="latest",
+        ),
+        pytest.param(b'{"iat":-1}', Issued(EPOCH - timedelta(seconds=1)), id="negative"),
+        pytest.param(b'{"iat":-0}', Issued(EPOCH), id="negative-zero"),
+        pytest.param(b'{"iat":1.5}', Issued(EPOCH + timedelta(seconds=1.5)), id="fraction"),
+        pytest.param(b'{"iat":1e3}', Issued(EPOCH + timedelta(seconds=1000)), id="exponent"),
+        pytest.param(b' { "iat" :\n 946684800 } ', Issued(Y2K), id="whitespace"),
+        pytest.param(b'{"\\u0069at":946684800}', Issued(Y2K), id="escaped-name"),
+        pytest.param(b'{"iat":"x","iat":946684800}', Issued(Y2K), id="repeated-claim"),
+        pytest.param(
+            b'{"iat":946684800,"sub":1,"sub":"s"}', Issued(Y2K, "s"), id="repeated-member"
+        ),
+        pytest.param(b'{"iat":"2000-01-01T00:00:00Z"}', Issued(Y2K), id="rfc3339"),
+        pytest.param(
+            b'{"iat":946684800,' + b",".join(b'"m%d":%d' % (i, i) for i in range(40)) + b"}",
+            Issued(Y2K),
+            id="many-members",
+        ),
+    ],
+)
+def test_datetime_claim_however_the_payload_spells_it(
+    payload: bytes,
+    expected: Issued,
+    hmac_jwt: ryjwt.SecretKey,
+    raw_hs256_token: Callable[[bytes, bytes], str],
+) -> None:
+    claims = hmac_jwt.decode(raw_hs256_token(b'{"alg":"HS256"}', payload), type=Issued)
+
+    assert claims == expected
+    assert claims.iat.tzinfo is UTC
+
+
+@pytest.mark.parametrize(
+    ("payload", "match"),
+    [
+        pytest.param(b'{"iat":-62135596801}', r"out of range.*at `\$\.iat`", id="before-year-1"),
+        pytest.param(b'{"iat":253402300800}', r"out of range.*at `\$\.iat`", id="after-year-9999"),
+        pytest.param(b'{"iat":1e300}', r"out of range.*at `\$\.iat`", id="huge-float"),
+        pytest.param(b'{"iat":true}', r"Expected `datetime`, got `bool` - at `\$\.iat`", id="bool"),
+        pytest.param(b'{"iat":null}', r"Expected `datetime`, got `null` - at `\$\.iat`", id="null"),
+        pytest.param(
+            b'{"iat":946684800,"sub":1}', r"Expected `str`, got `int` - at `\$\.sub`", id="sub"
+        ),
+    ],
+)
+def test_invalid_datetime_claim(
+    payload: bytes,
+    match: str,
+    hmac_jwt: ryjwt.SecretKey,
+    raw_hs256_token: Callable[[bytes, bytes], str],
+) -> None:
+    with pytest.raises(ryjwt.ClaimsValidationError, match=match):
+        hmac_jwt.decode(raw_hs256_token(b'{"alg":"HS256"}', payload), type=Issued)
+
+
+def test_datetime_claims_from_whole_seconds(hmac_jwt: ryjwt.SecretKey) -> None:
+    rng = random.Random(0)
+    seconds = [rng.randrange(253_402_300_800) for _ in range(2000)]
+
+    for n in seconds:
+        claims = hmac_jwt.decode(hmac_jwt.encode({"iat": n}), type=Issued)
+        assert claims == Issued(EPOCH + timedelta(seconds=n)), n
+
+
+def test_datetime_claims_in_a_frozen_struct(hmac_jwt: ryjwt.SecretKey, future: int) -> None:
+    expires = EPOCH + timedelta(seconds=future)
+
+    assert hmac_jwt.decode(hmac_jwt.encode({"exp": future}), type=DatedSession) == DatedSession(
+        expires=expires
+    )
+    assert hmac_jwt.decode(
+        hmac_jwt.encode({"exp": future, "nbf": 946_684_800, "sub": "s"}), type=DatedSession
+    ) == DatedSession(expires=expires, nbf=Y2K, sub="s")
+    with pytest.raises(ryjwt.ClaimsValidationError, match="unknown field `iat`"):
+        hmac_jwt.decode(hmac_jwt.encode({"exp": future, "iat": 0}), type=DatedSession)
+
+
+def test_datetime_claim_in_a_generic_struct(hmac_jwt: ryjwt.SecretKey, future: int) -> None:
+    token = hmac_jwt.encode({"exp": future, "value": 1})
+
+    assert hmac_jwt.decode(token, type=GenericDated[int]) == GenericDated(
+        EPOCH + timedelta(seconds=future), 1
+    )
+    with pytest.raises(ryjwt.ClaimsValidationError, match="Expected `str`, got `int`"):
+        hmac_jwt.decode(token, type=GenericDated[str])
+
+
+def test_datetime_claims_are_checked_before_post_init(
+    hmac_jwt: ryjwt.SecretKey,
+    future: int,
+    past: int,
+) -> None:
+    RecordedDated.built.clear()
+    with pytest.raises(ryjwt.ExpiredSignatureError):
+        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), type=RecordedDated)
+    assert RecordedDated.built == []
+
+    claims = hmac_jwt.decode(hmac_jwt.encode({"exp": future}), type=RecordedDated)
+
+    assert RecordedDated.built == [claims]
+    assert claims.exp == EPOCH + timedelta(seconds=future)
 
 
 def test_audience_accepts_any_iterable(hmac_jwt: ryjwt.SecretKey) -> None:

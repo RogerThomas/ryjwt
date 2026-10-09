@@ -158,6 +158,8 @@ def _from_numeric_date(claim: str, value: float) -> datetime:
         return msgspec.convert(value, datetime, strict=False)
     except msgspec.ValidationError as e:
         raise msgspec.ValidationError(f"{e} - at `$.{claim}`") from e
+    except (ValueError, OverflowError) as e:  # past year 9999: msgspec's own range check lets it by
+        raise msgspec.ValidationError(f"Timestamp is out of range - at `$.{claim}`") from e
 
 
 def _parse_with_dates(
@@ -168,7 +170,10 @@ def _parse_with_dates(
 ) -> object:
     """`decode(payload)` (a Decoder of a Struct), but with each of `claims` that's a NumericDate (a
     JSON number) as its UTC datetime's RFC 3339 string, the only form a (strict) Decoder takes for
-    a datetime field. Every other member reaches `decode` as the very JSON it was."""
+    a datetime field. Every other member reaches `decode` as the very JSON it was.
+
+    `decode` does the same in one pass itself (src/dates.rs) for whole seconds from 1970 on in a
+    plain payload, the common case, so this decodes the rest."""
     members = decode_members(payload)
     dated = False
     for claim in claims:
@@ -406,6 +411,24 @@ def payload_parser(type_: object) -> Callable[[bytes], Any]:
             )
         return origin.model_validate_json
     raise TypeError(f"type must be None, a msgspec Struct or a pydantic BaseModel, got {type_!r}")
+
+
+def struct_date_decoder(
+    type_: object,
+) -> tuple[tuple[str, ...], Callable[[bytes], Any], type[Exception]] | None:
+    """For a Struct that declares NumericDate claims (`exp`, `nbf`, `iat`) as datetimes, which its
+    `payload_parser` converts: those claims (by JSON name), the Struct's plain decoder, and the
+    error that raises for a payload that doesn't fit. Given the payload with those claims (each a
+    whole number of seconds) as RFC 3339 strings, as `_parse_with_dates` makes it, the decoder
+    decodes as `payload_parser` would; `decode` makes that payload itself when it can. None for any
+    other type."""
+    origin = _origin(type_)
+    if origin is None or not issubclass(origin, Struct):
+        return None
+    date_claims = _struct_datetime_claims(type_)
+    if not date_claims:
+        return None
+    return date_claims, msgspec.json.Decoder(type_).decode, msgspec.ValidationError
 
 
 def mismatch(type_: object, error: BaseException) -> tuple[str, bool] | None:

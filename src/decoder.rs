@@ -9,6 +9,7 @@ use pyo3::prelude::*;
 use pyo3::types::{PyBytes, PyDict, PyString, PyType};
 
 use crate::claims::{self, Checks, ClaimAttributes, Expected};
+use crate::dates::{self, DateClaims, Rewritten};
 use crate::errors::{
     ClaimsValidationError, DecodeError, InvalidAlgorithmError, InvalidSignatureError,
     UnknownKeyError,
@@ -59,6 +60,19 @@ struct TypedParser {
     make: Py<PyAny>,
     /// Where instances hold the registered claims, if they can be read from there.
     claims: Option<ClaimAttributes>,
+    /// For a Struct declaring `NumericDate` claims as datetimes, a faster way to make one.
+    dated: Option<DatedStruct>,
+}
+
+/// How to decode a Struct declaring `NumericDate` claims as datetimes in one pass, from the payload
+/// with those claims as RFC 3339 strings (`ryjwt._types.struct_date_decoder`).
+struct DatedStruct {
+    claims: DateClaims,
+    /// callable(bytes) -> instance: the Struct's plain decoder.
+    decode: Py<PyAny>,
+    /// The error `decode` raises for a payload that doesn't fit the Struct (any other it raises
+    /// is for malformed JSON).
+    validation_error: Py<PyType>,
 }
 
 impl TypedParser {
@@ -70,15 +84,52 @@ impl TypedParser {
             .call_method1(intern!(py, "claim_attributes"), (type_,))?
             .extract::<Option<[Option<Bound<'_, PyString>>; 4]>>()?
             .map(ClaimAttributes::new);
+        let dated = glue
+            .call_method1(intern!(py, "struct_date_decoder"), (type_,))?
+            .extract::<Option<(
+                Vec<Bound<'_, PyString>>,
+                Bound<'_, PyAny>,
+                Bound<'_, PyType>,
+            )>>()?
+            .map(|(claims, decode, validation_error)| {
+                Ok::<_, PyErr>(DatedStruct {
+                    claims: DateClaims::new(&claims)?,
+                    decode: decode.unbind(),
+                    validation_error: validation_error.unbind(),
+                })
+            })
+            .transpose()?;
         Ok(Self {
             type_: type_.clone().unbind(),
             make: make.unbind(),
             claims,
+            dated,
         })
     }
 
-    /// `error`, raised by `make`, as a `ClaimsValidationError` if it's msgspec or pydantic saying
-    /// the payload doesn't fit the type (or a `DecodeError` if pydantic says it isn't valid JSON).
+    /// An instance of the type from the payload: `make`'s, in one decoding pass when `dated` can.
+    fn instantiate<'py>(&self, payload: &Bound<'py, PyBytes>) -> PyResult<Bound<'py, PyAny>> {
+        let py = payload.py();
+        if let Some(dated) = &self.dated {
+            let decoded = match dates::rewrite(payload, dated.claims)? {
+                Rewritten::Unchanged => dated.decode.bind(py).call1((payload,)),
+                Rewritten::Payload(rewritten) => dated.decode.bind(py).call1((rewritten,)),
+                Rewritten::Unsupported => return self.make.bind(py).call1((payload,)),
+            };
+            match decoded {
+                // Malformed JSON: `make` reports it as it would (where in the payload it is).
+                Err(e)
+                    if e.is_instance_of::<PyValueError>(py)
+                        && !e.is_instance(py, dated.validation_error.bind(py)) => {}
+                decoded => return decoded,
+            }
+        }
+        self.make.bind(py).call1((payload,))
+    }
+
+    /// `error`, raised by `instantiate`, as a `ClaimsValidationError` if it's msgspec or pydantic
+    /// saying the payload doesn't fit the type (or a `DecodeError` if pydantic says it isn't valid
+    /// JSON).
     fn mismatch(&self, py: Python<'_>, error: PyErr) -> PyErr {
         let explained = py
             .import(intern!(py, "ryjwt._types"))
@@ -99,24 +150,23 @@ impl TypedParser {
         wrapped
     }
 
-    /// Parses the payload with `make` and validates its registered claims, reporting invalid
-    /// claims ahead of the parser's own errors (and never running user code for them).
+    /// Parses the payload with `instantiate` and validates its registered claims, reporting
+    /// invalid claims ahead of the parser's own errors (and never running user code for them).
     fn parse<'py>(
         &self,
         payload: &Bound<'py, PyBytes>,
         checks: &Checks<'_>,
     ) -> PyResult<Bound<'py, PyAny>> {
         let py = payload.py();
-        let make = self.make.bind(py);
         let bytes = payload.as_bytes();
         let Some(claims) = self.claims.as_ref().filter(|c| c.cover(bytes)) else {
             checks.validate(&claims::scan(bytes)?)?;
-            return make.call1((payload,)).map_err(|e| self.mismatch(py, e));
+            return self.instantiate(payload).map_err(|e| self.mismatch(py, e));
         };
         // The parser rejects what `scan` would and decodes the claims as `scan` would, running no
         // user code: parse first and read the claims from the instance, scanning only to report
         // invalid claims ahead of the parser's own error.
-        let instance = make.call1((payload,)).map_err(|e| {
+        let instance = self.instantiate(payload).map_err(|e| {
             claims::scan(bytes)
                 .and_then(|registered| checks.validate(&registered))
                 .map_or_else(|invalid| invalid, |()| self.mismatch(py, e))

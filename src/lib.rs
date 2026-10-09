@@ -3,6 +3,7 @@
 //! This module holds the Python bindings; `decoder` and `encoder` do the work.
 
 mod claims;
+mod dates;
 mod decoder;
 mod encoder;
 mod errors;
