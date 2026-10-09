@@ -1,34 +1,32 @@
 # Keys and algorithms
 
-A key object holds one key and the algorithms it may be used with. Create it once, when your app
-starts, and reuse it for every token. Pick the class by the key you have:
+A key object holds a key and the algorithms it may be used with. Create it once, at startup, and
+reuse it. Pick the class by the key you have:
 
-- [`SecretKey`](#secretkey-hmac-secrets): a shared secret, for the HMAC algorithms (`HS256` and
-  friends). Whoever can verify a token with it can also make one.
-- [`PrivateKey`](#private-and-public-keys): a private key, to sign tokens (and verify them).
+- [`SecretKey`](#secretkey-hmac-secrets): a shared secret, for `HS256` and friends. Whoever can
+  verify a token with it can also make one.
+- [`PrivateKey`](#private-and-public-keys): a private key, to sign and verify.
 - [`PublicKey`](#private-and-public-keys): a public key, or a [JWKS document](#jwks-documents), to
-  verify tokens only.
+  verify only.
 
-If an identity provider publishes its keys at a URL, use a [`JWKSClient`](jwks-urls.md) instead:
-it fetches the keys and keeps them up to date.
+For keys an identity provider publishes at a URL, use a [`JWKSClient`](jwks-urls.md): it fetches
+them and keeps them up to date.
 
 ## Algorithms
 
-| class | algorithm | signature | key |
-| :-- | :-- | :-- | :-- |
-| `SecretKey` | `HS256`, `HS384`, `HS512` | HMAC with SHA-256, -384, -512 | a shared secret |
-| `PrivateKey`, `PublicKey` | `RS256`, `RS384`, `RS512` | RSA (PKCS#1 v1.5) with SHA-256, -384, -512 | RSA |
-| `PrivateKey`, `PublicKey` | `PS256`, `PS384`, `PS512` | RSA-PSS with SHA-256, -384, -512 | RSA |
-| `PrivateKey`, `PublicKey` | `ES256` | ECDSA with SHA-256 | EC, P-256 curve |
-| `PrivateKey`, `PublicKey` | `ES256K` | ECDSA with SHA-256 | EC, secp256k1 curve |
-| `PrivateKey`, `PublicKey` | `ES384` | ECDSA with SHA-384 | EC, P-384 curve |
-| `PrivateKey`, `PublicKey` | `ES512`, `ES521` | ECDSA with SHA-512 | EC, P-521 curve |
-| `PrivateKey`, `PublicKey` | `EdDSA` | Ed25519 | Ed25519 |
+| algorithm | signature | key |
+| :-- | :-- | :-- |
+| `HS256`, `HS384`, `HS512` | HMAC with SHA-256, -384, -512 | a shared secret |
+| `RS256`, `RS384`, `RS512` | RSA (PKCS#1 v1.5) with SHA-256, -384, -512 | RSA |
+| `PS256`, `PS384`, `PS512` | RSA-PSS with SHA-256, -384, -512 | RSA |
+| `ES256` | ECDSA with SHA-256 | EC, P-256 curve |
+| `ES256K` | ECDSA with SHA-256 | EC, secp256k1 curve |
+| `ES384` | ECDSA with SHA-384 | EC, P-384 curve |
+| `ES512`, `ES521` | ECDSA with SHA-512 | EC, P-521 curve |
+| `EdDSA` | Ed25519 | Ed25519 |
 
-`ES512` is the standard name for ECDSA on the P-521 curve. `ES521` is accepted as another name
-for it. `EdDSA` means Ed25519 only: Ed448 isn't supported.
-
-There is no `none` algorithm. Every token ryjwt makes or accepts is signed.
+`ES521` is an alias for `ES512`. `EdDSA` means Ed25519 only, not Ed448. There is no `none`
+algorithm: every token ryjwt makes or accepts is signed.
 
 ### Choosing `algorithms`
 
@@ -59,8 +57,8 @@ ALGORITHMS: list[ryjwt.AsymmetricAlgorithm] = ["RS256", "PS256"]
 
 ### Setting `audience` and `issuer`
 
-Every key class (and [`JWKSClient`](jwks-urls.md)) also takes `audience` and `issuer`: who your
-tokens are for, and who issues them. `decode` checks each token's `aud` and `iss` against them:
+Every key class, and [`JWKSClient`](jwks-urls.md), also takes `audience` and `issuer`: who your
+tokens are for, and who issues them. `decode` checks `aud` and `iss` against them:
 
 ```python
 import secrets
@@ -75,23 +73,21 @@ key = ryjwt.SecretKey(
 )
 ```
 
-- Each is a `str`, or a list (any iterable) of them, any one of which may match.
+- Each is a `str`, or an iterable of them, any one of which may match. Anything else, such as
+  `audience=1`, is a `TypeError` when you create the key.
 - Without `audience`, a token that has an `aud` is rejected. Without `issuer`, `iss` isn't
-  checked, but set it if you can. [Claims checks](encoding-and-decoding.md#claims-checks) says
-  why.
-- A `decode` call can pass its own `audience` or `issuer`, which replace the key's for that call.
-- Anything else, such as `audience=1`, is a `TypeError`, raised when you create the key.
+  checked, but [you should set it](encoding-and-decoding.md#claims-checks).
+- A `decode` call's own `audience` or `issuer` replaces the key's for that call.
 
 ## SecretKey: HMAC secrets
 
-[`SecretKey`][ryjwt.SecretKey] takes a shared secret for the HMAC algorithms (`HS256`, `HS384`,
-`HS512`), as `str` or `bytes`. Whoever holds the secret can both sign and verify tokens. That
-suits a service that verifies its own tokens. When other services need to verify them, use a
-[key pair](#private-and-public-keys) instead.
+[`SecretKey`][ryjwt.SecretKey] takes a shared secret, as `str` or `bytes`. It suits a service
+that verifies its own tokens. When other services verify them, use a
+[key pair](#private-and-public-keys).
 
 ### Secret length
 
-The secret must be at least as long as the hash's output:
+The secret must be at least as long as the hash:
 
 | algorithm | shortest secret |
 | :-- | :-- |
@@ -99,9 +95,9 @@ The secret must be at least as long as the hash's output:
 | `HS384` | 48 bytes |
 | `HS512` | 64 bytes |
 
-With several algorithms, the secret must suit the longest. A `str` secret is measured in UTF-8
-bytes. A shorter secret is an [`InvalidKeyError`][ryjwt.InvalidKeyError]: anyone holding a single
-token could guess it offline, then sign tokens of their own. Make one with `secrets.token_bytes`:
+With several algorithms, it must suit the longest. A `str` counts in UTF-8 bytes. A shorter
+secret is an [`InvalidKeyError`][ryjwt.InvalidKeyError]: anyone with one token could guess it
+offline, then forge tokens. Make one with `secrets.token_bytes`:
 
 ```python
 import secrets
@@ -116,7 +112,7 @@ except ryjwt.InvalidKeyError as e:
     print(e)  # "HS256" needs a secret of at least 32 bytes, got 9 (...)
 ```
 
-If you can't change a short secret (an identity provider gave it to you, say), pass
+If you're stuck with a short secret (say, from an identity provider), pass
 `allow_short_secret=True`. It skips the length check, and only that:
 
 ```python
@@ -127,16 +123,17 @@ key = ryjwt.SecretKey("legacy-secret", algorithms=["HS256"], allow_short_secret=
 
 ### Secrets that are rejected
 
+These are an `InvalidKeyError` too:
+
 - An empty secret.
-- A secret that looks like a public key: a PEM, an SSH public key, a JWK or JWKS, or a public
-  key's or certificate's binary (DER) form, raw or base64-encoded. A public key is no secret: if
-  it were used as an HMAC secret, anyone who has it could sign tokens. This is the classic
-  "algorithm confusion" attack. The check also sees through how a file may have been saved: a
-  byte-order mark, leading spaces, or UTF-16 or UTF-32 text.
+- Anything that looks like a public key: a PEM, an SSH public key, a JWK or JWKS, or a public
+  key's or certificate's binary (DER) form, raw or base64-encoded. As an HMAC secret, a public
+  key lets anyone sign tokens: the classic "algorithm confusion" attack. The check sees through a
+  byte-order mark, leading spaces, and UTF-16 or UTF-32 text.
 
 ### Reading a secret from a file
 
-`SecretKey` has no `from_path`. Secret files usually end with a newline, and only you know whether
+`SecretKey` has no `from_path`: secret files usually end with a newline, and only you know whether
 it's part of the secret. Read the file yourself:
 
 <!-- test: with-key-files -->
@@ -151,8 +148,7 @@ key = ryjwt.SecretKey(Path("secret.txt").read_bytes().strip(), algorithms=["HS25
 ## Private and public keys
 
 [`PrivateKey`][ryjwt.PrivateKey] signs and verifies. [`PublicKey`][ryjwt.PublicKey] only
-verifies: it has no `encode`. Both take a PEM, as `str` or `bytes`, or read one from a file with
-`from_path`:
+verifies: it has no `encode`. Both take a PEM, as `str` or `bytes`, or read one with `from_path`:
 
 <!-- test: with-key-files -->
 ```python
@@ -164,8 +160,8 @@ verifier = ryjwt.PublicKey.from_path("public.pem", algorithms=["ES256"])
 assert verifier.decode(signer.encode({"sub": "user-1"})) == {"sub": "user-1"}
 ```
 
-`from_path` lets the usual OS errors through (`FileNotFoundError`, ...). A key that can't be used
-raises [`InvalidKeyError`][ryjwt.InvalidKeyError], whether it came from a file or not.
+`from_path` lets OS errors (`FileNotFoundError`, ...) through. An unusable key is an
+[`InvalidKeyError`][ryjwt.InvalidKeyError].
 
 ### Which PEMs are accepted
 
@@ -174,12 +170,11 @@ raises [`InvalidKeyError`][ryjwt.InvalidKeyError], whether it came from a file o
 | `PrivateKey` | `BEGIN PRIVATE KEY`, `BEGIN RSA PRIVATE KEY` or `BEGIN EC PRIVATE KEY` |
 | `PublicKey` | `BEGIN PUBLIC KEY` or `BEGIN RSA PUBLIC KEY` |
 
-- A PEM must hold exactly one key. ryjwt skips the `EC PARAMETERS` block that
-  `openssl ecparam -genkey` writes before the key.
+- A PEM must hold exactly one key. The `EC PARAMETERS` block that `openssl ecparam -genkey`
+  writes before the key is skipped.
 - Encrypted private keys (`BEGIN ENCRYPTED PRIVATE KEY`) aren't supported.
-- `PublicKey` rejects a private key. It could use the key's public half, but a private key should
-  never sit where only a public one is needed. Pass the public key instead.
-- `PrivateKey` rejects a public key: it couldn't sign with it.
+- `PublicKey` rejects a private key, which shouldn't sit where a public one will do.
+  `PrivateKey` rejects a public key: it can't sign with it.
 
 ### Keys from the cryptography library
 
@@ -205,22 +200,20 @@ verifier = ryjwt.PublicKey(public_pem, algorithms=["EdDSA"])
 
 ### Weak keys
 
-These keys are rejected when you create the key object. Otherwise every token would fail to
-verify later, or worse, a forged one could pass:
+These are rejected up front, rather than failing every token later or, worse, passing a forged
+one:
 
-- RSA keys smaller than 2048 bits, or larger than 8192.
-- A handful of special Ed25519 public keys (the "small-order" points). Anyone can make a signature
-  that such a key accepts.
+- RSA keys under 2048 bits or over 8192.
+- The few special ("small-order") Ed25519 public keys, which accept signatures anyone can make.
 
 ## JWKS documents
 
-Identity providers publish the public keys for their tokens as a JWKS (JSON Web Key Set): a JSON
-document with a list of keys, each with an ID, its `kid`. A token's header names the `kid` of the
-key that signed it.
+A JWKS (JSON Web Key Set) is a JSON list of public keys, each with an ID, its `kid`. A token's
+header names the `kid` of the key that signed it.
 
-[`PublicKey.from_jwks`][ryjwt.PublicKey.from_jwks] takes such a document, as JSON (`str` or
-`bytes`) or already parsed (a `Mapping`). It returns a `PublicKey` that may hold several keys,
-and verifies each token with the key its `kid` names:
+[`PublicKey.from_jwks`][ryjwt.PublicKey.from_jwks] takes the document as JSON (`str` or `bytes`)
+or parsed (a `Mapping`). The `PublicKey` it returns verifies each token with the key its `kid`
+names:
 
 <!-- test: with-key-files -->
 ```python
@@ -236,19 +229,16 @@ verifier = ryjwt.PublicKey.from_jwks(Path("jwks.json").read_bytes(), algorithms=
 claims = verifier.decode(token)
 ```
 
-What can go wrong:
+- An [unusable document](#documents-that-are-rejected) is an
+  [`InvalidKeyError`][ryjwt.InvalidKeyError] from `from_jwks`.
+- A token whose `kid` isn't in the document is an [`UnknownKeyError`][ryjwt.UnknownKeyError] from
+  `decode`. Like every rejected token, that's an `InvalidTokenError`.
 
-- `from_jwks` raises [`InvalidKeyError`][ryjwt.InvalidKeyError] if the document is unusable (see
-  [below](#documents-that-are-rejected)).
-- `decode` raises [`UnknownKeyError`][ryjwt.UnknownKeyError] if the token's `kid` isn't in the
-  document. It's an `InvalidTokenError`, like every other reason a token is rejected.
+For a JWKS at a URL, use a [`JWKSClient`](jwks-urls.md): it refetches the document when the
+provider changes its keys.
 
-If the provider publishes its JWKS at a URL, as most do, use a [`JWKSClient`](jwks-urls.md). It
-fetches the document for you, and fetches it again when the provider changes its keys.
-
-Verifying with a JWKS is as fast as with a single PEM key. Once a token has verified, ryjwt
-remembers which key its header picked, so the next token with the same header skips the lookup
-(its signature is still checked).
+A JWKS is as fast as a single PEM key: ryjwt caches which key each token header picks (the
+signature is still checked).
 
 ### Which keys are used
 
@@ -261,32 +251,28 @@ remembers which key its header picked, so the next token with the same header sk
 | EC | P-521 | `ES512`, `ES521` |
 | OKP | Ed25519 | `EdDSA` |
 
-- Keys of any other type or curve are ignored.
-- Keys marked for encryption (`"use": "enc"`) are ignored.
-- A key only verifies algorithms that fit its own type and curve. An RSA key never verifies an
-  `ES256` token, so one document can safely mix RSA, EC and Ed25519 keys.
-- A key may name the one algorithm it's for (its `alg`). It's then only used for that algorithm,
-  and ignored if that algorithm isn't in your `algorithms`.
-- Ignored keys play no further part. For example, an encryption key may share its `kid` with a
-  signing key.
+- Keys of any other type or curve, and encryption keys (`"use": "enc"`), are ignored entirely:
+  one may even share its `kid` with a signing key.
+- A key only verifies the algorithms in its row, so a document can safely mix key types.
+- A key with an `alg` is used only for that algorithm, and ignored if it isn't in your
+  `algorithms`.
 
 ### Picking a token's key
 
-- The token's `kid` must match the `kid` of one of the keys used.
-- A token without a `kid` is only accepted when the document has a single usable key.
-- A key without a `kid` can only be picked when it's the only usable key.
+- The token's `kid` must match the `kid` of a used key.
+- A `kid` may be missing, from the token or from the key, only when the document has a single
+  usable key.
 
 ### Documents that are rejected
 
 `from_jwks` raises `InvalidKeyError` if the document:
 
-- contains a private key, in any entry, even one that would be ignored. A JWKS should only
-  publish public keys; one with a private key in it has leaked that key;
+- contains a private key, even in an ignored entry (that key has leaked);
 - has two usable keys with the same `kid`;
 - has an entry that isn't a valid key: not a JSON object, a field repeated or of the wrong type,
-  invalid base64url, values of the wrong length, or an EC point that isn't on its curve;
-- has a weak key: RSA outside 2048 to 8192 bits, or a small-order Ed25519 key;
-- has no key at all that can be used with your `algorithms`.
+  invalid base64url, values of the wrong length, or an EC point off its curve;
+- has a [weak key](#weak-keys);
+- has no key usable with your `algorithms`.
 
 ??? info "How ryjwt spots a private key"
 

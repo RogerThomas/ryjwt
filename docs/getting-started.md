@@ -2,8 +2,8 @@
 
 ## Pick a key class
 
-ryjwt has a class per kind of key. You give it the key, and the algorithms it may be used with.
-It checks them once, when you create it. Create it at startup, and use it for every token.
+Each kind of key has a class. It takes the key and the algorithms it may use, and checks them
+once, when created. Create it at startup and reuse it for every token.
 
 | class | key | algorithms | can |
 | :-- | :-- | :-- | :-- |
@@ -12,12 +12,12 @@ It checks them once, when you create it. Create it at startup, and use it for ev
 | [`PublicKey`][ryjwt.PublicKey] | a public key PEM, `str` or `bytes`, or a JWKS | as `PrivateKey` | `decode` |
 | [`JWKSClient`][ryjwt.JWKSClient] | a JWKS URL | as `PrivateKey` | `decode` |
 
-[Keys and algorithms](keys.md) has the details of each.
+[Keys and algorithms](keys.md) has the details.
 
 ## Encode and decode
 
-With a shared secret, the same `SecretKey` object signs and verifies. The claims can be a msgspec
-`Struct`, a pydantic `BaseModel` ([typed claims](#typed-claims)) or a dict:
+A `SecretKey` signs and verifies. The claims can be a `Struct`, a `BaseModel`
+([typed claims](#typed-claims)) or a dict:
 
 === "msgspec"
 
@@ -36,13 +36,8 @@ With a shared secret, the same `SecretKey` object signs and verifies. The claims
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
-    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
-    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
-    claims_in = Claims(sub="user-1", exp=expires)
-
-    token = key.encode(claims_in)
-    claims_out = key.decode(token, type=Claims)
-    assert claims_in == claims_out
+    token = key.encode(Claims(sub="user-1", exp=datetime.now(UTC) + timedelta(minutes=15)))
+    claims = key.decode(token, type=Claims)  # a Claims
     ```
 
 === "pydantic"
@@ -62,13 +57,8 @@ With a shared secret, the same `SecretKey` object signs and verifies. The claims
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
-    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
-    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
-    claims_in = Claims(sub="user-1", exp=expires)
-
-    token = key.encode(claims_in)
-    claims_out = key.decode(token, type=Claims)
-    assert claims_in == claims_out
+    token = key.encode(Claims(sub="user-1", exp=datetime.now(UTC) + timedelta(minutes=15)))
+    claims = key.decode(token, type=Claims)  # a Claims
     ```
 
 === "dict"
@@ -82,16 +72,14 @@ With a shared secret, the same `SecretKey` object signs and verifies. The claims
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
     token = key.encode({"sub": "user-1", "exp": int(time.time()) + 900})
-    claims = key.decode(token)
-    assert claims["sub"] == "user-1"
+    claims = key.decode(token)  # a dict
     ```
 
-In a real service, the secret comes from your configuration, and is at least 32 bytes long for
-`HS256` (see [HMAC secrets](keys.md#secretkey-hmac-secrets)).
+A real service loads the secret from its configuration: at least 32 bytes for `HS256`
+([HMAC secrets](keys.md#secretkey-hmac-secrets)).
 
-`decode` checks the signature. Then it checks the token's times: it mustn't have expired (its
-`exp` claim), or be used too early (its `nbf` claim). Set `audience` and `issuer` on the key to
-check who the token is for (`aud`) and who issued it (`iss`) as well:
+`decode` checks the signature, then that the token hasn't expired (`exp`) and isn't used too early
+(`nbf`). Set `audience` and `issuer` to also check who it's for (`aud`) and who issued it (`iss`):
 
 ```python
 import secrets
@@ -115,15 +103,13 @@ token = key.encode({
 claims = key.decode(token)
 ```
 
-A token with an `aud` claim is rejected unless you set `audience`. It's meant for a particular
-service, and ryjwt won't assume it's yours. `decode` can also take its own `audience` and
-`issuer`, which replace the key's for that call. [Encoding and decoding](encoding-and-decoding.md)
-covers every check.
+A token with an `aud` claim is rejected unless you set `audience`: ryjwt won't assume it's for
+you. `decode` also takes `audience` and `issuer`, replacing the key's for that call.
+[Encoding and decoding](encoding-and-decoding.md) covers every check.
 
 ## Handle invalid tokens
 
-Every reason `decode` rejects a token is an [`InvalidTokenError`][ryjwt.InvalidTokenError].
-Catch it, and respond 401.
+Every rejection raises an [`InvalidTokenError`][ryjwt.InvalidTokenError]. Respond 401:
 
 ```python
 import secrets
@@ -140,17 +126,17 @@ except ryjwt.InvalidTokenError as e:
     print(f"401: {e}")  # 401: Signature has expired
 ```
 
-[Errors](errors.md) lists the subclasses, for when you need to tell the reasons apart.
+Its subclasses, in [Errors](errors.md), tell the reasons apart.
 
 ## Typed claims
 
-With `type=Claims`, as in the msgspec and pydantic tabs [above](#encode-and-decode), `decode`
-returns a `Claims` instead of a dict, and your type checker knows it.
+With `type=Claims` ([above](#encode-and-decode)), `decode` returns a `Claims`, and your type
+checker knows it.
 
-The class also checks the claims. A token whose claims don't fit it is rejected with
-[`ClaimsValidationError`][ryjwt.ClaimsValidationError]. So a required field makes its claim
-required: here, a token without `exp` is rejected. Decoded to a dict, it would be accepted, and
-never expire.
+The class also validates the claims, raising
+[`ClaimsValidationError`][ryjwt.ClaimsValidationError] if they don't fit. So a required field
+makes its claim required: here, a token without `exp` is rejected. As a dict, it would be accepted,
+and never expire.
 
 === "msgspec"
 
@@ -200,16 +186,15 @@ never expire.
 
 ## Public-key signatures
 
-When one service issues tokens and others verify them, sign with a private key and verify with
-its public key. Make a key pair, for instance with OpenSSL:
+When one service issues tokens and others verify them, use a key pair. For instance, with
+OpenSSL:
 
 ```console
 openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 -out private.pem
 openssl pkey -in private.pem -pubout -out public.pem
 ```
 
-The issuer signs with a `PrivateKey`. The services that check tokens only get the `PublicKey`,
-which can't sign:
+The issuer signs with the `PrivateKey`. Verifiers get only the `PublicKey`, which can't sign:
 
 <!-- test: with-key-files -->
 ```python
@@ -222,14 +207,13 @@ verifier = ryjwt.PublicKey.from_path("public.pem", algorithms=["ES256"])
 claims = verifier.decode(token)
 ```
 
-If your tokens come from an identity provider (Auth0, Okta, Entra ID, Google, Keycloak, ...),
-verify them with a [`JWKSClient`](jwks-urls.md) instead. It fetches the provider's public keys,
-and keeps them up to date when the provider changes them.
+For tokens from an identity provider (Auth0, Okta, Entra ID, Google, Keycloak, ...), use a
+[`JWKSClient`](jwks-urls.md). It fetches the provider's public keys and keeps them up to date.
 
 ## Let the type checker help
 
-`algorithms` is typed with Literals ([`HMACAlgorithm`][ryjwt.HMACAlgorithm] and
-[`AsymmetricAlgorithm`][ryjwt.AsymmetricAlgorithm], which you can use in your own annotations),
-so a type checker catches an algorithm that doesn't fit the key, or a typo. `PublicKey` has no
-`encode` at all, and `decode(token, type=Claims)` is typed to return a `Claims`. Untyped callers
-get the same mistakes as runtime errors.
+`algorithms` takes Literals, so a type checker catches a typo or an algorithm that doesn't fit
+the key. Use [`HMACAlgorithm`][ryjwt.HMACAlgorithm] and
+[`AsymmetricAlgorithm`][ryjwt.AsymmetricAlgorithm] in your own annotations. `PublicKey` has no
+`encode`, and `decode(token, type=Claims)` returns a `Claims`. Untyped code gets runtime errors
+instead.
