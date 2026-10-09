@@ -132,6 +132,22 @@ tasks:
         docker compose run --rm --no-deps matrix-jsonwebtoken 1 {{.SOURCES}} {{.CASES}}
       - task: race-svg
 
+  bench-download:
+    desc: 'Put a Benchmarks workflow run''s results in place (the results files and pages, and the races in assets/ and docs/assets/), from its artifact, and show the machine they ran on (needs gh): task bench-download -- <run id>'
+    cmds:
+      - |
+        set -eu
+        dir=$(mktemp -d)
+        trap 'rm -rf "$dir"' EXIT
+        gh run download {{.CLI_ARGS}} --dir "$dir"
+        machine=$(find "$dir" -name machine.txt | head -n 1)
+        test -n "$machine" || { echo "No benchmark results in run {{.CLI_ARGS}}" >&2; exit 1; }
+        artifact=$(dirname "$machine")
+        cat "$machine"
+        parts=$(cd "$artifact" && ls -d bench assets 2>/dev/null || true)
+        tar -C "$artifact" -cf - $parts | tar -xvf -
+        if [ -d "$artifact/assets" ]; then cp "$artifact"/assets/perf-race*.svg docs/assets/; fi
+
   race-svg:
     desc: 'Redraw the decode races (assets/perf-race.svg, HS256, and assets/perf-race-es256.svg, ES256; copied to docs/assets/) from bench-race''s results in bench/results-race'
     dir: bench

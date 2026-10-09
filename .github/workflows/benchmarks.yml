@@ -1,0 +1,125 @@
+# Runs the benchmarks (bench/, as `task bench-race`, `task bench-docker` and `task bench-matrix` do
+# locally) on a GitHub-hosted Linux runner, for any commit, tag or branch, and uploads the results
+# as an artifact: the results files and pages, the race SVGs, and machine.txt (what it ran on).
+# Run by hand only, from the Actions tab or `gh workflow run benchmarks.yml -f ref=v0.1.0 -f
+# benchmarks=race`.
+#
+# Every library runs in the one job, one after another, so they're all timed on the same machine:
+# runners differ, so a job per library would compare machines. Runners are shared VMs, so expect a
+# few percent of variation from run to run; compare runs on the same runner. Neither runner has the
+# Apple Silicon slowdown (docs/benchmarks/index.md): aws-lc detects both CPUs.
+#
+# The ref must have the task asked for: `bench-race` is newer than v0.1.0.
+name: Benchmarks
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Commit SHA, tag or branch to benchmark"
+        type: string
+        default: main
+      benchmarks:
+        description: "race: the races' two cases (about 10 min, most of it building the images); hs256: HS256 by token and key size; matrix: the full matrix; all: all three"
+        type: choice
+        options: [race, hs256, matrix, all]
+        default: race
+      runner:
+        description: "ubuntu-24.04 is x86_64; ubuntu-24.04-arm is arm64 (Arm Neoverse)"
+        type: choice
+        options: [ubuntu-24.04, ubuntu-24.04-arm]
+        default: ubuntu-24.04
+
+permissions:
+  contents: read
+
+# One run at a time, none cancelled: two on one runner pool would be timed side by side.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  TASK_VERSION: 3.54.0 # as ci.yml
+  UV_VERSION: 0.12.23 # as bench/docker/python.Dockerfile
+
+jobs:
+  bench:
+    name: Benchmark ${{ inputs.benchmarks }} at ${{ inputs.ref }} on ${{ inputs.runner }}
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+      - uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2.2.0
+        with:
+          version: ${{ env.TASK_VERSION }}
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: false
+      # The pages and SVGs are written by scripts run with `uv run`, which builds ryjwt: built here,
+      # before any timing, rather than between benchmarks.
+      - name: Install Rust (rust-toolchain.toml)
+        run: rustup toolchain install
+      - name: Build the dev environment
+        run: uv sync --locked
+      - name: Record the machine
+        id: machine
+        env:
+          REF: ${{ inputs.ref }}
+          RUNNER: ${{ inputs.runner }}
+        run: |
+          {
+            echo "ref: $REF ($(git rev-parse HEAD))"
+            echo "runner: $RUNNER"
+            echo "date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo
+            lscpu
+            echo
+            free -h
+            echo
+            docker version --format 'Docker {{.Server.Version}}'
+            uname -a
+          } | tee bench/machine.txt
+          echo "sha=$(git rev-parse --short=12 HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Benchmark
+        env:
+          BENCHMARKS: ${{ inputs.benchmarks }}
+        run: |
+          case $BENCHMARKS in
+            race) task bench-race ;;
+            hs256) task bench-docker ;;
+            matrix) task bench-matrix ;;
+            all) task bench-matrix && task bench-docker && task bench-race ;;
+          esac
+      # Only what this run wrote: the results files of the benchmarks it ran, and what's made from
+      # them.
+      - name: Collect the results
+        run: |
+          mkdir out
+          cp bench/machine.txt out/
+          git ls-files --modified --others --exclude-standard -- bench/results-race bench/results-docker \
+            bench/results-docker.md bench/results-matrix bench/results-matrix.md assets/perf-race.svg \
+            assets/perf-race-es256.svg | xargs -r cp --parents --target-directory=out
+          find out -type f | sort
+      - name: Summary
+        run: |
+          {
+            echo '```'
+            cat out/machine.txt
+            echo '```'
+            for svg in out/assets/perf-race*.svg; do
+              [ -f "$svg" ] && sed -n 's/.*<desc>\(.*\)<\/desc>.*/- \1/p' "$svg"
+            done
+            for page in out/bench/results-docker.md out/bench/results-matrix.md; do
+              [ -f "$page" ] && cat "$page"
+            done
+            true
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: bench-${{ inputs.benchmarks }}-${{ steps.machine.outputs.sha }}-${{ inputs.runner }}
+          path: out/
+          if-no-files-found: error
