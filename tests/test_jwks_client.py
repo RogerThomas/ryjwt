@@ -1502,13 +1502,14 @@ def test_decode_nowait_uses_expired_keys_until_max_stale(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    caller = make_client(server.url, cache_lifetime=0.05, max_stale=0.2, cooldown=0)
+    # Wide enough that a slow CI runner's sleep(0.1) doesn't overshoot max_stale.
+    caller = make_client(server.url, cache_lifetime=0.05, max_stale=0.5, cooldown=0)
     caller.refresh()
     time.sleep(0.1)
 
     assert caller.client.needs_refresh
     assert caller.client.decode_nowait(old_token) == {"sub": "old"}  # expired, not over max_stale
-    time.sleep(0.2)
+    time.sleep(0.5)
     message = f"The keys from {server.origin} expired over max_stale ago: call refresh()"
     with pytest.raises(ryjwt.JWKSFetchError, match=re.escape(message)):
         caller.client.decode_nowait(old_token)
