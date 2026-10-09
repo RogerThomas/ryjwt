@@ -102,7 +102,7 @@ jobs:
           cp bench/machine.txt out/
           git ls-files --modified --others --exclude-standard -- bench/results-race bench/results-docker \
             bench/results-docker.md bench/results-matrix bench/results-matrix.md assets/perf-race.svg \
-            assets/perf-race-es256.svg | xargs -r cp --parents --target-directory=out
+            assets/perf-race-rs256.svg | xargs -r cp --parents --target-directory=out
           find out -type f | sort
       - name: Summary
         run: |

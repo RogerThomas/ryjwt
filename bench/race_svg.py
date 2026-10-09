@@ -5,9 +5,9 @@ from `task bench-race`'s run of their two cases of the matrix (bench/results-rac
 docs site shows).
 
 - assets/perf-race.svg: HS256, a typical token, the 64-byte secret.
-- assets/perf-race-es256.svg: ES256 with a PEM public key, a typical token. ES256 because Docker on
-  Apple Silicon doesn't slow it down (see the Apple Silicon caveat in compare.py), so it's fair to
-  every library.
+- assets/perf-race-rs256.svg: RS256 with a 3072-bit RSA PEM public key, a typical token: what most
+  identity providers sign with. Draw it from a Linux run: Docker on Apple Silicon slows down RSA
+  for ryjwt and jsonwebtoken only (see the Apple Silicon caveat in compare.py).
 
 A lane per library. Each bar fills over the time the library takes (decodes x its mean time per
 decode), in real time, then every bar holds while the finish times show, and the race restarts.
@@ -300,7 +300,9 @@ class Races:
                 "as msgspec. ryjwt checks exp and aud first, before any of the model's code runs.",
             ),
         ),
-        Race("pem", "typical-es256", "ES256", "a PEM public key", "perf-race-es256.svg"),
+        Race(
+            "pem", "typical-rs3072", "RS256", "a 3072-bit RSA PEM public key", "perf-race-rs256.svg"
+        ),
     ]
 
     def _row(self, key: str, race: Race) -> dict[str, Any]:
@@ -331,7 +333,7 @@ def _mean_us(lane: Lane) -> float:
 
 
 def main(results: str = "results-race", decodes: int = 100_000) -> None:
-    """Draws assets/perf-race.svg and assets/perf-race-es256.svg from bench/<results>/*.json, and
+    """Draws assets/perf-race.svg and assets/perf-race-rs256.svg from bench/<results>/*.json, and
     the same into docs/assets/, for the docs site (Zensical only publishes files in docs/; the
     README links to assets/, which tests/test_docs.py checks they match)."""
     root = Path(__file__).parent.parent
