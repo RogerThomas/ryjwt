@@ -10,11 +10,11 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 10108,
-      "ops_per_sec": 50736.81648271116,
-      "mean_us": 19.7095535219628,
-      "p50_us": 19.417,
-      "p99_us": 27.958419999999997
+      "iterations": 9858,
+      "ops_per_sec": 49962.832730837225,
+      "mean_us": 20.01487796713329,
+      "p50_us": 19.917,
+      "p99_us": 31.458419999999997
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -24,11 +24,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 5945,
-      "ops_per_sec": 30146.536456820115,
-      "mean_us": 33.17130647603028,
-      "p50_us": 32.75,
-      "p99_us": 42.88083
+      "iterations": 5843,
+      "ops_per_sec": 30027.442451209143,
+      "mean_us": 33.30286958754065,
+      "p50_us": 33.041,
+      "p99_us": 44.87583
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -38,11 +38,11 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 2502,
-      "ops_per_sec": 12693.460166468489,
-      "mean_us": 78.78072541966428,
-      "p50_us": 78.166,
-      "p99_us": 96.24051
+      "iterations": 2440,
+      "ops_per_sec": 12740.804667554106,
+      "mean_us": 78.48797827868852,
+      "p50_us": 78.125,
+      "p99_us": 95.89139999999999
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -52,11 +52,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 324,
-      "ops_per_sec": 1678.0924129117298,
-      "mean_us": 595.914737654321,
-      "p50_us": 595.438,
-      "p99_us": 640.95625
+      "iterations": 334,
+      "ops_per_sec": 1676.522721212216,
+      "mean_us": 596.4726796407186,
+      "p50_us": 595.375,
+      "p99_us": 660.542
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -66,11 +66,11 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 9958,
-      "ops_per_sec": 50012.82790363427,
-      "mean_us": 19.99487015464953,
-      "p50_us": 19.834,
-      "p99_us": 26.37541
+      "iterations": 9564,
+      "ops_per_sec": 49203.34186998967,
+      "mean_us": 20.32382277289837,
+      "p50_us": 20.083,
+      "p99_us": 27.00041
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -80,11 +80,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 5876,
-      "ops_per_sec": 29545.72061738549,
-      "mean_us": 33.84584904697073,
-      "p50_us": 33.833,
-      "p99_us": 45.584830000000004
+      "iterations": 5729,
+      "ops_per_sec": 29530.027169222885,
+      "mean_us": 33.8638360970501,
+      "p50_us": 33.5,
+      "p99_us": 44.29101
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -94,11 +94,11 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 2458,
-      "ops_per_sec": 12522.5409558159,
-      "mean_us": 79.85599755899105,
-      "p50_us": 79.875,
-      "p99_us": 93.84912
+      "iterations": 2461,
+      "ops_per_sec": 12507.435406071525,
+      "mean_us": 79.95244169036977,
+      "p50_us": 78.459,
+      "p99_us": 94.49175
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -108,11 +108,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 328,
-      "ops_per_sec": 1647.0703955577146,
-      "mean_us": 607.1385914634146,
-      "p50_us": 609.333,
-      "p99_us": 676.81444
+      "iterations": 332,
+      "ops_per_sec": 1676.372916345467,
+      "mean_us": 596.5259819277109,
+      "p50_us": 599.229,
+      "p99_us": 666.96626
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -122,11 +122,11 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 9084,
-      "ops_per_sec": 47639.73360830123,
-      "mean_us": 20.99088143989432,
-      "p50_us": 20.833,
-      "p99_us": 27.583009999999998
+      "iterations": 9374,
+      "ops_per_sec": 46747.64784876191,
+      "mean_us": 21.39145060806486,
+      "p50_us": 20.875,
+      "p99_us": 26.08441
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -136,11 +136,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 5782,
-      "ops_per_sec": 29005.900759385717,
-      "mean_us": 34.47574368730543,
-      "p50_us": 34.125,
-      "p99_us": 41.75125
+      "iterations": 5692,
+      "ops_per_sec": 28131.865142560106,
+      "mean_us": 35.5468787772312,
+      "p50_us": 34.625,
+      "p99_us": 44.584669999999996
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -150,11 +150,11 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 2488,
-      "ops_per_sec": 12493.404055105875,
-      "mean_us": 80.04223633440515,
-      "p50_us": 79.834,
-      "p99_us": 101.84175
+      "iterations": 2440,
+      "ops_per_sec": 12185.253284622417,
+      "mean_us": 82.06641065573771,
+      "p50_us": 80.792,
+      "p99_us": 109.3832
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -164,11 +164,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 331,
-      "ops_per_sec": 1659.555479792029,
-      "mean_us": 602.570996978852,
-      "p50_us": 604.542,
-      "p99_us": 660.16864
+      "iterations": 325,
+      "ops_per_sec": 1669.5909423592016,
+      "mean_us": 598.9491046153846,
+      "p50_us": 594.625,
+      "p99_us": 647.52912
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -178,11 +178,11 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 4549,
-      "ops_per_sec": 22963.125813578146,
-      "mean_us": 43.548078258958014,
-      "p50_us": 43.3335,
-      "p99_us": 53.46024
+      "iterations": 4514,
+      "ops_per_sec": 22602.599503237525,
+      "mean_us": 44.242698715108546,
+      "p50_us": 43.375,
+      "p99_us": 54.62541
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -192,11 +192,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 3424,
-      "ops_per_sec": 17408.42487229517,
-      "mean_us": 57.44345093457944,
-      "p50_us": 57.0,
-      "p99_us": 67.875
+      "iterations": 3450,
+      "ops_per_sec": 17060.054040712865,
+      "mean_us": 58.61646144927536,
+      "p50_us": 57.333,
+      "p99_us": 91.42366
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -206,11 +206,11 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 1916,
-      "ops_per_sec": 9714.458253842049,
-      "mean_us": 102.9393481210856,
-      "p50_us": 102.334,
-      "p99_us": 123.38607
+      "iterations": 1896,
+      "ops_per_sec": 9577.257045294971,
+      "mean_us": 104.41402953586497,
+      "p50_us": 102.458,
+      "p99_us": 123.57656
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -220,11 +220,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 313,
-      "ops_per_sec": 1604.111930297534,
-      "mean_us": 623.39789456869,
-      "p50_us": 628.542,
-      "p99_us": 789.31456
+      "iterations": 319,
+      "ops_per_sec": 1596.17917736728,
+      "mean_us": 626.4960815047023,
+      "p50_us": 626.125,
+      "p99_us": 679.5405
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -234,11 +234,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 4952,
-      "ops_per_sec": 26579.784978556898,
-      "mean_us": 37.62257673667205,
-      "p50_us": 37.292,
-      "p99_us": 48.458
+      "iterations": 5257,
+      "ops_per_sec": 26362.78669749931,
+      "mean_us": 37.93225699067909,
+      "p50_us": 37.208,
+      "p99_us": 48.16601
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -248,11 +248,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 3898,
-      "ops_per_sec": 20016.753375548415,
-      "mean_us": 49.95815161621344,
-      "p50_us": 49.5,
-      "p99_us": 59.41908
+      "iterations": 3870,
+      "ops_per_sec": 19707.514914909545,
+      "mean_us": 50.74206485788114,
+      "p50_us": 49.959,
+      "p99_us": 63.37584
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -262,11 +262,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 2068,
-      "ops_per_sec": 10372.465818010372,
-      "mean_us": 96.4090909090909,
-      "p50_us": 95.791,
-      "p99_us": 108.91533
+      "iterations": 2022,
+      "ops_per_sec": 10215.382343952419,
+      "mean_us": 97.89158803165184,
+      "p50_us": 96.0,
+      "p99_us": 117.66675
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -276,11 +276,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 325,
-      "ops_per_sec": 1629.3677238547582,
-      "mean_us": 613.735,
-      "p50_us": 613.9795,
-      "p99_us": 727.0068299999999
+      "iterations": 324,
+      "ops_per_sec": 1609.7892436595532,
+      "mean_us": 621.1993302469136,
+      "p50_us": 631.208,
+      "p99_us": 915.54724
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -290,11 +290,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 3578,
-      "ops_per_sec": 18043.133608602566,
-      "mean_us": 55.42274538848518,
-      "p50_us": 54.666,
-      "p99_us": 67.29101
+      "iterations": 3637,
+      "ops_per_sec": 18057.99953391792,
+      "mean_us": 55.377119604069286,
+      "p50_us": 54.583,
+      "p99_us": 108.33883
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -304,11 +304,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 2919,
-      "ops_per_sec": 14567.967315649896,
-      "mean_us": 68.64375642343269,
-      "p50_us": 67.042,
-      "p99_us": 85.57941000000001
+      "iterations": 2565,
+      "ops_per_sec": 14246.392180326957,
+      "mean_us": 70.19321013645224,
+      "p50_us": 67.583,
+      "p99_us": 118.1625
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -318,11 +318,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 1737,
-      "ops_per_sec": 8669.717845006018,
-      "mean_us": 115.3440074841681,
-      "p50_us": 114.0,
-      "p99_us": 132.375
+      "iterations": 1725,
+      "ops_per_sec": 8544.634169611623,
+      "mean_us": 117.03251188405797,
+      "p50_us": 119.417,
+      "p99_us": 193.46362
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -332,11 +332,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 314,
-      "ops_per_sec": 1569.3758435332684,
-      "mean_us": 637.1959936305733,
-      "p50_us": 632.5,
-      "p99_us": 685.0498
+      "iterations": 301,
+      "ops_per_sec": 1574.208090958894,
+      "mean_us": 635.2400332225914,
+      "p50_us": 630.958,
+      "p99_us": 818.70425
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -346,11 +346,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 2502,
-      "ops_per_sec": 12882.298424467099,
-      "mean_us": 77.62589928057554,
-      "p50_us": 76.458,
-      "p99_us": 97.01848
+      "iterations": 2541,
+      "ops_per_sec": 12957.085541179575,
+      "mean_us": 77.17784966548604,
+      "p50_us": 76.417,
+      "p99_us": 96.24986
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -360,11 +360,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 2210,
-      "ops_per_sec": 10937.767133928079,
-      "mean_us": 91.42633846153845,
-      "p50_us": 93.791,
-      "p99_us": 160.92524
+      "iterations": 2171,
+      "ops_per_sec": 11165.38371042004,
+      "mean_us": 89.56252878857669,
+      "p50_us": 88.916,
+      "p99_us": 104.832
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -375,10 +375,10 @@
       "payload_size": "medium",
       "token_len": 2915,
       "iterations": 1416,
-      "ops_per_sec": 7255.530956322329,
-      "mean_us": 137.8258884180791,
-      "p50_us": 138.6665,
-      "p99_us": 162.65657000000002
+      "ops_per_sec": 7288.110463790336,
+      "mean_us": 137.20977542372881,
+      "p50_us": 136.209,
+      "p99_us": 217.15884
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -388,11 +388,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 279,
-      "ops_per_sec": 1478.5487849715341,
-      "mean_us": 676.3388602150537,
-      "p50_us": 683.083,
-      "p99_us": 883.24374
+      "iterations": 302,
+      "ops_per_sec": 1541.8517665243305,
+      "mean_us": 648.5707781456954,
+      "p50_us": 664.875,
+      "p99_us": 967.534
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -402,11 +402,11 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 3269,
-      "ops_per_sec": 16420.98812253704,
-      "mean_us": 60.897675130009176,
-      "p50_us": 59.6665,
-      "p99_us": 76.41450999999999
+      "iterations": 3378,
+      "ops_per_sec": 17200.49394237862,
+      "mean_us": 58.13786530491415,
+      "p50_us": 57.792,
+      "p99_us": 70.08384
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -416,11 +416,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 2597,
-      "ops_per_sec": 13624.368950261469,
-      "mean_us": 73.3978948787062,
-      "p50_us": 73.583,
-      "p99_us": 95.43352
+      "iterations": 2814,
+      "ops_per_sec": 14172.764375984138,
+      "mean_us": 70.55786531627577,
+      "p50_us": 70.292,
+      "p99_us": 83.4918
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -430,11 +430,11 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 1601,
-      "ops_per_sec": 8110.440799417933,
-      "mean_us": 123.29786071205497,
-      "p50_us": 127.104,
-      "p99_us": 155.03073999999998
+      "iterations": 1678,
+      "ops_per_sec": 8489.054876387321,
+      "mean_us": 117.79874374255066,
+      "p50_us": 116.916,
+      "p99_us": 134.188
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -444,11 +444,11 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 284,
-      "ops_per_sec": 1500.0894613211494,
-      "mean_us": 666.6269084507041,
-      "p50_us": 669.042,
-      "p99_us": 755.763
+      "iterations": 316,
+      "ops_per_sec": 1587.4597352266865,
+      "mean_us": 629.9372373417722,
+      "p50_us": 629.833,
+      "p99_us": 682.6963199999999
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -458,11 +458,11 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 913,
-      "ops_per_sec": 4668.388250307974,
-      "mean_us": 214.20669112814895,
-      "p50_us": 212.25,
-      "p99_us": 301.77927
+      "iterations": 948,
+      "ops_per_sec": 4840.19713877873,
+      "mean_us": 206.60315506329113,
+      "p50_us": 209.0835,
+      "p99_us": 243.3005
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -472,11 +472,11 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 891,
-      "ops_per_sec": 4525.077407645011,
-      "mean_us": 220.99069472502808,
-      "p50_us": 217.333,
-      "p99_us": 247.32664000000003
+      "iterations": 872,
+      "ops_per_sec": 4562.619259908413,
+      "mean_us": 219.17235321100918,
+      "p50_us": 220.834,
+      "p99_us": 262.21064
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -486,11 +486,11 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 727,
-      "ops_per_sec": 3690.546563955964,
-      "mean_us": 270.9625749656121,
-      "p50_us": 268.542,
-      "p99_us": 309.08776
+      "iterations": 750,
+      "ops_per_sec": 3765.480057964897,
+      "mean_us": 265.570388,
+      "p50_us": 264.291,
+      "p99_us": 279.47
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -500,11 +500,11 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 252,
-      "ops_per_sec": 1266.1704728814598,
-      "mean_us": 789.7830674603175,
-      "p50_us": 795.9375,
-      "p99_us": 858.04841
+      "iterations": 254,
+      "ops_per_sec": 1268.7391904295107,
+      "mean_us": 788.1840551181102,
+      "p50_us": 788.833,
+      "p99_us": 837.3252
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -514,11 +514,11 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 631,
-      "ops_per_sec": 3187.0437328312855,
-      "mean_us": 313.77040412044374,
-      "p50_us": 309.916,
-      "p99_us": 376.05968
+      "iterations": 642,
+      "ops_per_sec": 3249.099533826082,
+      "mean_us": 307.77758255451715,
+      "p50_us": 310.5,
+      "p99_us": 334.20958
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -528,11 +528,11 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 498,
-      "ops_per_sec": 3057.8246616936085,
-      "mean_us": 327.02986947791163,
-      "p50_us": 322.166,
-      "p99_us": 377.28636
+      "iterations": 621,
+      "ops_per_sec": 3117.6002960003343,
+      "mean_us": 320.75952818035427,
+      "p50_us": 320.0,
+      "p99_us": 403.367
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -542,11 +542,11 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 541,
-      "ops_per_sec": 2708.6470849540074,
-      "mean_us": 369.188,
-      "p50_us": 371.0,
-      "p99_us": 415.97762
+      "iterations": 534,
+      "ops_per_sec": 2717.265695522013,
+      "mean_us": 368.01701123595507,
+      "p50_us": 366.958,
+      "p99_us": 388.583
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -556,11 +556,11 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 220,
-      "ops_per_sec": 1105.0695063604285,
-      "mean_us": 904.9204545454546,
-      "p50_us": 908.75,
-      "p99_us": 1102.3087
+      "iterations": 222,
+      "ops_per_sec": 1119.9359315931026,
+      "mean_us": 892.9082207207207,
+      "p50_us": 896.084,
+      "p99_us": 920.59856
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -570,11 +570,11 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 2315,
-      "ops_per_sec": 11825.866058361144,
-      "mean_us": 84.5604030237581,
-      "p50_us": 84.458,
-      "p99_us": 105.14824
+      "iterations": 2350,
+      "ops_per_sec": 12003.550026934945,
+      "mean_us": 83.30868765957447,
+      "p50_us": 83.125,
+      "p99_us": 110.83632
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -584,11 +584,11 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 2039,
-      "ops_per_sec": 10437.47779572488,
-      "mean_us": 95.80858705247671,
-      "p50_us": 94.458,
-      "p99_us": 112.792
+      "iterations": 2012,
+      "ops_per_sec": 10483.741891754436,
+      "mean_us": 95.38578976143141,
+      "p50_us": 94.834,
+      "p99_us": 100.6025
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -598,11 +598,11 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 1379,
-      "ops_per_sec": 6893.565242266127,
-      "mean_us": 145.0628179840464,
-      "p50_us": 144.584,
-      "p99_us": 192.22856
+      "iterations": 1395,
+      "ops_per_sec": 6998.541343444011,
+      "mean_us": 142.886917562724,
+      "p50_us": 142.0,
+      "p99_us": 159.63255999999998
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -612,11 +612,11 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 290,
-      "ops_per_sec": 1473.2135511486003,
-      "mean_us": 678.7882172413794,
-      "p50_us": 665.209,
-      "p99_us": 773.85894
+      "iterations": 302,
+      "ops_per_sec": 1512.0308464306122,
+      "mean_us": 661.3621688741722,
+      "p50_us": 661.75,
+      "p99_us": 684.7425
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -626,11 +626,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 3421,
-      "ops_per_sec": 17346.843974230203,
-      "mean_us": 57.64737386729027,
-      "p50_us": 56.958,
-      "p99_us": 69.08649000000001
+      "iterations": 3450,
+      "ops_per_sec": 17576.59877927006,
+      "mean_us": 56.893828695652175,
+      "p50_us": 56.5,
+      "p99_us": 61.958
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -640,11 +640,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 2392,
-      "ops_per_sec": 12282.531603320955,
-      "mean_us": 81.41644021739131,
-      "p50_us": 80.25,
-      "p99_us": 97.26092
+      "iterations": 2452,
+      "ops_per_sec": 12377.001340799747,
+      "mean_us": 80.795014274062,
+      "p50_us": 80.542,
+      "p99_us": 88.22732
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -654,11 +654,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 1116,
-      "ops_per_sec": 5824.16474027808,
-      "mean_us": 171.6984399641577,
-      "p50_us": 170.417,
-      "p99_us": 196.81933999999998
+      "iterations": 1179,
+      "ops_per_sec": 5904.148980698255,
+      "mean_us": 169.37241984732825,
+      "p50_us": 169.167,
+      "p99_us": 180.55988
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -669,10 +669,10 @@
       "payload_size": "large",
       "token_len": 21214,
       "iterations": 171,
-      "ops_per_sec": 839.6580494066875,
-      "mean_us": 1190.9610116959066,
-      "p50_us": 1180.042,
-      "p99_us": 1319.505
+      "ops_per_sec": 862.283058281006,
+      "mean_us": 1159.7119883040934,
+      "p50_us": 1214.625,
+      "p99_us": 2221.56
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -682,11 +682,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 2452,
-      "ops_per_sec": 12525.0349371598,
-      "mean_us": 79.84009665579119,
-      "p50_us": 79.084,
-      "p99_us": 92.71724
+      "iterations": 2518,
+      "ops_per_sec": 12562.553458828685,
+      "mean_us": 79.60165131056395,
+      "p50_us": 78.708,
+      "p99_us": 93.94391999999999
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -696,11 +696,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 1917,
-      "ops_per_sec": 9650.071639322909,
-      "mean_us": 103.62617370892019,
-      "p50_us": 105.209,
-      "p99_us": 163.979
+      "iterations": 1938,
+      "ops_per_sec": 9742.091792894409,
+      "mean_us": 102.6473596491228,
+      "p50_us": 102.167,
+      "p99_us": 114.15144000000001
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -710,11 +710,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 1004,
-      "ops_per_sec": 5119.213558267702,
-      "mean_us": 195.3425049800797,
-      "p50_us": 197.041,
-      "p99_us": 228.07896
+      "iterations": 1041,
+      "ops_per_sec": 5222.299939119822,
+      "mean_us": 191.48651200768492,
+      "p50_us": 191.584,
+      "p99_us": 211.07437
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -724,11 +724,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 165,
-      "ops_per_sec": 830.3662418378772,
-      "mean_us": 1204.287878787879,
-      "p50_us": 1215.896,
-      "p99_us": 1400.5759699999999
+      "iterations": 169,
+      "ops_per_sec": 846.0806904050476,
+      "mean_us": 1181.9203668639052,
+      "p50_us": 1180.583,
+      "p99_us": 1320.25368
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -738,11 +738,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 1725,
-      "ops_per_sec": 9124.349024641206,
-      "mean_us": 109.59685971014493,
-      "p50_us": 113.2295,
-      "p99_us": 137.13579000000001
+      "iterations": 1875,
+      "ops_per_sec": 9416.477606395876,
+      "mean_us": 106.1968224,
+      "p50_us": 105.333,
+      "p99_us": 112.32849
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -752,11 +752,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 1452,
-      "ops_per_sec": 7485.04568290402,
-      "mean_us": 133.59971900826446,
-      "p50_us": 132.2085,
-      "p99_us": 239.13609
+      "iterations": 1532,
+      "ops_per_sec": 7675.97239363585,
+      "mean_us": 130.27665404699738,
+      "p50_us": 129.083,
+      "p99_us": 146.67018
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -766,11 +766,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 872,
-      "ops_per_sec": 4438.461818684467,
-      "mean_us": 225.30327866972476,
-      "p50_us": 225.334,
-      "p99_us": 254.66335999999998
+      "iterations": 896,
+      "ops_per_sec": 4570.878596785979,
+      "mean_us": 218.7763203125,
+      "p50_us": 218.0,
+      "p99_us": 233.13662
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -780,11 +780,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 155,
-      "ops_per_sec": 802.3597991816624,
-      "mean_us": 1246.323658064516,
-      "p50_us": 1244.7705,
-      "p99_us": 1533.79652
+      "iterations": 166,
+      "ops_per_sec": 835.7064838332857,
+      "mean_us": 1196.5923674698795,
+      "p50_us": 1196.541,
+      "p99_us": 1278.46
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -794,11 +794,11 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 2711,
-      "ops_per_sec": 13486.049738640755,
-      "mean_us": 74.1506978974548,
-      "p50_us": 75.25,
-      "p99_us": 127.0693
+      "iterations": 2831,
+      "ops_per_sec": 14276.504978246534,
+      "mean_us": 70.04515471564818,
+      "p50_us": 69.584,
+      "p99_us": 79.417
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -808,11 +808,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 1931,
-      "ops_per_sec": 10464.784658333045,
-      "mean_us": 95.55858363542207,
-      "p50_us": 93.791,
-      "p99_us": 112.833
+      "iterations": 2096,
+      "ops_per_sec": 10523.51034803232,
+      "mean_us": 95.02532585877863,
+      "p50_us": 95.333,
+      "p99_us": 102.29144000000001
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -822,11 +822,11 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 1069,
-      "ops_per_sec": 5354.391388319456,
-      "mean_us": 186.7625893358279,
-      "p50_us": 182.875,
-      "p99_us": 212.07048999999998
+      "iterations": 1094,
+      "ops_per_sec": 5452.36046888745,
+      "mean_us": 183.40680255941498,
+      "p50_us": 182.792,
+      "p99_us": 198.19025
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -836,11 +836,11 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 162,
-      "ops_per_sec": 840.4629319634465,
-      "mean_us": 1189.8204691358026,
-      "p50_us": 1189.416,
-      "p99_us": 1284.72064
+      "iterations": 168,
+      "ops_per_sec": 855.1671026296679,
+      "mean_us": 1169.3621011904763,
+      "p50_us": 1170.333,
+      "p99_us": 1282.8388400000001
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -851,10 +851,10 @@
       "payload_size": "small",
       "token_len": 346,
       "iterations": 885,
-      "ops_per_sec": 4441.202060266109,
-      "mean_us": 225.16426553672315,
-      "p50_us": 222.4375,
-      "p99_us": 252.24107
+      "ops_per_sec": 4549.388820455286,
+      "mean_us": 219.80974576271186,
+      "p50_us": 218.791,
+      "p99_us": 300.02441
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -864,11 +864,11 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 809,
-      "ops_per_sec": 4097.7119419938235,
-      "mean_us": 244.0386279357231,
-      "p50_us": 245.667,
-      "p99_us": 291.87312
+      "iterations": 813,
+      "ops_per_sec": 4115.051890525953,
+      "mean_us": 243.01030135301352,
+      "p50_us": 241.792,
+      "p99_us": 260.34575
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -878,11 +878,11 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 587,
-      "ops_per_sec": 2987.270390993185,
-      "mean_us": 334.7537614991482,
-      "p50_us": 357.291,
-      "p99_us": 470.1418
+      "iterations": 598,
+      "ops_per_sec": 3010.94362706416,
+      "mean_us": 332.12179431438125,
+      "p50_us": 330.375,
+      "p99_us": 349.22064
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -892,11 +892,11 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 145,
-      "ops_per_sec": 750.1999981457126,
-      "mean_us": 1332.977875862069,
-      "p50_us": 1346.854,
-      "p99_us": 1651.9765300000001
+      "iterations": 148,
+      "ops_per_sec": 757.5048345570798,
+      "mean_us": 1320.123587837838,
+      "p50_us": 1321.4795,
+      "p99_us": 1357.69557
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -907,10 +907,10 @@
       "payload_size": "small",
       "token_len": 394,
       "iterations": 607,
-      "ops_per_sec": 3089.6494569747656,
-      "mean_us": 323.66131301482704,
-      "p50_us": 324.833,
-      "p99_us": 360.517
+      "ops_per_sec": 3050.5572011086415,
+      "mean_us": 327.8089654036244,
+      "p50_us": 326.709,
+      "p99_us": 340.1125
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -921,10 +921,10 @@
       "payload_size": "typical",
       "token_len": 794,
       "iterations": 566,
-      "ops_per_sec": 2887.9036817384012,
-      "mean_us": 346.27193639575967,
-      "p50_us": 346.166,
-      "p99_us": 380.22515999999996
+      "ops_per_sec": 2832.922031594098,
+      "mean_us": 352.9924187279152,
+      "p50_us": 345.209,
+      "p99_us": 383.99836
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -934,11 +934,11 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 448,
-      "ops_per_sec": 2278.4063438644293,
-      "mean_us": 438.9032723214286,
-      "p50_us": 438.375,
-      "p99_us": 501.5475
+      "iterations": 456,
+      "ops_per_sec": 2295.8543089119803,
+      "mean_us": 435.5677083333333,
+      "p50_us": 434.458,
+      "p99_us": 448.84328000000005
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -948,11 +948,11 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 136,
-      "ops_per_sec": 694.1800718623377,
-      "mean_us": 1440.5484117647059,
-      "p50_us": 1438.187,
-      "p99_us": 1797.29926
+      "iterations": 138,
+      "ops_per_sec": 694.0861441278025,
+      "mean_us": 1440.7433550724638,
+      "p50_us": 1439.625,
+      "p99_us": 1458.56302
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -962,11 +962,11 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 2061,
-      "ops_per_sec": 10316.051069708425,
-      "mean_us": 96.9363173216885,
-      "p50_us": 95.25,
-      "p99_us": 109.48897
+      "iterations": 1981,
+      "ops_per_sec": 10440.72442879487,
+      "mean_us": 95.77879454820798,
+      "p50_us": 94.875,
+      "p99_us": 101.9294
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -976,11 +976,11 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 1668,
-      "ops_per_sec": 8442.691282369035,
-      "mean_us": 118.4456432853717,
-      "p50_us": 117.25,
-      "p99_us": 132.62416000000002
+      "iterations": 1669,
+      "ops_per_sec": 8398.880582702963,
+      "mean_us": 119.0634859197124,
+      "p50_us": 119.084,
+      "p99_us": 132.03934
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -990,11 +990,11 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 956,
-      "ops_per_sec": 4741.942944158786,
-      "mean_us": 210.8840219665272,
-      "p50_us": 212.042,
-      "p99_us": 280.12822
+      "iterations": 961,
+      "ops_per_sec": 4806.561122987136,
+      "mean_us": 208.04895109261184,
+      "p50_us": 207.458,
+      "p99_us": 220.38197
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1004,11 +1004,11 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 151,
-      "ops_per_sec": 793.8008172489575,
-      "mean_us": 1259.7618675496688,
-      "p50_us": 1237.5,
-      "p99_us": 1417.5835
+      "iterations": 165,
+      "ops_per_sec": 832.9028571667409,
+      "mean_us": 1200.620206060606,
+      "p50_us": 1199.5625,
+      "p99_us": 1219.33875
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1018,11 +1018,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 3236,
-      "ops_per_sec": 16408.276703904972,
-      "mean_us": 60.944852286773795,
-      "p50_us": 60.75,
-      "p99_us": 75.30368
+      "iterations": 3277,
+      "ops_per_sec": 16515.569366341348,
+      "mean_us": 60.548926762282576,
+      "p50_us": 60.042,
+      "p99_us": 67.74375
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1032,11 +1032,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 2305,
-      "ops_per_sec": 11636.915591953337,
-      "mean_us": 85.93342386117136,
-      "p50_us": 84.917,
-      "p99_us": 101.721
+      "iterations": 2335,
+      "ops_per_sec": 11863.440851960277,
+      "mean_us": 84.29257687366167,
+      "p50_us": 83.917,
+      "p99_us": 94.953
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1046,11 +1046,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 1090,
-      "ops_per_sec": 5529.962118592615,
-      "mean_us": 180.83306513761468,
-      "p50_us": 178.459,
-      "p99_us": 198.84678
+      "iterations": 1130,
+      "ops_per_sec": 5627.248331589342,
+      "mean_us": 177.70674778761062,
+      "p50_us": 176.0,
+      "p99_us": 195.30102
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1060,11 +1060,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 162,
-      "ops_per_sec": 818.2310608147508,
-      "mean_us": 1222.1486666666667,
-      "p50_us": 1225.0415,
-      "p99_us": 1315.76106
+      "iterations": 158,
+      "ops_per_sec": 836.4031224834291,
+      "mean_us": 1195.5957278481012,
+      "p50_us": 1192.667,
+      "p99_us": 1238.9407099999999
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1074,11 +1074,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 2329,
-      "ops_per_sec": 11781.198012270605,
-      "mean_us": 84.88101116358953,
-      "p50_us": 86.083,
-      "p99_us": 135.30112
+      "iterations": 2416,
+      "ops_per_sec": 12166.12350162305,
+      "mean_us": 82.19545033112583,
+      "p50_us": 81.583,
+      "p99_us": 93.84625
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1088,11 +1088,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 1818,
-      "ops_per_sec": 9293.656922722354,
-      "mean_us": 107.60027062706271,
-      "p50_us": 106.709,
-      "p99_us": 124.88325
+      "iterations": 1861,
+      "ops_per_sec": 9392.354722176166,
+      "mean_us": 106.46957334766255,
+      "p50_us": 106.667,
+      "p99_us": 119.67447
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1102,11 +1102,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 964,
-      "ops_per_sec": 4917.613597205677,
-      "mean_us": 203.35066597510374,
-      "p50_us": 201.125,
-      "p99_us": 230.91060000000002
+      "iterations": 999,
+      "ops_per_sec": 5015.421114612629,
+      "mean_us": 199.38505205205206,
+      "p50_us": 198.667,
+      "p99_us": 218.54268
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1116,11 +1116,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 150,
-      "ops_per_sec": 788.6689305846468,
-      "mean_us": 1267.9591666666668,
-      "p50_us": 1264.375,
-      "p99_us": 1349.73008
+      "iterations": 161,
+      "ops_per_sec": 816.1703109177988,
+      "mean_us": 1225.2344720496894,
+      "p50_us": 1226.0,
+      "p99_us": 1250.95453
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1130,11 +1130,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 1785,
-      "ops_per_sec": 9067.062002083687,
-      "mean_us": 110.28930868347338,
-      "p50_us": 109.084,
-      "p99_us": 126.27808
+      "iterations": 1837,
+      "ops_per_sec": 9211.00570874768,
+      "mean_us": 108.56577789874795,
+      "p50_us": 108.25,
+      "p99_us": 120.4465
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1144,11 +1144,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 1461,
-      "ops_per_sec": 7437.932893676323,
-      "mean_us": 134.4459561943874,
-      "p50_us": 133.791,
-      "p99_us": 163.34803
+      "iterations": 1458,
+      "ops_per_sec": 7508.228230239849,
+      "mean_us": 133.18721399176957,
+      "p50_us": 132.875,
+      "p99_us": 157.82112
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1158,11 +1158,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 856,
-      "ops_per_sec": 4324.057650438007,
-      "mean_us": 231.264261682243,
-      "p50_us": 229.625,
-      "p99_us": 267.85356
+      "iterations": 875,
+      "ops_per_sec": 4386.740936647299,
+      "mean_us": 227.9596662857143,
+      "p50_us": 225.792,
+      "p99_us": 242.25696
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1172,11 +1172,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 155,
-      "ops_per_sec": 784.0285791062706,
-      "mean_us": 1275.4637096774195,
-      "p50_us": 1314.833,
-      "p99_us": 1611.74902
+      "iterations": 159,
+      "ops_per_sec": 805.4374627200232,
+      "mean_us": 1241.561320754717,
+      "p50_us": 1244.0,
+      "p99_us": 1311.7640800000001
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1186,11 +1186,11 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 2638,
-      "ops_per_sec": 13589.266861164895,
-      "mean_us": 73.58748711144807,
-      "p50_us": 72.75,
-      "p99_us": 88.625
+      "iterations": 2729,
+      "ops_per_sec": 13746.24390433543,
+      "mean_us": 72.74714510809821,
+      "p50_us": 72.583,
+      "p99_us": 83.76169
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1200,11 +1200,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 2019,
-      "ops_per_sec": 10062.040478347908,
-      "mean_us": 99.3834205052006,
-      "p50_us": 97.958,
-      "p99_us": 138.333
+      "iterations": 2034,
+      "ops_per_sec": 10220.823042579224,
+      "mean_us": 97.83947885939037,
+      "p50_us": 96.916,
+      "p99_us": 102.583
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1214,11 +1214,11 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 1015,
-      "ops_per_sec": 5164.443855262528,
-      "mean_us": 193.63169162561576,
-      "p50_us": 199.375,
-      "p99_us": 291.01725
+      "iterations": 1041,
+      "ops_per_sec": 5268.640781323334,
+      "mean_us": 189.80227377521612,
+      "p50_us": 189.083,
+      "p99_us": 206.525
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1228,11 +1228,11 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 156,
-      "ops_per_sec": 808.7079557593823,
-      "mean_us": 1236.540326923077,
-      "p50_us": 1228.25,
-      "p99_us": 1296.0115600000001
+      "iterations": 164,
+      "ops_per_sec": 824.7467598729744,
+      "mean_us": 1212.4933963414633,
+      "p50_us": 1212.021,
+      "p99_us": 1874.80215
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1242,11 +1242,11 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 891,
-      "ops_per_sec": 4473.120791250187,
-      "mean_us": 223.5575667789001,
-      "p50_us": 226.5415,
-      "p99_us": 286.79025
+      "iterations": 888,
+      "ops_per_sec": 4472.197023445669,
+      "mean_us": 223.60374436936937,
+      "p50_us": 223.458,
+      "p99_us": 236.13081
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1256,11 +1256,11 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 785,
-      "ops_per_sec": 4012.103591451652,
-      "mean_us": 249.24580764331208,
-      "p50_us": 245.6665,
-      "p99_us": 274.26932
+      "iterations": 807,
+      "ops_per_sec": 4056.3303755329553,
+      "mean_us": 246.52824287484512,
+      "p50_us": 245.083,
+      "p99_us": 262.205
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1270,11 +1270,11 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 583,
-      "ops_per_sec": 2919.6696466410963,
-      "mean_us": 342.5045025728988,
-      "p50_us": 342.208,
-      "p99_us": 382.41875
+      "iterations": 582,
+      "ops_per_sec": 2925.5431621493303,
+      "mean_us": 341.8168676975945,
+      "p50_us": 342.292,
+      "p99_us": 414.887
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1284,11 +1284,11 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 129,
-      "ops_per_sec": 717.1912801348973,
-      "mean_us": 1394.3281627906977,
-      "p50_us": 1390.1045,
-      "p99_us": 1481.915
+      "iterations": 139,
+      "ops_per_sec": 728.090973909101,
+      "mean_us": 1373.4547410071941,
+      "p50_us": 1375.042,
+      "p99_us": 1425.84864
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1298,11 +1298,11 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 612,
-      "ops_per_sec": 3066.150191369105,
-      "mean_us": 326.14188398692806,
-      "p50_us": 335.208,
-      "p99_us": 453.2475
+      "iterations": 609,
+      "ops_per_sec": 3084.7039963125376,
+      "mean_us": 324.18021346469624,
+      "p50_us": 322.458,
+      "p99_us": 339.17954
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1312,11 +1312,11 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 555,
-      "ops_per_sec": 2851.0469298609014,
-      "mean_us": 350.74834774774774,
-      "p50_us": 351.209,
-      "p99_us": 385.29344
+      "iterations": 562,
+      "ops_per_sec": 2819.834171673712,
+      "mean_us": 354.63078291814946,
+      "p50_us": 350.0,
+      "p99_us": 368.40686
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1326,11 +1326,11 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 442,
-      "ops_per_sec": 2238.3373395267213,
-      "mean_us": 446.7601832579186,
-      "p50_us": 445.083,
-      "p99_us": 482.68196
+      "iterations": 451,
+      "ops_per_sec": 2259.5147929957548,
+      "mean_us": 442.5728935698448,
+      "p50_us": 443.916,
+      "p99_us": 546.96816
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1340,11 +1340,11 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 132,
-      "ops_per_sec": 667.2897197962506,
-      "mean_us": 1498.5994393939395,
-      "p50_us": 1497.375,
-      "p99_us": 1579.78949
+      "iterations": 126,
+      "ops_per_sec": 668.9364210334252,
+      "mean_us": 1494.910380952381,
+      "p50_us": 1483.875,
+      "p99_us": 1598.58496
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1354,11 +1354,11 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 1920,
-      "ops_per_sec": 10033.748460688419,
-      "mean_us": 99.66365052083334,
-      "p50_us": 98.084,
-      "p99_us": 115.67582
+      "iterations": 2026,
+      "ops_per_sec": 10172.40621842305,
+      "mean_us": 98.305157946693,
+      "p50_us": 97.542,
+      "p99_us": 102.90001
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1368,11 +1368,11 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 1610,
-      "ops_per_sec": 8089.051595277036,
-      "mean_us": 123.62388695652173,
-      "p50_us": 121.833,
-      "p99_us": 143.64362
+      "iterations": 1643,
+      "ops_per_sec": 8206.721469717422,
+      "mean_us": 121.8513390139988,
+      "p50_us": 120.75,
+      "p99_us": 131.51811999999998
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1382,11 +1382,11 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 898,
-      "ops_per_sec": 4555.030646606332,
-      "mean_us": 219.53749109131402,
-      "p50_us": 219.875,
-      "p99_us": 246.87018
+      "iterations": 913,
+      "ops_per_sec": 4623.879323333498,
+      "mean_us": 216.26861993428258,
+      "p50_us": 214.917,
+      "p99_us": 238.10648
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -1396,24 +1396,24 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 156,
-      "ops_per_sec": 791.2097971086516,
-      "mean_us": 1263.887282051282,
-      "p50_us": 1295.5835,
-      "p99_us": 1459.6518899999999
+      "iterations": 160,
+      "ops_per_sec": 806.3503435911731,
+      "mean_us": 1240.15573125,
+      "p50_us": 1244.625,
+      "p99_us": 1268.0834
     }
   ],
   "first_fetch": [
     {
       "source": "jwks-url-sync",
       "name": "typical-rs3072",
-      "ms": 1.46175,
+      "ms": 1.617458,
       "trials_ms": [
-        2.5885,
-        1.46175,
-        1.552958,
-        1.431708,
-        1.361958
+        2.194791,
+        7.103291,
+        1.617458,
+        1.482375,
+        1.406
       ]
     }
   ],

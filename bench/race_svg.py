@@ -1,7 +1,8 @@
 #!yeet
 """Draw the decode races, animated SVGs of how long each library takes to decode 100,000 tokens,
-from the full matrix's results (bench/results-matrix/*.json): `task race-svg`. Each is written to
-assets/ (which the README shows) and docs/assets/ (which the docs site shows).
+from `task bench-race`'s run of their two cases of the matrix (bench/results-race/*.json):
+`task race-svg`. Each is written to assets/ (which the README shows) and docs/assets/ (which the
+docs site shows).
 
 - assets/perf-race.svg: HS256, a typical token, the 64-byte secret.
 - assets/perf-race-es256.svg: ES256 with a PEM public key, a typical token. ES256 because Docker on
@@ -325,7 +326,7 @@ def _mean_us(lane: Lane) -> float:
     return lane.mean_us
 
 
-def main(results: str = "results-matrix", decodes: int = 100_000) -> None:
+def main(results: str = "results-race", decodes: int = 100_000) -> None:
     """Draws assets/perf-race.svg and assets/perf-race-es256.svg from bench/<results>/*.json, and
     the same into docs/assets/, for the docs site (Zensical only publishes files in docs/; the
     README links to assets/, which tests/test_docs.py checks they match)."""

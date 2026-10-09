@@ -1,0 +1,51 @@
+{
+  "impl": "jwcrypto 1.6.1",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "jwcrypto 1.6.1",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 4144,
+      "ops_per_sec": 22269.946521765123,
+      "mean_us": 44.9035653957529,
+      "p50_us": 44.167,
+      "p99_us": 61.54267
+    },
+    {
+      "impl": "jwcrypto 1.6.1",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 2162,
+      "ops_per_sec": 11485.386190107642,
+      "mean_us": 87.0671637372803,
+      "p50_us": 85.25,
+      "p99_us": 116.50713999999999
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "jwcrypto has no JWKS URL client"
+    },
+    {
+      "source": "jwks-url-async",
+      "alg": "*",
+      "reason": "jwcrypto has no JWKS URL client"
+    }
+  ],
+  "notes": [
+    "`jwt.JWT(jwt=token, key=key, algs=[...], check_claims={\"exp\": None, \"aud\": ...})`, then `json.loads` of its `claims`",
+    "keys built once (`JWK.from_password`, `JWK.from_pem`); JWKS document: a `JWKSet`, which picks the key by `kid`"
+  ]
+}

@@ -7,7 +7,9 @@
 //! `JwkSet`, each key turned into a `DecodingKey` with `DecodingKey::from_jwk` once, then picked per
 //! token by the `kid` from `decode_header`). jsonwebtoken doesn't fetch JWKS URLs.
 //!
-//! Usage: `jwt_matrix [budget]` (1.0: 0.1 s warm-up, 5 batches of 0.2 s, 0.3 s of samples per case).
+//! Usage: `jwt_matrix [budget] [only_sources] [only_cases]`: `budget` scales each case's time (1.0:
+//! 0.1 s warm-up, 5 batches of 0.2 s, 0.3 s of samples); `only_sources` and `only_cases` are
+//! comma-separated filters, as bench_matrix.py's (empty: all).
 
 use std::collections::HashMap;
 use std::hint::black_box;
@@ -163,10 +165,23 @@ fn jwks_keys(jwks: &str) -> HashMap<String, DecodingKey> {
         .collect()
 }
 
+/// The comma-separated filter at argument `n`: `None` (everything) if it's missing or empty.
+fn filter_arg(n: usize) -> Option<Vec<String>> {
+    let arg = std::env::args().nth(n).filter(|s| !s.is_empty())?;
+    Some(arg.split(',').map(str::to_owned).collect())
+}
+
+/// Whether `filter` (from `filter_arg`) takes `name`.
+fn selected(filter: Option<&Vec<String>>, name: &str) -> bool {
+    filter.is_none_or(|names| names.iter().any(|n| n == name))
+}
+
 fn main() {
     let budget_scale: f64 = std::env::args()
         .nth(1)
         .map_or(1.0, |s| s.parse().expect("budget"));
+    let only_sources = filter_arg(2);
+    let only_cases = filter_arg(3);
     let budget = Budget {
         warmup: Duration::from_secs_f64(0.1 * budget_scale),
         batch: Duration::from_secs_f64(0.2 * budget_scale),
@@ -197,6 +212,9 @@ fn main() {
 
     let mut rows = Vec::new();
     for source in ["hmac", "pem", "jwks"] {
+        if !selected(only_sources.as_ref(), source) {
+            continue;
+        }
         println!(
             "\n{source}\n{:<16} {:>9} {:>10} {:>10} {:>9} {:>9}",
             "case", "token_len", "iterations", "mean µs", "p50 µs", "p99 µs"
@@ -204,7 +222,10 @@ fn main() {
         for case in fixtures["cases"].as_array().expect("cases") {
             let s = |k: &str| case[k].as_str().expect(k).to_owned();
             let (name, alg_name, token) = (s("name"), s("alg"), s("token"));
-            if (alg_name == "HS256") != (source == "hmac") || alg_name == "ES512" {
+            if (alg_name == "HS256") != (source == "hmac")
+                || alg_name == "ES512"
+                || !selected(only_cases.as_ref(), &name)
+            {
                 continue;
             }
             let key = &fixtures["keys"][s("key")];

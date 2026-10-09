@@ -22,7 +22,9 @@ There are two sets of results:
 ## The races
 
 Each bar is one library decoding 100,000 tokens, filling in real time. A library's time is
-100,000 times its mean time per decode, from the full matrix.
+100,000 times its mean time per decode, measured as the full matrix measures it, in a run of just
+the races' two cases (`task bench-race`). So a race's times can differ a little from the same case
+on the matrix page.
 
 ![A race to decode 100,000 HS256 tokens: ryjwt finishes in about a tenth of a second, the Rust and Bun libraries take three to ten times as long, and the other Python libraries from about one and a half to over four seconds](../assets/perf-race.svg)
 
@@ -84,7 +86,8 @@ The benchmarks are in the repository's `bench/` directory. You need Docker,
 ```console
 task bench-docker  # HS256: bench/results-docker.md
 task bench-matrix  # the full matrix: bench/results-matrix.md
-task race-svg      # the races, from the full matrix's results
+task bench-race    # just the races' two cases, then redraws the races
+task race-svg      # redraws the races from bench-race's results
 ```
 
 These pages show those files as they are, so rerunning the benchmarks updates the docs.

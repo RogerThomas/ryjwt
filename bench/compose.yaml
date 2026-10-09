@@ -30,10 +30,11 @@ x-rust: &rust
     context: .
     dockerfile: docker/rust.Dockerfile
 
-# The full matrix (`task bench-matrix`): the same images and limits, results in results-matrix/, and
-# the JWKS server up (and healthy) before each benchmark starts.
+# The full matrix (`task bench-matrix`): the same images and limits, results in results-matrix/ (or
+# $MATRIX_RESULTS/: `task bench-race` runs just the races' cases, into results-race/), and the JWKS
+# server up (and healthy) before each benchmark starts.
 x-matrix-volumes: &matrix-volumes
-  - ./results-matrix:/app/bench/results/matrix
+  - ./${MATRIX_RESULTS:-results-matrix}:/app/bench/results/matrix
 
 x-needs-jwks: &needs-jwks
   jwks:
