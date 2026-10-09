@@ -77,7 +77,10 @@ class RaceSVG:
     # reach the track
     name_char_width: ClassVar[float] = 7.4
     name_gap: ClassVar[int] = 14
-    badge_room: ClassVar[int] = 90  # right of the track, for the finish time
+    badge_room: ClassVar[int] = 140  # right of the track, for the finish time and speed-up
+    baseline: ClassVar[str] = "pyjwt"
+    """The lane (results key) the others' speed-ups are against."""
+    baseline_name: ClassVar[str] = "PyJWT"
     header_height: ClassVar[int] = 58
     hold_seconds: ClassVar[float] = 3.0
     axis_ticks: ClassVar[int] = 6
@@ -99,6 +102,17 @@ class RaceSVG:
 
     def _loop_seconds(self) -> float:
         return self._race_seconds() + self.hold_seconds
+
+    def _baseline(self) -> Lane:
+        return next(lane for lane in self.lanes if lane.key == self.baseline)
+
+    def _speedup(self, lane: Lane) -> str:
+        """How many times faster than the baseline `lane` is (`~31x`, `~2.4x`, as a
+        multiplication sign), or nothing for the baseline itself."""
+        if lane.key == self.baseline:
+            return ""
+        ratio = self._baseline().mean_us / lane.mean_us
+        return f"~{ratio:.0f}&#215;" if ratio >= 10 else f"~{ratio:.1f}&#215;"
 
     def _lane_y(self, index: int) -> int:
         return self.header_height + index * (self.lane_height + self.lane_gap)
@@ -134,7 +148,7 @@ fill="{lane.color}" />
     <text x="{self.name_x}" y="{middle + 10:.1f}" class="rate">{rate:,.0f} decodes/s</text>
     <g id="badge-{lane.key}" opacity="0">
       <text x="{badge_x}" y="{middle + 4:.1f}" class="badge" fill="{lane.color}">\
-&#x2713; {self._seconds(lane):.2f}s</text>
+&#x2713; {self._seconds(lane):.2f}s <tspan class="speedup">{self._speedup(lane)}</tspan></text>
     </g>
   </g>"""
 
@@ -174,7 +188,7 @@ fill="{lane.color}" />
         loop = self._loop_seconds()
         race_end = self._race_seconds() / loop * 100
         footer_y = self._axis_bottom() + 26
-        height = footer_y + 36 + 16 * len(self.race.footnote)
+        height = footer_y + 52 + 16 * len(self.race.footnote)
         fastest, slowest = self.lanes[0], self.lanes[-1]
         styles = "\n".join(self._lane_style(lane) for lane in self.lanes)
         lanes = "\n".join(self._lane(i, lane) for i, lane in enumerate(self.lanes))
@@ -193,6 +207,7 @@ the bars filling in real time. {fastest.name} finishes in {self._seconds(fastest
     .rate {{ font-size: 10px; fill: #52514e; }}
     .caption {{ font-size: 11px; fill: #52514e; }}
     .badge {{ font-size: 12px; font-weight: 700; }}
+    .speedup {{ font-size: 11px; font-weight: 600; fill: #52514e; }}
     .track {{ fill: #f3f2ef; stroke: #e1e0d9; }}
     .grid {{ stroke: #e1e0d9; stroke-width: 1; }}
     .playhead {{ stroke: #0b0b0b; stroke-width: 1.5; opacity: 0.55; }}
@@ -228,7 +243,9 @@ class="playhead" />
 {self.decodes:,} &#215; the library's mean time per decode.</text>
   <text x="20" y="{footer_y + 16}" class="caption">Measured in Docker, one container per \
 library, each on one pinned CPU core.</text>
-{self._footnote(footer_y + 32)}
+  <text x="20" y="{footer_y + 32}" class="caption">~N&#215;: how many times faster than \
+{self.baseline_name}.</text>
+{self._footnote(footer_y + 48)}
 </svg>
 """
 
