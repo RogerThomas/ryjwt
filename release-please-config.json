@@ -10,8 +10,7 @@
       "versioning": "prerelease",
       "prerelease-type": "alpha",
       "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true,
-      "release-as": "0.0.0-alpha.0"
+      "bump-patch-for-minor-pre-major": true
     }
   }
 }
