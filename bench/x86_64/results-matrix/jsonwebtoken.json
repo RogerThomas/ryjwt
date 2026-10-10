@@ -1,0 +1,1051 @@
+{
+  "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+  "runtime": "Rust (release, LTO)",
+  "rows": [
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "small-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 431081.69735314546,
+      "mean_us": 2.3197459,
+      "round_means_us": [
+        2.3197459
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "typical-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 224591.64914795654,
+      "mean_us": 4.4525253000000005,
+      "round_means_us": [
+        4.4525253000000005
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "medium-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 83826.26881724747,
+      "mean_us": 11.9294347,
+      "round_means_us": [
+        11.9294347
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "large-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9047.195918882298,
+      "mean_us": 110.531485,
+      "round_means_us": [
+        110.531485
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "small-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 431529.73753412,
+      "mean_us": 2.3173374,
+      "round_means_us": [
+        2.3173374
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 218546.9043617766,
+      "mean_us": 4.5756768,
+      "round_means_us": [
+        4.5756768
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "medium-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 83454.39088184001,
+      "mean_us": 11.982593000000001,
+      "round_means_us": [
+        11.982593000000001
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "large-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9103.40638788739,
+      "mean_us": 109.84899030000001,
+      "round_means_us": [
+        109.84899030000001
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "small-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 402436.965090847,
+      "mean_us": 2.4848611999999997,
+      "round_means_us": [
+        2.4848611999999997
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "typical-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 211914.34134119484,
+      "mean_us": 4.7188878,
+      "round_means_us": [
+        4.7188878
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "medium-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 82053.68559308772,
+      "mean_us": 12.187143,
+      "round_means_us": [
+        12.187143
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "large-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9104.931687249942,
+      "mean_us": 109.8305879,
+      "round_means_us": [
+        109.8305879
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "small-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 215813.3149218678,
+      "mean_us": 4.6336344,
+      "round_means_us": [
+        4.6336344
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "typical-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 144966.44396486646,
+      "mean_us": 6.8981481,
+      "round_means_us": [
+        6.8981481
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "medium-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 70006.8360975381,
+      "mean_us": 14.2843193,
+      "round_means_us": [
+        14.2843193
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "large-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8916.447464276382,
+      "mean_us": 112.1522898,
+      "round_means_us": [
+        112.1522898
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 49522.71983531517,
+      "mean_us": 20.192752,
+      "round_means_us": [
+        20.192752
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 45259.71800371478,
+      "mean_us": 22.0947024,
+      "round_means_us": [
+        22.0947024
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 33244.912836010786,
+      "mean_us": 30.079790099999997,
+      "round_means_us": [
+        30.079790099999997
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7008.899029482376,
+      "mean_us": 142.67576060000002,
+      "round_means_us": [
+        142.67576060000002
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25152.932597012423,
+      "mean_us": 39.7567956,
+      "round_means_us": [
+        39.7567956
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23924.854939896148,
+      "mean_us": 41.7975366,
+      "round_means_us": [
+        41.7975366
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 20158.88145817511,
+      "mean_us": 49.6059269,
+      "round_means_us": [
+        49.6059269
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6466.43608989423,
+      "mean_us": 154.6446893,
+      "round_means_us": [
+        154.6446893
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14859.5127796082,
+      "mean_us": 67.2969575,
+      "round_means_us": [
+        67.2969575
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14652.894362412455,
+      "mean_us": 68.2459025,
+      "round_means_us": [
+        68.2459025
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13181.822241819433,
+      "mean_us": 75.8620456,
+      "round_means_us": [
+        75.8620456
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5537.904126089234,
+      "mean_us": 180.5737292,
+      "round_means_us": [
+        180.5737292
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18924.420278582154,
+      "mean_us": 52.841777199999996,
+      "round_means_us": [
+        52.841777199999996
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18165.166899927695,
+      "mean_us": 55.050416299999995,
+      "round_means_us": [
+        55.050416299999995
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15916.677086784599,
+      "mean_us": 62.827184,
+      "round_means_us": [
+        62.827184
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5935.818090766833,
+      "mean_us": 168.46877460000002,
+      "round_means_us": [
+        168.46877460000002
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5086.2368559776,
+      "mean_us": 196.60901139999999,
+      "round_means_us": [
+        196.60901139999999
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5024.56446508697,
+      "mean_us": 199.0222251,
+      "round_means_us": [
+        199.0222251
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4822.689576176393,
+      "mean_us": 207.3531759,
+      "round_means_us": [
+        207.3531759
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2958.1084414381603,
+      "mean_us": 338.05386780000003,
+      "round_means_us": [
+        338.05386780000003
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25836.901351276912,
+      "mean_us": 38.704331700000004,
+      "round_means_us": [
+        38.704331700000004
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24379.46752371027,
+      "mean_us": 41.0181231,
+      "round_means_us": [
+        41.0181231
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19694.30600627452,
+      "mean_us": 50.7760974,
+      "round_means_us": [
+        50.7760974
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5799.342678375568,
+      "mean_us": 172.4333352,
+      "round_means_us": [
+        172.4333352
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 48247.85269313,
+      "mean_us": 20.726311000000003,
+      "round_means_us": [
+        20.726311000000003
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 43653.17210773409,
+      "mean_us": 22.9078427,
+      "round_means_us": [
+        22.9078427
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 31133.38911274349,
+      "mean_us": 32.1198568,
+      "round_means_us": [
+        32.1198568
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6753.989793170706,
+      "mean_us": 148.0606324,
+      "round_means_us": [
+        148.0606324
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24920.752070717,
+      "mean_us": 40.1271999,
+      "round_means_us": [
+        40.1271999
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23662.45606748546,
+      "mean_us": 42.2610399,
+      "round_means_us": [
+        42.2610399
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19395.848528485556,
+      "mean_us": 51.557424700000006,
+      "round_means_us": [
+        51.557424700000006
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5896.247820281739,
+      "mean_us": 169.5993843,
+      "round_means_us": [
+        169.5993843
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15030.700318130032,
+      "mean_us": 66.5304995,
+      "round_means_us": [
+        66.5304995
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14497.881250638267,
+      "mean_us": 68.97559600000001,
+      "round_means_us": [
+        68.97559600000001
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12844.19879103645,
+      "mean_us": 77.8561603,
+      "round_means_us": [
+        77.8561603
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5192.215875858102,
+      "mean_us": 192.59599830000002,
+      "round_means_us": [
+        192.59599830000002
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18746.977869998747,
+      "mean_us": 53.341930999999995,
+      "round_means_us": [
+        53.341930999999995
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17958.878331488886,
+      "mean_us": 55.6827649,
+      "round_means_us": [
+        55.6827649
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15543.237857326487,
+      "mean_us": 64.3366594,
+      "round_means_us": [
+        64.3366594
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5547.97224496618,
+      "mean_us": 180.2460351,
+      "round_means_us": [
+        180.2460351
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5034.419840108094,
+      "mean_us": 198.6326194,
+      "round_means_us": [
+        198.6326194
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4978.588760059513,
+      "mean_us": 200.8601329,
+      "round_means_us": [
+        200.8601329
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4770.564945643,
+      "mean_us": 209.61877919999998,
+      "round_means_us": [
+        209.61877919999998
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2869.4090166451856,
+      "mean_us": 348.50381880000003,
+      "round_means_us": [
+        348.50381880000003
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24060.51259338898,
+      "mean_us": 41.56187430000001,
+      "round_means_us": [
+        41.56187430000001
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23968.03325880993,
+      "mean_us": 41.722238499999996,
+      "round_means_us": [
+        41.722238499999996
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18996.445518089775,
+      "mean_us": 52.641427,
+      "round_means_us": [
+        52.641427
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "jwks",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5395.230933094724,
+      "mean_us": 185.34887799999998,
+      "round_means_us": [
+        185.34887799999998
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "*",
+      "alg": "ES512",
+      "reason": "jsonwebtoken has no ES512 (P-521)"
+    },
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "jsonwebtoken doesn't fetch JWKS URLs (it takes your own HTTP client and cache)"
+    },
+    {
+      "source": "jwks-url-async",
+      "alg": "*",
+      "reason": "jsonwebtoken doesn't fetch JWKS URLs (it takes your own HTTP client and cache)"
+    }
+  ],
+  "notes": [
+    "JWKS: each key turned into a `DecodingKey` once, picked per token by `kid` (`decode_header`)"
+  ]
+}

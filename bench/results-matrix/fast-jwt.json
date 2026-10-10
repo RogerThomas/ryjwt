@@ -10,11 +10,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 15365,
-      "ops_per_sec": 257876,
-      "mean_us": 3.878,
-      "p50_us": 3.324,
-      "p99_us": 11.075
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 89064,
+      "mean_us": 11.228,
+      "round_means_us": [
+        11.228
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -24,11 +26,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 20000,
-      "ops_per_sec": 159516,
-      "mean_us": 6.269,
-      "p50_us": 5.508,
-      "p99_us": 21.676
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 99514,
+      "mean_us": 10.049,
+      "round_means_us": [
+        10.049
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -38,11 +42,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 13237,
-      "ops_per_sec": 78470,
-      "mean_us": 12.744,
-      "p50_us": 11.092,
-      "p99_us": 28.269
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 71485,
+      "mean_us": 13.989,
+      "round_means_us": [
+        13.989
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -52,11 +58,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1386,
-      "ops_per_sec": 7492,
-      "mean_us": 133.471,
-      "p50_us": 125.415,
-      "p99_us": 342.094
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8541,
+      "mean_us": 117.078,
+      "round_means_us": [
+        117.078
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -66,11 +74,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 20000,
-      "ops_per_sec": 260490,
-      "mean_us": 3.839,
-      "p50_us": 3.341,
-      "p99_us": 7.474
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 202316,
+      "mean_us": 4.943,
+      "round_means_us": [
+        4.943
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -80,11 +90,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 20000,
-      "ops_per_sec": 158946,
-      "mean_us": 6.291,
-      "p50_us": 5.449,
-      "p99_us": 21.347
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 140874,
+      "mean_us": 7.099,
+      "round_means_us": [
+        7.099
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -94,11 +106,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 14164,
-      "ops_per_sec": 79611,
-      "mean_us": 12.561,
-      "p50_us": 10.961,
-      "p99_us": 27.886
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 50823,
+      "mean_us": 19.676,
+      "round_means_us": [
+        19.676
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -108,11 +122,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1401,
-      "ops_per_sec": 7445,
-      "mean_us": 134.311,
-      "p50_us": 125.953,
-      "p99_us": 476.088
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8805,
+      "mean_us": 113.566,
+      "round_means_us": [
+        113.566
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -122,11 +138,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 20000,
-      "ops_per_sec": 248944,
-      "mean_us": 4.017,
-      "p50_us": 3.545,
-      "p99_us": 7.39
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 214883,
+      "mean_us": 4.654,
+      "round_means_us": [
+        4.654
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -136,11 +154,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 20000,
-      "ops_per_sec": 152372,
-      "mean_us": 6.563,
-      "p50_us": 5.758,
-      "p99_us": 21.465
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 140675,
+      "mean_us": 7.109,
+      "round_means_us": [
+        7.109
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -150,11 +170,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 14079,
-      "ops_per_sec": 77331,
-      "mean_us": 12.931,
-      "p50_us": 11.195,
-      "p99_us": 27.94
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 79692,
+      "mean_us": 12.548,
+      "round_means_us": [
+        12.548
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -164,11 +186,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1369,
-      "ops_per_sec": 7469,
-      "mean_us": 133.894,
-      "p50_us": 126.924,
-      "p99_us": 632.315
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8800,
+      "mean_us": 113.633,
+      "round_means_us": [
+        113.633
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -178,11 +202,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 20000,
-      "ops_per_sec": 146878,
-      "mean_us": 6.808,
-      "p50_us": 6.182,
-      "p99_us": 12.171
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 155454,
+      "mean_us": 6.433,
+      "round_means_us": [
+        6.433
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -192,11 +218,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 15257,
-      "ops_per_sec": 107413,
-      "mean_us": 9.31,
-      "p50_us": 8.329,
-      "p99_us": 24.507
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 112126,
+      "mean_us": 8.919,
+      "round_means_us": [
+        8.919
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -206,11 +234,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 11211,
-      "ops_per_sec": 64699,
-      "mean_us": 15.456,
-      "p50_us": 13.925,
-      "p99_us": 31.331
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 64760,
+      "mean_us": 15.442,
+      "round_means_us": [
+        15.442
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -220,11 +250,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1384,
-      "ops_per_sec": 7239,
-      "mean_us": 138.15,
-      "p50_us": 132.857,
-      "p99_us": 371.708
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8708,
+      "mean_us": 114.84,
+      "round_means_us": [
+        114.84
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -234,11 +266,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 6461,
-      "ops_per_sec": 39524,
-      "mean_us": 25.301,
-      "p50_us": 22.646,
-      "p99_us": 31.6
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 38709,
+      "mean_us": 25.834,
+      "round_means_us": [
+        25.834
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -248,11 +282,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 7310,
-      "ops_per_sec": 38841,
-      "mean_us": 25.746,
-      "p50_us": 24.754,
-      "p99_us": 43.635
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 34414,
+      "mean_us": 29.058,
+      "round_means_us": [
+        29.058
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -262,11 +298,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 5558,
-      "ops_per_sec": 31150,
-      "mean_us": 32.103,
-      "p50_us": 30.533,
-      "p99_us": 49.489
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 27753,
+      "mean_us": 36.032,
+      "round_means_us": [
+        36.032
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -276,11 +314,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 1163,
-      "ops_per_sec": 6553,
-      "mean_us": 152.604,
-      "p50_us": 147.417,
-      "p99_us": 218.487
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7299,
+      "mean_us": 137.005,
+      "round_means_us": [
+        137.005
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -290,11 +330,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 4347,
-      "ops_per_sec": 22752,
-      "mean_us": 43.952,
-      "p50_us": 43.811,
-      "p99_us": 59.919
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21588,
+      "mean_us": 46.323,
+      "round_means_us": [
+        46.323
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -304,11 +346,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 4225,
-      "ops_per_sec": 21360,
-      "mean_us": 46.817,
-      "p50_us": 45.77,
-      "p99_us": 64.03
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 20436,
+      "mean_us": 48.933,
+      "round_means_us": [
+        48.933
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -318,11 +362,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 3430,
-      "ops_per_sec": 18669,
-      "mean_us": 53.565,
-      "p50_us": 51.496,
-      "p99_us": 70.892
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18103,
+      "mean_us": 55.241,
+      "round_means_us": [
+        55.241
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -332,11 +378,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 1044,
-      "ops_per_sec": 5672,
-      "mean_us": 176.319,
-      "p50_us": 172.713,
-      "p99_us": 308.906
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6054,
+      "mean_us": 165.193,
+      "round_means_us": [
+        165.193
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -346,11 +394,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 2449,
-      "ops_per_sec": 13625,
-      "mean_us": 73.392,
-      "p50_us": 73.012,
-      "p99_us": 97.175
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13149,
+      "mean_us": 76.051,
+      "round_means_us": [
+        76.051
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -360,11 +410,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 2418,
-      "ops_per_sec": 13101,
-      "mean_us": 76.33,
-      "p50_us": 74.838,
-      "p99_us": 92.929
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12651,
+      "mean_us": 79.047,
+      "round_means_us": [
+        79.047
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -374,11 +426,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 2382,
-      "ops_per_sec": 12213,
-      "mean_us": 81.882,
-      "p50_us": 81.672,
-      "p99_us": 105.231
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11747,
+      "mean_us": 85.127,
+      "round_means_us": [
+        85.127
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -388,11 +442,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 863,
-      "ops_per_sec": 4898,
-      "mean_us": 204.161,
-      "p50_us": 196.596,
-      "p99_us": 280.854
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5305,
+      "mean_us": 188.512,
+      "round_means_us": [
+        188.512
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -402,11 +458,13 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 2739,
-      "ops_per_sec": 14439,
-      "mean_us": 69.258,
-      "p50_us": 67.489,
-      "p99_us": 93.451
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16759,
+      "mean_us": 59.668,
+      "round_means_us": [
+        59.668
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -416,11 +474,13 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 2759,
-      "ops_per_sec": 14142,
-      "mean_us": 70.712,
-      "p50_us": 70.746,
-      "p99_us": 94.053
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16344,
+      "mean_us": 61.186,
+      "round_means_us": [
+        61.186
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -430,11 +490,13 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 2542,
-      "ops_per_sec": 12951,
-      "mean_us": 77.216,
-      "p50_us": 75.368,
-      "p99_us": 97.781
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14721,
+      "mean_us": 67.929,
+      "round_means_us": [
+        67.929
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -444,11 +506,13 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 918,
-      "ops_per_sec": 5022,
-      "mean_us": 199.112,
-      "p50_us": 191.667,
-      "p99_us": 276.121
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5826,
+      "mean_us": 171.646,
+      "round_means_us": [
+        171.646
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -458,11 +522,13 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 433,
-      "ops_per_sec": 2222,
-      "mean_us": 450.109,
-      "p50_us": 449.944,
-      "p99_us": 504.186
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2082,
+      "mean_us": 480.349,
+      "round_means_us": [
+        480.349
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -472,11 +538,13 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 409,
-      "ops_per_sec": 2217,
-      "mean_us": 451.052,
-      "p50_us": 453.835,
-      "p99_us": 589.507
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2059,
+      "mean_us": 485.717,
+      "round_means_us": [
+        485.717
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -486,11 +554,13 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 427,
-      "ops_per_sec": 2170,
-      "mean_us": 460.877,
-      "p50_us": 457.103,
-      "p99_us": 508.028
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2030,
+      "mean_us": 492.611,
+      "round_means_us": [
+        492.611
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -500,11 +570,13 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 324,
-      "ops_per_sec": 1680,
-      "mean_us": 595.255,
-      "p50_us": 592.801,
-      "p99_us": 895.893
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1649,
+      "mean_us": 606.531,
+      "round_means_us": [
+        606.531
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -514,53 +586,61 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 180,
-      "ops_per_sec": 912,
-      "mean_us": 1096.241,
-      "p50_us": 1090.821,
-      "p99_us": 1197.47
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "typical-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "typical",
-      "token_len": 794,
-      "iterations": 186,
-      "ops_per_sec": 925,
-      "mean_us": 1080.77,
-      "p50_us": 1083.347,
-      "p99_us": 1193.609
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "medium-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "medium",
-      "token_len": 2407,
-      "iterations": 184,
-      "ops_per_sec": 927,
-      "mean_us": 1079.205,
-      "p50_us": 1093.458,
-      "p99_us": 1247.654
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "large-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "large",
-      "token_len": 21047,
-      "iterations": 152,
+      "iterations": 10000,
+      "rounds": 1,
       "ops_per_sec": 796,
-      "mean_us": 1255.725,
-      "p50_us": 1229.29,
-      "p99_us": 1378.603
+      "mean_us": 1255.919,
+      "round_means_us": [
+        1255.919
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 805,
+      "mean_us": 1242.046,
+      "round_means_us": [
+        1242.046
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 808,
+      "mean_us": 1237.751,
+      "round_means_us": [
+        1237.751
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 724,
+      "mean_us": 1380.908,
+      "round_means_us": [
+        1380.908
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -570,11 +650,13 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 3599,
-      "ops_per_sec": 19277,
-      "mean_us": 51.877,
-      "p50_us": 51.553,
-      "p99_us": 67.797
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19518,
+      "mean_us": 51.234,
+      "round_means_us": [
+        51.234
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -584,11 +666,13 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 3603,
-      "ops_per_sec": 18521,
-      "mean_us": 53.994,
-      "p50_us": 53.336,
-      "p99_us": 72.19
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18637,
+      "mean_us": 53.658,
+      "round_means_us": [
+        53.658
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -598,11 +682,13 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 3088,
-      "ops_per_sec": 15574,
-      "mean_us": 64.209,
-      "p50_us": 61.412,
-      "p99_us": 81.057
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16135,
+      "mean_us": 61.979,
+      "round_means_us": [
+        61.979
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -612,11 +698,13 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 922,
-      "ops_per_sec": 4897,
-      "mean_us": 204.209,
-      "p50_us": 199.429,
-      "p99_us": 306.657
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5893,
+      "mean_us": 169.705,
+      "round_means_us": [
+        169.705
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -626,11 +714,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 6939,
-      "ops_per_sec": 37920,
-      "mean_us": 26.372,
-      "p50_us": 24.989,
-      "p99_us": 41.947
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 34528,
+      "mean_us": 28.962,
+      "round_means_us": [
+        28.962
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -640,11 +730,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 6188,
-      "ops_per_sec": 33271,
-      "mean_us": 30.056,
-      "p50_us": 28.838,
-      "p99_us": 48.039
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 31597,
+      "mean_us": 31.648,
+      "round_means_us": [
+        31.648
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -654,11 +746,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 4365,
-      "ops_per_sec": 23814,
-      "mean_us": 41.993,
-      "p50_us": 39.359,
-      "p99_us": 63.464
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23022,
+      "mean_us": 43.436,
+      "round_means_us": [
+        43.436
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -668,11 +762,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 714,
-      "ops_per_sec": 3774,
-      "mean_us": 265.002,
-      "p50_us": 257.419,
-      "p99_us": 977.557
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4168,
+      "mean_us": 239.92,
+      "round_means_us": [
+        239.92
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -682,11 +778,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 4130,
-      "ops_per_sec": 21227,
-      "mean_us": 47.109,
-      "p50_us": 46.478,
-      "p99_us": 65.437
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19996,
+      "mean_us": 50.01,
+      "round_means_us": [
+        50.01
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -696,11 +794,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 3746,
-      "ops_per_sec": 19293,
-      "mean_us": 51.833,
-      "p50_us": 50.097,
-      "p99_us": 70.014
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18493,
+      "mean_us": 54.075,
+      "round_means_us": [
+        54.075
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -710,11 +810,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 2163,
-      "ops_per_sec": 15796,
-      "mean_us": 63.308,
-      "p50_us": 60.443,
-      "p99_us": 85.131
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15338,
+      "mean_us": 65.199,
+      "round_means_us": [
+        65.199
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -724,11 +826,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 637,
-      "ops_per_sec": 3460,
-      "mean_us": 289.027,
-      "p50_us": 278.904,
-      "p99_us": 706.263
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3834,
+      "mean_us": 260.804,
+      "round_means_us": [
+        260.804
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -738,11 +842,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 2419,
-      "ops_per_sec": 13218,
-      "mean_us": 75.654,
-      "p50_us": 75.767,
-      "p99_us": 93.656
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12450,
+      "mean_us": 80.324,
+      "round_means_us": [
+        80.324
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -752,11 +858,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 2440,
-      "ops_per_sec": 12514,
-      "mean_us": 79.912,
-      "p50_us": 79.108,
-      "p99_us": 99.997
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12013,
+      "mean_us": 83.241,
+      "round_means_us": [
+        83.241
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -766,11 +874,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 1934,
-      "ops_per_sec": 10862,
-      "mean_us": 92.063,
-      "p50_us": 89.883,
-      "p99_us": 118.403
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10397,
+      "mean_us": 96.18,
+      "round_means_us": [
+        96.18
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -780,11 +890,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 582,
-      "ops_per_sec": 3144,
-      "mean_us": 318.101,
-      "p50_us": 311.142,
-      "p99_us": 1005.469
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3424,
+      "mean_us": 292.074,
+      "round_means_us": [
+        292.074
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -794,11 +906,13 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 2709,
-      "ops_per_sec": 14212,
-      "mean_us": 70.365,
-      "p50_us": 69.423,
-      "p99_us": 87.223
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16327,
+      "mean_us": 61.247,
+      "round_means_us": [
+        61.247
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -808,11 +922,13 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 2660,
-      "ops_per_sec": 13429,
-      "mean_us": 74.466,
-      "p50_us": 73.296,
-      "p99_us": 96.473
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15143,
+      "mean_us": 66.039,
+      "round_means_us": [
+        66.039
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -822,11 +938,13 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 2206,
-      "ops_per_sec": 11591,
-      "mean_us": 86.271,
-      "p50_us": 83.331,
-      "p99_us": 107.224
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12977,
+      "mean_us": 77.059,
+      "round_means_us": [
+        77.059
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -836,11 +954,13 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 604,
-      "ops_per_sec": 3229,
-      "mean_us": 309.733,
-      "p50_us": 304.391,
-      "p99_us": 1008.488
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3635,
+      "mean_us": 275.079,
+      "round_means_us": [
+        275.079
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -850,11 +970,13 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 442,
-      "ops_per_sec": 2220,
-      "mean_us": 450.362,
-      "p50_us": 452.934,
-      "p99_us": 563.996
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2065,
+      "mean_us": 484.286,
+      "round_means_us": [
+        484.286
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -864,11 +986,13 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 441,
-      "ops_per_sec": 2204,
-      "mean_us": 453.717,
-      "p50_us": 451.773,
-      "p99_us": 499.118
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2040,
+      "mean_us": 490.199,
+      "round_means_us": [
+        490.199
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -878,11 +1002,13 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 422,
-      "ops_per_sec": 2153,
-      "mean_us": 464.553,
-      "p50_us": 462.82,
-      "p99_us": 821.99
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1989,
+      "mean_us": 502.719,
+      "round_means_us": [
+        502.719
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -892,11 +1018,13 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 273,
-      "ops_per_sec": 1415,
-      "mean_us": 706.557,
-      "p50_us": 698.394,
-      "p99_us": 954.443
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1416,
+      "mean_us": 706.068,
+      "round_means_us": [
+        706.068
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -906,11 +1034,13 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 179,
-      "ops_per_sec": 909,
-      "mean_us": 1099.87,
-      "p50_us": 1098.99,
-      "p99_us": 1204.477
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 793,
+      "mean_us": 1261.059,
+      "round_means_us": [
+        1261.059
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -920,11 +1050,13 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 180,
-      "ops_per_sec": 921,
-      "mean_us": 1086.235,
-      "p50_us": 1072.379,
-      "p99_us": 1240.999
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 800,
+      "mean_us": 1249.853,
+      "round_means_us": [
+        1249.853
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -934,11 +1066,13 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 183,
-      "ops_per_sec": 919,
-      "mean_us": 1088.345,
-      "p50_us": 1087.404,
-      "p99_us": 1168.053
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 800,
+      "mean_us": 1250.059,
+      "round_means_us": [
+        1250.059
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -948,11 +1082,13 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 137,
-      "ops_per_sec": 734,
-      "mean_us": 1363.01,
-      "p50_us": 1342.545,
-      "p99_us": 2242.352
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 676,
+      "mean_us": 1480.233,
+      "round_means_us": [
+        1480.233
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -962,11 +1098,13 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 3481,
-      "ops_per_sec": 18575,
-      "mean_us": 53.835,
-      "p50_us": 53.164,
-      "p99_us": 70.986
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18358,
+      "mean_us": 54.473,
+      "round_means_us": [
+        54.473
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -976,11 +1114,13 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 3223,
-      "ops_per_sec": 17384,
-      "mean_us": 57.524,
-      "p50_us": 57.018,
-      "p99_us": 76.719
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17334,
+      "mean_us": 57.689,
+      "round_means_us": [
+        57.689
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -990,11 +1130,13 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 2527,
-      "ops_per_sec": 13685,
-      "mean_us": 73.075,
-      "p50_us": 70.558,
-      "p99_us": 97.224
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14336,
+      "mean_us": 69.755,
+      "round_means_us": [
+        69.755
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1004,11 +1146,13 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 597,
-      "ops_per_sec": 3154,
-      "mean_us": 317.047,
-      "p50_us": 305.101,
-      "p99_us": 992.511
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3702,
+      "mean_us": 270.153,
+      "round_means_us": [
+        270.153
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1018,11 +1162,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 1071,
-      "ops_per_sec": 13781,
-      "mean_us": 72.562,
-      "p50_us": 59.062,
-      "p99_us": 193.456
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12661,
+      "mean_us": 78.98,
+      "round_means_us": [
+        78.98
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1032,11 +1178,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 2087,
-      "ops_per_sec": 15278,
-      "mean_us": 65.454,
-      "p50_us": 62.257,
-      "p99_us": 116.11
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14730,
+      "mean_us": 67.89,
+      "round_means_us": [
+        67.89
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1046,11 +1194,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 2678,
-      "ops_per_sec": 13820,
-      "mean_us": 72.36,
-      "p50_us": 68.014,
-      "p99_us": 102.721
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13864,
+      "mean_us": 72.13,
+      "round_means_us": [
+        72.13
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1060,11 +1210,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 955,
-      "ops_per_sec": 4974,
-      "mean_us": 201.031,
-      "p50_us": 192.898,
-      "p99_us": 493.193
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5069,
+      "mean_us": 197.28,
+      "round_means_us": [
+        197.28
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1074,11 +1226,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 1810,
-      "ops_per_sec": 9331,
-      "mean_us": 107.167,
-      "p50_us": 105.119,
-      "p99_us": 149.646
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10033,
+      "mean_us": 99.674,
+      "round_means_us": [
+        99.674
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1088,11 +1242,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 1559,
-      "ops_per_sec": 8779,
-      "mean_us": 113.902,
-      "p50_us": 108.557,
-      "p99_us": 155.308
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9487,
+      "mean_us": 105.407,
+      "round_means_us": [
+        105.407
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1102,11 +1258,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 1583,
-      "ops_per_sec": 8349,
-      "mean_us": 119.772,
-      "p50_us": 115.88,
-      "p99_us": 156.455
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8567,
+      "mean_us": 116.726,
+      "round_means_us": [
+        116.726
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1116,11 +1274,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 765,
-      "ops_per_sec": 4062,
-      "mean_us": 246.201,
-      "p50_us": 237.644,
-      "p99_us": 544.157
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4214,
+      "mean_us": 237.3,
+      "round_means_us": [
+        237.3
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1130,11 +1290,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 1097,
-      "ops_per_sec": 5831,
-      "mean_us": 171.49,
-      "p50_us": 169.411,
-      "p99_us": 226.456
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6465,
+      "mean_us": 154.678,
+      "round_means_us": [
+        154.678
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1144,11 +1306,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 1124,
-      "ops_per_sec": 5707,
-      "mean_us": 175.221,
-      "p50_us": 172.314,
-      "p99_us": 232.92
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6283,
+      "mean_us": 159.154,
+      "round_means_us": [
+        159.154
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1158,11 +1322,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 1063,
-      "ops_per_sec": 5452,
-      "mean_us": 183.417,
-      "p50_us": 178.996,
-      "p99_us": 253.826
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6096,
+      "mean_us": 164.052,
+      "round_means_us": [
+        164.052
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1172,11 +1338,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 588,
-      "ops_per_sec": 3228,
-      "mean_us": 309.788,
-      "p50_us": 302.163,
-      "p99_us": 610.398
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3455,
+      "mean_us": 289.433,
+      "round_means_us": [
+        289.433
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1186,11 +1354,13 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 18,
-      "ops_per_sec": 246,
-      "mean_us": 4062.173,
-      "p50_us": 3880.834,
-      "p99_us": 4929.02
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 282,
+      "mean_us": 3551.202,
+      "round_means_us": [
+        3551.202
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1200,11 +1370,13 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 48,
-      "ops_per_sec": 242,
-      "mean_us": 4126.67,
-      "p50_us": 3834.988,
-      "p99_us": 4981.023
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 282,
+      "mean_us": 3542.817,
+      "round_means_us": [
+        3542.817
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1214,11 +1386,13 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 49,
-      "ops_per_sec": 256,
-      "mean_us": 3905.779,
-      "p50_us": 3825.648,
-      "p99_us": 5003.46
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 284,
+      "mean_us": 3519.196,
+      "round_means_us": [
+        3519.196
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1228,11 +1402,13 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 47,
-      "ops_per_sec": 246,
-      "mean_us": 4065.971,
-      "p50_us": 3963.284,
-      "p99_us": 7234.248
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 277,
+      "mean_us": 3610.723,
+      "round_means_us": [
+        3610.723
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1242,11 +1418,13 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 10,
-      "ops_per_sec": 37,
-      "mean_us": 26684.122,
-      "p50_us": 26525.597,
-      "p99_us": 27479.757
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 81,
+      "mean_us": 12313.103,
+      "round_means_us": [
+        12313.103
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1256,11 +1434,13 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 10,
-      "ops_per_sec": 37,
-      "mean_us": 26777.522,
-      "p50_us": 27010.394,
-      "p99_us": 27798.08
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 81,
+      "mean_us": 12329.964,
+      "round_means_us": [
+        12329.964
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1270,11 +1450,13 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 10,
-      "ops_per_sec": 37,
-      "mean_us": 26761.19,
-      "p50_us": 26903.635,
-      "p99_us": 28501.525
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 81,
+      "mean_us": 12273.709,
+      "round_means_us": [
+        12273.709
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1284,11 +1466,13 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 10,
-      "ops_per_sec": 37,
-      "mean_us": 27233.299,
-      "p50_us": 27397.887,
-      "p99_us": 29140.419
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 81,
+      "mean_us": 12346.253,
+      "round_means_us": [
+        12346.253
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1298,11 +1482,13 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 10,
-      "ops_per_sec": 15,
-      "mean_us": 65771.33,
-      "p50_us": 66170.516,
-      "p99_us": 67732.398
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 35,
+      "mean_us": 28790.139,
+      "round_means_us": [
+        28790.139
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1312,11 +1498,13 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 10,
-      "ops_per_sec": 15,
-      "mean_us": 65524.965,
-      "p50_us": 65360.703,
-      "p99_us": 66655.924
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 35,
+      "mean_us": 28730.053,
+      "round_means_us": [
+        28730.053
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1326,11 +1514,13 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 10,
-      "ops_per_sec": 15,
-      "mean_us": 65424.148,
-      "p50_us": 65778.226,
-      "p99_us": 66582.817
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 35,
+      "mean_us": 28648.032,
+      "round_means_us": [
+        28648.032
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -1340,24 +1530,26 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 10,
-      "ops_per_sec": 15,
-      "mean_us": 65640.905,
-      "p50_us": 66340.452,
-      "p99_us": 69295.769
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 35,
+      "mean_us": 28673.005,
+      "round_means_us": [
+        28673.005
+      ]
     }
   ],
   "first_fetch": [
     {
       "source": "jwks-url-async",
       "name": "typical-rs3072",
-      "ms": 1.36061,
+      "ms": 1.920254,
       "trials_ms": [
-        2.762042,
-        1.508362,
-        1.34092,
-        1.36061,
-        1.27859
+        3.513921,
+        1.85874,
+        1.91171,
+        1.920254,
+        3.585115
       ]
     }
   ],

@@ -1,0 +1,48 @@
+{
+  "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 388665.39563408843,
+      "mean_us": 2.5729072133333335,
+      "round_means_us": [
+        2.5757995399999998,
+        2.56994502,
+        2.5729770800000002
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 28199.504174829573,
+      "mean_us": 35.461616410000005,
+      "round_means_us": [
+        35.46890662,
+        35.45450159,
+        35.461441019999995
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [],
+  "notes": [
+    "`SecretKey`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and `.adecode`",
+    "JWKS URL: trusting the test CA through `SSL_CERT_FILE`"
+  ]
+}

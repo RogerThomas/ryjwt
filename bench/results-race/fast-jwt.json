@@ -10,11 +10,15 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 10749,
-      "ops_per_sec": 159756,
-      "mean_us": 6.26,
-      "p50_us": 5.499,
-      "p99_us": 21.577
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 145977,
+      "mean_us": 6.85,
+      "round_means_us": [
+        7.831,
+        6.346,
+        6.374
+      ]
     },
     {
       "impl": "fast-jwt 6.3.3",
@@ -24,11 +28,15 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 3592,
-      "ops_per_sec": 21665,
-      "mean_us": 46.158,
-      "p50_us": 46.086,
-      "p99_us": 69.848
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 20636,
+      "mean_us": 48.458,
+      "round_means_us": [
+        49.409,
+        47.972,
+        47.995
+      ]
     }
   ],
   "first_fetch": [],

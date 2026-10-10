@@ -1,0 +1,210 @@
+[
+  {
+    "impl": "jose 6.2.12",
+    "name": "small-k32",
+    "token_len": 231,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 31652,
+    "mean_us": 31.593,
+    "round_means_us": [
+      31.593
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "small-k64",
+    "token_len": 231,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 39564,
+    "mean_us": 25.275,
+    "round_means_us": [
+      25.275
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "small-k256",
+    "token_len": 231,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 41562,
+    "mean_us": 24.06,
+    "round_means_us": [
+      24.06
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "small-k4096",
+    "token_len": 231,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 28520,
+    "mean_us": 35.063,
+    "round_means_us": [
+      35.063
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "typical-k32",
+    "token_len": 661,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 37546,
+    "mean_us": 26.634,
+    "round_means_us": [
+      26.634
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "typical-k64",
+    "token_len": 661,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 36709,
+    "mean_us": 27.241,
+    "round_means_us": [
+      27.241
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "typical-k256",
+    "token_len": 661,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 29747,
+    "mean_us": 33.617,
+    "round_means_us": [
+      33.617
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "typical-k4096",
+    "token_len": 661,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 31951,
+    "mean_us": 31.298,
+    "round_means_us": [
+      31.298
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "medium-k32",
+    "token_len": 2244,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 28931,
+    "mean_us": 34.565,
+    "round_means_us": [
+      34.565
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "medium-k64",
+    "token_len": 2244,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 29624,
+    "mean_us": 33.757,
+    "round_means_us": [
+      33.757
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "medium-k256",
+    "token_len": 2244,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 28570,
+    "mean_us": 35.002,
+    "round_means_us": [
+      35.002
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "medium-k4096",
+    "token_len": 2244,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 26894,
+    "mean_us": 37.182,
+    "round_means_us": [
+      37.182
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "large-k32",
+    "token_len": 20884,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 8858,
+    "mean_us": 112.887,
+    "round_means_us": [
+      112.887
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "large-k64",
+    "token_len": 20884,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 8811,
+    "mean_us": 113.494,
+    "round_means_us": [
+      113.494
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "large-k256",
+    "token_len": 20884,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 8892,
+    "mean_us": 112.466,
+    "round_means_us": [
+      112.466
+    ]
+  },
+  {
+    "impl": "jose 6.2.12",
+    "name": "large-k4096",
+    "token_len": 20884,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 8696,
+    "mean_us": 114.991,
+    "round_means_us": [
+      114.991
+    ]
+  }
+]

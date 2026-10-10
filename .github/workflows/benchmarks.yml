@@ -34,9 +34,10 @@ on:
 permissions:
   contents: read
 
-# One run at a time, none cancelled: two on one runner pool would be timed side by side.
+# One run at a time per runner pool, none cancelled, so no two runs are timed side by side in one
+# pool; an arm64 and an x86_64 run go in parallel.
 concurrency:
-  group: ${{ github.workflow }}
+  group: ${{ github.workflow }}-${{ inputs.runner }}
   cancel-in-progress: false
 
 env:

@@ -456,7 +456,7 @@ fn main() {
     ];
     if let Mode::Struct = mode {
         notes.push(
-            "struct: claims decoded into typed structs with the fields ryjwt's msgspec lane decodes; other claims ignored",
+            "claims decoded into typed structs with the fields ryjwt's msgspec lane decodes; other claims ignored",
         );
     }
     let results = Results {

@@ -1,0 +1,53 @@
+{
+  "impl": "jose 6.2.12",
+  "runtime": "Bun 1.3.14",
+  "rows": [
+    {
+      "impl": "jose 6.2.12",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 36548,
+      "mean_us": 27.361,
+      "round_means_us": [
+        28.12,
+        27.088,
+        26.877
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 15709,
+      "mean_us": 63.658,
+      "round_means_us": [
+        64.509,
+        63.236,
+        63.229
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "jose's API is async only"
+    }
+  ],
+  "notes": [
+    "HMAC secret imported once (`crypto.subtle.importKey`); `importSPKI`, `createLocalJWKSet`, `createRemoteJWKSet`"
+  ]
+}

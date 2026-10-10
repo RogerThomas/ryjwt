@@ -1,0 +1,2085 @@
+{
+  "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "small-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 444265.3956174462,
+      "mean_us": 2.2509068,
+      "round_means_us": [
+        2.2509068
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "typical-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 247134.13373159495,
+      "mean_us": 4.0463856,
+      "round_means_us": [
+        4.0463856
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "medium-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 162203.35480008228,
+      "mean_us": 6.1651006,
+      "round_means_us": [
+        6.1651006
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "large-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24942.721285412965,
+      "mean_us": 40.0918564,
+      "round_means_us": [
+        40.0918564
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "small-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 445437.25479514315,
+      "mean_us": 2.2449851,
+      "round_means_us": [
+        2.2449851
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 246568.97423090387,
+      "mean_us": 4.0556603,
+      "round_means_us": [
+        4.0556603
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "medium-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 161951.8777162265,
+      "mean_us": 6.1746737000000005,
+      "round_means_us": [
+        6.1746737000000005
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "large-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24914.063671038853,
+      "mean_us": 40.137972399999995,
+      "round_means_us": [
+        40.137972399999995
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "small-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 445272.7705370488,
+      "mean_us": 2.2458144,
+      "round_means_us": [
+        2.2458144
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "typical-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 247060.3340853603,
+      "mean_us": 4.0475943,
+      "round_means_us": [
+        4.0475943
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "medium-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 161838.53495601498,
+      "mean_us": 6.178998099999999,
+      "round_means_us": [
+        6.178998099999999
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "large-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24876.290703855542,
+      "mean_us": 40.1989192,
+      "round_means_us": [
+        40.1989192
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "small-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 446440.21076263767,
+      "mean_us": 2.2399416000000003,
+      "round_means_us": [
+        2.2399416000000003
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "typical-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 244745.09040124927,
+      "mean_us": 4.0858838,
+      "round_means_us": [
+        4.0858838
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "medium-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 162395.8480318492,
+      "mean_us": 6.1577929000000005,
+      "round_means_us": [
+        6.1577929000000005
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "hmac",
+      "name": "large-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24897.533144199882,
+      "mean_us": 40.164621700000005,
+      "round_means_us": [
+        40.164621700000005
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 56395.34808308546,
+      "mean_us": 17.731959,
+      "round_means_us": [
+        17.731959
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 51337.115208556716,
+      "mean_us": 19.4790844,
+      "round_means_us": [
+        19.4790844
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 46194.98705397036,
+      "mean_us": 21.6473705,
+      "round_means_us": [
+        21.6473705
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17992.146705042305,
+      "mean_us": 55.579804700000004,
+      "round_means_us": [
+        55.579804700000004
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 27622.299984398374,
+      "mean_us": 36.202633399999996,
+      "round_means_us": [
+        36.202633399999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26693.52989623029,
+      "mean_us": 37.4622616,
+      "round_means_us": [
+        37.4622616
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25376.372330742503,
+      "mean_us": 39.4067358,
+      "round_means_us": [
+        39.4067358
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13660.548793532294,
+      "mean_us": 73.2035012,
+      "round_means_us": [
+        73.2035012
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17003.370613863866,
+      "mean_us": 58.8118687,
+      "round_means_us": [
+        58.8118687
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16396.11626505719,
+      "mean_us": 60.990053,
+      "round_means_us": [
+        60.990053
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15820.145899650262,
+      "mean_us": 63.210542200000006,
+      "round_means_us": [
+        63.210542200000006
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10311.482477731854,
+      "mean_us": 96.9792658,
+      "round_means_us": [
+        96.9792658
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19193.924867883994,
+      "mean_us": 52.0998184,
+      "round_means_us": [
+        52.0998184
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18466.170345250906,
+      "mean_us": 54.15308,
+      "round_means_us": [
+        54.15308
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17836.462339033038,
+      "mean_us": 56.0649293,
+      "round_means_us": [
+        56.0649293
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11103.558667901802,
+      "mean_us": 90.0612164,
+      "round_means_us": [
+        90.0612164
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5119.720223754793,
+      "mean_us": 195.32317319999999,
+      "round_means_us": [
+        195.32317319999999
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5021.879558377338,
+      "mean_us": 199.1286307,
+      "round_means_us": [
+        199.1286307
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4984.949674236182,
+      "mean_us": 200.60383059999998,
+      "round_means_us": [
+        200.60383059999998
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3915.1730035002415,
+      "mean_us": 255.4165548,
+      "round_means_us": [
+        255.4165548
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2957.9587488255233,
+      "mean_us": 338.0709756,
+      "round_means_us": [
+        338.0709756
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2957.3822319742662,
+      "mean_us": 338.1368797,
+      "round_means_us": [
+        338.1368797
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2914.7235353743185,
+      "mean_us": 343.0857122,
+      "round_means_us": [
+        343.0857122
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2520.9796010634786,
+      "mean_us": 396.6711986,
+      "round_means_us": [
+        396.6711986
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25581.21119386221,
+      "mean_us": 39.091190499999996,
+      "round_means_us": [
+        39.091190499999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24066.054079378828,
+      "mean_us": 41.5523042,
+      "round_means_us": [
+        41.5523042
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22059.728205353626,
+      "mean_us": 45.331474199999995,
+      "round_means_us": [
+        45.331474199999995
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "pem",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10101.593197621083,
+      "mean_us": 98.9942854,
+      "round_means_us": [
+        98.9942854
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 56505.98145479339,
+      "mean_us": 17.6972415,
+      "round_means_us": [
+        17.6972415
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 51177.52892147074,
+      "mean_us": 19.5398258,
+      "round_means_us": [
+        19.5398258
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 46350.47184363182,
+      "mean_us": 21.574753400000002,
+      "round_means_us": [
+        21.574753400000002
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17919.939412828204,
+      "mean_us": 55.8037601,
+      "round_means_us": [
+        55.8037601
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 28656.014083811948,
+      "mean_us": 34.896688600000004,
+      "round_means_us": [
+        34.896688600000004
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26795.48786814056,
+      "mean_us": 37.3197161,
+      "round_means_us": [
+        37.3197161
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25356.32585458983,
+      "mean_us": 39.43789039999999,
+      "round_means_us": [
+        39.43789039999999
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13642.203888652377,
+      "mean_us": 73.30193919999999,
+      "round_means_us": [
+        73.30193919999999
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17026.599907865664,
+      "mean_us": 58.731632,
+      "round_means_us": [
+        58.731632
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16250.992496864761,
+      "mean_us": 61.5347032,
+      "round_means_us": [
+        61.5347032
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15859.67974523315,
+      "mean_us": 63.052975599999996,
+      "round_means_us": [
+        63.052975599999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10325.392210823346,
+      "mean_us": 96.8486213,
+      "round_means_us": [
+        96.8486213
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19187.750441876626,
+      "mean_us": 52.1165836,
+      "round_means_us": [
+        52.1165836
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18451.066238130323,
+      "mean_us": 54.1974099,
+      "round_means_us": [
+        54.1974099
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17809.063125187717,
+      "mean_us": 56.1511851,
+      "round_means_us": [
+        56.1511851
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11093.619665395996,
+      "mean_us": 90.1419041,
+      "round_means_us": [
+        90.1419041
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5122.874378093233,
+      "mean_us": 195.20291269999998,
+      "round_means_us": [
+        195.20291269999998
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5026.972810772017,
+      "mean_us": 198.92687659999999,
+      "round_means_us": [
+        198.92687659999999
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4986.959338211146,
+      "mean_us": 200.52299050000002,
+      "round_means_us": [
+        200.52299050000002
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3909.653426613869,
+      "mean_us": 255.7771472,
+      "round_means_us": [
+        255.7771472
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2951.4643995947577,
+      "mean_us": 338.81486090000004,
+      "round_means_us": [
+        338.81486090000004
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2962.5554847425465,
+      "mean_us": 337.5464207,
+      "round_means_us": [
+        337.5464207
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2919.349095012757,
+      "mean_us": 342.5421104,
+      "round_means_us": [
+        342.5421104
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2518.1216346443803,
+      "mean_us": 397.1214044,
+      "round_means_us": [
+        397.1214044
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25500.350538018636,
+      "mean_us": 39.2151472,
+      "round_means_us": [
+        39.2151472
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24071.295595745814,
+      "mean_us": 41.5432562,
+      "round_means_us": [
+        41.5432562
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22032.706526113892,
+      "mean_us": 45.3870703,
+      "round_means_us": [
+        45.3870703
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10090.107953399047,
+      "mean_us": 99.10696739999999,
+      "round_means_us": [
+        99.10696739999999
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 55507.220792809516,
+      "mean_us": 18.015674100000002,
+      "round_means_us": [
+        18.015674100000002
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 50379.51620056873,
+      "mean_us": 19.8493371,
+      "round_means_us": [
+        19.8493371
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 45579.69465807028,
+      "mean_us": 21.939594099999997,
+      "round_means_us": [
+        21.939594099999997
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17897.420586697386,
+      "mean_us": 55.873973299999996,
+      "round_means_us": [
+        55.873973299999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 28033.71264759392,
+      "mean_us": 35.671336600000004,
+      "round_means_us": [
+        35.671336600000004
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26259.542983798183,
+      "mean_us": 38.0813939,
+      "round_means_us": [
+        38.0813939
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25178.027284642612,
+      "mean_us": 39.7171704,
+      "round_means_us": [
+        39.7171704
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13666.394463521661,
+      "mean_us": 73.1721891,
+      "round_means_us": [
+        73.1721891
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16881.71370138319,
+      "mean_us": 59.2356924,
+      "round_means_us": [
+        59.2356924
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16085.774005437142,
+      "mean_us": 62.1667319,
+      "round_means_us": [
+        62.1667319
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15772.597502964381,
+      "mean_us": 63.401098,
+      "round_means_us": [
+        63.401098
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10324.2508558391,
+      "mean_us": 96.85932799999999,
+      "round_means_us": [
+        96.85932799999999
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19045.893634767308,
+      "mean_us": 52.5047561,
+      "round_means_us": [
+        52.5047561
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18304.12823034641,
+      "mean_us": 54.6324844,
+      "round_means_us": [
+        54.6324844
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17710.908942266262,
+      "mean_us": 56.462376,
+      "round_means_us": [
+        56.462376
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11129.05644258117,
+      "mean_us": 89.8548772,
+      "round_means_us": [
+        89.8548772
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5109.2424264712145,
+      "mean_us": 195.72373290000002,
+      "round_means_us": [
+        195.72373290000002
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5020.521991121872,
+      "mean_us": 199.1824758,
+      "round_means_us": [
+        199.1824758
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4976.042732790042,
+      "mean_us": 200.9629044,
+      "round_means_us": [
+        200.9629044
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3914.5063820565824,
+      "mean_us": 255.460051,
+      "round_means_us": [
+        255.460051
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2887.7992771719437,
+      "mean_us": 346.28445539999996,
+      "round_means_us": [
+        346.28445539999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2893.241252913773,
+      "mean_us": 345.6331196,
+      "round_means_us": [
+        345.6331196
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2849.9704683780087,
+      "mean_us": 350.8808288,
+      "round_means_us": [
+        350.8808288
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2454.5484151771248,
+      "mean_us": 407.406916,
+      "round_means_us": [
+        407.406916
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25259.811177152216,
+      "mean_us": 39.588577799999996,
+      "round_means_us": [
+        39.588577799999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23892.00509789447,
+      "mean_us": 41.855005299999995,
+      "round_means_us": [
+        41.855005299999995
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21855.441770054746,
+      "mean_us": 45.755195,
+      "round_means_us": [
+        45.755195
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-sync",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10087.600572053705,
+      "mean_us": 99.1316015,
+      "round_means_us": [
+        99.1316015
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 55372.058705456635,
+      "mean_us": 18.05965,
+      "round_means_us": [
+        18.05965
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 50310.96250013043,
+      "mean_us": 19.8763838,
+      "round_means_us": [
+        19.8763838
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 45237.64677145271,
+      "mean_us": 22.1054823,
+      "round_means_us": [
+        22.1054823
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17971.498357375396,
+      "mean_us": 55.6436631,
+      "round_means_us": [
+        55.6436631
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 27935.037606399037,
+      "mean_us": 35.7973386,
+      "round_means_us": [
+        35.7973386
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26572.435637129933,
+      "mean_us": 37.6329823,
+      "round_means_us": [
+        37.6329823
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25152.056948925154,
+      "mean_us": 39.7581797,
+      "round_means_us": [
+        39.7581797
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13527.403524573647,
+      "mean_us": 73.9240164,
+      "round_means_us": [
+        73.9240164
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16786.42415001874,
+      "mean_us": 59.5719488,
+      "round_means_us": [
+        59.5719488
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16141.493907916107,
+      "mean_us": 61.952134400000006,
+      "round_means_us": [
+        61.952134400000006
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15727.145920581936,
+      "mean_us": 63.5843277,
+      "round_means_us": [
+        63.5843277
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10319.303287698036,
+      "mean_us": 96.90576700000001,
+      "round_means_us": [
+        96.90576700000001
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19017.851581833576,
+      "mean_us": 52.582175,
+      "round_means_us": [
+        52.582175
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18305.506425203464,
+      "mean_us": 54.628371200000004,
+      "round_means_us": [
+        54.628371200000004
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17693.59176253745,
+      "mean_us": 56.517637199999996,
+      "round_means_us": [
+        56.517637199999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11020.57473857775,
+      "mean_us": 90.7393692,
+      "round_means_us": [
+        90.7393692
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5110.294217861431,
+      "mean_us": 195.6834494,
+      "round_means_us": [
+        195.6834494
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5018.461260375474,
+      "mean_us": 199.26426610000001,
+      "round_means_us": [
+        199.26426610000001
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4974.392340593038,
+      "mean_us": 201.0295794,
+      "round_means_us": [
+        201.0295794
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3904.2000235237424,
+      "mean_us": 256.1344178,
+      "round_means_us": [
+        256.1344178
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2939.9600595195266,
+      "mean_us": 340.1406753,
+      "round_means_us": [
+        340.1406753
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2947.977931688371,
+      "mean_us": 339.2155651,
+      "round_means_us": [
+        339.2155651
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2910.396930981314,
+      "mean_us": 343.5957444,
+      "round_means_us": [
+        343.5957444
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2511.465116401133,
+      "mean_us": 398.17395569999996,
+      "round_means_us": [
+        398.17395569999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25192.68042189033,
+      "mean_us": 39.6940692,
+      "round_means_us": [
+        39.6940692
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23802.58212648351,
+      "mean_us": 42.012248699999994,
+      "round_means_us": [
+        42.012248699999994
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21807.28431378422,
+      "mean_us": 45.8562371,
+      "round_means_us": [
+        45.8562371
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "source": "jwks-url-async",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10075.411563912769,
+      "mean_us": 99.2515287,
+      "round_means_us": [
+        99.2515287
+      ]
+    }
+  ],
+  "first_fetch": [
+    {
+      "source": "jwks-url-sync",
+      "name": "typical-rs3072",
+      "ms": 2.427487,
+      "trials_ms": [
+        3.290239,
+        2.561234,
+        2.427487,
+        2.182336,
+        2.181805
+      ]
+    },
+    {
+      "source": "jwks-url-async",
+      "name": "typical-rs3072",
+      "ms": 2.379827,
+      "trials_ms": [
+        3.534398,
+        2.522617,
+        2.379827,
+        2.241743,
+        2.242183
+      ]
+    }
+  ],
+  "not_applicable": [],
+  "notes": [
+    "`SecretKey`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and `.adecode`",
+    "JWKS URL: trusting the test CA through `SSL_CERT_FILE`"
+  ]
+}

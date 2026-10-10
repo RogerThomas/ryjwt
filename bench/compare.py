@@ -35,11 +35,13 @@ def machine() -> str:
             check=True,
         ).stdout.strip()
         return f"{cpu}, macOS {platform.mac_ver()[0]}"
+    # x86 names the CPU in /proc/cpuinfo; Arm doesn't, but lscpu does (`Model name: Neoverse-N2`).
+    lscpu = subprocess.run(["/usr/bin/lscpu"], capture_output=True, text=True, check=False).stdout
     cpu = next(
         (
             line.split(":", 1)[1].strip()
-            for line in Path("/proc/cpuinfo").read_text().splitlines()
-            if line.startswith("model name")
+            for line in [*Path("/proc/cpuinfo").read_text().splitlines(), *lscpu.splitlines()]
+            if line.lower().startswith("model name")
         ),
         platform.machine(),
     )

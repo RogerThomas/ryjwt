@@ -10,11 +10,15 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 3202,
-      "ops_per_sec": 16248.808742082385,
-      "mean_us": 61.54297314178638,
-      "p50_us": 61.669,
-      "p99_us": 131.67756
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 16860.03604329401,
+      "mean_us": 59.311854223333334,
+      "round_means_us": [
+        59.30000963,
+        59.273020149999994,
+        59.362532890000004
+      ]
     },
     {
       "impl": "pyjwt 2.15.1",
@@ -24,11 +28,15 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 1765,
-      "ops_per_sec": 8867.557046765482,
-      "mean_us": 112.77063059490085,
-      "p50_us": 112.3025,
-      "p99_us": 131.44581
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 8590.68639534616,
+      "mean_us": 116.40513388333333,
+      "round_means_us": [
+        116.37778213,
+        116.45213041,
+        116.38548911
+      ]
     }
   ],
   "first_fetch": [],

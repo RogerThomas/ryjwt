@@ -1,0 +1,59 @@
+{
+  "impl": "fast-jwt 6.3.3",
+  "runtime": "Bun 1.3.14",
+  "rows": [
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 167248,
+      "mean_us": 5.979,
+      "round_means_us": [
+        6.814,
+        5.62,
+        5.503
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 23872,
+      "mean_us": 41.89,
+      "round_means_us": [
+        42.756,
+        41.446,
+        41.467
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "fast-jwt's JWKS support (get-jwks) is async only"
+    },
+    {
+      "source": "jwks-url-async",
+      "alg": "EdDSA",
+      "reason": "get-jwks converts JWKs with jwk-to-pem, which doesn't support OKP (Ed25519) keys"
+    }
+  ],
+  "notes": [
+    "JWKS document: a verifier per key, made once, picked by the token's `kid` (read with `createDecoder`)",
+    "JWKS URL rows are fast-jwt + get-jwks 11.0.3 (fast-jwt's documented integration), so they time both: on every verify get-jwks converts the cached JWK to a PEM (with jwk-to-pem) and fast-jwt imports that PEM (`createPublicKey`), which is why they're slow"
+  ]
+}

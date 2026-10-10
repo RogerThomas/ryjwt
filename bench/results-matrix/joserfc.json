@@ -10,11 +10,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 7652,
-      "ops_per_sec": 39202.77840521406,
-      "mean_us": 25.50839610559331,
-      "p50_us": 25.4105,
-      "p99_us": 38.87724
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 45778.440405443165,
+      "mean_us": 21.844344,
+      "round_means_us": [
+        21.844344
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -24,11 +26,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 5776,
-      "ops_per_sec": 29578.552534202914,
-      "mean_us": 33.80828047091413,
-      "p50_us": 33.4235,
-      "p99_us": 46.44955
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 35839.04347255903,
+      "mean_us": 27.9025304,
+      "round_means_us": [
+        27.9025304
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -38,11 +42,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 3689,
-      "ops_per_sec": 18772.393260459437,
-      "mean_us": 53.26971293033342,
-      "p50_us": 52.993,
-      "p99_us": 67.65284
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21869.143825993415,
+      "mean_us": 45.7265272,
+      "round_means_us": [
+        45.7265272
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -52,11 +58,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 713,
-      "ops_per_sec": 3581.508785672116,
-      "mean_us": 279.21193548387095,
-      "p50_us": 280.847,
-      "p99_us": 310.67728999999997
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3827.0791874353276,
+      "mean_us": 261.2958737,
+      "round_means_us": [
+        261.2958737
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -66,11 +74,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 7437,
-      "ops_per_sec": 38400.643408279386,
-      "mean_us": 26.041230334812425,
-      "p50_us": 25.787,
-      "p99_us": 39.130050000000004
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 45908.09152332615,
+      "mean_us": 21.7826524,
+      "round_means_us": [
+        21.7826524
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -80,11 +90,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 5732,
-      "ops_per_sec": 29174.373525499956,
-      "mean_us": 34.27665718771807,
-      "p50_us": 34.0315,
-      "p99_us": 48.287279999999996
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 35870.83552064721,
+      "mean_us": 27.877800599999997,
+      "round_means_us": [
+        27.877800599999997
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -94,11 +106,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 3709,
-      "ops_per_sec": 19069.446879253654,
-      "mean_us": 52.43990590455649,
-      "p50_us": 52.1175,
-      "p99_us": 66.38337
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22055.67068750439,
+      "mean_us": 45.3398137,
+      "round_means_us": [
+        45.3398137
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -108,11 +122,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 695,
-      "ops_per_sec": 3654.8973555208427,
-      "mean_us": 273.60549496402876,
-      "p50_us": 274.376,
-      "p99_us": 325.22758
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3814.1950883946934,
+      "mean_us": 262.17851390000004,
+      "round_means_us": [
+        262.17851390000004
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -122,11 +138,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 7463,
-      "ops_per_sec": 38215.131826023666,
-      "mean_us": 26.167644914913573,
-      "p50_us": 26.1315,
-      "p99_us": 59.68994
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 45933.78706146364,
+      "mean_us": 21.7704671,
+      "round_means_us": [
+        21.7704671
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -136,11 +154,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 4682,
-      "ops_per_sec": 28760.486075065804,
-      "mean_us": 34.769926954293034,
-      "p50_us": 34.548,
-      "p99_us": 48.90854
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 35602.00386021136,
+      "mean_us": 28.0883066,
+      "round_means_us": [
+        28.0883066
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -150,11 +170,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 3691,
-      "ops_per_sec": 18669.87277935938,
-      "mean_us": 53.5622289352479,
-      "p50_us": 53.1,
-      "p99_us": 67.90294
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21737.15750421096,
+      "mean_us": 46.0041751,
+      "round_means_us": [
+        46.0041751
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -164,11 +186,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 713,
-      "ops_per_sec": 3578.2199842070518,
-      "mean_us": 279.46856381486674,
-      "p50_us": 279.896,
-      "p99_us": 305.45052000000004
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3818.710409145122,
+      "mean_us": 261.8685087,
+      "round_means_us": [
+        261.8685087
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -178,11 +202,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 6794,
-      "ops_per_sec": 34757.26900012837,
-      "mean_us": 28.77096011186341,
-      "p50_us": 28.604,
-      "p99_us": 42.88036
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 42137.140836390055,
+      "mean_us": 23.7320326,
+      "round_means_us": [
+        23.7320326
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -192,11 +218,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 5303,
-      "ops_per_sec": 26975.3314688596,
-      "mean_us": 37.070906845181966,
-      "p50_us": 36.7165,
-      "p99_us": 50.726169999999996
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 33682.39658389361,
+      "mean_us": 29.6890988,
+      "round_means_us": [
+        29.6890988
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -206,11 +234,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 3515,
-      "ops_per_sec": 17995.1273802626,
-      "mean_us": 55.57059857752489,
-      "p50_us": 55.484,
-      "p99_us": 69.32116
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21074.271350640396,
+      "mean_us": 47.451225400000006,
+      "round_means_us": [
+        47.451225400000006
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -220,11 +250,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 705,
-      "ops_per_sec": 3555.6381158474915,
-      "mean_us": 281.24346950354607,
-      "p50_us": 281.4665,
-      "p99_us": 332.48429
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3792.1380972798297,
+      "mean_us": 263.7034766,
+      "round_means_us": [
+        263.7034766
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -234,11 +266,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 3904,
-      "ops_per_sec": 19659.51334325011,
-      "mean_us": 50.86595901639344,
-      "p50_us": 50.152,
-      "p99_us": 70.16938
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21743.180716672283,
+      "mean_us": 45.9914312,
+      "round_means_us": [
+        45.9914312
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -248,11 +282,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 3375,
-      "ops_per_sec": 17088.43281704157,
-      "mean_us": 58.51911703703704,
-      "p50_us": 57.755,
-      "p99_us": 80.50806
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19228.69190341335,
+      "mean_us": 52.0056177,
+      "round_means_us": [
+        52.0056177
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -262,11 +298,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 2557,
-      "ops_per_sec": 12900.436134130694,
-      "mean_us": 77.51675909268674,
-      "p50_us": 76.098,
-      "p99_us": 94.6405
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14212.990858128951,
+      "mean_us": 70.3581681,
+      "round_means_us": [
+        70.3581681
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -276,11 +314,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 648,
-      "ops_per_sec": 3257.550738690349,
-      "mean_us": 306.97910185185185,
-      "p50_us": 307.055,
-      "p99_us": 353.24935999999997
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3421.4114513846143,
+      "mean_us": 292.2770366,
+      "round_means_us": [
+        292.2770366
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -290,11 +330,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 2692,
-      "ops_per_sec": 13553.44326585541,
-      "mean_us": 73.78198885586924,
-      "p50_us": 73.082,
-      "p99_us": 88.0213
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14454.708077370084,
+      "mean_us": 69.18161160000001,
+      "round_means_us": [
+        69.18161160000001
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -304,11 +346,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 2429,
-      "ops_per_sec": 12270.922922584657,
-      "mean_us": 81.49346274186908,
-      "p50_us": 80.866,
-      "p99_us": 98.67787
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13306.937372993765,
+      "mean_us": 75.1487718,
+      "round_means_us": [
+        75.1487718
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -318,11 +362,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 1965,
-      "ops_per_sec": 9980.57992472022,
-      "mean_us": 100.1945786259542,
-      "p50_us": 99.616,
-      "p99_us": 124.26872
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10723.232283146932,
+      "mean_us": 93.2554638,
+      "round_means_us": [
+        93.2554638
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -332,11 +378,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 603,
-      "ops_per_sec": 3040.4219714424808,
-      "mean_us": 328.9017147595357,
-      "p50_us": 328.856,
-      "p99_us": 369.44164
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3150.078207716181,
+      "mean_us": 317.4524358,
+      "round_means_us": [
+        317.4524358
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -346,11 +394,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 1904,
-      "ops_per_sec": 9498.150123021745,
-      "mean_us": 105.28365913865547,
-      "p50_us": 104.1325,
-      "p99_us": 121.62060000000001
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9918.051524035667,
+      "mean_us": 100.8262558,
+      "round_means_us": [
+        100.8262558
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -360,11 +410,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 1755,
-      "ops_per_sec": 8798.256695871898,
-      "mean_us": 113.65887977207977,
-      "p50_us": 112.427,
-      "p99_us": 132.08123999999998
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9376.53398337868,
+      "mean_us": 106.6492162,
+      "round_means_us": [
+        106.6492162
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -374,11 +426,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 1504,
-      "ops_per_sec": 7610.052875801033,
-      "mean_us": 131.40513164893616,
-      "p50_us": 130.867,
-      "p99_us": 196.08336
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7983.720191773717,
+      "mean_us": 125.2548907,
+      "round_means_us": [
+        125.2548907
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -388,11 +442,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 550,
-      "ops_per_sec": 2785.732930588612,
-      "mean_us": 358.97195636363637,
-      "p50_us": 357.692,
-      "p99_us": 401.8115
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2835.2953920989953,
+      "mean_us": 352.69693689999997,
+      "round_means_us": [
+        352.69693689999997
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -402,11 +458,13 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 1753,
-      "ops_per_sec": 8902.314642433683,
-      "mean_us": 112.33033656588705,
-      "p50_us": 112.0315,
-      "p99_us": 130.47968
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10625.741557885258,
+      "mean_us": 94.1110787,
+      "round_means_us": [
+        94.1110787
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -416,11 +474,13 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 1659,
-      "ops_per_sec": 8356.250227857667,
-      "mean_us": 119.67090174804098,
-      "p50_us": 119.245,
-      "p99_us": 139.04076
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9971.276014409743,
+      "mean_us": 100.2880673,
+      "round_means_us": [
+        100.2880673
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -430,11 +490,13 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 1423,
-      "ops_per_sec": 7197.514610701761,
-      "mean_us": 138.93684891075193,
-      "p50_us": 138.075,
-      "p99_us": 163.58392
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8072.359161584016,
+      "mean_us": 123.8795227,
+      "round_means_us": [
+        123.8795227
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -444,11 +506,13 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 538,
-      "ops_per_sec": 2707.6448823282194,
-      "mean_us": 369.3246505576208,
-      "p50_us": 368.6495,
-      "p99_us": 417.37039
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2819.836767178512,
+      "mean_us": 354.6304565,
+      "round_means_us": [
+        354.6304565
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -458,11 +522,13 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 470,
-      "ops_per_sec": 2373.5311522403435,
-      "mean_us": 421.3131978723404,
-      "p50_us": 419.847,
-      "p99_us": 463.3102
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2882.8117431920996,
+      "mean_us": 346.88355989999997,
+      "round_means_us": [
+        346.88355989999997
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -472,11 +538,13 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 464,
-      "ops_per_sec": 2335.298517233411,
-      "mean_us": 428.2107801724138,
-      "p50_us": 429.352,
-      "p99_us": 484.95279999999997
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2819.978403657872,
+      "mean_us": 354.6126448,
+      "round_means_us": [
+        354.6126448
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -486,11 +554,13 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 441,
-      "ops_per_sec": 2246.8040702328126,
-      "mean_us": 445.0766371882086,
-      "p50_us": 448.325,
-      "p99_us": 496.62753999999995
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2671.700230407989,
+      "mean_us": 374.2934887,
+      "round_means_us": [
+        374.2934887
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -500,11 +570,13 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 291,
-      "ops_per_sec": 1457.1817945855792,
-      "mean_us": 686.2561718213059,
-      "p50_us": 693.034,
-      "p99_us": 735.45776
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1616.3786670156676,
+      "mean_us": 618.6669128999999,
+      "round_means_us": [
+        618.6669128999999
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -514,11 +586,13 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 390,
-      "ops_per_sec": 1971.1330297060665,
-      "mean_us": 507.3224307692308,
-      "p50_us": 505.864,
-      "p99_us": 551.558
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2031.7135371260079,
+      "mean_us": 492.19537190000005,
+      "round_means_us": [
+        492.19537190000005
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -528,11 +602,13 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 387,
-      "ops_per_sec": 1944.4567584998424,
-      "mean_us": 514.2824573643411,
-      "p50_us": 514.221,
-      "p99_us": 569.20565
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2005.189903894019,
+      "mean_us": 498.7058822,
+      "round_means_us": [
+        498.7058822
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -542,11 +618,13 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 373,
-      "ops_per_sec": 1869.8871276473835,
-      "mean_us": 534.7916380697051,
-      "p50_us": 537.832,
-      "p99_us": 588.92882
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1917.9908951468503,
+      "mean_us": 521.3789088,
+      "round_means_us": [
+        521.3789088
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -556,11 +634,13 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 242,
-      "ops_per_sec": 1281.5056102276858,
-      "mean_us": 780.3321280991736,
-      "p50_us": 780.746,
-      "p99_us": 863.34412
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1309.8111546786697,
+      "mean_us": 763.4688378,
+      "round_means_us": [
+        763.4688378
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -570,11 +650,13 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 1419,
-      "ops_per_sec": 7123.542038355922,
-      "mean_us": 140.37960253699788,
-      "p50_us": 139.478,
-      "p99_us": 218.9034
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9675.280874322933,
+      "mean_us": 103.35617260000001,
+      "round_means_us": [
+        103.35617260000001
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -584,11 +666,13 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 1342,
-      "ops_per_sec": 6771.46027893189,
-      "mean_us": 147.67863338301044,
-      "p50_us": 146.924,
-      "p99_us": 179.1654
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9256.99733767368,
+      "mean_us": 108.02638950000001,
+      "round_means_us": [
+        108.02638950000001
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -598,11 +682,13 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 1176,
-      "ops_per_sec": 5977.059314466264,
-      "mean_us": 167.3063537414966,
-      "p50_us": 167.842,
-      "p99_us": 216.76148999999998
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7834.570505378098,
+      "mean_us": 127.6394155,
+      "round_means_us": [
+        127.6394155
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -612,11 +698,13 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 482,
-      "ops_per_sec": 2429.6456531184417,
-      "mean_us": 411.58265145228216,
-      "p50_us": 406.716,
-      "p99_us": 453.04889000000003
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2778.2369593802964,
+      "mean_us": 359.9404999,
+      "round_means_us": [
+        359.9404999
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -626,11 +714,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 3434,
-      "ops_per_sec": 17456.63648730749,
-      "mean_us": 57.28480401863716,
-      "p50_us": 56.603,
-      "p99_us": 75.57044
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19957.535553301816,
+      "mean_us": 50.106387000000005,
+      "round_means_us": [
+        50.106387000000005
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -640,11 +730,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 3049,
-      "ops_per_sec": 15461.960686152015,
-      "mean_us": 64.67485077074451,
-      "p50_us": 64.1825,
-      "p99_us": 79.56012
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17951.791530182112,
+      "mean_us": 55.7047467,
+      "round_means_us": [
+        55.7047467
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -654,11 +746,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 2352,
-      "ops_per_sec": 11998.925851260274,
-      "mean_us": 83.34079336734693,
-      "p50_us": 82.725,
-      "p99_us": 101.17247
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13358.520877882667,
+      "mean_us": 74.85858719999999,
+      "round_means_us": [
+        74.85858719999999
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -668,11 +762,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 639,
-      "ops_per_sec": 3215.4524479996803,
-      "mean_us": 310.99822378716743,
-      "p50_us": 310.559,
-      "p99_us": 488.30558
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3259.4114526241383,
+      "mean_us": 306.8038554,
+      "round_means_us": [
+        306.8038554
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -682,11 +778,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 2486,
-      "ops_per_sec": 12547.777707809924,
-      "mean_us": 79.6953869670153,
-      "p50_us": 79.165,
-      "p99_us": 101.22814
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13659.82233846561,
+      "mean_us": 73.2073943,
+      "round_means_us": [
+        73.2073943
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -696,11 +794,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 2258,
-      "ops_per_sec": 11401.670411368079,
-      "mean_us": 87.70644685562443,
-      "p50_us": 86.979,
-      "p99_us": 109.02435000000001
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12544.337333086927,
+      "mean_us": 79.71724400000001,
+      "round_means_us": [
+        79.71724400000001
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -710,11 +810,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 1848,
-      "ops_per_sec": 9334.20424287466,
-      "mean_us": 107.13286038961039,
-      "p50_us": 105.613,
-      "p99_us": 123.23316
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10137.680878048222,
+      "mean_us": 98.6418898,
+      "round_means_us": [
+        98.6418898
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -724,11 +826,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 593,
-      "ops_per_sec": 3012.750314969582,
-      "mean_us": 331.92262731871836,
-      "p50_us": 329.55,
-      "p99_us": 370.82964000000004
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2994.2699108850147,
+      "mean_us": 333.9712283,
+      "round_means_us": [
+        333.9712283
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -738,11 +842,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 1791,
-      "ops_per_sec": 9007.92960347778,
-      "mean_us": 111.0133009491904,
-      "p50_us": 109.4675,
-      "p99_us": 130.64025
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9482.16590112574,
+      "mean_us": 105.4611373,
+      "round_means_us": [
+        105.4611373
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -752,11 +858,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 1697,
-      "ops_per_sec": 8459.417241862591,
-      "mean_us": 118.21145256334708,
-      "p50_us": 117.802,
-      "p99_us": 147.68914999999998
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8975.857866673143,
+      "mean_us": 111.4099638,
+      "round_means_us": [
+        111.4099638
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -766,11 +874,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 1454,
-      "ops_per_sec": 7295.505854495431,
-      "mean_us": 137.0706870701513,
-      "p50_us": 136.997,
-      "p99_us": 204.8818
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7685.56138928776,
+      "mean_us": 130.1141126,
+      "round_means_us": [
+        130.1141126
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -780,11 +890,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 549,
-      "ops_per_sec": 2763.4062615373155,
-      "mean_us": 361.8722349726776,
-      "p50_us": 361.846,
-      "p99_us": 420.04568
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2729.7144772213824,
+      "mean_us": 366.33868060000003,
+      "round_means_us": [
+        366.33868060000003
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -794,11 +906,13 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 1694,
-      "ops_per_sec": 8521.409450177685,
-      "mean_us": 117.3514787485242,
-      "p50_us": 116.869,
-      "p99_us": 140.243
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10082.247821988212,
+      "mean_us": 99.1842313,
+      "round_means_us": [
+        99.1842313
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -808,11 +922,13 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 1579,
-      "ops_per_sec": 8009.937070099348,
-      "mean_us": 124.84492590246991,
-      "p50_us": 124.758,
-      "p99_us": 145.90072
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9258.401039773247,
+      "mean_us": 108.0100112,
+      "round_means_us": [
+        108.0100112
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -822,11 +938,13 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 1364,
-      "ops_per_sec": 6955.684006233292,
-      "mean_us": 143.76731304985339,
-      "p50_us": 143.7355,
-      "p99_us": 169.61525
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7434.966730765523,
+      "mean_us": 134.4995931,
+      "round_means_us": [
+        134.4995931
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -836,11 +954,13 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 536,
-      "ops_per_sec": 2700.9943972910396,
-      "mean_us": 370.2340149253731,
-      "p50_us": 371.506,
-      "p99_us": 609.7876
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2661.429806721711,
+      "mean_us": 375.7378825,
+      "round_means_us": [
+        375.7378825
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -850,11 +970,13 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 475,
-      "ops_per_sec": 2376.8539460779407,
-      "mean_us": 420.7242105263158,
-      "p50_us": 423.21,
-      "p99_us": 464.69252
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2834.948249791543,
+      "mean_us": 352.740125,
+      "round_means_us": [
+        352.740125
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -864,11 +986,13 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 464,
-      "ops_per_sec": 2340.3971462286695,
-      "mean_us": 427.2779094827586,
-      "p50_us": 430.7285,
-      "p99_us": 473.75140000000005
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2780.878668376316,
+      "mean_us": 359.59857270000003,
+      "round_means_us": [
+        359.59857270000003
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -878,11 +1002,13 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 443,
-      "ops_per_sec": 2219.6923964306684,
-      "mean_us": 450.5128735891648,
-      "p50_us": 445.516,
-      "p99_us": 489.65852
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2626.6139268015786,
+      "mean_us": 380.71830420000003,
+      "round_means_us": [
+        380.71830420000003
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -892,11 +1018,13 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 286,
-      "ops_per_sec": 1454.5063890744273,
-      "mean_us": 687.5184650349651,
-      "p50_us": 694.627,
-      "p99_us": 764.4508000000001
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1574.935244757735,
+      "mean_us": 634.9467404,
+      "round_means_us": [
+        634.9467404
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -906,11 +1034,13 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 395,
-      "ops_per_sec": 1975.7972045350718,
-      "mean_us": 506.124817721519,
-      "p50_us": 505.325,
-      "p99_us": 553.28332
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2017.562093189561,
+      "mean_us": 495.6476945,
+      "round_means_us": [
+        495.6476945
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -920,11 +1050,13 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 388,
-      "ops_per_sec": 1942.9141185990632,
-      "mean_us": 514.6907886597938,
-      "p50_us": 516.29,
-      "p99_us": 561.4516600000001
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1966.4485422819014,
+      "mean_us": 508.5309778,
+      "round_means_us": [
+        508.5309778
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -934,11 +1066,13 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 369,
-      "ops_per_sec": 1869.9975190859475,
-      "mean_us": 534.7600677506774,
-      "p50_us": 527.9605,
-      "p99_us": 573.80087
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1893.8259849679814,
+      "mean_us": 528.0316185,
+      "round_means_us": [
+        528.0316185
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -948,11 +1082,13 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 245,
-      "ops_per_sec": 1284.9642644357646,
-      "mean_us": 778.2317591836734,
-      "p50_us": 772.052,
-      "p99_us": 835.27702
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1285.6552349265178,
+      "mean_us": 777.8135015,
+      "round_means_us": [
+        777.8135015
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -962,11 +1098,13 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 1350,
-      "ops_per_sec": 6948.113434344081,
-      "mean_us": 143.92396,
-      "p50_us": 144.38,
-      "p99_us": 188.87
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9372.43777174862,
+      "mean_us": 106.69582709999999,
+      "round_means_us": [
+        106.69582709999999
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -976,11 +1114,13 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 1321,
-      "ops_per_sec": 6631.0921540295185,
-      "mean_us": 150.804720666162,
-      "p50_us": 151.148,
-      "p99_us": 169.13279999999997
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8960.525374097208,
+      "mean_us": 111.60059910000001,
+      "round_means_us": [
+        111.60059910000001
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -990,11 +1130,13 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 1154,
-      "ops_per_sec": 5843.463793067898,
-      "mean_us": 171.13137608318888,
-      "p50_us": 171.814,
-      "p99_us": 203.2068
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7569.425877168423,
+      "mean_us": 132.1104158,
+      "round_means_us": [
+        132.1104158
+      ]
     },
     {
       "impl": "joserfc 1.7.5",
@@ -1004,11 +1146,13 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 481,
-      "ops_per_sec": 2430.5747014546823,
-      "mean_us": 411.42533056133055,
-      "p50_us": 411.162,
-      "p99_us": 458.7588
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2697.4780878938764,
+      "mean_us": 370.7166351,
+      "round_means_us": [
+        370.7166351
+      ]
     }
   ],
   "first_fetch": [],

@@ -26,8 +26,10 @@ nav = [
   ] },
   { "Benchmarks" = [
     "benchmarks/index.md",
+    { "The races" = "benchmarks/races.md" },
     { "Full matrix" = "benchmarks/matrix.md" },
     { "HS256 by token and key size" = "benchmarks/docker.md" },
+    { "x86_64 cross-check" = "benchmarks/x86_64.md" },
   ] },
   { "API reference" = "reference.md" },
   { "Changelog" = "changelog.md" },

@@ -1,0 +1,2085 @@
+{
+  "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "small-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 848167.7160056288,
+      "mean_us": 1.1790121,
+      "round_means_us": [
+        1.1790121
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "typical-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 402826.45599809807,
+      "mean_us": 2.4824585999999997,
+      "round_means_us": [
+        2.4824585999999997
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "medium-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 157231.2730046058,
+      "mean_us": 6.3600579,
+      "round_means_us": [
+        6.3600579
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "large-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19390.385364286045,
+      "mean_us": 51.571950799999996,
+      "round_means_us": [
+        51.571950799999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "small-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 843608.8405144834,
+      "mean_us": 1.1853835,
+      "round_means_us": [
+        1.1853835
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 402564.33481275727,
+      "mean_us": 2.484075,
+      "round_means_us": [
+        2.484075
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "medium-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 157722.92013387647,
+      "mean_us": 6.3402326,
+      "round_means_us": [
+        6.3402326
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "large-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19252.614098283073,
+      "mean_us": 51.9409985,
+      "round_means_us": [
+        51.9409985
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "small-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 853997.7299032344,
+      "mean_us": 1.1709633,
+      "round_means_us": [
+        1.1709633
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "typical-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 403311.9493304679,
+      "mean_us": 2.4794703,
+      "round_means_us": [
+        2.4794703
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "medium-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 157184.8149346071,
+      "mean_us": 6.3619377,
+      "round_means_us": [
+        6.3619377
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "large-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19364.45078578569,
+      "mean_us": 51.641020499999996,
+      "round_means_us": [
+        51.641020499999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "small-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 857956.3959104993,
+      "mean_us": 1.1655604000000002,
+      "round_means_us": [
+        1.1655604000000002
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "typical-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 404462.2050090298,
+      "mean_us": 2.4724189,
+      "round_means_us": [
+        2.4724189
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "medium-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 158526.53265710775,
+      "mean_us": 6.3080923,
+      "round_means_us": [
+        6.3080923
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "hmac",
+      "name": "large-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19334.095732152462,
+      "mean_us": 51.7220983,
+      "round_means_us": [
+        51.7220983
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 59731.85878788874,
+      "mean_us": 16.7414847,
+      "round_means_us": [
+        16.7414847
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 55573.09967438331,
+      "mean_us": 17.9943175,
+      "round_means_us": [
+        17.9943175
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 45599.92672638974,
+      "mean_us": 21.9298598,
+      "round_means_us": [
+        21.9298598
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14868.299568646691,
+      "mean_us": 67.2571867,
+      "round_means_us": [
+        67.2571867
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 29170.466265750114,
+      "mean_us": 34.281248399999996,
+      "round_means_us": [
+        34.281248399999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 28222.18667167441,
+      "mean_us": 35.4331155,
+      "round_means_us": [
+        35.4331155
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25286.5784194918,
+      "mean_us": 39.5466711,
+      "round_means_us": [
+        39.5466711
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11663.373450968127,
+      "mean_us": 85.7384876,
+      "round_means_us": [
+        85.7384876
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17276.297030006554,
+      "mean_us": 57.8827742,
+      "round_means_us": [
+        57.8827742
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16907.931835625463,
+      "mean_us": 59.143839099999994,
+      "round_means_us": [
+        59.143839099999994
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15833.34043722541,
+      "mean_us": 63.157866399999996,
+      "round_means_us": [
+        63.157866399999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9182.613565279982,
+      "mean_us": 108.9014574,
+      "round_means_us": [
+        108.9014574
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19703.751223605417,
+      "mean_us": 50.751757299999994,
+      "round_means_us": [
+        50.751757299999994
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19049.21569845256,
+      "mean_us": 52.4955996,
+      "round_means_us": [
+        52.4955996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17794.931712323247,
+      "mean_us": 56.1957762,
+      "round_means_us": [
+        56.1957762
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9823.852412288514,
+      "mean_us": 101.79306020000001,
+      "round_means_us": [
+        101.79306020000001
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5159.367344487202,
+      "mean_us": 193.8222137,
+      "round_means_us": [
+        193.8222137
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5095.742525362818,
+      "mean_us": 196.2422542,
+      "round_means_us": [
+        196.2422542
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4987.343458909335,
+      "mean_us": 200.5075464,
+      "round_means_us": [
+        200.5075464
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3724.4496524698525,
+      "mean_us": 268.4960446,
+      "round_means_us": [
+        268.4960446
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2964.5919636447015,
+      "mean_us": 337.31454859999997,
+      "round_means_us": [
+        337.31454859999997
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2976.825161007639,
+      "mean_us": 335.9283619,
+      "round_means_us": [
+        335.9283619
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2890.886755092805,
+      "mean_us": 345.91462229999996,
+      "round_means_us": [
+        345.91462229999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2436.080850579671,
+      "mean_us": 410.4954069,
+      "round_means_us": [
+        410.4954069
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26247.558186380982,
+      "mean_us": 38.098782099999994,
+      "round_means_us": [
+        38.098782099999994
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25337.00009047336,
+      "mean_us": 39.4679716,
+      "round_means_us": [
+        39.4679716
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22035.573811685685,
+      "mean_us": 45.3811645,
+      "round_means_us": [
+        45.3811645
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "pem",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9033.357928878522,
+      "mean_us": 110.70080560000001,
+      "round_means_us": [
+        110.70080560000001
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 60116.93320631186,
+      "mean_us": 16.6342484,
+      "round_means_us": [
+        16.6342484
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 55486.59311852165,
+      "mean_us": 18.0223716,
+      "round_means_us": [
+        18.0223716
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 45788.0971735145,
+      "mean_us": 21.839737,
+      "round_means_us": [
+        21.839737
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14714.529476021846,
+      "mean_us": 67.9600392,
+      "round_means_us": [
+        67.9600392
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 29137.58270925026,
+      "mean_us": 34.3199369,
+      "round_means_us": [
+        34.3199369
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 28249.667122872426,
+      "mean_us": 35.3986472,
+      "round_means_us": [
+        35.3986472
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25418.150046603416,
+      "mean_us": 39.3419662,
+      "round_means_us": [
+        39.3419662
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11632.177852574854,
+      "mean_us": 85.96842419999999,
+      "round_means_us": [
+        85.96842419999999
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17300.937130173006,
+      "mean_us": 57.8003372,
+      "round_means_us": [
+        57.8003372
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16865.856365712214,
+      "mean_us": 59.291385999999996,
+      "round_means_us": [
+        59.291385999999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15722.210427070577,
+      "mean_us": 63.604288000000004,
+      "round_means_us": [
+        63.604288000000004
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9211.242552922255,
+      "mean_us": 108.5629864,
+      "round_means_us": [
+        108.5629864
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19702.16485633949,
+      "mean_us": 50.7558437,
+      "round_means_us": [
+        50.7558437
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19055.460605582994,
+      "mean_us": 52.478395600000006,
+      "round_means_us": [
+        52.478395600000006
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17781.026284350464,
+      "mean_us": 56.2397234,
+      "round_means_us": [
+        56.2397234
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9815.485105022455,
+      "mean_us": 101.8798347,
+      "round_means_us": [
+        101.8798347
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5157.523025525591,
+      "mean_us": 193.8915241,
+      "round_means_us": [
+        193.8915241
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5094.13484120825,
+      "mean_us": 196.3041873,
+      "round_means_us": [
+        196.3041873
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4981.5177968384705,
+      "mean_us": 200.742031,
+      "round_means_us": [
+        200.742031
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3720.1272595269425,
+      "mean_us": 268.80800849999997,
+      "round_means_us": [
+        268.80800849999997
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2962.101757548504,
+      "mean_us": 337.5981252,
+      "round_means_us": [
+        337.5981252
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2975.8744232702174,
+      "mean_us": 336.0356849,
+      "round_means_us": [
+        336.0356849
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2910.545121578246,
+      "mean_us": 343.5782502,
+      "round_means_us": [
+        343.5782502
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2434.682431040633,
+      "mean_us": 410.731185,
+      "round_means_us": [
+        410.731185
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26601.963738873874,
+      "mean_us": 37.591209799999994,
+      "round_means_us": [
+        37.591209799999994
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25385.073284472688,
+      "mean_us": 39.393228799999996,
+      "round_means_us": [
+        39.393228799999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22169.813964400455,
+      "mean_us": 45.1063776,
+      "round_means_us": [
+        45.1063776
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9038.673814323378,
+      "mean_us": 110.6356995,
+      "round_means_us": [
+        110.6356995
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 58257.02439897393,
+      "mean_us": 17.165312,
+      "round_means_us": [
+        17.165312
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 53847.19264134174,
+      "mean_us": 18.5710703,
+      "round_means_us": [
+        18.5710703
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 44267.86426231547,
+      "mean_us": 22.5897503,
+      "round_means_us": [
+        22.5897503
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14712.52101023402,
+      "mean_us": 67.9693167,
+      "round_means_us": [
+        67.9693167
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 28892.28849680461,
+      "mean_us": 34.6113116,
+      "round_means_us": [
+        34.6113116
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 27291.247386115967,
+      "mean_us": 36.6417843,
+      "round_means_us": [
+        36.6417843
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24874.77670503728,
+      "mean_us": 40.2013659,
+      "round_means_us": [
+        40.2013659
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11608.293428692865,
+      "mean_us": 86.1453069,
+      "round_means_us": [
+        86.1453069
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17126.45797215596,
+      "mean_us": 58.3891895,
+      "round_means_us": [
+        58.3891895
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16686.650153913655,
+      "mean_us": 59.9281456,
+      "round_means_us": [
+        59.9281456
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15681.027969914016,
+      "mean_us": 63.7713294,
+      "round_means_us": [
+        63.7713294
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9082.724853968744,
+      "mean_us": 110.0991185,
+      "round_means_us": [
+        110.0991185
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19404.129831402755,
+      "mean_us": 51.535421,
+      "round_means_us": [
+        51.535421
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18850.682769090803,
+      "mean_us": 53.0484764,
+      "round_means_us": [
+        53.0484764
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17546.950467487346,
+      "mean_us": 56.9899597,
+      "round_means_us": [
+        56.9899597
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9627.265216080406,
+      "mean_us": 103.871658,
+      "round_means_us": [
+        103.871658
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5152.664546714824,
+      "mean_us": 194.0743456,
+      "round_means_us": [
+        194.0743456
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5079.51517500714,
+      "mean_us": 196.8691825,
+      "round_means_us": [
+        196.8691825
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4970.785167056768,
+      "mean_us": 201.1754615,
+      "round_means_us": [
+        201.1754615
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3710.0580699365023,
+      "mean_us": 269.5375601,
+      "round_means_us": [
+        269.5375601
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2958.350249784058,
+      "mean_us": 338.0262361,
+      "round_means_us": [
+        338.0262361
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2963.847187033708,
+      "mean_us": 337.3993114,
+      "round_means_us": [
+        337.3993114
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2902.0050375917053,
+      "mean_us": 344.5893398,
+      "round_means_us": [
+        344.5893398
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2425.3083746129064,
+      "mean_us": 412.3187016,
+      "round_means_us": [
+        412.3187016
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26295.474627965905,
+      "mean_us": 38.0293573,
+      "round_means_us": [
+        38.0293573
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25078.481792148235,
+      "mean_us": 39.874822099999996,
+      "round_means_us": [
+        39.874822099999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21880.988402581635,
+      "mean_us": 45.7017746,
+      "round_means_us": [
+        45.7017746
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-sync",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8954.058548633282,
+      "mean_us": 111.68119960000001,
+      "round_means_us": [
+        111.68119960000001
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 58219.512585192686,
+      "mean_us": 17.1763719,
+      "round_means_us": [
+        17.1763719
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 54016.87613609982,
+      "mean_us": 18.5127329,
+      "round_means_us": [
+        18.5127329
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 44834.27849596688,
+      "mean_us": 22.3043625,
+      "round_means_us": [
+        22.3043625
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14760.916781411146,
+      "mean_us": 67.7464696,
+      "round_means_us": [
+        67.7464696
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 28727.47506689293,
+      "mean_us": 34.8098814,
+      "round_means_us": [
+        34.8098814
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 27636.654502605066,
+      "mean_us": 36.183829700000004,
+      "round_means_us": [
+        36.183829700000004
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24942.77024787554,
+      "mean_us": 40.0917777,
+      "round_means_us": [
+        40.0917777
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11585.8665284031,
+      "mean_us": 86.3120594,
+      "round_means_us": [
+        86.3120594
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17155.136416992893,
+      "mean_us": 58.2915796,
+      "round_means_us": [
+        58.2915796
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16701.008644557314,
+      "mean_us": 59.876623099999996,
+      "round_means_us": [
+        59.876623099999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15669.457188065766,
+      "mean_us": 63.818419999999996,
+      "round_means_us": [
+        63.818419999999996
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9085.767752290469,
+      "mean_us": 110.0622454,
+      "round_means_us": [
+        110.0622454
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19487.854164685687,
+      "mean_us": 51.3140129,
+      "round_means_us": [
+        51.3140129
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18844.232279494518,
+      "mean_us": 53.0666352,
+      "round_means_us": [
+        53.0666352
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17623.19444733465,
+      "mean_us": 56.7434016,
+      "round_means_us": [
+        56.7434016
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9690.901890868523,
+      "mean_us": 103.1895701,
+      "round_means_us": [
+        103.1895701
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5144.911314848457,
+      "mean_us": 194.36681,
+      "round_means_us": [
+        194.36681
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5068.916774502718,
+      "mean_us": 197.2808086,
+      "round_means_us": [
+        197.2808086
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4969.181390444713,
+      "mean_us": 201.2403898,
+      "round_means_us": [
+        201.2403898
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3700.398907590733,
+      "mean_us": 270.2411348,
+      "round_means_us": [
+        270.2411348
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2959.222912916194,
+      "mean_us": 337.92655349999995,
+      "round_means_us": [
+        337.92655349999995
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2966.155180474647,
+      "mean_us": 337.1367778,
+      "round_means_us": [
+        337.1367778
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2907.1824357944906,
+      "mean_us": 343.975661,
+      "round_means_us": [
+        343.975661
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2423.5532144730564,
+      "mean_us": 412.61730670000003,
+      "round_means_us": [
+        412.61730670000003
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26268.75416330201,
+      "mean_us": 38.0680406,
+      "round_means_us": [
+        38.0680406
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25048.128977905886,
+      "mean_us": 39.9231416,
+      "round_means_us": [
+        39.9231416
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21880.466020755455,
+      "mean_us": 45.702865700000004,
+      "round_means_us": [
+        45.702865700000004
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (jiter)",
+      "source": "jwks-url-async",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8955.838037215608,
+      "mean_us": 111.65900900000001,
+      "round_means_us": [
+        111.65900900000001
+      ]
+    }
+  ],
+  "first_fetch": [
+    {
+      "source": "jwks-url-sync",
+      "name": "typical-rs3072",
+      "ms": 2.307399,
+      "trials_ms": [
+        3.424135,
+        2.496017,
+        2.307399,
+        2.2198,
+        2.152932
+      ]
+    },
+    {
+      "source": "jwks-url-async",
+      "name": "typical-rs3072",
+      "ms": 2.304505,
+      "trials_ms": [
+        3.449632,
+        2.472082,
+        2.304505,
+        2.156607,
+        2.096619
+      ]
+    }
+  ],
+  "not_applicable": [],
+  "notes": [
+    "`SecretKey`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and `.adecode`",
+    "JWKS URL: trusting the test CA through `SSL_CERT_FILE`"
+  ]
+}
