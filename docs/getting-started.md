@@ -36,8 +36,13 @@ A `SecretKey` signs and verifies. The claims can be a `Struct`, a `BaseModel`
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
-    token = key.encode(Claims(sub="user-1", exp=datetime.now(UTC) + timedelta(minutes=15)))
-    claims = key.decode(token, type=Claims)  # a Claims
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", exp=expires)
+
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)
+    assert claims_in == claims_out
     ```
 
 === "pydantic"
@@ -57,8 +62,13 @@ A `SecretKey` signs and verifies. The claims can be a `Struct`, a `BaseModel`
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 
-    token = key.encode(Claims(sub="user-1", exp=datetime.now(UTC) + timedelta(minutes=15)))
-    claims = key.decode(token, type=Claims)  # a Claims
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", exp=expires)
+
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)
+    assert claims_in == claims_out
     ```
 
 === "dict"

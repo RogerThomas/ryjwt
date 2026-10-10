@@ -48,9 +48,13 @@ example, extra and all, with nothing installed first.
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
-    exp = datetime.now(UTC) + timedelta(minutes=15)
-    token = key.encode(Claims(sub="user-1", aud="my-api", exp=exp))
-    claims = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", aud="my-api", exp=expires)
+
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    assert claims_in == claims_out
     ```
 
 === "pydantic"
@@ -71,9 +75,13 @@ example, extra and all, with nothing installed first.
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
-    exp = datetime.now(UTC) + timedelta(minutes=15)
-    token = key.encode(Claims(sub="user-1", aud="my-api", exp=exp))
-    claims = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", aud="my-api", exp=expires)
+
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    assert claims_in == claims_out
     ```
 
 === "dict"
