@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/RogerThomas/ryjwt/compare/v0.1.0...v0.1.1) (2026-10-10)
+
+
+### Bug Fixes
+
+* don't read a JWKS response over 1 MiB; benchmarks from Linux, an RS256 race, shorter docs ([#15](https://github.com/RogerThomas/ryjwt/issues/15)) ([6aef8ab](https://github.com/RogerThomas/ryjwt/commit/6aef8ab1d8323696c22ae6d167392b5de6c27ce4))
+
 ## [0.1.0](https://github.com/RogerThomas/ryjwt/compare/v0.0.0-alpha.1...v0.1.0) (2026-10-09)
 
 
