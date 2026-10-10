@@ -1,31 +1,35 @@
 //! Benchmark `jsonwebtoken::decode` (aws-lc-rs backend) over the full matrix in
 //! `bench/matrix/fixtures.json`, per algorithm, key size, payload size and key source. Mirrors
-//! `bench/bench_matrix.py`: each case's iteration counts follow from its cost, measured in the
-//! warm-up, so slow cases run fewer iterations in about the same time.
+//! `bench/bench_matrix.py`: 1,000 untimed warm-up decodes, then `rounds` rounds of `iterations`
+//! decodes, each round timed as one loop.
 //!
 //! Key sources: `hmac` (the HS256 secret), `pem` (the public key's PEM) and `jwks` (a JWKS document:
 //! `JwkSet`, each key turned into a `DecodingKey` with `DecodingKey::from_jwk` once, then picked per
 //! token by the `kid` from `decode_header`). jsonwebtoken doesn't fetch JWKS URLs.
 //!
-//! Usage: `jwt_matrix [budget] [only_sources] [only_cases]`: `budget` scales each case's time (1.0:
-//! 0.1 s warm-up, 5 batches of 0.2 s, 0.3 s of samples); `only_sources` and `only_cases` are
-//! comma-separated filters, as bench_matrix.py's (empty: all).
+//! Usage: `jwt_matrix <value|struct> [only_sources] [only_cases] [iterations] [rounds]`: `value`
+//! decodes into `serde_json::Value` and writes `results/matrix/jsonwebtoken.json`; `struct` decodes
+//! into typed claims structs, the same fields ryjwt's msgspec lane decodes, and writes
+//! `results/matrix/jsonwebtoken-struct.json`. `only_sources` and `only_cases` are comma-separated
+//! filters, as bench_matrix.py's (empty: all); `iterations` (default 10,000) and `rounds` (default
+//! 1) as there.
 
 use std::collections::HashMap;
+use std::fmt::Debug;
 use std::hint::black_box;
 use std::path::PathBuf;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 use jsonwebtoken::errors::{Error, ErrorKind};
 use jsonwebtoken::jwk::JwkSet;
 use jsonwebtoken::{Algorithm, DecodingKey, TokenData, Validation, decode, decode_header};
-use serde::Serialize;
+use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-const REPEATS: u32 = 5;
-const MAX_ITERATIONS: u64 = 20_000;
-const MAX_SAMPLES: u64 = 5_000;
-const MIN_COUNT: u64 = 10;
+const ITERATIONS: u64 = 10_000;
+const ROUNDS: u64 = 1;
+const WARMUP: u64 = 1_000;
 
 #[derive(Serialize)]
 struct Row {
@@ -38,10 +42,10 @@ struct Row {
     payload_size: String,
     token_len: u64,
     iterations: u64,
+    rounds: u64,
     ops_per_sec: f64,
     mean_us: f64,
-    p50_us: f64,
-    p99_us: f64,
+    round_means_us: Vec<f64>,
 }
 
 #[derive(Serialize)]
@@ -62,17 +66,100 @@ struct Results {
     notes: Vec<&'static str>,
 }
 
-struct Budget {
-    warmup: Duration,
-    batch: Duration,
-    samples: Duration,
+/// What the claims decode into: `serde_json::Value`, or the typed structs below.
+#[derive(Clone, Copy)]
+enum Mode {
+    Value,
+    Struct,
+}
+
+impl Mode {
+    fn from_arg(arg: Option<&str>) -> Self {
+        match arg {
+            Some("value") => Self::Value,
+            Some("struct") => Self::Struct,
+            other => panic!(
+                "usage: jwt_matrix <value|struct> [only_sources] [only_cases] [iterations] \
+                 [rounds] (got {other:?})"
+            ),
+        }
+    }
+
+    /// Ends the impl label: `jsonwebtoken <ver> (aws-lc-rs) → <target>`.
+    fn target(self) -> &'static str {
+        match self {
+            Self::Value => "Value",
+            Self::Struct => "struct",
+        }
+    }
+
+    fn results_file(self) -> &'static str {
+        match self {
+            Self::Value => "jsonwebtoken.json",
+            Self::Struct => "jsonwebtoken-struct.json",
+        }
+    }
+}
+
+/// The claims of the non-"typical" payloads, as `BaseClaimsStruct` in `bench_python.py`. Other
+/// claims in the payload (`claim_0`, ...) are ignored.
+#[derive(Deserialize, PartialEq, Debug)]
+struct BaseClaims {
+    sub: String,
+    iss: String,
+    aud: String,
+    iat: i64,
+    exp: i64,
+}
+
+/// The claims of the "typical" payloads, as `TypicalClaimsStruct` in `bench_python.py`.
+#[derive(Deserialize, PartialEq, Debug)]
+struct TypicalClaims {
+    sub: String,
+    iss: String,
+    aud: String,
+    iat: i64,
+    exp: i64,
+    nbf: i64,
+    jti: String,
+    sid: String,
+    email: String,
+    name: String,
+    scope: String,
+    roles: Vec<String>,
+    amr: Vec<String>,
+}
+
+/// What a decode can produce: `Value` or one of the claims structs.
+trait Claims: DeserializeOwned + PartialEq + Debug {}
+
+impl<T: DeserializeOwned + PartialEq + Debug> Claims for T {}
+
+/// Where a case's `DecodingKey` comes from.
+enum KeySource<'a> {
+    Secret(&'a str),
+    Pem(Algorithm, &'a str),
+    Jwks(&'a str),
+}
+
+/// A case's token and what its decode is checked against before it's timed.
+struct Checks<'a> {
+    label: &'a str,
+    token: &'a str,
+    payload: &'a Value,
+    expired_token: &'a str,
+    wrong_audience_token: &'a str,
+}
+
+#[derive(Clone, Copy)]
+struct Timing {
+    iterations: u64,
+    rounds: u64,
 }
 
 struct Stats {
-    iterations: u64,
-    mean_ns: f64,
-    p50_ns: f64,
-    p99_ns: f64,
+    mean_us: f64,
+    round_means_us: Vec<f64>,
 }
 
 fn bench_dir() -> PathBuf {
@@ -89,59 +176,30 @@ fn jsonwebtoken_version() -> &'static str {
     &rest[..rest.find('"').expect("closing quote")]
 }
 
-/// Python `statistics.median` on sorted data.
-fn median(sorted: &[f64]) -> f64 {
-    let n = sorted.len();
-    if n % 2 == 1 {
-        sorted[n / 2]
-    } else {
-        f64::midpoint(sorted[n / 2 - 1], sorted[n / 2])
-    }
-}
-
-/// Python `statistics.quantiles(data, n=100, method="inclusive")[98]` on sorted data.
-fn p99_inclusive(sorted: &[f64]) -> f64 {
-    let m = sorted.len() - 1;
-    let i = 99 * m;
-    let (j, delta) = (i / 100, (i % 100) as f64);
-    (sorted[j] * (100.0 - delta) + sorted[j + 1] * delta) / 100.0
-}
-
-/// Runs the methodology against `call`, which must perform one decode.
-fn measure(budget: &Budget, mut call: impl FnMut()) -> Stats {
-    let start = Instant::now();
-    let mut calls = 0u64;
-    while calls < MIN_COUNT || start.elapsed() < budget.warmup {
+/// Runs the methodology against `call`, which must perform one decode: `WARMUP` untimed calls,
+/// then `timing.rounds` rounds of `timing.iterations` calls, the clock read once per round.
+fn measure(timing: Timing, mut call: impl FnMut()) -> Stats {
+    for _ in 0..WARMUP {
         call();
-        calls += 1;
     }
-    let per_call_ns = start.elapsed().as_nanos() as f64 / calls as f64;
-    let count =
-        |d: Duration, max: u64| ((d.as_nanos() as f64 / per_call_ns) as u64).clamp(MIN_COUNT, max);
-    let iterations = count(budget.batch, MAX_ITERATIONS);
-    let best_ns = (0..REPEATS)
+    let round_ns: Vec<u128> = (0..timing.rounds)
         .map(|_| {
-            let t0 = Instant::now();
-            for _ in 0..iterations {
+            let start = Instant::now();
+            for _ in 0..timing.iterations {
                 call();
             }
-            t0.elapsed().as_nanos()
-        })
-        .min()
-        .expect("REPEATS > 0");
-    let mut samples: Vec<f64> = (0..count(budget.samples, MAX_SAMPLES))
-        .map(|_| {
-            let t0 = Instant::now();
-            call();
-            t0.elapsed().as_nanos() as f64
+            start.elapsed().as_nanos()
         })
         .collect();
-    samples.sort_by(f64::total_cmp);
+
+    let per_round = timing.iterations as f64;
+    let total_ns = round_ns.iter().sum::<u128>() as f64;
     Stats {
-        iterations,
-        mean_ns: best_ns as f64 / iterations as f64,
-        p50_ns: median(&samples),
-        p99_ns: p99_inclusive(&samples),
+        mean_us: total_ns / (per_round * timing.rounds as f64) / 1e3,
+        round_means_us: round_ns
+            .iter()
+            .map(|&ns| ns as f64 / per_round / 1e3)
+            .collect(),
     }
 }
 
@@ -168,11 +226,11 @@ fn jwks_keys(jwks: &str) -> HashMap<String, DecodingKey> {
 
 /// Panics unless `verify` rejects `expired_token` as expired and `wrong_audience_token` as for
 /// another audience, so the timed decode is known to check both. `label` starts each message.
-fn assert_rejects(
+fn assert_rejects<T>(
     label: &str,
     expired_token: &str,
     wrong_audience_token: &str,
-    verify: impl Fn(&str) -> Result<TokenData<Value>, Error>,
+    verify: impl Fn(&str) -> Result<TokenData<T>, Error>,
 ) {
     for (token, expected, what) in [
         (
@@ -197,6 +255,56 @@ fn assert_rejects(
     }
 }
 
+/// Checks `verify` on the case (the claims it decodes must equal the fixture payload read as `T`,
+/// and it must reject the expired and other-audience tokens), then times it on the case's token.
+fn check_and_measure<T: Claims>(
+    checks: &Checks,
+    timing: Timing,
+    verify: impl Fn(&str) -> Result<TokenData<T>, Error>,
+) -> Stats {
+    let label = checks.label;
+    let expected: T = serde_json::from_value(checks.payload.clone())
+        .unwrap_or_else(|e| panic!("{label}: fixture payload as claims: {e}"));
+    let decoded = verify(checks.token).unwrap_or_else(|e| panic!("{label}: decode failed: {e}"));
+    assert_eq!(decoded.claims, expected, "{label}: payload mismatch");
+    assert_rejects(
+        label,
+        checks.expired_token,
+        checks.wrong_audience_token,
+        &verify,
+    );
+    measure(timing, || {
+        black_box(verify(black_box(checks.token)).expect("decode"));
+    })
+}
+
+/// Builds the case's key from `source` (once, outside the timed loop), then checks and times
+/// decoding into `T` with it.
+fn bench_source<T: Claims>(
+    source: &KeySource,
+    validation: &Validation,
+    checks: &Checks,
+    timing: Timing,
+) -> Stats {
+    match *source {
+        KeySource::Secret(secret) => {
+            let key = DecodingKey::from_secret(secret.as_bytes());
+            check_and_measure(checks, timing, |t| decode::<T>(t, &key, validation))
+        }
+        KeySource::Pem(alg, pem) => {
+            let key = pem_key(alg, pem);
+            check_and_measure(checks, timing, |t| decode::<T>(t, &key, validation))
+        }
+        KeySource::Jwks(jwks) => {
+            let keys = jwks_keys(jwks);
+            check_and_measure(checks, timing, |t| {
+                let kid = decode_header(t).expect("header").kid.expect("kid");
+                decode::<T>(t, &keys[&kid], validation)
+            })
+        }
+    }
+}
+
 /// The comma-separated filter at argument `n`: `None` (everything) if it's missing or empty.
 fn filter_arg(n: usize) -> Option<Vec<String>> {
     let arg = std::env::args().nth(n).filter(|s| !s.is_empty())?;
@@ -209,17 +317,21 @@ fn selected(filter: Option<&Vec<String>>, name: &str) -> bool {
 }
 
 fn main() {
-    let budget_scale: f64 = std::env::args()
-        .nth(1)
-        .map_or(1.0, |s| s.parse().expect("budget"));
+    let args: Vec<String> = std::env::args().collect();
+    let mode = Mode::from_arg(args.get(1).map(String::as_str));
     let only_sources = filter_arg(2);
     let only_cases = filter_arg(3);
-    let budget = Budget {
-        warmup: Duration::from_secs_f64(0.1 * budget_scale),
-        batch: Duration::from_secs_f64(0.2 * budget_scale),
-        samples: Duration::from_secs_f64(0.3 * budget_scale),
+    let timing = Timing {
+        iterations: args
+            .get(4)
+            .map_or(ITERATIONS, |s| s.parse().expect("iterations")),
+        rounds: args.get(5).map_or(ROUNDS, |s| s.parse().expect("rounds")),
     };
-    let impl_name = format!("jsonwebtoken {} (aws-lc-rs)", jsonwebtoken_version());
+    let impl_name = format!(
+        "jsonwebtoken {} (aws-lc-rs) → {}",
+        jsonwebtoken_version(),
+        mode.target()
+    );
     let raw = std::fs::read_to_string(bench_dir().join("matrix").join("fixtures.json"))
         .expect("read matrix/fixtures.json");
     let fixtures: Value = serde_json::from_str(&raw).expect("parse matrix/fixtures.json");
@@ -240,17 +352,24 @@ fn main() {
             reason: "jsonwebtoken doesn't fetch JWKS URLs (it takes your own HTTP client and cache)",
         },
     ];
-    println!("{impl_name}");
+    println!(
+        "{impl_name} — {WARMUP} warm-up, then {} rounds of {} iters",
+        timing.rounds, timing.iterations
+    );
 
     let mut rows = Vec::new();
     for source in ["hmac", "pem", "jwks"] {
         if !selected(only_sources.as_ref(), source) {
             continue;
         }
-        println!(
-            "\n{source}\n{:<16} {:>9} {:>10} {:>10} {:>9} {:>9}",
-            "case", "token_len", "iterations", "mean µs", "p50 µs", "p99 µs"
+        print!(
+            "\n{source}\n{:<16} {:>9} {:>10} {:>6} {:>10}",
+            "case", "token_len", "iterations", "rounds", "mean µs"
         );
+        if timing.rounds > 1 {
+            print!(" {:>17}", "round means µs");
+        }
+        println!();
         for case in fixtures["cases"].as_array().expect("cases") {
             let s = |k: &str| case[k].as_str().expect(k).to_owned();
             let (name, alg_name, token) = (s("name"), s("alg"), s("token"));
@@ -268,94 +387,90 @@ fn main() {
             validation.validate_nbf = true;
             validation.leeway = 0;
             assert!(validation.validate_exp, "exp must be validated");
+            let key_source = match source {
+                "hmac" => KeySource::Secret(case["secret"].as_str().expect("secret")),
+                "pem" => KeySource::Pem(alg, key["pem"].as_str().expect("pem")),
+                _ => KeySource::Jwks(key["jwks"].as_str().expect("jwks")),
+            };
             // Each source must also reject an expired token and one for another audience.
             let label = format!("{impl_name} {source} {name}");
-            let (expired_token, wrong_audience_token) =
-                (s("expired_token"), s("wrong_audience_token"));
+            let checks = Checks {
+                label: &label,
+                token: &token,
+                payload: &case["payload"],
+                expired_token: case["expired_token"].as_str().expect("expired_token"),
+                wrong_audience_token: case["wrong_audience_token"]
+                    .as_str()
+                    .expect("wrong_audience_token"),
+            };
+            let payload_size = s("payload_size");
 
-            let stats = match source {
-                "hmac" => {
-                    let key = DecodingKey::from_secret(s("secret").as_bytes());
-                    let decoded = decode::<Value>(&token, &key, &validation).expect("decode");
-                    assert_eq!(decoded.claims, case["payload"], "{name}: payload mismatch");
-                    assert_rejects(&label, &expired_token, &wrong_audience_token, |t| {
-                        decode::<Value>(t, &key, &validation)
-                    });
-                    measure(&budget, || {
-                        black_box(
-                            decode::<Value>(black_box(&token), &key, &validation).expect("decode"),
-                        );
-                    })
+            // As bench_matrix.py: the "typical" payloads decode into their own, larger struct.
+            let stats = match (mode, payload_size == "typical") {
+                (Mode::Value, _) => {
+                    bench_source::<Value>(&key_source, &validation, &checks, timing)
                 }
-                "pem" => {
-                    let key = pem_key(alg, key["pem"].as_str().expect("pem"));
-                    let decoded = decode::<Value>(&token, &key, &validation).expect("decode");
-                    assert_eq!(decoded.claims, case["payload"], "{name}: payload mismatch");
-                    assert_rejects(&label, &expired_token, &wrong_audience_token, |t| {
-                        decode::<Value>(t, &key, &validation)
-                    });
-                    measure(&budget, || {
-                        black_box(
-                            decode::<Value>(black_box(&token), &key, &validation).expect("decode"),
-                        );
-                    })
+                (Mode::Struct, false) => {
+                    bench_source::<BaseClaims>(&key_source, &validation, &checks, timing)
                 }
-                _ => {
-                    let keys = jwks_keys(key["jwks"].as_str().expect("jwks"));
-                    let verify = |token: &str| {
-                        let kid = decode_header(token).expect("header").kid.expect("kid");
-                        decode::<Value>(token, &keys[&kid], &validation)
-                    };
-                    assert_eq!(
-                        verify(&token).expect("decode").claims,
-                        case["payload"],
-                        "{name}: payload mismatch"
-                    );
-                    assert_rejects(&label, &expired_token, &wrong_audience_token, verify);
-                    measure(&budget, || {
-                        black_box(verify(black_box(&token)).expect("decode"));
-                    })
+                (Mode::Struct, true) => {
+                    bench_source::<TypicalClaims>(&key_source, &validation, &checks, timing)
                 }
             };
-            println!(
-                "{name:<16} {:>9} {:>10} {:>10.3} {:>9.3} {:>9.3}",
+            print!(
+                "{name:<16} {:>9} {:>10} {:>6} {:>10.3}",
                 token.len(),
-                stats.iterations,
-                stats.mean_ns / 1e3,
-                stats.p50_ns / 1e3,
-                stats.p99_ns / 1e3
+                timing.iterations,
+                timing.rounds,
+                stats.mean_us
             );
+            if timing.rounds > 1 {
+                let min = stats
+                    .round_means_us
+                    .iter()
+                    .copied()
+                    .fold(f64::INFINITY, f64::min);
+                let max = stats.round_means_us.iter().copied().fold(0.0, f64::max);
+                print!(" {:>17}", format!("{min:.3}–{max:.3}"));
+            }
+            println!();
             rows.push(Row {
                 impl_name: impl_name.clone(),
                 source,
                 name,
                 key: s("key"),
                 alg: alg_name,
-                payload_size: s("payload_size"),
+                payload_size,
                 token_len: case["token_len"].as_u64().expect("token_len"),
-                iterations: stats.iterations,
-                ops_per_sec: 1e9 / stats.mean_ns,
-                mean_us: stats.mean_ns / 1e3,
-                p50_us: stats.p50_ns / 1e3,
-                p99_us: stats.p99_ns / 1e3,
+                iterations: timing.iterations,
+                rounds: timing.rounds,
+                ops_per_sec: 1e6 / stats.mean_us,
+                mean_us: stats.mean_us,
+                round_means_us: stats.round_means_us,
             });
         }
     }
 
+    let mut notes = vec![
+        "JWKS: each key turned into a `DecodingKey` once, picked per token by `kid` (`decode_header`)",
+    ];
+    if let Mode::Struct = mode {
+        notes.push(
+            "struct: claims decoded into typed structs with the fields ryjwt's msgspec lane decodes; other claims ignored",
+        );
+    }
     let results = Results {
         impl_name,
         runtime: "Rust (release, LTO)".to_owned(),
         rows,
         first_fetch: Vec::new(),
         not_applicable,
-        notes: vec![
-            "JWKS: each key turned into a `DecodingKey` once, picked per token by `kid` (`decode_header`)",
-        ],
+        notes,
     };
     let out = bench_dir()
         .join("results")
         .join("matrix")
-        .join("jsonwebtoken.json");
+        .join(mode.results_file());
     std::fs::create_dir_all(out.parent().expect("parent")).expect("mkdir results/matrix");
     let body = serde_json::to_string_pretty(&results).expect("serialize") + "\n";
     std::fs::write(&out, body).expect("write results");

@@ -9,8 +9,9 @@ docs site shows).
   identity providers sign with. Draw it from a Linux run: Docker on Apple Silicon slows down RSA
   for ryjwt and jsonwebtoken only (see the Apple Silicon caveat in compare.py).
 
-A lane per library. Each bar fills over the time the library takes (decodes x its mean time per
-decode), in real time, then every bar holds while the finish times show, and the race restarts.
+A lane per library. Each bar fills over the time the library took to decode 100,000 tokens (the
+mean of 3 rounds of 100,000, `task bench-race`), in real time, then every bar holds while the
+finish times show, and the race restarts.
 
 The animation is pure CSS `@keyframes`, no JavaScript, so it plays where GitHub (and PyPI) show the
 SVG as an image. Every `@keyframes` rule repeats its final value at 100%: without that stop, a
@@ -21,9 +22,11 @@ back to it for the rest of the loop, so the bars would drain away instead of hol
 import json
 import math
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, ClassVar
 
+from compare import machine
 from rich.console import Console
 
 
@@ -241,9 +244,9 @@ class="playhead" />
 {lanes}
 
   <text x="20" y="{footer_y}" class="caption">{self._setup()}. Each bar takes \
-{self.decodes:,} &#215; the library's mean time per decode.</text>
+the library's mean time for {self.decodes:,} decodes, over 3 rounds.</text>
   <text x="20" y="{footer_y + 16}" class="caption">Measured in Docker, one container per \
-library, each on one pinned CPU core.</text>
+library, each on one pinned CPU.</text>
   <text x="20" y="{footer_y + 32}" class="caption">~N&#215;: how many times faster than \
 {self.baseline_name}.</text>
 {self._footnote(footer_y + 48)}
@@ -262,14 +265,14 @@ class Races:
     lane_names: ClassVar[dict[str, tuple[str, str]]] = {
         "ryjwt-msgspec": ("ryjwt → Struct", "#009e00"),
         "ryjwt-pydantic": ("ryjwt → BaseModel", "#007a00"),
-        "ryjwt": ("ryjwt → dict", "#00c200"),
-        "jsonwebtoken": ("jsonwebtoken", "#eb6834"),
+        "ryjwt": ("ryjwt → dict (msgspec)", "#00c200"),
+        "ryjwt-jiter": ("ryjwt → dict (jiter)", "#5fd35f"),
+        "jsonwebtoken-struct": ("jsonwebtoken → struct", "#eb6834"),
+        "jsonwebtoken": ("jsonwebtoken → Value", "#f4a582"),
         "fast-jwt": ("fast-jwt", "#4a3aa7"),
         "jose": ("jose", "#eda100"),
         "pyjwt": ("PyJWT", "#2a78d6"),
-        "python-jose": ("python-jose", "#c2378e"),
         "joserfc": ("joserfc", "#8a5a2b"),
-        "jwcrypto": ("jwcrypto", "#5f6b7a"),
     }
     runtimes: ClassVar[dict[str, str]] = {"CPython": "Python", "Bun": "Bun", "Rust": "Rust"}
     races: ClassVar[list[Race]] = [
@@ -279,7 +282,11 @@ class Races:
             "HS256",
             "a 64-byte secret",
             "perf-race.svg",
-            marks=(("jsonwebtoken", "*"), ("ryjwt-pydantic", "\u2020")),
+            marks=(
+                ("jsonwebtoken-struct", "*"),
+                ("jsonwebtoken", "*"),
+                ("ryjwt-pydantic", "\u2020"),
+            ),
             footnote=(
                 (
                     "* Same token, checks and crypto library (aws-lc) on both sides. Per token, "
@@ -290,8 +297,8 @@ class Races:
                     "HMAC once, parses the payload once"
                 ),
                 (
-                    "and skips headers it has already verified. jsonwebtoken decodes into a "
-                    "serde_json::Value here."
+                    "and skips headers it has already verified. → struct is a typed Rust struct; "
+                    "→ Value a serde_json::Value."
                 ),
                 (
                     "\u2020 Into a pydantic BaseModel, pydantic parses and validates the claims "
@@ -322,6 +329,44 @@ class Races:
     def load(cls, results_dir: Path) -> Races:
         return cls({path.stem: json.loads(path.read_text()) for path in results_dir.glob("*.json")})
 
+    def _range(self, key: str, race: Race) -> str:
+        """The fastest and slowest of `key`'s round means for `race`, in µs."""
+        rounds: list[float] = self._row(key, race)["round_means_us"]
+        return f"{min(rounds):.2f} to {max(rounds):.2f}"
+
+    def _table(self, race: Race, decodes: int) -> list[str]:
+        lanes = sorted((self._lane(key, race) for key in self.lane_names), key=_mean_us)
+        baseline = self._lane("pyjwt", race).mean_us
+        lines = [
+            f"## {race.algorithm}, {race.key}",
+            "",
+            f"| library | {decodes:,} decodes | µs per decode | range over 3 rounds | vs PyJWT |",
+            "| :-- | --: | --: | --: | --: |",
+        ]
+        lines.extend(
+            f"| {lane.name.rstrip('*\u2020')} | {decodes * lane.mean_us / 1e6:.2f} s "
+            f"| {lane.mean_us:.2f} | {self._range(lane.key, race)} "
+            f"| {baseline / lane.mean_us:.1f}x |"
+            for lane in lanes
+        )
+        return [*lines, ""]
+
+    def markdown(self, decodes: int) -> str:
+        """The races' numbers as a Markdown page: per race, each library's mean time per decode
+        (over every round) and the fastest and slowest round's."""
+        generated = datetime.now(UTC).strftime("%Y-%m-%d")
+        lines = [
+            "# The races' numbers",
+            "",
+            f"Generated {generated} from `bench/results-race/` by `bench/race_svg.py`, on",
+            f"{machine()}. Each library decodes the same token {decodes:,} times, in 3 rounds,",
+            "after 1,000 untimed decodes; the time is the mean over all three.",
+            "",
+        ]
+        for race in self.races:
+            lines += self._table(race, decodes)
+        return "\n".join(lines)
+
     def svg(self, race: Race, decodes: int) -> str:
         lanes = sorted((self._lane(key, race) for key in self.lane_names), key=_mean_us)
         token_bytes: int = self._row("pyjwt", race)["token_len"]
@@ -335,7 +380,8 @@ def _mean_us(lane: Lane) -> float:
 def main(results: str = "results-race", decodes: int = 100_000) -> None:
     """Draws assets/perf-race.svg and assets/perf-race-rs256.svg from bench/<results>/*.json, and
     the same into docs/assets/, for the docs site (Zensical only publishes files in docs/; the
-    README links to assets/, which tests/test_docs.py checks they match)."""
+    README links to assets/, which tests/test_docs.py checks they match); and writes their numbers
+    to bench/<results>.md."""
     root = Path(__file__).parent.parent
     races = Races.load(root / "bench" / results)
     for race in races.races:
@@ -344,3 +390,6 @@ def main(results: str = "results-race", decodes: int = 100_000) -> None:
             path = assets / race.output
             path.write_text(svg)
             Console().print(f"wrote {path.relative_to(root)}")
+    page = root / "bench" / f"{results}.md"
+    page.write_text(races.markdown(decodes))
+    Console().print(f"wrote {page.relative_to(root)}")

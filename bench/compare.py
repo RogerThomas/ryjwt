@@ -25,7 +25,7 @@ type Rows = dict[str, dict[str, Any]]
 HEADLINE_CASE = "typical-k64"
 
 
-def _machine() -> str:
+def machine() -> str:
     """The CPU and OS the page is made on (the benchmarks' host): `Apple M3 Max, macOS 26.0`."""
     if platform.system() == "Darwin":
         cpu = subprocess.run(
@@ -88,12 +88,12 @@ def _markdown(by_impl: dict[str, Rows], baseline: str, results: str, note: str) 
     lines = [
         "# JWT decode benchmarks",
         "",
-        f"Generated {generated} from `bench/{results}/` by `bench/compare.py`, on {_machine()}.",
+        f"Generated {generated} from `bench/{results}/` by `bench/compare.py`, on {machine()}.",
         *([note] if note else []),
         "",
         "Each decode verifies an HS256 signature and checks `exp` and `aud`, as a real caller",
-        "would. Times are µs per decode, the mean over the fastest of 5 batches (lower is",
-        f"better); `(Nx)` is the speed-up vs {baseline}.",
+        "would. Times are µs per decode: the mean over 10,000 decodes of the same token, after",
+        f"1,000 untimed (lower is better); `(Nx)` is the speed-up vs {baseline}.",
         "",
         f"## Typical token ({base[HEADLINE_CASE]['token_len']} B, 64-byte key)",
         "",
@@ -340,16 +340,15 @@ class MatrixPage:
                 "# JWT decode benchmarks: the full matrix",
                 "",
                 f"Generated {generated} from `bench/{results}/` by `bench/compare.py`, on",
-                f"{_machine()}.",
+                f"{machine()}.",
                 *([note] if note else []),
                 f"Runtimes: {runtimes}.",
                 "",
                 "Each decode verifies the signature and checks `exp` and `aud`, as a real",
                 "caller would, and each library's result is checked against the token's claims",
-                "before timing. Times are µs per decode, the mean over the fastest of 5 batches",
-                f"(lower is better); `(Nx)` is the speed-up vs {self._baseline}. Each case runs",
-                "about a second (a warm-up, then the 5 batches), so slow ones (RSA 4096, P-521)",
-                "run fewer iterations.",
+                "before timing. Times are µs per decode: the mean over 10,000 decodes of the same",
+                "token, after 1,000 untimed (lower is better); `(Nx)` is the speed-up vs",
+                f"{self._baseline}.",
                 "Fastest per row in bold; n/a where the library can't (see the end).",
                 "",
                 "Key sources: an HMAC secret (HS256 only); a PEM public key, parsed once; a",
