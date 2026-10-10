@@ -2,7 +2,8 @@
 whole fetch, and redirects aren't followed. https:// URLs go through the proxy urllib finds
 (`HTTPS_PROXY`/`NO_PROXY`, or the system settings on macOS and Windows); http:// ones, which are
 always to this machine, never go through a proxy. Requests say they're from ryjwt (`User-Agent:
-ryjwt/<version>`): some firewalls refuse urllib's default, `Python-urllib/<version>`.
+ryjwt/<version>`): some firewalls refuse urllib's default, `Python-urllib/<version>`. A body
+over `MAX_BODY_BYTES` is refused, without reading the rest: a JWKS is a few KB.
 
 Imported on a client's first fetch only: `ssl` and `urllib.request` take ~25 ms to import.
 """
@@ -23,6 +24,10 @@ type Response = tuple[int, str | None, str | None, bytes]
 """What a fetch got: the status, the `Cache-Control` and `Age` headers, and the body."""
 
 USER_AGENT = f"ryjwt/{importlib.metadata.version('ryjwt')}"
+
+MAX_BODY_BYTES = 1024 * 1024
+"""The largest response body a fetch reads (1 MiB): the deadline alone would let a fast server
+send gigabytes within it."""
 
 
 class _DeadlineReader(io.RawIOBase):
@@ -120,7 +125,8 @@ class HTTPGetter:
 
     def get(self, timeout: float) -> Response:
         """The response, read in full within `timeout` seconds of the call; `TimeoutError` (or
-        `URLError` wrapping one, while connecting) past that."""
+        `URLError` wrapping one, while connecting) past that, and `ValueError` if its body is over
+        `MAX_BODY_BYTES`."""
         deadline = time.monotonic() + timeout
         request = urllib.request.Request(self._url)
         if (request.type, request.host) != (self._scheme, self._host):
@@ -129,8 +135,10 @@ class HTTPGetter:
         try:
             response: http.client.HTTPResponse = self._opener.open(request, timeout=timeout)
             with response:
-                body = response.read()
+                body = response.read(MAX_BODY_BYTES + 1)
         finally:
             _HTTPResponse.deadline.reset(token)
+        if len(body) > MAX_BODY_BYTES:
+            raise ValueError("The response is over 1 MiB")
         cache_control, age = response.getheader("Cache-Control"), response.getheader("Age")
         return response.status, cache_control, age, body

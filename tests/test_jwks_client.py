@@ -825,6 +825,11 @@ def test_recovers_after_an_outage(
     assert server.requests == 3
 
 
+def _padded(body: bytes, size: int) -> bytes:
+    """`body`, a JSON document, padded with spaces to `size` bytes."""
+    return body + b" " * (size - len(body))
+
+
 @pytest.mark.parametrize(
     ("outage", "cause", "match"),
     [
@@ -840,6 +845,9 @@ def test_recovers_after_an_outage(
         ),
         pytest.param(
             "bad-status-line", http.client.BadStatusLine, "BadStatusLine", id="bad-status-line"
+        ),
+        pytest.param(
+            "over-1-mib", ValueError, "ValueError: The response is over 1 MiB", id="over-1-mib"
         ),
     ],
 )
@@ -867,6 +875,8 @@ def test_first_fetch_fails(
             server.serve(make_jwk(old_key, kid="old", use="enc"), malformed)
         case "duplicate-kid":
             server.serve(make_jwk(old_key, kid="old"), make_jwk(old_key, kid="old", use="sig"))
+        case "over-1-mib":
+            server.body = _padded(server.body, 1024 * 1024 + 1)
         case _:
             server.raw = b"not-http\r\n"
     decode = make_client(server.url, cooldown=0.2).decode
@@ -887,6 +897,18 @@ def test_first_fetch_fails(
     time.sleep(0.25)
     assert decode(old_token) == {"sub": "old"}
     assert server.requests == 2
+
+
+def test_reads_a_1_mib_response(
+    server: JWKSServer,
+    make_client: MakeClient,
+    old_key: ec.EllipticCurvePrivateKey,
+    old_token: str,
+) -> None:
+    server.serve(make_jwk(old_key, kid="old"))
+    server.body = _padded(server.body, 1024 * 1024)
+
+    assert make_client(server.url).decode(old_token) == {"sub": "old"}
 
 
 def test_connection_refused(make_client: MakeClient, old_token: str) -> None:

@@ -47,6 +47,8 @@ jobs:
     name: Benchmark ${{ inputs.benchmarks }} at ${{ inputs.ref }} on ${{ inputs.runner }}
     runs-on: ${{ inputs.runner }}
     timeout-minutes: 240
+    env:
+      HAS_DOCKERHUB_LOGIN: ${{ secrets.DOCKERHUB_TOKEN != '' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -63,8 +65,26 @@ jobs:
       # before any timing, rather than between benchmarks.
       - name: Install Rust (rust-toolchain.toml)
         run: rustup toolchain install
-      - name: Build the dev environment
-        run: uv sync --locked
+      - name: Build the bench environment
+        run: uv sync --locked --group bench
+      # GitHub's runners share their IP addresses, so anonymous pulls from Docker Hub run into its
+      # rate limit (429 Too Many Requests). Pull through Google's mirror of it, which falls back to
+      # Docker Hub for images it doesn't hold; and, if the repository has DOCKERHUB_USERNAME and
+      # DOCKERHUB_TOKEN secrets, log in to Docker Hub, for the account's own (higher) limit.
+      - name: Pull Docker Hub images through a mirror
+        run: |
+          config=/etc/docker/daemon.json
+          { sudo cat "$config" 2>/dev/null || echo '{}'; } \
+            | jq '."registry-mirrors" = ["https://mirror.gcr.io"]' | sudo tee "$config.new" >/dev/null
+          sudo mv "$config.new" "$config"
+          sudo systemctl restart docker
+          docker info --format '{{.RegistryConfig.Mirrors}}'
+      - name: Log in to Docker Hub
+        if: env.HAS_DOCKERHUB_LOGIN == 'true'
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: printf '%s' "$DOCKERHUB_TOKEN" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
       - name: Record the machine
         id: machine
         env:
@@ -102,7 +122,7 @@ jobs:
           cp bench/machine.txt out/
           git ls-files --modified --others --exclude-standard -- bench/results-race bench/results-docker \
             bench/results-docker.md bench/results-matrix bench/results-matrix.md assets/perf-race.svg \
-            assets/perf-race-es256.svg | xargs -r cp --parents --target-directory=out
+            assets/perf-race-rs256.svg | xargs -r cp --parents --target-directory=out
           find out -type f | sort
       - name: Summary
         run: |
