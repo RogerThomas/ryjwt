@@ -290,6 +290,7 @@ impl Decoder {
             algorithm_names,
             verifiers,
             key_count,
+            jwks: _, // the key classes take them first, to export
         } = keys;
         Ok(Self {
             any_kid: verifiers.iter().any(|v| v.kid.is_some()),

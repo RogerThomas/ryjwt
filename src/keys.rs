@@ -4,7 +4,7 @@
 use std::fmt::Display;
 use std::sync::Arc;
 
-use aws_lc_rs::encoding::AsDer;
+use aws_lc_rs::encoding::{AsDer, PublicKeyX509Der};
 use aws_lc_rs::error::KeyRejected;
 use aws_lc_rs::rand::SystemRandom;
 use aws_lc_rs::signature::{
@@ -16,6 +16,7 @@ use pyo3::prelude::*;
 use pyo3::types::{PyBytes, PyString};
 
 use crate::errors::InvalidKeyError;
+use crate::jwk::Jwk;
 use crate::mac::{self, HmacKey};
 
 /// How an algorithm signs and verifies.
@@ -205,15 +206,18 @@ pub struct KeySet {
     pub verifiers: Vec<Verifier>,
     /// How many keys `verifiers` holds: 1, unless built from a JWKS.
     pub key_count: usize,
+    /// Each public key's JWK, to export: one per key, none for a secret.
+    pub jwks: Vec<Jwk>,
 }
 
 impl KeySet {
     /// The set for a single key, with a verifier per spec.
-    fn single_key(specs: &[&AlgSpec], verifiers: Vec<Verifier>) -> Self {
+    fn single_key(specs: &[&AlgSpec], verifiers: Vec<Verifier>, jwk: Option<Jwk>) -> Self {
         Self {
             algorithm_names: specs.iter().map(|s| s.name).collect(),
             verifiers,
             key_count: 1,
+            jwks: jwk.into_iter().collect(),
         }
     }
 }
@@ -312,6 +316,14 @@ impl Verifier {
             kid: kid.map(Into::into),
             key: VerifyingKey::Public(key),
         })
+    }
+
+    /// The public key as `SubjectPublicKeyInfo` DER; None for a secret.
+    pub fn public_key_der(&self) -> Option<PublicKeyX509Der<'static>> {
+        match &self.key {
+            VerifyingKey::Hmac(_) => None,
+            VerifyingKey::Public(key) => key.as_der().ok(),
+        }
     }
 
     pub fn verify(&self, signing_input: &[u8], signature: &[u8]) -> bool {
@@ -794,7 +806,7 @@ pub fn prepare_secret(
             Ok((verifier, signer))
         })
         .collect::<PyResult<(Vec<_>, Vec<_>)>>()?;
-    Ok((KeySet::single_key(&specs, verifiers), signers))
+    Ok((KeySet::single_key(&specs, verifiers, None), signers))
 }
 
 /// Key pairs shared across the algorithms of one key (e.g. RS256 + PS256 with one RSA key).
@@ -864,11 +876,24 @@ fn private_key_pair(
     Ok((verifier, signer))
 }
 
+/// The set for the single public key that `verifiers` hold, exported with `kid`. The `kid` is only
+/// the JWK's: the verifiers have none, so it doesn't change which tokens they verify.
+fn single_public_key(
+    specs: &[&AlgSpec],
+    verifiers: Vec<Verifier>,
+    kid: Option<&str>,
+) -> PyResult<KeySet> {
+    let key_kind = specs.first().map_or(KeyKind::Secret, |s| s.key_kind);
+    let jwk = Jwk::new(key_kind, &verifiers, kid).map_err(InvalidKeyError::new_err)?;
+    Ok(KeySet::single_key(specs, verifiers, Some(jwk)))
+}
+
 /// Validates `algorithms` for `PrivateKey` and prepares the private key `pem` to sign with each of
-/// them (and its public key to verify with them).
+/// them (and its public key to verify with them, and to export with `kid`).
 pub fn prepare_private(
     pem: &Bound<'_, PyAny>,
     algorithms: Vec<String>,
+    kid: Option<&str>,
 ) -> PyResult<(KeySet, Vec<Signer>)> {
     let specs = single_key_specs(KeyClass::Private, algorithms)?;
     let der = pem_der(pem, KeyClass::Private)?;
@@ -877,17 +902,21 @@ pub fn prepare_private(
         .iter()
         .map(|spec| private_key_pair(spec, &der, &mut pairs))
         .collect::<PyResult<(Vec<_>, Vec<_>)>>()?;
-    Ok((KeySet::single_key(&specs, verifiers), signers))
+    Ok((single_public_key(&specs, verifiers, kid)?, signers))
 }
 
 /// Validates `algorithms` for `PublicKey` and prepares the public key `pem` to verify with each of
-/// them.
-pub fn prepare_public(pem: &Bound<'_, PyAny>, algorithms: Vec<String>) -> PyResult<KeySet> {
+/// them (and to export with `kid`).
+pub fn prepare_public(
+    pem: &Bound<'_, PyAny>,
+    algorithms: Vec<String>,
+    kid: Option<&str>,
+) -> PyResult<KeySet> {
     let specs = single_key_specs(KeyClass::Public, algorithms)?;
     let der = pem_der(pem, KeyClass::Public)?;
     let verifiers = specs
         .iter()
         .map(|spec| Verifier::public(spec, &der, None).map_err(InvalidKeyError::new_err))
         .collect::<PyResult<_>>()?;
-    Ok(KeySet::single_key(&specs, verifiers))
+    single_public_key(&specs, verifiers, kid)
 }
