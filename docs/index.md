@@ -94,7 +94,7 @@ example, extra and all, with nothing installed first.
 
 ## Why it's fast
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.15 seconds, jsonwebtoken (Rust) and fast-jwt (Bun) take two to three and a half times as long, and the other libraries from about 1.8 to over 6 seconds](assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) and fast-jwt (Bun) take two and a half to three times as long, and the other libraries from about 2 to over 10 seconds](assets/perf-race.svg)
 
 One bar per library, decoding 100,000 HS256 tokens in real time
 ([benchmarks](benchmarks/index.md)).

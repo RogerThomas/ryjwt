@@ -11,24 +11,24 @@
       "payload_size": "typical",
       "token_len": 661,
       "iterations": 20000,
-      "ops_per_sec": 291744.38372368587,
-      "mean_us": 3.4276581,
-      "p50_us": 3.405,
-      "p99_us": 3.535
+      "ops_per_sec": 192604.36414331934,
+      "mean_us": 5.19199035,
+      "p50_us": 5.196,
+      "p99_us": 6.24702
     },
     {
       "impl": "jsonwebtoken 11.1.0 (aws-lc-rs)",
       "source": "pem",
-      "name": "typical-es256",
-      "key": "es256",
-      "alg": "ES256",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
       "payload_size": "typical",
-      "token_len": 704,
-      "iterations": 5272,
-      "ops_per_sec": 26345.573690758414,
-      "mean_us": 37.9570402124431,
-      "p50_us": 37.697,
-      "p99_us": 43.546
+      "token_len": 1131,
+      "iterations": 3816,
+      "ops_per_sec": 20938.194515618547,
+      "mean_us": 47.759609800838575,
+      "p50_us": 48.023,
+      "p99_us": 55.90771
     }
   ],
   "first_fetch": [],

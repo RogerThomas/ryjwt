@@ -10,11 +10,11 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 13080,
-      "ops_per_sec": 66663.77484511872,
-      "mean_us": 15.000650688073394,
-      "p50_us": 15.012,
-      "p99_us": 21.1221
+      "iterations": 7652,
+      "ops_per_sec": 39202.77840521406,
+      "mean_us": 25.50839610559331,
+      "p50_us": 25.4105,
+      "p99_us": 38.87724
     },
     {
       "impl": "joserfc 1.7.5",
@@ -24,11 +24,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 10243,
-      "ops_per_sec": 53669.13385049497,
-      "mean_us": 18.632683784047643,
-      "p50_us": 18.548,
-      "p99_us": 24.437
+      "iterations": 5776,
+      "ops_per_sec": 29578.552534202914,
+      "mean_us": 33.80828047091413,
+      "p50_us": 33.4235,
+      "p99_us": 46.44955
     },
     {
       "impl": "joserfc 1.7.5",
@@ -38,11 +38,11 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 6603,
-      "ops_per_sec": 33431.860870235134,
-      "mean_us": 29.91158655156747,
-      "p50_us": 29.695,
-      "p99_us": 35.784099999999995
+      "iterations": 3689,
+      "ops_per_sec": 18772.393260459437,
+      "mean_us": 53.26971293033342,
+      "p50_us": 52.993,
+      "p99_us": 67.65284
     },
     {
       "impl": "joserfc 1.7.5",
@@ -52,11 +52,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1229,
-      "ops_per_sec": 6158.94144143625,
-      "mean_us": 162.36556387306752,
-      "p50_us": 161.374,
-      "p99_us": 180.71529999999998
+      "iterations": 713,
+      "ops_per_sec": 3581.508785672116,
+      "mean_us": 279.21193548387095,
+      "p50_us": 280.847,
+      "p99_us": 310.67728999999997
     },
     {
       "impl": "joserfc 1.7.5",
@@ -66,11 +66,11 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 13369,
-      "ops_per_sec": 67446.33704008695,
-      "mean_us": 14.826602064477523,
-      "p50_us": 14.712,
-      "p99_us": 20.54209
+      "iterations": 7437,
+      "ops_per_sec": 38400.643408279386,
+      "mean_us": 26.041230334812425,
+      "p50_us": 25.787,
+      "p99_us": 39.130050000000004
     },
     {
       "impl": "joserfc 1.7.5",
@@ -80,11 +80,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 10442,
-      "ops_per_sec": 53103.86442547813,
-      "mean_us": 18.83102126029496,
-      "p50_us": 18.688,
-      "p99_us": 24.607
+      "iterations": 5732,
+      "ops_per_sec": 29174.373525499956,
+      "mean_us": 34.27665718771807,
+      "p50_us": 34.0315,
+      "p99_us": 48.287279999999996
     },
     {
       "impl": "joserfc 1.7.5",
@@ -94,11 +94,11 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 6504,
-      "ops_per_sec": 33655.8673488555,
-      "mean_us": 29.7125012300123,
-      "p50_us": 30.426,
-      "p99_us": 36.72511
+      "iterations": 3709,
+      "ops_per_sec": 19069.446879253654,
+      "mean_us": 52.43990590455649,
+      "p50_us": 52.1175,
+      "p99_us": 66.38337
     },
     {
       "impl": "joserfc 1.7.5",
@@ -108,11 +108,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1218,
-      "ops_per_sec": 6084.49572179024,
-      "mean_us": 164.35215763546796,
-      "p50_us": 165.35,
-      "p99_us": 184.96454
+      "iterations": 695,
+      "ops_per_sec": 3654.8973555208427,
+      "mean_us": 273.60549496402876,
+      "p50_us": 274.376,
+      "p99_us": 325.22758
     },
     {
       "impl": "joserfc 1.7.5",
@@ -122,11 +122,11 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 13036,
-      "ops_per_sec": 66221.92147477093,
-      "mean_us": 15.100739720773243,
-      "p50_us": 15.213,
-      "p99_us": 21.31241
+      "iterations": 7463,
+      "ops_per_sec": 38215.131826023666,
+      "mean_us": 26.167644914913573,
+      "p50_us": 26.1315,
+      "p99_us": 59.68994
     },
     {
       "impl": "joserfc 1.7.5",
@@ -136,11 +136,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 10282,
-      "ops_per_sec": 52770.687696752306,
-      "mean_us": 18.94991412176619,
-      "p50_us": 18.688,
-      "p99_us": 24.71731
+      "iterations": 4682,
+      "ops_per_sec": 28760.486075065804,
+      "mean_us": 34.769926954293034,
+      "p50_us": 34.548,
+      "p99_us": 48.90854
     },
     {
       "impl": "joserfc 1.7.5",
@@ -150,11 +150,11 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 6545,
-      "ops_per_sec": 32946.81923780733,
-      "mean_us": 30.351943621084796,
-      "p50_us": 30.366,
-      "p99_us": 36.496
+      "iterations": 3691,
+      "ops_per_sec": 18669.87277935938,
+      "mean_us": 53.5622289352479,
+      "p50_us": 53.1,
+      "p99_us": 67.90294
     },
     {
       "impl": "joserfc 1.7.5",
@@ -164,11 +164,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1226,
-      "ops_per_sec": 6689.905667364499,
-      "mean_us": 149.47893882544864,
-      "p50_us": 152.051,
-      "p99_us": 168.238
+      "iterations": 713,
+      "ops_per_sec": 3578.2199842070518,
+      "mean_us": 279.46856381486674,
+      "p50_us": 279.896,
+      "p99_us": 305.45052000000004
     },
     {
       "impl": "joserfc 1.7.5",
@@ -178,11 +178,11 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 12006,
-      "ops_per_sec": 61496.56264640392,
-      "mean_us": 16.261071464267868,
-      "p50_us": 15.974,
-      "p99_us": 21.50319
+      "iterations": 6794,
+      "ops_per_sec": 34757.26900012837,
+      "mean_us": 28.77096011186341,
+      "p50_us": 28.604,
+      "p99_us": 42.88036
     },
     {
       "impl": "joserfc 1.7.5",
@@ -192,11 +192,11 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 10136,
-      "ops_per_sec": 50815.021610220945,
-      "mean_us": 19.679220205209155,
-      "p50_us": 20.4815,
-      "p99_us": 26.851
+      "iterations": 5303,
+      "ops_per_sec": 26975.3314688596,
+      "mean_us": 37.070906845181966,
+      "p50_us": 36.7165,
+      "p99_us": 50.726169999999996
     },
     {
       "impl": "joserfc 1.7.5",
@@ -206,11 +206,11 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 6203,
-      "ops_per_sec": 32026.089589472205,
-      "mean_us": 31.224542640657745,
-      "p50_us": 31.547,
-      "p99_us": 37.6774
+      "iterations": 3515,
+      "ops_per_sec": 17995.1273802626,
+      "mean_us": 55.57059857752489,
+      "p50_us": 55.484,
+      "p99_us": 69.32116
     },
     {
       "impl": "joserfc 1.7.5",
@@ -220,11 +220,11 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1297,
-      "ops_per_sec": 6506.553609486787,
-      "mean_us": 153.69119506553585,
-      "p50_us": 161.6145,
-      "p99_us": 176.78605
+      "iterations": 705,
+      "ops_per_sec": 3555.6381158474915,
+      "mean_us": 281.24346950354607,
+      "p50_us": 281.4665,
+      "p99_us": 332.48429
     },
     {
       "impl": "joserfc 1.7.5",
@@ -234,11 +234,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 6976,
-      "ops_per_sec": 35059.91010399822,
-      "mean_us": 28.522605934633027,
-      "p50_us": 29.234,
-      "p99_us": 35.353010000000005
+      "iterations": 3904,
+      "ops_per_sec": 19659.51334325011,
+      "mean_us": 50.86595901639344,
+      "p50_us": 50.152,
+      "p99_us": 70.16938
     },
     {
       "impl": "joserfc 1.7.5",
@@ -248,11 +248,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 6262,
-      "ops_per_sec": 30834.804215538257,
-      "mean_us": 32.430885340146915,
-      "p50_us": 33.06,
-      "p99_us": 38.909
+      "iterations": 3375,
+      "ops_per_sec": 17088.43281704157,
+      "mean_us": 58.51911703703704,
+      "p50_us": 57.755,
+      "p99_us": 80.50806
     },
     {
       "impl": "joserfc 1.7.5",
@@ -262,11 +262,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 4515,
-      "ops_per_sec": 23001.54127138276,
-      "mean_us": 43.475347508305646,
-      "p50_us": 42.935,
-      "p99_us": 83.0262
+      "iterations": 2557,
+      "ops_per_sec": 12900.436134130694,
+      "mean_us": 77.51675909268674,
+      "p50_us": 76.098,
+      "p99_us": 94.6405
     },
     {
       "impl": "joserfc 1.7.5",
@@ -276,11 +276,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 1211,
-      "ops_per_sec": 6108.432813566903,
-      "mean_us": 163.70811147811727,
-      "p50_us": 162.706,
-      "p99_us": 263.01244
+      "iterations": 648,
+      "ops_per_sec": 3257.550738690349,
+      "mean_us": 306.97910185185185,
+      "p50_us": 307.055,
+      "p99_us": 353.24935999999997
     },
     {
       "impl": "joserfc 1.7.5",
@@ -290,11 +290,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 4334,
-      "ops_per_sec": 23962.615179856708,
-      "mean_us": 41.731672127365016,
-      "p50_us": 46.36,
-      "p99_us": 52.8001
+      "iterations": 2692,
+      "ops_per_sec": 13553.44326585541,
+      "mean_us": 73.78198885586924,
+      "p50_us": 73.082,
+      "p99_us": 88.0213
     },
     {
       "impl": "joserfc 1.7.5",
@@ -304,11 +304,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 3938,
-      "ops_per_sec": 20064.85677072924,
-      "mean_us": 49.83838217369223,
-      "p50_us": 49.405,
-      "p99_us": 57.277089999999994
+      "iterations": 2429,
+      "ops_per_sec": 12270.922922584657,
+      "mean_us": 81.49346274186908,
+      "p50_us": 80.866,
+      "p99_us": 98.67787
     },
     {
       "impl": "joserfc 1.7.5",
@@ -318,11 +318,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 3257,
-      "ops_per_sec": 16422.981538798882,
-      "mean_us": 60.890283389622354,
-      "p50_us": 60.972,
-      "p99_us": 71.2804
+      "iterations": 1965,
+      "ops_per_sec": 9980.57992472022,
+      "mean_us": 100.1945786259542,
+      "p50_us": 99.616,
+      "p99_us": 124.26872
     },
     {
       "impl": "joserfc 1.7.5",
@@ -332,11 +332,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 1030,
-      "ops_per_sec": 5189.800188409902,
-      "mean_us": 192.68564563106796,
-      "p50_us": 193.603,
-      "p99_us": 209.373
+      "iterations": 603,
+      "ops_per_sec": 3040.4219714424808,
+      "mean_us": 328.9017147595357,
+      "p50_us": 328.856,
+      "p99_us": 369.44164
     },
     {
       "impl": "joserfc 1.7.5",
@@ -346,11 +346,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 2961,
-      "ops_per_sec": 15058.597549633068,
-      "mean_us": 66.40724653833165,
-      "p50_us": 66.271,
-      "p99_us": 76.9827
+      "iterations": 1904,
+      "ops_per_sec": 9498.150123021745,
+      "mean_us": 105.28365913865547,
+      "p50_us": 104.1325,
+      "p99_us": 121.62060000000001
     },
     {
       "impl": "joserfc 1.7.5",
@@ -360,11 +360,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 1958,
-      "ops_per_sec": 14208.075539243635,
-      "mean_us": 70.3825086823289,
-      "p50_us": 70.356,
-      "p99_us": 204.03408
+      "iterations": 1755,
+      "ops_per_sec": 8798.256695871898,
+      "mean_us": 113.65887977207977,
+      "p50_us": 112.427,
+      "p99_us": 132.08123999999998
     },
     {
       "impl": "joserfc 1.7.5",
@@ -374,11 +374,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 2238,
-      "ops_per_sec": 12125.293945596386,
-      "mean_us": 82.47222743521,
-      "p50_us": 85.83,
-      "p99_us": 117.95437
+      "iterations": 1504,
+      "ops_per_sec": 7610.052875801033,
+      "mean_us": 131.40513164893616,
+      "p50_us": 130.867,
+      "p99_us": 196.08336
     },
     {
       "impl": "joserfc 1.7.5",
@@ -388,11 +388,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 925,
-      "ops_per_sec": 4662.007434596496,
-      "mean_us": 214.49987243243243,
-      "p50_us": 212.793,
-      "p99_us": 251.71434
+      "iterations": 550,
+      "ops_per_sec": 2785.732930588612,
+      "mean_us": 358.97195636363637,
+      "p50_us": 357.692,
+      "p99_us": 401.8115
     },
     {
       "impl": "joserfc 1.7.5",
@@ -402,11 +402,11 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 3415,
-      "ops_per_sec": 17198.694039453392,
-      "mean_us": 58.143949633967786,
-      "p50_us": 59.39,
-      "p99_us": 68.14799000000001
+      "iterations": 1753,
+      "ops_per_sec": 8902.314642433683,
+      "mean_us": 112.33033656588705,
+      "p50_us": 112.0315,
+      "p99_us": 130.47968
     },
     {
       "impl": "joserfc 1.7.5",
@@ -416,11 +416,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 3108,
-      "ops_per_sec": 16799.28671136693,
-      "mean_us": 59.526336872586874,
-      "p50_us": 62.124,
-      "p99_us": 73.42299
+      "iterations": 1659,
+      "ops_per_sec": 8356.250227857667,
+      "mean_us": 119.67090174804098,
+      "p50_us": 119.245,
+      "p99_us": 139.04076
     },
     {
       "impl": "joserfc 1.7.5",
@@ -430,11 +430,11 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 2690,
-      "ops_per_sec": 13968.918647105349,
-      "mean_us": 71.58750260223049,
-      "p50_us": 71.288,
-      "p99_us": 78.6256
+      "iterations": 1423,
+      "ops_per_sec": 7197.514610701761,
+      "mean_us": 138.93684891075193,
+      "p50_us": 138.075,
+      "p99_us": 163.58392
     },
     {
       "impl": "joserfc 1.7.5",
@@ -444,11 +444,11 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 1028,
-      "ops_per_sec": 5026.2802583660605,
-      "mean_us": 198.95428599221788,
-      "p50_us": 198.04,
-      "p99_us": 220.9309
+      "iterations": 538,
+      "ops_per_sec": 2707.6448823282194,
+      "mean_us": 369.3246505576208,
+      "p50_us": 368.6495,
+      "p99_us": 417.37039
     },
     {
       "impl": "joserfc 1.7.5",
@@ -458,11 +458,11 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 614,
-      "ops_per_sec": 2927.503545366519,
-      "mean_us": 341.5879723127035,
-      "p50_us": 349.9145,
-      "p99_us": 568.53778
+      "iterations": 470,
+      "ops_per_sec": 2373.5311522403435,
+      "mean_us": 421.3131978723404,
+      "p50_us": 419.847,
+      "p99_us": 463.3102
     },
     {
       "impl": "joserfc 1.7.5",
@@ -472,11 +472,11 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 569,
-      "ops_per_sec": 2807.7578853696673,
-      "mean_us": 356.156065026362,
-      "p50_us": 362.2685,
-      "p99_us": 889.7613
+      "iterations": 464,
+      "ops_per_sec": 2335.298517233411,
+      "mean_us": 428.2107801724138,
+      "p50_us": 429.352,
+      "p99_us": 484.95279999999997
     },
     {
       "impl": "joserfc 1.7.5",
@@ -486,11 +486,11 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 534,
-      "ops_per_sec": 2674.689774303366,
-      "mean_us": 373.8751348314607,
-      "p50_us": 376.931,
-      "p99_us": 416.931
+      "iterations": 441,
+      "ops_per_sec": 2246.8040702328126,
+      "mean_us": 445.0766371882086,
+      "p50_us": 448.325,
+      "p99_us": 496.62753999999995
     },
     {
       "impl": "joserfc 1.7.5",
@@ -500,11 +500,11 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 386,
-      "ops_per_sec": 1928.4698266889664,
-      "mean_us": 518.5458367875648,
-      "p50_us": 520.829,
-      "p99_us": 556.69716
+      "iterations": 291,
+      "ops_per_sec": 1457.1817945855792,
+      "mean_us": 686.2561718213059,
+      "p50_us": 693.034,
+      "p99_us": 735.45776
     },
     {
       "impl": "joserfc 1.7.5",
@@ -514,11 +514,11 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 568,
-      "ops_per_sec": 3042.016237222253,
-      "mean_us": 328.7293433098592,
-      "p50_us": 327.266,
-      "p99_us": 353.00807000000003
+      "iterations": 390,
+      "ops_per_sec": 1971.1330297060665,
+      "mean_us": 507.3224307692308,
+      "p50_us": 505.864,
+      "p99_us": 551.558
     },
     {
       "impl": "joserfc 1.7.5",
@@ -528,11 +528,11 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 599,
-      "ops_per_sec": 3015.184109784434,
-      "mean_us": 331.6547061769616,
-      "p50_us": 331.1465,
-      "p99_us": 347.81655
+      "iterations": 387,
+      "ops_per_sec": 1944.4567584998424,
+      "mean_us": 514.2824573643411,
+      "p50_us": 514.221,
+      "p99_us": 569.20565
     },
     {
       "impl": "joserfc 1.7.5",
@@ -542,11 +542,11 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 576,
-      "ops_per_sec": 2901.6997522401803,
-      "mean_us": 344.62559375,
-      "p50_us": 346.1495,
-      "p99_us": 386.72834
+      "iterations": 373,
+      "ops_per_sec": 1869.8871276473835,
+      "mean_us": 534.7916380697051,
+      "p50_us": 537.832,
+      "p99_us": 588.92882
     },
     {
       "impl": "joserfc 1.7.5",
@@ -556,11 +556,11 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 410,
-      "ops_per_sec": 2063.4528666750457,
-      "mean_us": 484.62459024390245,
-      "p50_us": 487.479,
-      "p99_us": 527.42986
+      "iterations": 242,
+      "ops_per_sec": 1281.5056102276858,
+      "mean_us": 780.3321280991736,
+      "p50_us": 780.746,
+      "p99_us": 863.34412
     },
     {
       "impl": "joserfc 1.7.5",
@@ -570,11 +570,11 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 2426,
-      "ops_per_sec": 12924.046158513202,
-      "mean_us": 77.3751492168178,
-      "p50_us": 77.057,
-      "p99_us": 84.08002
+      "iterations": 1419,
+      "ops_per_sec": 7123.542038355922,
+      "mean_us": 140.37960253699788,
+      "p50_us": 139.478,
+      "p99_us": 218.9034
     },
     {
       "impl": "joserfc 1.7.5",
@@ -584,11 +584,11 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 2412,
-      "ops_per_sec": 12481.459185659513,
-      "mean_us": 80.11883747927031,
-      "p50_us": 78.96,
-      "p99_us": 86.45039999999999
+      "iterations": 1342,
+      "ops_per_sec": 6771.46027893189,
+      "mean_us": 147.67863338301044,
+      "p50_us": 146.924,
+      "p99_us": 179.1654
     },
     {
       "impl": "joserfc 1.7.5",
@@ -598,11 +598,11 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 2169,
-      "ops_per_sec": 10946.63153751799,
-      "mean_us": 91.35230290456433,
-      "p50_us": 89.556,
-      "p99_us": 102.8448
+      "iterations": 1176,
+      "ops_per_sec": 5977.059314466264,
+      "mean_us": 167.3063537414966,
+      "p50_us": 167.842,
+      "p99_us": 216.76148999999998
     },
     {
       "impl": "joserfc 1.7.5",
@@ -612,11 +612,11 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 903,
-      "ops_per_sec": 4609.4499338699625,
-      "mean_us": 216.94562569213733,
-      "p50_us": 223.158,
-      "p99_us": 242.40506
+      "iterations": 482,
+      "ops_per_sec": 2429.6456531184417,
+      "mean_us": 411.58265145228216,
+      "p50_us": 406.716,
+      "p99_us": 453.04889000000003
     },
     {
       "impl": "joserfc 1.7.5",
@@ -626,11 +626,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 6416,
-      "ops_per_sec": 32526.471521322637,
-      "mean_us": 30.74418937032419,
-      "p50_us": 31.638,
-      "p99_us": 38.0183
+      "iterations": 3434,
+      "ops_per_sec": 17456.63648730749,
+      "mean_us": 57.28480401863716,
+      "p50_us": 56.603,
+      "p99_us": 75.57044
     },
     {
       "impl": "joserfc 1.7.5",
@@ -640,11 +640,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 5834,
-      "ops_per_sec": 28646.005969731406,
-      "mean_us": 34.908880527939665,
-      "p50_us": 35.293,
-      "p99_us": 42.224
+      "iterations": 3049,
+      "ops_per_sec": 15461.960686152015,
+      "mean_us": 64.67485077074451,
+      "p50_us": 64.1825,
+      "p99_us": 79.56012
     },
     {
       "impl": "joserfc 1.7.5",
@@ -654,11 +654,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 4259,
-      "ops_per_sec": 21634.71588091265,
-      "mean_us": 46.22200751350082,
-      "p50_us": 46.531,
-      "p99_us": 53.8535
+      "iterations": 2352,
+      "ops_per_sec": 11998.925851260274,
+      "mean_us": 83.34079336734693,
+      "p50_us": 82.725,
+      "p99_us": 101.17247
     },
     {
       "impl": "joserfc 1.7.5",
@@ -668,11 +668,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 1123,
-      "ops_per_sec": 5794.678373781461,
-      "mean_us": 172.5721317898486,
-      "p50_us": 172.406,
-      "p99_us": 242.08679999999998
+      "iterations": 639,
+      "ops_per_sec": 3215.4524479996803,
+      "mean_us": 310.99822378716743,
+      "p50_us": 310.559,
+      "p99_us": 488.30558
     },
     {
       "impl": "joserfc 1.7.5",
@@ -682,11 +682,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 4382,
-      "ops_per_sec": 21820.062068167426,
-      "mean_us": 45.82938384299407,
-      "p50_us": 45.74,
-      "p99_us": 52.2191
+      "iterations": 2486,
+      "ops_per_sec": 12547.777707809924,
+      "mean_us": 79.6953869670153,
+      "p50_us": 79.165,
+      "p99_us": 101.22814
     },
     {
       "impl": "joserfc 1.7.5",
@@ -696,11 +696,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 3983,
-      "ops_per_sec": 20073.514218627522,
-      "mean_us": 49.81688752196837,
-      "p50_us": 50.236,
-      "p99_us": 57.24729
+      "iterations": 2258,
+      "ops_per_sec": 11401.670411368079,
+      "mean_us": 87.70644685562443,
+      "p50_us": 86.979,
+      "p99_us": 109.02435000000001
     },
     {
       "impl": "joserfc 1.7.5",
@@ -710,11 +710,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 3211,
-      "ops_per_sec": 16566.40876604993,
-      "mean_us": 60.36311273746497,
-      "p50_us": 60.792,
-      "p99_us": 227.25332
+      "iterations": 1848,
+      "ops_per_sec": 9334.20424287466,
+      "mean_us": 107.13286038961039,
+      "p50_us": 105.613,
+      "p99_us": 123.23316
     },
     {
       "impl": "joserfc 1.7.5",
@@ -724,11 +724,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 1067,
-      "ops_per_sec": 5359.597928287856,
-      "mean_us": 186.581160262418,
-      "p50_us": 185.892,
-      "p99_us": 200.24961
+      "iterations": 593,
+      "ops_per_sec": 3012.750314969582,
+      "mean_us": 331.92262731871836,
+      "p50_us": 329.55,
+      "p99_us": 370.82964000000004
     },
     {
       "impl": "joserfc 1.7.5",
@@ -738,11 +738,11 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 3059,
-      "ops_per_sec": 15393.271104529449,
-      "mean_us": 64.9634501471069,
-      "p50_us": 65.129,
-      "p99_us": 73.8744
+      "iterations": 1791,
+      "ops_per_sec": 9007.92960347778,
+      "mean_us": 111.0133009491904,
+      "p50_us": 109.4675,
+      "p99_us": 130.64025
     },
     {
       "impl": "joserfc 1.7.5",
@@ -752,11 +752,11 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 1936,
-      "ops_per_sec": 14386.167462197207,
-      "mean_us": 69.51121642561984,
-      "p50_us": 69.305,
-      "p99_us": 80.18116
+      "iterations": 1697,
+      "ops_per_sec": 8459.417241862591,
+      "mean_us": 118.21145256334708,
+      "p50_us": 117.802,
+      "p99_us": 147.68914999999998
     },
     {
       "impl": "joserfc 1.7.5",
@@ -766,11 +766,11 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 2455,
-      "ops_per_sec": 12232.696156190892,
-      "mean_us": 81.74812708757638,
-      "p50_us": 83.186,
-      "p99_us": 93.392
+      "iterations": 1454,
+      "ops_per_sec": 7295.505854495431,
+      "mean_us": 137.0706870701513,
+      "p50_us": 136.997,
+      "p99_us": 204.8818
     },
     {
       "impl": "joserfc 1.7.5",
@@ -780,11 +780,11 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 931,
-      "ops_per_sec": 4984.223327082782,
-      "mean_us": 200.63306444683136,
-      "p50_us": 198.29,
-      "p99_us": 234.04724
+      "iterations": 549,
+      "ops_per_sec": 2763.4062615373155,
+      "mean_us": 361.8722349726776,
+      "p50_us": 361.846,
+      "p99_us": 420.04568
     },
     {
       "impl": "joserfc 1.7.5",
@@ -794,11 +794,11 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 3478,
-      "ops_per_sec": 17482.558785103913,
-      "mean_us": 57.199864864864864,
-      "p50_us": 59.691,
-      "p99_us": 67.723
+      "iterations": 1694,
+      "ops_per_sec": 8521.409450177685,
+      "mean_us": 117.3514787485242,
+      "p50_us": 116.869,
+      "p99_us": 140.243
     },
     {
       "impl": "joserfc 1.7.5",
@@ -808,11 +808,11 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 3124,
-      "ops_per_sec": 16256.972232383698,
-      "mean_us": 61.51206914212548,
-      "p50_us": 61.853,
-      "p99_us": 70.03985
+      "iterations": 1579,
+      "ops_per_sec": 8009.937070099348,
+      "mean_us": 124.84492590246991,
+      "p50_us": 124.758,
+      "p99_us": 145.90072
     },
     {
       "impl": "joserfc 1.7.5",
@@ -822,11 +822,11 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 2702,
-      "ops_per_sec": 13493.72986774332,
-      "mean_us": 74.1084940784604,
-      "p50_us": 73.712,
-      "p99_us": 85.47308
+      "iterations": 1364,
+      "ops_per_sec": 6955.684006233292,
+      "mean_us": 143.76731304985339,
+      "p50_us": 143.7355,
+      "p99_us": 169.61525
     },
     {
       "impl": "joserfc 1.7.5",
@@ -836,11 +836,11 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 976,
-      "ops_per_sec": 5021.062585868016,
-      "mean_us": 199.16103073770492,
-      "p50_us": 214.755,
-      "p99_us": 244.51716
+      "iterations": 536,
+      "ops_per_sec": 2700.9943972910396,
+      "mean_us": 370.2340149253731,
+      "p50_us": 371.506,
+      "p99_us": 609.7876
     },
     {
       "impl": "joserfc 1.7.5",
@@ -850,11 +850,11 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 599,
-      "ops_per_sec": 3056.6508596993835,
-      "mean_us": 327.1554540901503,
-      "p50_us": 325.634,
-      "p99_us": 348.56
+      "iterations": 475,
+      "ops_per_sec": 2376.8539460779407,
+      "mean_us": 420.7242105263158,
+      "p50_us": 423.21,
+      "p99_us": 464.69252
     },
     {
       "impl": "joserfc 1.7.5",
@@ -864,11 +864,11 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 583,
-      "ops_per_sec": 3015.8196032929854,
-      "mean_us": 331.584819897084,
-      "p50_us": 334.287,
-      "p99_us": 352.55794000000003
+      "iterations": 464,
+      "ops_per_sec": 2340.3971462286695,
+      "mean_us": 427.2779094827586,
+      "p50_us": 430.7285,
+      "p99_us": 473.75140000000005
     },
     {
       "impl": "joserfc 1.7.5",
@@ -878,81 +878,81 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 579,
-      "ops_per_sec": 2909.828442093482,
-      "mean_us": 343.66287219343695,
-      "p50_us": 350.29,
-      "p99_us": 366.04679999999996
-    },
-    {
-      "impl": "joserfc 1.7.5",
-      "source": "jwks",
-      "name": "large-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "large",
-      "token_len": 20999,
-      "iterations": 412,
-      "ops_per_sec": 2104.20177787379,
-      "mean_us": 475.2395946601942,
-      "p50_us": 477.413,
-      "p99_us": 506.48066
-    },
-    {
-      "impl": "joserfc 1.7.5",
-      "source": "jwks",
-      "name": "small-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "small",
-      "token_len": 394,
-      "iterations": 651,
-      "ops_per_sec": 3301.6323544228385,
-      "mean_us": 302.88048233486944,
-      "p50_us": 300.075,
-      "p99_us": 317.313
-    },
-    {
-      "impl": "joserfc 1.7.5",
-      "source": "jwks",
-      "name": "typical-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "typical",
-      "token_len": 794,
-      "iterations": 653,
-      "ops_per_sec": 3239.6306789274663,
-      "mean_us": 308.67716079632464,
-      "p50_us": 307.3855,
-      "p99_us": 335.15814
-    },
-    {
-      "impl": "joserfc 1.7.5",
-      "source": "jwks",
-      "name": "medium-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "medium",
-      "token_len": 2407,
-      "iterations": 629,
-      "ops_per_sec": 3160.531102681063,
-      "mean_us": 316.40251828298886,
-      "p50_us": 316.79,
-      "p99_us": 345.77627
-    },
-    {
-      "impl": "joserfc 1.7.5",
-      "source": "jwks",
-      "name": "large-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "large",
-      "token_len": 21047,
       "iterations": 443,
-      "ops_per_sec": 2204.674275749073,
-      "mean_us": 453.5817426636569,
-      "p50_us": 455.98,
-      "p99_us": 503.63852
+      "ops_per_sec": 2219.6923964306684,
+      "mean_us": 450.5128735891648,
+      "p50_us": 445.516,
+      "p99_us": 489.65852
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 286,
+      "ops_per_sec": 1454.5063890744273,
+      "mean_us": 687.5184650349651,
+      "p50_us": 694.627,
+      "p99_us": 764.4508000000001
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 395,
+      "ops_per_sec": 1975.7972045350718,
+      "mean_us": 506.124817721519,
+      "p50_us": 505.325,
+      "p99_us": 553.28332
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 388,
+      "ops_per_sec": 1942.9141185990632,
+      "mean_us": 514.6907886597938,
+      "p50_us": 516.29,
+      "p99_us": 561.4516600000001
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 369,
+      "ops_per_sec": 1869.9975190859475,
+      "mean_us": 534.7600677506774,
+      "p50_us": 527.9605,
+      "p99_us": 573.80087
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 245,
+      "ops_per_sec": 1284.9642644357646,
+      "mean_us": 778.2317591836734,
+      "p50_us": 772.052,
+      "p99_us": 835.27702
     },
     {
       "impl": "joserfc 1.7.5",
@@ -962,11 +962,11 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 2652,
-      "ops_per_sec": 13046.006165182422,
-      "mean_us": 76.65181108597285,
-      "p50_us": 76.817,
-      "p99_us": 85.32843
+      "iterations": 1350,
+      "ops_per_sec": 6948.113434344081,
+      "mean_us": 143.92396,
+      "p50_us": 144.38,
+      "p99_us": 188.87
     },
     {
       "impl": "joserfc 1.7.5",
@@ -976,11 +976,11 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 2517,
-      "ops_per_sec": 12710.149919222882,
-      "mean_us": 78.67727810885975,
-      "p50_us": 79.15,
-      "p99_us": 86.19325
+      "iterations": 1321,
+      "ops_per_sec": 6631.0921540295185,
+      "mean_us": 150.804720666162,
+      "p50_us": 151.148,
+      "p99_us": 169.13279999999997
     },
     {
       "impl": "joserfc 1.7.5",
@@ -990,11 +990,11 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 2187,
-      "ops_per_sec": 11061.02002622711,
-      "mean_us": 90.4075752171925,
-      "p50_us": 90.658,
-      "p99_us": 99.8438
+      "iterations": 1154,
+      "ops_per_sec": 5843.463793067898,
+      "mean_us": 171.13137608318888,
+      "p50_us": 171.814,
+      "p99_us": 203.2068
     },
     {
       "impl": "joserfc 1.7.5",
@@ -1004,11 +1004,11 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 887,
-      "ops_per_sec": 4365.3996182042165,
-      "mean_us": 229.07410259301014,
-      "p50_us": 224.51,
-      "p99_us": 246.3597
+      "iterations": 481,
+      "ops_per_sec": 2430.5747014546823,
+      "mean_us": 411.42533056133055,
+      "p50_us": 411.162,
+      "p99_us": 458.7588
     }
   ],
   "first_fetch": [],

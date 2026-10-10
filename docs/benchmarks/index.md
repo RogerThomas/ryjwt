@@ -20,13 +20,13 @@ There are two sets of results:
 ## The races
 
 Each bar is one library decoding 100,000 tokens, filling in real time. Its time is 100,000 times
-its mean time per decode, measured as in the full matrix, but in a run of just the races' two cases
-(`task bench-race`). So race times can differ a little from the matrix page.
+its mean time per decode, measured as in the full matrix, in a run of just the races' two cases
+(`task bench-race`) on the same machine. So race times can differ a little from the matrix page.
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.15 seconds, jsonwebtoken (Rust) and fast-jwt (Bun) take two to three and a half times as long, and the other libraries from about 1.8 to over 6 seconds](../assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) and fast-jwt (Bun) take two and a half to three times as long, and the other libraries from about 2 to over 10 seconds](../assets/perf-race.svg)
 
-With HS256, ryjwt decodes a typical token about 24 times faster than PyJWT 2.15 (22 times into a
-dict), 2.4 times faster than jsonwebtoken (Rust) and 3.5 times faster than fast-jwt (Bun).
+With HS256, ryjwt decodes a typical token about 28 times faster than PyJWT 2.15 (26 times into a
+dict), about 2.4 times faster than jsonwebtoken (Rust) and 2.9 times faster than fast-jwt (Bun).
 
 ### Why it's faster than jsonwebtoken (Rust)
 
@@ -39,28 +39,28 @@ building the result.
 Here, jsonwebtoken decodes into a `serde_json::Value`, the nearest thing to a Python dict. A typed
 Rust struct would be faster.
 
-![A race to decode 100,000 ES256 tokens: ryjwt finishes first in about 3.6 seconds, just ahead of jsonwebtoken (Rust) and fast-jwt (Bun) at 3.8 and 4.0, and the other libraries take from about 6 to over 10 seconds](../assets/perf-race-es256.svg)
-
-With ES256, most of the time goes on the signature check, which every library hands to native
-crypto, so the gaps are smaller. ryjwt is about twice as fast as PyJWT, and about as fast as
-jsonwebtoken and fast-jwt: a little ahead, by 6% and 11%, not far beyond the run-to-run
-variation.
-
 ### RS256
 
-Most identity providers sign with RS256 by default. With a 3072-bit key, ryjwt decodes a typical
-token in about 25 µs, against 32 for jsonwebtoken, 34 for fast-jwt and 48 for jose
-([full matrix](matrix.md#pem-public-key)). On an Apple Silicon Mac, in Docker, the
-[slowdown below](#apple-silicon) puts fast-jwt and jose ahead.
+![A race to decode 100,000 RS256 tokens with a 3072-bit RSA key: ryjwt finishes first in about 4.1 seconds, ahead of fast-jwt (Bun) and jsonwebtoken (Rust) at 4.6 and 4.8, and the other libraries take from about 6 to 15 seconds](../assets/perf-race-rs256.svg)
+
+Most identity providers sign with RS256 by default. Most of the time goes on checking the
+signature, which every library hands to native crypto, so the gaps are smaller: ryjwt is about 2.7
+times faster than PyJWT, and a little ahead of fast-jwt and jsonwebtoken, by about 12% and 16%. On
+an Apple Silicon Mac, in Docker, the [slowdown below](#apple-silicon) puts fast-jwt and jose
+ahead.
+
+ES256 is much the same: ryjwt is about twice as fast as PyJWT, and level with jsonwebtoken and
+fast-jwt, ahead by 5% and 7% ([full matrix](matrix.md#pem-public-key)).
 
 ## How they're measured
 
 - Each decode checks the signature, `exp` and `aud`, as a real service would.
 - Before timing, each library's result is checked against the token's claims, and each is shown
   to reject an expired token and one for another audience.
-- The published numbers come from GitHub's x86_64 Linux runner (the machine is on each results
-  page), from the [Benchmarks workflow](#running-them). It's a shared virtual machine, so expect a
-  few percent of variation between runs.
+- The published numbers come from one run of the [Benchmarks workflow](#running-them) on GitHub's
+  x86_64 Linux runner. Its CPU varies from run to run (each results page names it), so the times
+  change between runs more than the ratios do. It's a shared virtual machine, so expect a few
+  percent of variation too.
 - Each library runs in its own Docker container, with one CPU (pinned to one of Docker's virtual
   CPUs) and 500 MB of memory. The containers run one after another, so they never compete.
 - jose and fast-jwt run on [Bun](https://bun.sh), whose crypto is BoringSSL. On Node (OpenSSL),
@@ -107,6 +107,6 @@ These pages show those files as is, so rerunning the benchmarks updates the docs
 To run them on Linux, for any commit or tag, run the **Benchmarks** workflow from the repository's
 Actions tab, choosing the ref, benchmarks (`race` for just the races) and runner (x86_64 or
 arm64). It uploads the results, with a note of the machine, as an artifact;
-`task bench-download -- <run id>` puts them in place. GitHub's Linux runners don't have the
-[Apple Silicon](#apple-silicon) slowdown, but they're shared machines, so compare runs on the same
-runner.
+`task bench-download -- <run id>` puts them in place. To update the published numbers, run `all`,
+so the races and the tables come from the same machine. GitHub's Linux runners don't have the
+[Apple Silicon](#apple-silicon) slowdown.
