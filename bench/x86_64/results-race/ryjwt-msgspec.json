@@ -1,0 +1,48 @@
+{
+  "impl": "ryjwt 0.1.1 \u2192 Struct",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "ryjwt 0.1.1 \u2192 Struct",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 523194.51198255824,
+      "mean_us": 1.9113350333333332,
+      "round_means_us": [
+        1.9031353899999999,
+        1.91661334,
+        1.9142563700000002
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 Struct",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 28389.27198463389,
+      "mean_us": 35.22457358333333,
+      "round_means_us": [
+        35.207824050000006,
+        35.22637835,
+        35.23951835
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [],
+  "notes": [
+    "`SecretKey`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and `.adecode`",
+    "JWKS URL: trusting the test CA through `SSL_CERT_FILE`"
+  ]
+}

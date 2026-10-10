@@ -1,0 +1,63 @@
+{
+  "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+  "runtime": "Rust (release, LTO)",
+  "rows": [
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 223456.09380484218,
+      "mean_us": 4.475152066666666,
+      "round_means_us": [
+        4.4711469699999995,
+        4.4784313000000004,
+        4.475877929999999
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → Value",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 24086.658500145586,
+      "mean_us": 41.51675916333333,
+      "round_means_us": [
+        41.52886172,
+        41.5116869,
+        41.50972887
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "*",
+      "alg": "ES512",
+      "reason": "jsonwebtoken has no ES512 (P-521)"
+    },
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "jsonwebtoken doesn't fetch JWKS URLs (it takes your own HTTP client and cache)"
+    },
+    {
+      "source": "jwks-url-async",
+      "alg": "*",
+      "reason": "jsonwebtoken doesn't fetch JWKS URLs (it takes your own HTTP client and cache)"
+    }
+  ],
+  "notes": [
+    "JWKS: each key turned into a `DecodingKey` once, picked per token by `kid` (`decode_header`)"
+  ]
+}

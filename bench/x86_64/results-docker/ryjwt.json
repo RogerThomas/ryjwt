@@ -1,0 +1,210 @@
+[
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "small-k32",
+    "token_len": 231,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 975556.7429165071,
+    "mean_us": 1.0250556999999998,
+    "round_means_us": [
+      1.0250556999999998
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "small-k64",
+    "token_len": 231,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 971439.4848572984,
+    "mean_us": 1.0294002,
+    "round_means_us": [
+      1.0294002
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "small-k256",
+    "token_len": 231,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 979882.0417998083,
+    "mean_us": 1.0205309999999999,
+    "round_means_us": [
+      1.0205309999999999
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "small-k4096",
+    "token_len": 231,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 976954.0448632928,
+    "mean_us": 1.0235896,
+    "round_means_us": [
+      1.0235896
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "typical-k32",
+    "token_len": 661,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 494115.4066814384,
+    "mean_us": 2.0238187,
+    "round_means_us": [
+      2.0238187
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "typical-k64",
+    "token_len": 661,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 496872.6339546263,
+    "mean_us": 2.0125881999999997,
+    "round_means_us": [
+      2.0125881999999997
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "typical-k256",
+    "token_len": 661,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 496056.5488591889,
+    "mean_us": 2.0158992000000002,
+    "round_means_us": [
+      2.0158992000000002
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "typical-k4096",
+    "token_len": 661,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 499255.6098856605,
+    "mean_us": 2.002982,
+    "round_means_us": [
+      2.002982
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "medium-k32",
+    "token_len": 2244,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 191772.93716036173,
+    "mean_us": 5.2145001,
+    "round_means_us": [
+      5.2145001
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "medium-k64",
+    "token_len": 2244,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 188800.92926306973,
+    "mean_us": 5.2965841000000005,
+    "round_means_us": [
+      5.2965841000000005
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "medium-k256",
+    "token_len": 2244,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 187291.13526708935,
+    "mean_us": 5.339281,
+    "round_means_us": [
+      5.339281
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "medium-k4096",
+    "token_len": 2244,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 191523.80379451174,
+    "mean_us": 5.2212831,
+    "round_means_us": [
+      5.2212831
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "large-k32",
+    "token_len": 20884,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 22294.547816162318,
+    "mean_us": 44.8540158,
+    "round_means_us": [
+      44.8540158
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "large-k64",
+    "token_len": 20884,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 22340.548191031077,
+    "mean_us": 44.761659,
+    "round_means_us": [
+      44.761659
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "large-k256",
+    "token_len": 20884,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 22329.290076484784,
+    "mean_us": 44.784227200000004,
+    "round_means_us": [
+      44.784227200000004
+    ]
+  },
+  {
+    "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+    "name": "large-k4096",
+    "token_len": 20884,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 22286.77562017522,
+    "mean_us": 44.869658,
+    "round_means_us": [
+      44.869658
+    ]
+  }
+]

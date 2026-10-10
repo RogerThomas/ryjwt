@@ -1,0 +1,210 @@
+[
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "small-k32",
+    "token_len": 231,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 485124.0588350697,
+    "mean_us": 2.0613284,
+    "round_means_us": [
+      2.0613284
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "small-k64",
+    "token_len": 231,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 489742.65835351363,
+    "mean_us": 2.0418887,
+    "round_means_us": [
+      2.0418887
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "small-k256",
+    "token_len": 231,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 446851.20489405736,
+    "mean_us": 2.2378814,
+    "round_means_us": [
+      2.2378814
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "small-k4096",
+    "token_len": 231,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 228030.0617503127,
+    "mean_us": 4.3853867,
+    "round_means_us": [
+      4.3853867
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "typical-k32",
+    "token_len": 661,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 248289.6258759503,
+    "mean_us": 4.0275545,
+    "round_means_us": [
+      4.0275545
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "typical-k64",
+    "token_len": 661,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 240926.94425273352,
+    "mean_us": 4.1506358,
+    "round_means_us": [
+      4.1506358
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "typical-k256",
+    "token_len": 661,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 236735.24484259842,
+    "mean_us": 4.2241281,
+    "round_means_us": [
+      4.2241281
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "typical-k4096",
+    "token_len": 661,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 158057.60105799965,
+    "mean_us": 6.3268074,
+    "round_means_us": [
+      6.3268074
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "medium-k32",
+    "token_len": 2244,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 131230.8161871742,
+    "mean_us": 7.6201614,
+    "round_means_us": [
+      7.6201614
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "medium-k64",
+    "token_len": 2244,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 131080.52574249156,
+    "mean_us": 7.6288982999999995,
+    "round_means_us": [
+      7.6288982999999995
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "medium-k256",
+    "token_len": 2244,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 127839.92886372727,
+    "mean_us": 7.8222822,
+    "round_means_us": [
+      7.8222822
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "medium-k4096",
+    "token_len": 2244,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 100197.00835980714,
+    "mean_us": 9.9803379,
+    "round_means_us": [
+      9.9803379
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "large-k32",
+    "token_len": 20884,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 17111.407139215127,
+    "mean_us": 58.4405474,
+    "round_means_us": [
+      58.4405474
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "large-k64",
+    "token_len": 20884,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 17074.14970098477,
+    "mean_us": 58.5680703,
+    "round_means_us": [
+      58.5680703
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "large-k256",
+    "token_len": 20884,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 17065.175285024732,
+    "mean_us": 58.5988707,
+    "round_means_us": [
+      58.5988707
+    ]
+  },
+  {
+    "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+    "name": "large-k4096",
+    "token_len": 20884,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 16458.232559918248,
+    "mean_us": 60.7598657,
+    "round_means_us": [
+      60.7598657
+    ]
+  }
+]

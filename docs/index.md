@@ -48,9 +48,13 @@ example, extra and all, with nothing installed first.
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
-    exp = datetime.now(UTC) + timedelta(minutes=15)
-    token = key.encode(Claims(sub="user-1", aud="my-api", exp=exp))
-    claims = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", aud="my-api", exp=expires)
+
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    assert claims_in == claims_out
     ```
 
 === "pydantic"
@@ -71,9 +75,13 @@ example, extra and all, with nothing installed first.
 
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
 
-    exp = datetime.now(UTC) + timedelta(minutes=15)
-    token = key.encode(Claims(sub="user-1", aud="my-api", exp=exp))
-    claims = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    # Tokens store exp in whole seconds, so round it for the round trip to compare equal.
+    expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
+    claims_in = Claims(sub="user-1", aud="my-api", exp=expires)
+
+    token = key.encode(claims_in)
+    claims_out = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    assert claims_in == claims_out
     ```
 
 === "dict"
@@ -94,7 +102,7 @@ example, extra and all, with nothing installed first.
 
 ## Why it's fast
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) and fast-jwt (Bun) take two and a half to three times as long, and the other libraries from about 2 to over 10 seconds](assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) in about 0.4 to 0.5, fast-jwt (Bun) in 0.7, and joserfc, jose and PyJWT in about 3 to 6 seconds](assets/perf-race.svg)
 
 One bar per library, decoding 100,000 HS256 tokens in real time
 ([benchmarks](benchmarks/index.md)).
@@ -110,5 +118,6 @@ One bar per library, decoding 100,000 HS256 tokens in real time
   [jiter](https://github.com/pydantic/jiter).
 
 With RSA, ECDSA and EdDSA, most of the time goes on the signature check, so the gaps are smaller.
-For ES256, ryjwt is about twice as fast as PyJWT, and about as fast as jsonwebtoken and fast-jwt.
-For RS256, it's the fastest of them ([benchmarks](benchmarks/index.md#rs256)).
+ryjwt is about twice as fast as PyJWT with ES256. With RS256 it's 1.7 to 2.9 times as fast: the
+fastest of them on x86_64, and second to fast-jwt (Bun) on Arm
+([benchmarks](benchmarks/index.md#rs256)).

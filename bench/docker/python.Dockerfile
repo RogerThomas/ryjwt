@@ -1,4 +1,4 @@
-# PyJWT, python-jose, joserfc, jwcrypto and ryjwt (dict / msgspec Struct / pydantic BaseModel).
+# PyJWT, joserfc and ryjwt (dict with msgspec or jiter / msgspec Struct / pydantic BaseModel).
 # Build context: the repo root.
 # The entrypoint runs the HS256 bench (bench_python.py); the matrix services run bench_matrix.py.
 

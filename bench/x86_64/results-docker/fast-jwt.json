@@ -1,0 +1,210 @@
+[
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "small-k32",
+    "token_len": 231,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 107873,
+    "mean_us": 9.27,
+    "round_means_us": [
+      9.27
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "small-k64",
+    "token_len": 231,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 143172,
+    "mean_us": 6.985,
+    "round_means_us": [
+      6.985
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "small-k256",
+    "token_len": 231,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 252071,
+    "mean_us": 3.967,
+    "round_means_us": [
+      3.967
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "small-k4096",
+    "token_len": 231,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 90777,
+    "mean_us": 11.016,
+    "round_means_us": [
+      11.016
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "typical-k32",
+    "token_len": 661,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 154784,
+    "mean_us": 6.461,
+    "round_means_us": [
+      6.461
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "typical-k64",
+    "token_len": 661,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 148660,
+    "mean_us": 6.727,
+    "round_means_us": [
+      6.727
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "typical-k256",
+    "token_len": 661,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 140201,
+    "mean_us": 7.133,
+    "round_means_us": [
+      7.133
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "typical-k4096",
+    "token_len": 661,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 76165,
+    "mean_us": 13.129,
+    "round_means_us": [
+      13.129
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "medium-k32",
+    "token_len": 2244,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 87589,
+    "mean_us": 11.417,
+    "round_means_us": [
+      11.417
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "medium-k64",
+    "token_len": 2244,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 92837,
+    "mean_us": 10.772,
+    "round_means_us": [
+      10.772
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "medium-k256",
+    "token_len": 2244,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 90160,
+    "mean_us": 11.091,
+    "round_means_us": [
+      11.091
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "medium-k4096",
+    "token_len": 2244,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 76325,
+    "mean_us": 13.102,
+    "round_means_us": [
+      13.102
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "large-k32",
+    "token_len": 20884,
+    "key_len": 32,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 10629,
+    "mean_us": 94.083,
+    "round_means_us": [
+      94.083
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "large-k64",
+    "token_len": 20884,
+    "key_len": 64,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 10895,
+    "mean_us": 91.789,
+    "round_means_us": [
+      91.789
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "large-k256",
+    "token_len": 20884,
+    "key_len": 256,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 10684,
+    "mean_us": 93.596,
+    "round_means_us": [
+      93.596
+    ]
+  },
+  {
+    "impl": "fast-jwt 6.3.3",
+    "name": "large-k4096",
+    "token_len": 20884,
+    "key_len": 4096,
+    "iterations": 10000,
+    "rounds": 1,
+    "ops_per_sec": 10620,
+    "mean_us": 94.165,
+    "round_means_us": [
+      94.165
+    ]
+  }
+]

@@ -68,11 +68,9 @@ exclude = [
 bench = [
     "cryptography>=46",
     "joserfc==1.7.5",
-    "jwcrypto==1.6.1",
     "msgspec>=0.22.0",
     "pydantic>=2.13.5",
     "pyjwt>=2.15.1",
-    "python-jose[cryptography]==3.5.0",
     "pyreqwest>=0.14.0",
     "rich>=15.0.0",
     "yeetr>=2026.9.18",

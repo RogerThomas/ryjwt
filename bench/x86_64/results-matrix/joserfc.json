@@ -1,0 +1,1176 @@
+{
+  "impl": "joserfc 1.7.5",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "small-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 44344.73894504948,
+      "mean_us": 22.5505894,
+      "round_means_us": [
+        22.5505894
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "typical-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 39364.23175694596,
+      "mean_us": 25.4037728,
+      "round_means_us": [
+        25.4037728
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "medium-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26196.41667703914,
+      "mean_us": 38.1731598,
+      "round_means_us": [
+        38.1731598
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "large-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4894.135958174863,
+      "mean_us": 204.32615859999999,
+      "round_means_us": [
+        204.32615859999999
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "small-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 49363.41556332235,
+      "mean_us": 20.257917499999998,
+      "round_means_us": [
+        20.257917499999998
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 39383.252438098025,
+      "mean_us": 25.3915037,
+      "round_means_us": [
+        25.3915037
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "medium-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25968.124801976817,
+      "mean_us": 38.508749,
+      "round_means_us": [
+        38.508749
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "large-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4887.901077101694,
+      "mean_us": 204.58679180000001,
+      "round_means_us": [
+        204.58679180000001
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "small-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 49073.62539573463,
+      "mean_us": 20.3775448,
+      "round_means_us": [
+        20.3775448
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "typical-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 39223.09497879509,
+      "mean_us": 25.495183400000002,
+      "round_means_us": [
+        25.495183400000002
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "medium-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25918.73149083447,
+      "mean_us": 38.5821351,
+      "round_means_us": [
+        38.5821351
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "large-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4867.226274936838,
+      "mean_us": 205.4558271,
+      "round_means_us": [
+        205.4558271
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "small-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 43912.354733978435,
+      "mean_us": 22.772634399999998,
+      "round_means_us": [
+        22.772634399999998
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "typical-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 36288.910898113354,
+      "mean_us": 27.556627499999998,
+      "round_means_us": [
+        27.556627499999998
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "medium-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24642.959920722024,
+      "mean_us": 40.5795409,
+      "round_means_us": [
+        40.5795409
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "hmac",
+      "name": "large-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4820.997217007041,
+      "mean_us": 207.425965,
+      "round_means_us": [
+        207.425965
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24700.57365624983,
+      "mean_us": 40.4848897,
+      "round_means_us": [
+        40.4848897
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22211.147349289025,
+      "mean_us": 45.0224378,
+      "round_means_us": [
+        45.0224378
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17081.50931211889,
+      "mean_us": 58.5428361,
+      "round_means_us": [
+        58.5428361
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4376.727301416322,
+      "mean_us": 228.4812215,
+      "round_means_us": [
+        228.4812215
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16700.959163641353,
+      "mean_us": 59.876800499999995,
+      "round_means_us": [
+        59.876800499999995
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15371.240702543662,
+      "mean_us": 65.0565572,
+      "round_means_us": [
+        65.0565572
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12591.202010915691,
+      "mean_us": 79.420535,
+      "round_means_us": [
+        79.420535
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4020.006255789015,
+      "mean_us": 248.7558318,
+      "round_means_us": [
+        248.7558318
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11606.208926235935,
+      "mean_us": 86.1607788,
+      "round_means_us": [
+        86.1607788
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10957.951986650725,
+      "mean_us": 91.2579286,
+      "round_means_us": [
+        91.2579286
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9570.615686263229,
+      "mean_us": 104.4864858,
+      "round_means_us": [
+        104.4864858
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3587.5308719004915,
+      "mean_us": 278.7432459,
+      "round_means_us": [
+        278.7432459
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11613.249057874009,
+      "mean_us": 86.1085468,
+      "round_means_us": [
+        86.1085468
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10944.582430821176,
+      "mean_us": 91.3694064,
+      "round_means_us": [
+        91.3694064
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9470.146765796577,
+      "mean_us": 105.5949844,
+      "round_means_us": [
+        105.5949844
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3625.5924126456057,
+      "mean_us": 275.8169938,
+      "round_means_us": [
+        275.8169938
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2000.9279683629597,
+      "mean_us": 499.7681155,
+      "round_means_us": [
+        499.7681155
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1979.308492697172,
+      "mean_us": 505.2269536,
+      "round_means_us": [
+        505.2269536
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1910.2922846148601,
+      "mean_us": 523.480102,
+      "round_means_us": [
+        523.480102
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1397.454027278846,
+      "mean_us": 715.5870465,
+      "round_means_us": [
+        715.5870465
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2037.223855218083,
+      "mean_us": 490.8640734,
+      "round_means_us": [
+        490.8640734
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2008.1255930503182,
+      "mean_us": 497.9768215,
+      "round_means_us": [
+        497.9768215
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1950.0240104993895,
+      "mean_us": 512.8141985,
+      "round_means_us": [
+        512.8141985
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1410.603063970069,
+      "mean_us": 708.916651,
+      "round_means_us": [
+        708.916651
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7942.708172100494,
+      "mean_us": 125.9016419,
+      "round_means_us": [
+        125.9016419
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7691.480396676226,
+      "mean_us": 130.0139828,
+      "round_means_us": [
+        130.0139828
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6792.271885090908,
+      "mean_us": 147.22614420000002,
+      "round_means_us": [
+        147.22614420000002
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "pem",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3031.1025313585037,
+      "mean_us": 329.9129573,
+      "round_means_us": [
+        329.9129573
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22968.142983562142,
+      "mean_us": 43.5385656,
+      "round_means_us": [
+        43.5385656
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 20692.452178310064,
+      "mean_us": 48.3268001,
+      "round_means_us": [
+        48.3268001
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16084.242752636845,
+      "mean_us": 62.1726503,
+      "round_means_us": [
+        62.1726503
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4259.066618284635,
+      "mean_us": 234.79322810000002,
+      "round_means_us": [
+        234.79322810000002
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15889.978071496571,
+      "mean_us": 62.9327489,
+      "round_means_us": [
+        62.9327489
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14628.6217603926,
+      "mean_us": 68.35913980000001,
+      "round_means_us": [
+        68.35913980000001
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12236.020027452614,
+      "mean_us": 81.72592049999999,
+      "round_means_us": [
+        81.72592049999999
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3878.4666165128183,
+      "mean_us": 257.8338552,
+      "round_means_us": [
+        257.8338552
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10840.014372037935,
+      "mean_us": 92.2508002,
+      "round_means_us": [
+        92.2508002
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10585.260884376805,
+      "mean_us": 94.4709829,
+      "round_means_us": [
+        94.4709829
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9162.776570931675,
+      "mean_us": 109.13722410000001,
+      "round_means_us": [
+        109.13722410000001
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3499.8903808083546,
+      "mean_us": 285.72323450000005,
+      "round_means_us": [
+        285.72323450000005
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11127.460713865685,
+      "mean_us": 89.8677628,
+      "round_means_us": [
+        89.8677628
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10441.81092807249,
+      "mean_us": 95.7688285,
+      "round_means_us": [
+        95.7688285
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9147.00859267792,
+      "mean_us": 109.32535920000001,
+      "round_means_us": [
+        109.32535920000001
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3452.5890506096184,
+      "mean_us": 289.63771399999996,
+      "round_means_us": [
+        289.63771399999996
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1989.128372335397,
+      "mean_us": 502.73276169999997,
+      "round_means_us": [
+        502.73276169999997
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1967.4692166741374,
+      "mean_us": 508.26716450000004,
+      "round_means_us": [
+        508.26716450000004
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1908.3890682686401,
+      "mean_us": 524.0021632,
+      "round_means_us": [
+        524.0021632
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1390.056991812613,
+      "mean_us": 719.3949643,
+      "round_means_us": [
+        719.3949643
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2018.6896012323175,
+      "mean_us": 495.3708581,
+      "round_means_us": [
+        495.3708581
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1993.1181624060914,
+      "mean_us": 501.7263998,
+      "round_means_us": [
+        501.7263998
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1906.5156129669194,
+      "mean_us": 524.5170788,
+      "round_means_us": [
+        524.5170788
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1395.3909866490528,
+      "mean_us": 716.6450189,
+      "round_means_us": [
+        716.6450189
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7696.730991767536,
+      "mean_us": 129.9252892,
+      "round_means_us": [
+        129.9252892
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7534.664463315788,
+      "mean_us": 132.7199114,
+      "round_means_us": [
+        132.7199114
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6731.622384292059,
+      "mean_us": 148.55259890000002,
+      "round_means_us": [
+        148.55259890000002
+      ]
+    },
+    {
+      "impl": "joserfc 1.7.5",
+      "source": "jwks",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2949.267587572895,
+      "mean_us": 339.0672329,
+      "round_means_us": [
+        339.0672329
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "joserfc has no JWKS URL client"
+    },
+    {
+      "source": "jwks-url-async",
+      "alg": "*",
+      "reason": "joserfc has no JWKS URL client"
+    }
+  ],
+  "notes": [
+    "`jwt.decode(token, key, algorithms=[...])`, then `JWTClaimsRegistry(exp=..., aud=...).validate(token.claims)`, both essential",
+    "keys imported once (`OctKey`, `RSAKey`, `ECKey`, `OKPKey`); JWKS document: a `KeySet`, which picks the key by `kid`",
+    "EdDSA: joserfc warns on every decode (`SecurityWarning`: RFC 9864 deprecates `EdDSA`), as it does by default"
+  ]
+}

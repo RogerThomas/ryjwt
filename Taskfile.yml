@@ -79,12 +79,12 @@ tasks:
       - docker compose build
       - |
         set -eu
-        for service in pyjwt python-jose joserfc jwcrypto ryjwt ryjwt-msgspec ryjwt-pydantic jose fast-jwt jsonwebtoken; do
+        for service in pyjwt joserfc ryjwt ryjwt-jiter ryjwt-msgspec ryjwt-pydantic jose fast-jwt jsonwebtoken jsonwebtoken-struct; do
           echo "──── ${service} ────"
           docker compose run --rm "${service}"
         done
       - uv run --group bench yeet ./compare.py results-docker
-      - uv run --group bench yeet ./compare.py results-docker markdown "Run in Docker, one container per library, each limited to 1 CPU (pinned) and 500 MB with no swap."
+      - uv run --group bench yeet ./compare.py results-docker markdown "Run in Docker, one container per library, each limited to 1 CPU (pinned) and 500 MB with no swap. Each case gets 1,000 untimed decodes, then 10,000 timed."
 
   bench-fixtures:
     desc: 'Regenerate the bench fixtures (bench/fixtures.json, and the full matrix in bench/matrix, reusing its stored keys) and the JWKS server''s test TLS certificates'
@@ -101,14 +101,14 @@ tasks:
       - defer: docker compose rm --stop --force jwks
       - |
         set -eu
-        for service in matrix-pyjwt matrix-python-jose matrix-joserfc matrix-jwcrypto matrix-ryjwt matrix-ryjwt-msgspec matrix-ryjwt-pydantic matrix-jose matrix-fast-jwt matrix-jsonwebtoken; do
+        for service in matrix-pyjwt matrix-joserfc matrix-ryjwt matrix-ryjwt-jiter matrix-ryjwt-msgspec matrix-ryjwt-pydantic matrix-jose matrix-fast-jwt matrix-jsonwebtoken matrix-jsonwebtoken-struct; do
           echo "──── ${service} ────"
           docker compose run --rm "${service}"
         done
-      - uv run --group bench yeet ./compare.py:matrix results-matrix "Run in Docker, one container per library, each limited to 1 CPU (pinned) and 500 MB with no swap; the JWKS server runs in a container of its own, outside that limit."
+      - uv run --group bench yeet ./compare.py:matrix results-matrix "Run in Docker, one container per library, each limited to 1 CPU (pinned) and 500 MB with no swap; the JWKS server runs in a container of its own, outside that limit. Each case gets 1,000 untimed decodes, then 10,000 timed."
 
   bench-race:
-    desc: 'Benchmark just the races'' two cases of the matrix (HS256 typical-k64 from the secret, RS256 typical-rs3072 from the PEM), as bench-matrix does, into bench/results-race; then redraw the races'
+    desc: 'Benchmark just the races'' two cases of the matrix (HS256 typical-k64 from the secret, RS256 typical-rs3072 from the PEM), 3 rounds of 100,000 decodes each, into bench/results-race; then redraw the races'
     dir: bench
     env:
       MATRIX_RESULTS: results-race
@@ -116,24 +116,28 @@ tasks:
       # The races' cases (race_svg.py's Races.races): the sources and cases to run.
       SOURCES: hmac,pem
       CASES: typical-k64,typical-rs3072
+      # Each library really decodes 100,000 tokens per round; the races show the mean of 3 rounds.
+      ITERATIONS: 100000
+      ROUNDS: 3
     cmds:
       - docker compose build
       - |
         set -eu
-        for impl in pyjwt python-jose joserfc jwcrypto ryjwt ryjwt-msgspec ryjwt-pydantic; do
+        for impl in pyjwt joserfc ryjwt ryjwt-jiter ryjwt-msgspec ryjwt-pydantic jose fast-jwt; do
           echo "──── ${impl} ────"
-          docker compose run --rm --no-deps "matrix-${impl}" "${impl}" https://jwks:8443 {{.SOURCES}} {{.CASES}}
+          docker compose run --rm --no-deps "matrix-${impl}" "${impl}" https://jwks:8443 {{.SOURCES}} {{.CASES}} {{.ITERATIONS}} {{.ROUNDS}}
         done
-        for impl in jose fast-jwt; do
-          echo "──── ${impl} ────"
-          docker compose run --rm --no-deps "matrix-${impl}" "${impl}" https://jwks:8443 {{.SOURCES}} {{.CASES}}
+        for mode in value struct; do
+          echo "──── jsonwebtoken (${mode}) ────"
+          service=matrix-jsonwebtoken$([ "$mode" = struct ] && echo -struct || true)
+          docker compose run --rm --no-deps "$service" "$mode" {{.SOURCES}} {{.CASES}} {{.ITERATIONS}} {{.ROUNDS}}
         done
-        echo "──── jsonwebtoken ────"
-        docker compose run --rm --no-deps matrix-jsonwebtoken 1 {{.SOURCES}} {{.CASES}}
       - task: race-svg
 
   bench-download:
-    desc: 'Put a Benchmarks workflow run''s results in place (the results files and pages, and the races in assets/ and docs/assets/), from its artifact, and show the machine they ran on (needs gh): task bench-download -- <run id>'
+    desc: 'Put a Benchmarks workflow run''s results in place (the results files and pages, and the races in assets/ and docs/assets/), from its artifact, and show the machine they ran on (needs gh): task bench-download -- <run id>. With CROSS_CHECK=x86_64, the results go to bench/x86_64/ instead, for the x86_64 cross-check page (no races drawn)'
+    vars:
+      CROSS_CHECK: '{{.CROSS_CHECK | default ""}}'
     cmds:
       - |
         set -eu
@@ -144,6 +148,13 @@ tasks:
         test -n "$machine" || { echo "No benchmark results in run {{.CLI_ARGS}}" >&2; exit 1; }
         artifact=$(dirname "$machine")
         cat "$machine"
+        if [ -n "{{.CROSS_CHECK}}" ]; then
+          dest="bench/{{.CROSS_CHECK}}"
+          mkdir -p "$dest"
+          cp "$machine" "$dest/machine.txt"
+          tar -C "$artifact/bench" -cf - . | tar -C "$dest" -xvf -
+          exit 0
+        fi
         parts=$(cd "$artifact" && ls -d bench assets 2>/dev/null || true)
         tar -C "$artifact" -cf - $parts | tar -xvf -
         if [ -d "$artifact/assets" ]; then cp "$artifact"/assets/perf-race*.svg docs/assets/; fi

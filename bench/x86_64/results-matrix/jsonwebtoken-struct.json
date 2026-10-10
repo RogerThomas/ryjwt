@@ -1,0 +1,1052 @@
+{
+  "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+  "runtime": "Rust (release, LTO)",
+  "rows": [
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "small-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 503938.6077798949,
+      "mean_us": 1.9843687,
+      "round_means_us": [
+        1.9843687
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "typical-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 265394.57033494866,
+      "mean_us": 3.7679746,
+      "round_means_us": [
+        3.7679746
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "medium-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 133165.08191563457,
+      "mean_us": 7.5094761,
+      "round_means_us": [
+        7.5094761
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "large-k32",
+      "key": "k32",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18969.36884744171,
+      "mean_us": 52.7165668,
+      "round_means_us": [
+        52.7165668
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "small-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 509239.5922375998,
+      "mean_us": 1.9637122,
+      "round_means_us": [
+        1.9637122
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 260741.19439179066,
+      "mean_us": 3.8352206,
+      "round_means_us": [
+        3.8352206
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "medium-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 142246.03964621873,
+      "mean_us": 7.0300727,
+      "round_means_us": [
+        7.0300727
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "large-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18958.350171113045,
+      "mean_us": 52.7472059,
+      "round_means_us": [
+        52.7472059
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "small-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 439780.58115420595,
+      "mean_us": 2.2738612,
+      "round_means_us": [
+        2.2738612
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "typical-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 245688.12428123938,
+      "mean_us": 4.0702008,
+      "round_means_us": [
+        4.0702008
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "medium-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 136465.75927399122,
+      "mean_us": 7.3278455000000005,
+      "round_means_us": [
+        7.3278455000000005
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "large-k256",
+      "key": "k256",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18870.229615859982,
+      "mean_us": 52.9935258,
+      "round_means_us": [
+        52.9935258
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "small-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "small",
+      "token_len": 231,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 229707.2060069353,
+      "mean_us": 4.353368000000001,
+      "round_means_us": [
+        4.353368000000001
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "typical-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 161041.3085611218,
+      "mean_us": 6.209586900000001,
+      "round_means_us": [
+        6.209586900000001
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "medium-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "medium",
+      "token_len": 2244,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 106472.25797708525,
+      "mean_us": 9.392117899999999,
+      "round_means_us": [
+        9.392117899999999
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "hmac",
+      "name": "large-k4096",
+      "key": "k4096",
+      "alg": "HS256",
+      "payload_size": "large",
+      "token_len": 20884,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18171.196159545314,
+      "mean_us": 55.0321504,
+      "round_means_us": [
+        55.0321504
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 49577.98770662234,
+      "mean_us": 20.1702418,
+      "round_means_us": [
+        20.1702418
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 46081.71444622348,
+      "mean_us": 21.700581500000002,
+      "round_means_us": [
+        21.700581500000002
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 39524.80668762891,
+      "mean_us": 25.300566500000002,
+      "round_means_us": [
+        25.300566500000002
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14035.272787912758,
+      "mean_us": 71.24906050000001,
+      "round_means_us": [
+        71.24906050000001
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25378.047317567176,
+      "mean_us": 39.404134899999995,
+      "round_means_us": [
+        39.404134899999995
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24407.207983523534,
+      "mean_us": 40.9715032,
+      "round_means_us": [
+        40.9715032
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22458.83059411436,
+      "mean_us": 44.5259158,
+      "round_means_us": [
+        44.5259158
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10741.726898107398,
+      "mean_us": 93.0949008,
+      "round_means_us": [
+        93.0949008
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15217.851866018094,
+      "mean_us": 65.7122969,
+      "round_means_us": [
+        65.7122969
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14826.584091370614,
+      "mean_us": 67.4464188,
+      "round_means_us": [
+        67.4464188
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14089.050582472768,
+      "mean_us": 70.9771034,
+      "round_means_us": [
+        70.9771034
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8497.895309697751,
+      "mean_us": 117.6761967,
+      "round_means_us": [
+        117.6761967
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19017.79881306076,
+      "mean_us": 52.5823209,
+      "round_means_us": [
+        52.5823209
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18310.663127147123,
+      "mean_us": 54.6129866,
+      "round_means_us": [
+        54.6129866
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17284.34784147153,
+      "mean_us": 57.8558132,
+      "round_means_us": [
+        57.8558132
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9634.769790731973,
+      "mean_us": 103.7907518,
+      "round_means_us": [
+        103.7907518
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5107.957707744727,
+      "mean_us": 195.77295999999998,
+      "round_means_us": [
+        195.77295999999998
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4995.255379061955,
+      "mean_us": 200.1899651,
+      "round_means_us": [
+        200.1899651
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4946.210984357002,
+      "mean_us": 202.1749584,
+      "round_means_us": [
+        202.1749584
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3706.684354302144,
+      "mean_us": 269.78288530000003,
+      "round_means_us": [
+        269.78288530000003
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26005.241450033125,
+      "mean_us": 38.4537864,
+      "round_means_us": [
+        38.4537864
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24661.369494924176,
+      "mean_us": 40.549248500000004,
+      "round_means_us": [
+        40.549248500000004
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21802.25293362667,
+      "mean_us": 45.8668195,
+      "round_means_us": [
+        45.8668195
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "pem",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8957.758485045253,
+      "mean_us": 111.6350705,
+      "round_means_us": [
+        111.6350705
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 48326.85937059833,
+      "mean_us": 20.6924268,
+      "round_means_us": [
+        20.6924268
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 44897.305808758654,
+      "mean_us": 22.2730514,
+      "round_means_us": [
+        22.2730514
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 37909.62290551276,
+      "mean_us": 26.3785267,
+      "round_means_us": [
+        26.3785267
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12443.86397192685,
+      "mean_us": 80.3608913,
+      "round_means_us": [
+        80.3608913
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25001.62854357926,
+      "mean_us": 39.9973945,
+      "round_means_us": [
+        39.9973945
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24034.067983730867,
+      "mean_us": 41.6076047,
+      "round_means_us": [
+        41.6076047
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21826.84669534218,
+      "mean_us": 45.8151383,
+      "round_means_us": [
+        45.8151383
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10339.49389054195,
+      "mean_us": 96.7165328,
+      "round_means_us": [
+        96.7165328
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14919.60815320182,
+      "mean_us": 67.02588899999999,
+      "round_means_us": [
+        67.02588899999999
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14684.838870862475,
+      "mean_us": 68.0974445,
+      "round_means_us": [
+        68.0974445
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13842.153932171119,
+      "mean_us": 72.243092,
+      "round_means_us": [
+        72.243092
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8108.335752921535,
+      "mean_us": 123.3298707,
+      "round_means_us": [
+        123.3298707
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18816.515748112168,
+      "mean_us": 53.1448018,
+      "round_means_us": [
+        53.1448018
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18092.099820649575,
+      "mean_us": 55.2727439,
+      "round_means_us": [
+        55.2727439
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16267.466932339128,
+      "mean_us": 61.4723856,
+      "round_means_us": [
+        61.4723856
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9056.754890837607,
+      "mean_us": 110.41482429999999,
+      "round_means_us": [
+        110.41482429999999
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5050.418769967014,
+      "mean_us": 198.0033826,
+      "round_means_us": [
+        198.0033826
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4991.173060530721,
+      "mean_us": 200.353702,
+      "round_means_us": [
+        200.353702
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4917.288483529219,
+      "mean_us": 203.3641108,
+      "round_means_us": [
+        203.3641108
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3623.9446232501946,
+      "mean_us": 275.9424064,
+      "round_means_us": [
+        275.9424064
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25667.343816542187,
+      "mean_us": 38.9600111,
+      "round_means_us": [
+        38.9600111
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23994.14302968645,
+      "mean_us": 41.676837500000005,
+      "round_means_us": [
+        41.676837500000005
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21334.13067228853,
+      "mean_us": 46.8732481,
+      "round_means_us": [
+        46.8732481
+      ]
+    },
+    {
+      "impl": "jsonwebtoken 11.1.0 (aws-lc-rs) → struct",
+      "source": "jwks",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8490.941568050439,
+      "mean_us": 117.77256879999999,
+      "round_means_us": [
+        117.77256879999999
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "*",
+      "alg": "ES512",
+      "reason": "jsonwebtoken has no ES512 (P-521)"
+    },
+    {
+      "source": "jwks-url-sync",
+      "alg": "*",
+      "reason": "jsonwebtoken doesn't fetch JWKS URLs (it takes your own HTTP client and cache)"
+    },
+    {
+      "source": "jwks-url-async",
+      "alg": "*",
+      "reason": "jsonwebtoken doesn't fetch JWKS URLs (it takes your own HTTP client and cache)"
+    }
+  ],
+  "notes": [
+    "JWKS: each key turned into a `DecodingKey` once, picked per token by `kid` (`decode_header`)",
+    "struct: claims decoded into typed structs with the fields ryjwt's msgspec lane decodes; other claims ignored"
+  ]
+}

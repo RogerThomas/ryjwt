@@ -1,15 +1,25 @@
 #!yeet
-"""Benchmark Python JWT decoding (PyJWT, python-jose, joserfc, jwcrypto, or ryjwt into a dict /
-msgspec Struct / pydantic model) over the fixture matrix.
+"""Benchmark Python JWT decoding (PyJWT, joserfc, or ryjwt into a dict, read with msgspec or
+jiter, or a msgspec Struct / pydantic model) over the fixture matrix.
 
-Each call verifies the signature and validates exp/aud, as a real caller would.
+Each call verifies the signature and validates exp/aud, as a real caller would. Each case gets
+1,000 untimed warm-up decodes, then `rounds` rounds of `iterations` decodes, each round timed as
+one loop.
+
+Usage: `yeet ./bench_python.py [impl] [iterations] [rounds]`
 """
 
+import base64
+import hashlib
+import hmac
 import json
+import math
 import platform
-import statistics
+import secrets
+import sys
 import time
 from dataclasses import asdict, dataclass
+from importlib.abc import MetaPathFinder
 from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
@@ -18,32 +28,28 @@ import jwt
 import msgspec
 import pydantic
 import ryjwt
-from jose import jwk as jose_jwk
-from jose import jwt as jose_jwt
-from jose.exceptions import ExpiredSignatureError as JoseExpiredSignatureError
-from jose.exceptions import JWTClaimsError
 from joserfc import jwt as joserfc_jwt
 from joserfc.errors import ExpiredTokenError, InvalidClaimError
 from joserfc.jwk import ECKey, KeySet, OctKey, OKPKey, RSAKey
-from jwcrypto import jwk as jwcrypto_jwk
-from jwcrypto import jwt as jwcrypto_jwt
 from rich.console import Console
 from rich.table import Table
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
+    from importlib.machinery import ModuleSpec
+    from types import ModuleType
 
-type Impl = Literal[
-    "pyjwt", "python-jose", "joserfc", "jwcrypto", "ryjwt", "ryjwt-msgspec", "ryjwt-pydantic"
-]
+type Impl = Literal["pyjwt", "joserfc", "ryjwt", "ryjwt-jiter", "ryjwt-msgspec", "ryjwt-pydantic"]
+
+WARMUP = 1_000
+"""Untimed decodes before each case's timed rounds."""
 
 
 REJECTIONS: dict[Impl, tuple[type[Exception], type[Exception]]] = {
     "pyjwt": (jwt.ExpiredSignatureError, jwt.InvalidAudienceError),
-    "python-jose": (JoseExpiredSignatureError, JWTClaimsError),
     "joserfc": (ExpiredTokenError, InvalidClaimError),
-    "jwcrypto": (jwcrypto_jwt.JWTExpired, jwcrypto_jwt.JWTInvalidClaimValue),
     "ryjwt": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
+    "ryjwt-jiter": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
     "ryjwt-msgspec": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
     "ryjwt-pydantic": (ryjwt.ExpiredSignatureError, ryjwt.InvalidAudienceError),
 }
@@ -109,18 +115,72 @@ def joserfc_claims(audience: str) -> joserfc_jwt.JWTClaimsRegistry:
     )
 
 
-def jwcrypto_decode(
-    token: str,
-    *,
-    key: jwcrypto_jwk.JWK | jwcrypto_jwk.JWKSet,
-    algs: list[str],
-    check_claims: dict[str, str | None],
-) -> dict[str, Any]:
-    """jwcrypto: `JWT(jwt=..., key=...)` verifies the signature (a `JWKSet` picks the key by the
-    token's `kid`) and checks the claims (`exp` always, when present; `"exp": None` requires it);
-    its claims are the payload's JSON."""
-    verified = jwcrypto_jwt.JWT(jwt=token, key=key, algs=algs, check_claims=check_claims)
-    return json.loads(verified.claims)
+class _NoMsgspecJson(MetaPathFinder):
+    """Makes `import msgspec.json` raise ImportError, as if msgspec weren't installed."""
+
+    def find_spec(
+        self,
+        fullname: str,
+        _path: Sequence[str] | None,
+        _target: ModuleType | None = None,
+        /,
+    ) -> ModuleSpec | None:
+        if fullname == "msgspec.json":
+            raise ModuleNotFoundError("msgspec.json is blocked for ryjwt-jiter", name=fullname)
+        return None
+
+
+def use_jiter_for_dicts() -> None:
+    """Makes ryjwt read dicts with jiter, as on a default install, though these scripts import
+    msgspec. Each ryjwt key picks when created: msgspec if `import msgspec.json` succeeds, else
+    jiter. msgspec imports `msgspec.json` itself, so it's dropped from `sys.modules` (else the
+    import would just return it) and blocked from being imported again. Call before creating any
+    ryjwt key."""
+    sys.modules.pop("msgspec.json", None)
+    sys.meta_path.insert(0, _NoMsgspecJson())
+
+
+def _b64(data: bytes) -> str:
+    """Unpadded base64url, as in JWTs."""
+    return base64.urlsafe_b64encode(data).rstrip(b"=").decode()
+
+
+def _huge_number_token(secret: str) -> str:
+    """An HS256 token, signed with `secret`, whose payload holds `1e400`: a number too big for a
+    float, which jiter reads as `inf` and msgspec rejects. Built by hand, as encoders won't write
+    it."""
+    header = _b64(b'{"alg":"HS256","typ":"JWT"}')
+    payload = _b64(b'{"huge":1e400,"exp":4102444800}')
+    signing_input = f"{header}.{payload}"
+    signature = hmac.new(secret.encode(), signing_input.encode(), hashlib.sha256).digest()
+    return f"{signing_input}.{_b64(signature)}"
+
+
+def _decode_huge_number() -> object:
+    """`_huge_number_token`'s `huge`, decoded to a dict by a fresh ryjwt key."""
+    secret = secrets.token_urlsafe(32)
+    key = ryjwt.SecretKey(secret, algorithms=["HS256"])
+    return key.decode(_huge_number_token(secret))["huge"]
+
+
+def prove_dict_parser(impl: str) -> None:
+    """Fails unless ryjwt decodes dicts with jiter for `ryjwt-jiter`, and with msgspec for
+    `ryjwt`, telling them apart by a number too big for a float (jiter: `inf`, msgspec: an
+    error). Other implementations aren't checked."""
+    if impl == "ryjwt-jiter":
+        not_jiter = "ryjwt-jiter: ryjwt isn't decoding with jiter"
+        try:
+            huge = _decode_huge_number()
+        except ryjwt.DecodeError as e:
+            raise AssertionError(not_jiter) from e
+        if huge != math.inf:
+            raise AssertionError(not_jiter)
+    elif impl == "ryjwt":
+        try:
+            _decode_huge_number()
+        except ryjwt.DecodeError:
+            return
+        raise AssertionError("ryjwt: ryjwt isn't decoding with msgspec")
 
 
 @dataclass(frozen=True, slots=True)
@@ -129,10 +189,11 @@ class Result:
     name: str
     token_len: int
     key_len: int
+    iterations: int
+    rounds: int
     ops_per_sec: float
     mean_us: float
-    p50_us: float
-    p99_us: float
+    round_means_us: list[float]
 
 
 @dataclass(frozen=True, slots=True)
@@ -162,18 +223,12 @@ class PythonBenchmark:
     _impl: Impl
     _label: str
     _iterations: int
-    _warmup: int
-    _repeats: int
-    _samples: int
+    _rounds: int
 
     def _prepare(self, case: Case) -> Prepared:
         if self._impl == "pyjwt":
             kwargs = {"key": case.key, "algorithms": [case.alg], "audience": case.audience}
             return Prepared(jwt.decode, kwargs, case.payload)
-        if self._impl == "python-jose":
-            key = jose_jwk.construct(case.key, case.alg)
-            kwargs = {"key": key, "algorithms": [case.alg], "audience": case.audience}
-            return Prepared(jose_jwt.decode, kwargs, case.payload)
         if self._impl == "joserfc":
             kwargs = {
                 "key": OctKey.import_key(case.key),
@@ -181,13 +236,6 @@ class PythonBenchmark:
                 "claims_registry": joserfc_claims(case.audience),
             }
             return Prepared(joserfc_decode, kwargs, case.payload)
-        if self._impl == "jwcrypto":
-            kwargs = {
-                "key": jwcrypto_jwk.JWK.from_password(case.key),
-                "algs": [case.alg],
-                "check_claims": {"exp": None, "aud": case.audience},
-            }
-            return Prepared(jwcrypto_decode, kwargs, case.payload)
         decode = ryjwt.SecretKey(case.key, algorithms=[case.alg]).decode
         kwargs: dict[str, Any] = {"audience": case.audience}
         typical = case.name.startswith("typical")
@@ -203,21 +251,13 @@ class PythonBenchmark:
             return Prepared(decode, kwargs | {"type": model}, model.model_validate(case.payload))
         return Prepared(decode, kwargs, case.payload)
 
-    def _batch_ns(self, prepared: Prepared, token: str, iterations: int) -> int:
+    def _loop_ns(self, prepared: Prepared, token: str, iterations: int) -> int:
+        """`iterations` decodes of `token`, timed as one loop."""
         decode, kwargs = prepared.decode, prepared.kwargs
         start = time.perf_counter_ns()
         for _ in range(iterations):
             decode(token, **kwargs)
         return time.perf_counter_ns() - start
-
-    def _samples_ns(self, prepared: Prepared, token: str) -> list[int]:
-        decode, kwargs, clock = prepared.decode, prepared.kwargs, time.perf_counter_ns
-        samples: list[int] = []
-        for _ in range(self._samples):
-            t0 = clock()
-            decode(token, **kwargs)
-            samples.append(clock() - t0)
-        return samples
 
     def _rejects(self, prepared: Prepared, token: str, error: type[Exception]) -> bool:
         try:
@@ -241,21 +281,21 @@ class PythonBenchmark:
             raise AssertionError(msg)
         self._prove_checks(prepared, case)
 
-        self._batch_ns(prepared, case.token, self._warmup)
-        best_ns = min(
-            self._batch_ns(prepared, case.token, self._iterations) for _ in range(self._repeats)
-        )
-        per_call = sorted(self._samples_ns(prepared, case.token))
-        mean_ns = best_ns / self._iterations
+        self._loop_ns(prepared, case.token, WARMUP)
+        rounds_ns = [
+            self._loop_ns(prepared, case.token, self._iterations) for _ in range(self._rounds)
+        ]
+        mean_us = sum(rounds_ns) / (self._iterations * self._rounds) / 1e3
         return Result(
             impl=self._label,
             name=case.name,
             token_len=case.token_len,
             key_len=len(case.key),
-            ops_per_sec=1e9 / mean_ns,
-            mean_us=mean_ns / 1e3,
-            p50_us=statistics.median(per_call) / 1e3,
-            p99_us=statistics.quantiles(per_call, n=100, method="inclusive")[98] / 1e3,
+            iterations=self._iterations,
+            rounds=self._rounds,
+            ops_per_sec=1e6 / mean_us,
+            mean_us=mean_us,
+            round_means_us=[ns / self._iterations / 1e3 for ns in rounds_ns],
         )
 
 
@@ -279,43 +319,51 @@ def _load_cases(path: Path) -> list[Case]:
 def _label(impl: Impl) -> str:
     if not impl.startswith("ryjwt"):
         return f"{impl} {version(impl)}"
-    target = {"ryjwt": "dict", "ryjwt-msgspec": "Struct", "ryjwt-pydantic": "BaseModel"}[impl]
+    target = {
+        "ryjwt": "dict (msgspec)",
+        "ryjwt-jiter": "dict (jiter)",
+        "ryjwt-msgspec": "Struct",
+        "ryjwt-pydantic": "BaseModel",
+    }[impl]
     return f"ryjwt {version('ryjwt')} → {target}"
 
 
-def _print_table(console: Console, label: str, results: list[Result]) -> None:
+def round_means_range(round_means_us: list[float]) -> str:
+    """The lowest and highest round mean, in µs."""
+    return f"{min(round_means_us):.2f}-{max(round_means_us):.2f}"
+
+
+def _print_table(console: Console, label: str, rounds: int, results: list[Result]) -> None:
     table = Table(title=f"decode — {label}")
     table.add_column("case")
-    for col in ("token_len", "key_len", "ops/s", "mean µs", "p50 µs", "p99 µs"):
+    columns = ["token_len", "iterations", "rounds", "mean µs"]
+    if rounds > 1:
+        columns.append("round means µs")
+    for col in columns:
         table.add_column(col, justify="right")
     for r in results:
-        table.add_row(
-            r.name,
-            f"{r.token_len:,}",
-            f"{r.key_len:,}",
-            f"{r.ops_per_sec:,.0f}",
-            f"{r.mean_us:.2f}",
-            f"{r.p50_us:.2f}",
-            f"{r.p99_us:.2f}",
-        )
+        cells = [r.name, f"{r.token_len:,}", f"{r.iterations:,}", f"{r.rounds}", f"{r.mean_us:.2f}"]
+        if rounds > 1:
+            cells.append(round_means_range(r.round_means_us))
+        table.add_row(*cells)
     console.print(table)
 
 
-def main(
-    impl: Impl = "pyjwt",
-    iterations: int = 20_000,
-    warmup: int = 1_000,
-    repeats: int = 5,
-    samples: int = 5_000,
-) -> None:
+def main(impl: Impl = "pyjwt", iterations: int = 10_000, rounds: int = 1) -> None:
+    """`iterations` decodes per round, `rounds` rounds per case."""
+    if impl == "ryjwt-jiter":
+        # This script imports msgspec, so ryjwt would read dicts with it; block it, before any
+        # ryjwt key is created, to time a default install's jiter.
+        use_jiter_for_dicts()
+    prove_dict_parser(impl)
     bench_dir = Path(__file__).parent
     label = _label(impl)
-    benchmark = PythonBenchmark(impl, label, iterations, warmup, repeats, samples)
+    benchmark = PythonBenchmark(impl, label, iterations, rounds)
 
     console = Console()
     console.print(
         f"[bold]{label}[/] on {platform.python_implementation()} {platform.python_version()}"
-        f" — {iterations:,} iters x {repeats} repeats (best), {samples:,} timed samples",
+        f" — {WARMUP:,} warm-up decodes, then {rounds} x {iterations:,} timed",
     )
     results: list[Result] = []
     for case in _load_cases(bench_dir / "fixtures.json"):
@@ -325,5 +373,5 @@ def main(
     results_path = bench_dir / "results" / f"{impl}.json"
     results_path.parent.mkdir(parents=True, exist_ok=True)
     results_path.write_text(json.dumps([asdict(r) for r in results], indent=2) + "\n")
-    _print_table(console, label, results)
+    _print_table(console, label, rounds, results)
     console.print(f"wrote {results_path}")

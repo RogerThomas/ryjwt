@@ -10,11 +10,15 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 5674,
-      "ops_per_sec": 48352,
-      "mean_us": 20.682,
-      "p50_us": 20.319,
-      "p99_us": 38.786
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 25354,
+      "mean_us": 39.442,
+      "round_means_us": [
+        40.097,
+        39.463,
+        38.764
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -24,11 +28,15 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 2519,
-      "ops_per_sec": 16626,
-      "mean_us": 60.146,
-      "p50_us": 58.829,
-      "p99_us": 89.196
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 12448,
+      "mean_us": 80.336,
+      "round_means_us": [
+        81.364,
+        79.883,
+        79.763
+      ]
     }
   ],
   "first_fetch": [],

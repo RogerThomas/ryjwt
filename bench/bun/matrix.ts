@@ -1,6 +1,9 @@
 // JWT verify benchmark for Bun over the full matrix (bench/matrix/fixtures.json): jose and
 // fast-jwt, per algorithm, key size, payload size and key source. Mirrors bench/bench_matrix.py.
-// Run from bench/bun:  bun run matrix.ts <jose|fast-jwt> [jwks_url] [only_sources] [only_cases] [budget]
+// Run from bench/bun:  bun run matrix.ts <jose|fast-jwt> [jwks_url] [only_sources] [only_cases] [iterations] [rounds]
+// (an empty filter means all; iterations: decodes per timed round, default 10000; rounds default 1).
+// Each case: 1,000 untimed warm-up decodes, then `rounds` timed loops of `iterations` decodes; the
+// mean is over every timed decode.
 //
 // Key sources: "hmac" (the HS256 secret), "pem" (the public key's PEM, imported once), "jwks" (a
 // JWKS document, the token's kid picks the key) and "jwks-url-async" (the document fetched over
@@ -50,10 +53,10 @@ interface Row {
   payload_size: string;
   token_len: number;
   iterations: number;
+  rounds: number;
   ops_per_sec: number;
   mean_us: number;
-  p50_us: number;
-  p99_us: number;
+  round_means_us: number[];
 }
 
 interface NotApplicable {
@@ -82,19 +85,23 @@ interface Impl {
   prepare(source: Source, c: Fixture, key: Key): Promise<Prepared>;
 }
 
-const [, , only = "jose", jwksUrlArg = "https://jwks:8443", onlySources = "", onlyCases = "", budgetArg = "1"] =
-  Bun.argv;
+const [
+  ,
+  ,
+  only = "jose",
+  jwksUrlArg = "https://jwks:8443",
+  onlySources = "",
+  onlyCases = "",
+  iterationsArg = "10000",
+  roundsArg = "1",
+] = Bun.argv;
 const JWKS_URL = jwksUrlArg.replace(/\/$/, "");
-const BUDGET = Number(budgetArg);
-// Per-case time budgets (s): the warm-up estimates one call's cost, from which the batch and sample
-// counts follow (capped as in bench.ts). The mean is the best batch's.
-const WARMUP_S = 0.1 * BUDGET;
-const BATCH_S = 0.2 * BUDGET;
-const SAMPLES_S = 0.3 * BUDGET;
-const REPEATS = 5;
-const MAX_ITERATIONS = 20_000;
-const MAX_SAMPLES = 5_000;
-const MIN_COUNT = 10;
+const ITERATIONS = Number(iterationsArg);
+const ROUNDS = Number(roundsArg);
+for (const [what, n] of [["iterations", ITERATIONS], ["rounds", ROUNDS]] as const) {
+  if (!Number.isInteger(n) || n < 1) throw new Error(`${what} must be a positive integer, got ${n}`);
+}
+const WARMUP = 1_000;
 const FIRST_FETCH_CASE = "typical-rs3072";
 const FIRST_FETCH_TRIALS = 5;
 
@@ -213,6 +220,7 @@ async function call(p: Prepared, token: string): Promise<unknown> {
   return p.isAsync ? await p.verify(token) : p.verify(token);
 }
 
+// Nanoseconds for `n` decodes of `token`, in one loop.
 async function batch(p: Prepared, token: string, n: number): Promise<number> {
   const { verify } = p;
   const t0 = Bun.nanoseconds();
@@ -223,13 +231,6 @@ async function batch(p: Prepared, token: string, n: number): Promise<number> {
   }
   return Bun.nanoseconds() - t0;
 }
-
-function percentile(sorted: number[], p: number): number {
-  const idx = Math.min(sorted.length - 1, Math.max(0, Math.ceil((p / 100) * sorted.length) - 1));
-  return sorted[idx]!;
-}
-
-const clamp = (n: number, max: number) => Math.max(MIN_COUNT, Math.min(max, Math.floor(n)));
 
 // Throws unless `p` rejects `token` with an error carrying every field of `expected`.
 async function checkRejects(p: Prepared, token: string, expected: ExpectedError, where: string, what: string): Promise<void> {
@@ -258,29 +259,11 @@ async function benchCase(impl: Impl, source: Source, c: Fixture, key: Key): Prom
   await checkRejects(p, c.expired_token, impl.rejects.expired, where, "an expired token");
   await checkRejects(p, c.wrong_audience_token, impl.rejects.wrongAudience, where, "another audience's token");
 
-  const start = Bun.nanoseconds();
-  const deadline = start + WARMUP_S * 1e9;
-  let calls = 0;
-  while (calls < MIN_COUNT || Bun.nanoseconds() < deadline) {
-    await call(p, token);
-    calls++;
-  }
-  const perCall = (Bun.nanoseconds() - start) / calls;
-  const iterations = clamp((BATCH_S * 1e9) / perCall, MAX_ITERATIONS);
-  const nSamples = clamp((SAMPLES_S * 1e9) / perCall, MAX_SAMPLES);
+  await batch(p, token, WARMUP);
 
-  let best = Infinity;
-  for (let b = 0; b < REPEATS; b++) best = Math.min(best, await batch(p, token, iterations));
-  const meanNs = best / iterations;
-
-  const samples = new Array<number>(nSamples);
-  for (let i = 0; i < nSamples; i++) {
-    const t0 = Bun.nanoseconds();
-    if (p.isAsync) await p.verify(token);
-    else p.verify(token);
-    samples[i] = Bun.nanoseconds() - t0;
-  }
-  samples.sort((a, b) => a - b);
+  const roundNs: number[] = [];
+  for (let r = 0; r < ROUNDS; r++) roundNs.push(await batch(p, token, ITERATIONS));
+  const meanNs = roundNs.reduce((a, b) => a + b, 0) / (ITERATIONS * ROUNDS);
 
   return {
     impl: impl.label,
@@ -290,11 +273,11 @@ async function benchCase(impl: Impl, source: Source, c: Fixture, key: Key): Prom
     alg: c.alg,
     payload_size: c.payload_size,
     token_len: c.token_len,
-    iterations,
+    iterations: ITERATIONS,
+    rounds: ROUNDS,
     ops_per_sec: Math.round(1e9 / meanNs),
     mean_us: +(meanNs / 1e3).toFixed(3),
-    p50_us: +(percentile(samples, 50) / 1e3).toFixed(3),
-    p99_us: +(percentile(samples, 99) / 1e3).toFixed(3),
+    round_means_us: roundNs.map((ns) => +(ns / ITERATIONS / 1e3).toFixed(3)),
   };
 }
 
@@ -313,13 +296,23 @@ async function firstFetch(impl: Impl, source: Source, c: Fixture, key: Key): Pro
   return trials;
 }
 
+// The min–max of a row's round means, e.g. "1.234–1.301".
+function roundSpread(r: Row): string {
+  return `${Math.min(...r.round_means_us).toFixed(3)}–${Math.max(...r.round_means_us).toFixed(3)}`;
+}
+
 function printTable(rows: Row[]): void {
-  const cols: (keyof Row)[] = ["source", "name", "token_len", "iterations", "ops_per_sec", "mean_us", "p50_us", "p99_us"];
+  const cols: (keyof Row)[] = ["source", "name", "token_len", "iterations", "rounds", "mean_us"];
+  const headers: string[] = [...cols];
   const cells = rows.map((r) => cols.map((k) => (typeof r[k] === "number" ? r[k].toLocaleString("en-US") : String(r[k]))));
-  const widths = cols.map((k, i) => Math.max(k.length, ...cells.map((row) => row[i]!.length)));
+  if (ROUNDS > 1) {
+    headers.push("round_means_us");
+    rows.forEach((r, i) => cells[i]!.push(roundSpread(r)));
+  }
+  const widths = headers.map((k, i) => Math.max(k.length, ...cells.map((row) => row[i]!.length)));
   const fmt = (row: string[]) =>
     row.map((v, i) => (i < 2 ? v.padEnd(widths[i]!) : v.padStart(widths[i]!))).join("  ");
-  console.log(fmt(cols));
+  console.log(fmt(headers));
   console.log(widths.map((w) => "-".repeat(w)).join("  "));
   for (const row of cells) console.log(fmt(row));
   console.log();

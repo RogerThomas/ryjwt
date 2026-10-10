@@ -1,5 +1,8 @@
 // JWT verify benchmark for Bun: jose vs fast-jwt over bench/fixtures.json.
-// Run from bench/bun:  bun run bench.ts [jose|fast-jwt]  (default: both)
+// Run from bench/bun:  bun run bench.ts [jose|fast-jwt] [iterations] [rounds]
+// (impl default: both, "" also means both; iterations: decodes per timed round, default 10000;
+// rounds default 1). Each case: 1,000 untimed warm-up decodes, then `rounds` timed loops of
+// `iterations` decodes; the mean is over every timed decode.
 import { jwtVerify } from "jose";
 import { createVerifier } from "fast-jwt";
 import { join } from "node:path";
@@ -23,10 +26,11 @@ interface Result {
   name: string;
   token_len: number;
   key_len: number;
+  iterations: number;
+  rounds: number;
   ops_per_sec: number;
   mean_us: number;
-  p50_us: number;
-  p99_us: number;
+  round_means_us: number[];
 }
 
 // Verifies a token, returning its payload (a promise of it if `async`).
@@ -46,9 +50,6 @@ interface Impl {
 }
 
 const WARMUP = 1_000;
-const BATCHES = 5;
-const BATCH_SIZE = 20_000;
-const SAMPLES = 5_000;
 
 const BENCH_DIR = join(import.meta.dir, "..");
 const FIXTURES = join(BENCH_DIR, "fixtures.json");
@@ -100,6 +101,7 @@ const impls: Impl[] = [
   },
 ];
 
+// Nanoseconds for `n` decodes of `token`, in one loop.
 async function runBatch(fn: VerifyFn, token: string, n: number, isAsync: boolean): Promise<number> {
   const t0 = Bun.nanoseconds();
   if (isAsync) {
@@ -108,11 +110,6 @@ async function runBatch(fn: VerifyFn, token: string, n: number, isAsync: boolean
     for (let i = 0; i < n; i++) fn(token);
   }
   return Bun.nanoseconds() - t0;
-}
-
-function percentile(sorted: number[], p: number): number {
-  const idx = Math.min(sorted.length - 1, Math.max(0, Math.ceil((p / 100) * sorted.length) - 1));
-  return sorted[idx]!;
 }
 
 // Throws unless `fn` rejects `token` with an error carrying every field of `expected`.
@@ -130,7 +127,7 @@ async function checkRejects(fn: VerifyFn, token: string, expected: ExpectedError
   }
 }
 
-async function benchCase(impl: Impl, c: Fixture): Promise<Result> {
+async function benchCase(impl: Impl, c: Fixture, iterations: number, rounds: number): Promise<Result> {
   const fn = await impl.prepare(c);
   const token = c.token;
   const where = `${impl.label} ${c.name}`;
@@ -145,54 +142,53 @@ async function benchCase(impl: Impl, c: Fixture): Promise<Result> {
 
   await runBatch(fn, token, WARMUP, impl.async);
 
-  let best = Infinity;
-  for (let b = 0; b < BATCHES; b++) {
-    best = Math.min(best, await runBatch(fn, token, BATCH_SIZE, impl.async));
-  }
-  const meanNs = best / BATCH_SIZE;
-
-  const samples = new Array<number>(SAMPLES);
-  if (impl.async) {
-    for (let i = 0; i < SAMPLES; i++) {
-      const t0 = Bun.nanoseconds();
-      await fn(token);
-      samples[i] = Bun.nanoseconds() - t0;
-    }
-  } else {
-    for (let i = 0; i < SAMPLES; i++) {
-      const t0 = Bun.nanoseconds();
-      fn(token);
-      samples[i] = Bun.nanoseconds() - t0;
-    }
-  }
-  samples.sort((a, b) => a - b);
+  const roundNs: number[] = [];
+  for (let r = 0; r < rounds; r++) roundNs.push(await runBatch(fn, token, iterations, impl.async));
+  const meanNs = roundNs.reduce((a, b) => a + b, 0) / (iterations * rounds);
 
   return {
     impl: impl.label,
     name: c.name,
     token_len: c.token_len,
     key_len: Buffer.byteLength(c.key, "utf8"),
+    iterations,
+    rounds,
     ops_per_sec: Math.round(1e9 / meanNs),
     mean_us: +(meanNs / 1e3).toFixed(3),
-    p50_us: +(percentile(samples, 50) / 1e3).toFixed(3),
-    p99_us: +(percentile(samples, 99) / 1e3).toFixed(3),
+    round_means_us: roundNs.map((ns) => +(ns / iterations / 1e3).toFixed(3)),
   };
 }
 
-function printTable(rows: Result[]): void {
-  const cols: (keyof Result)[] = ["impl", "name", "token_len", "key_len", "ops_per_sec", "mean_us", "p50_us", "p99_us"];
+// The min–max of a row's round means, e.g. "1.234–1.301".
+function roundSpread(r: Result): string {
+  return `${Math.min(...r.round_means_us).toFixed(3)}–${Math.max(...r.round_means_us).toFixed(3)}`;
+}
+
+function printTable(label: string, rows: Result[], rounds: number): void {
+  const cols: (keyof Result)[] = ["name", "token_len", "iterations", "rounds", "mean_us"];
+  const headers: string[] = [...cols];
   const cells = rows.map((r) => cols.map((k) => (typeof r[k] === "number" ? r[k].toLocaleString("en-US") : String(r[k]))));
-  const widths = cols.map((k, i) => Math.max(k.length, ...cells.map((row) => row[i]!.length)));
+  if (rounds > 1) {
+    headers.push("round_means_us");
+    rows.forEach((r, i) => cells[i]!.push(roundSpread(r)));
+  }
+  const widths = headers.map((k, i) => Math.max(k.length, ...cells.map((row) => row[i]!.length)));
   const fmt = (row: string[]) =>
-    row.map((v, i) => (i < 2 ? v.padEnd(widths[i]!) : v.padStart(widths[i]!))).join("  ");
-  console.log(fmt(cols));
+    row.map((v, i) => (i < 1 ? v.padEnd(widths[i]!) : v.padStart(widths[i]!))).join("  ");
+  console.log(label);
+  console.log(fmt(headers));
   console.log(widths.map((w) => "-".repeat(w)).join("  "));
   for (const row of cells) console.log(fmt(row));
   console.log();
 }
 
-const only = Bun.argv[2];
-const selected = only === undefined ? impls : impls.filter((i) => i.id === only);
+const [, , only = "", iterationsArg = "10000", roundsArg = "1"] = Bun.argv;
+const ITERATIONS = Number(iterationsArg);
+const ROUNDS = Number(roundsArg);
+for (const [what, n] of [["iterations", ITERATIONS], ["rounds", ROUNDS]] as const) {
+  if (!Number.isInteger(n) || n < 1) throw new Error(`${what} must be a positive integer, got ${n}`);
+}
+const selected = only === "" ? impls : impls.filter((i) => i.id === only);
 if (selected.length === 0) {
   throw new Error(`unknown impl ${only}; expected one of: ${impls.map((i) => i.id).join(", ")}`);
 }
@@ -202,7 +198,7 @@ console.log(`Bun ${Bun.version}, ${fixtures.length} cases\n`);
 
 for (const impl of selected) {
   const rows: Result[] = [];
-  for (const c of fixtures) rows.push(await benchCase(impl, c));
+  for (const c of fixtures) rows.push(await benchCase(impl, c, ITERATIONS, ROUNDS));
   await Bun.write(join(RESULTS_DIR, `${impl.id}.json`), JSON.stringify(rows, null, 2) + "\n");
-  printTable(rows);
+  printTable(impl.label, rows, ROUNDS);
 }

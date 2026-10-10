@@ -1,0 +1,55 @@
+{
+  "impl": "pyjwt 2.15.1",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "pyjwt 2.15.1",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 19544.954497092396,
+      "mean_us": 51.16409967333333,
+      "round_means_us": [
+        51.9650795,
+        50.8854721,
+        50.64174742
+      ]
+    },
+    {
+      "impl": "pyjwt 2.15.1",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 9917.052185486558,
+      "mean_us": 100.83641603333332,
+      "round_means_us": [
+        100.90544675,
+        101.02725916,
+        100.57654219
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [
+    {
+      "source": "jwks-url-async",
+      "alg": "*",
+      "reason": "PyJWT has no async JWKS client"
+    }
+  ],
+  "notes": [
+    "PEM: the key loaded once, with `load_pem_public_key`",
+    "JWKS document: `PyJWKSet`, picking the key by `get_unverified_header`'s `kid`",
+    "JWKS URL: `PyJWKClient(cache_keys=True)`, its `ssl_context` trusting the test CA"
+  ]
+}

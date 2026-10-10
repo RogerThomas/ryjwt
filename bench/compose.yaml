@@ -44,15 +44,9 @@ services:
   pyjwt:
     <<: *python
     command: ["pyjwt"]
-  python-jose:
-    <<: *python
-    command: ["python-jose"]
   joserfc:
     <<: *python
     command: ["joserfc"]
-  jwcrypto:
-    <<: *python
-    command: ["jwcrypto"]
   ryjwt:
     <<: *python
     command: ["ryjwt"]
@@ -62,6 +56,9 @@ services:
   ryjwt-pydantic:
     <<: *python
     command: ["ryjwt-pydantic"]
+  ryjwt-jiter:
+    <<: *python
+    command: ["ryjwt-jiter"]
   jose:
     <<: *bun
     command: ["jose"]
@@ -70,6 +67,10 @@ services:
     command: ["fast-jwt"]
   jsonwebtoken:
     <<: *rust
+    command: ["value"]
+  jsonwebtoken-struct:
+    <<: *rust
+    command: ["struct"]
 
   # Serves matrix/jwks/<key>.json over HTTPS as https://jwks:8443/<key>.json, with a certificate
   # from the test CA in matrix/tls (made by gen_tls.py). Not CPU-limited: it's only hit when a
@@ -101,25 +102,13 @@ services:
     depends_on: *needs-jwks
     entrypoint: ["yeet", "./bench_matrix.py"]
     command: ["pyjwt"]
-  # python-jose, joserfc and jwcrypto have no JWKS URL client, so they never fetch from the server
-  matrix-python-jose:
-    <<: *python
-    volumes: *matrix-volumes
-    depends_on: *needs-jwks
-    entrypoint: ["yeet", "./bench_matrix.py"]
-    command: ["python-jose"]
+  # joserfc has no JWKS URL client, so it never fetches from the server
   matrix-joserfc:
     <<: *python
     volumes: *matrix-volumes
     depends_on: *needs-jwks
     entrypoint: ["yeet", "./bench_matrix.py"]
     command: ["joserfc"]
-  matrix-jwcrypto:
-    <<: *python
-    volumes: *matrix-volumes
-    depends_on: *needs-jwks
-    entrypoint: ["yeet", "./bench_matrix.py"]
-    command: ["jwcrypto"]
   matrix-ryjwt:
     <<: *python
     volumes: *matrix-volumes
@@ -144,6 +133,14 @@ services:
       SSL_CERT_FILE: /app/bench/matrix/tls/ca.pem
     entrypoint: ["yeet", "./bench_matrix.py"]
     command: ["ryjwt-pydantic"]
+  matrix-ryjwt-jiter:
+    <<: *python
+    volumes: *matrix-volumes
+    depends_on: *needs-jwks
+    environment:
+      SSL_CERT_FILE: /app/bench/matrix/tls/ca.pem
+    entrypoint: ["yeet", "./bench_matrix.py"]
+    command: ["ryjwt-jiter"]
   matrix-jose:
     <<: *bun
     volumes: *matrix-volumes
@@ -164,3 +161,9 @@ services:
     <<: *rust
     volumes: *matrix-volumes
     entrypoint: ["jwt_matrix"]
+    command: ["value"]
+  matrix-jsonwebtoken-struct:
+    <<: *rust
+    volumes: *matrix-volumes
+    entrypoint: ["jwt_matrix"]
+    command: ["struct"]

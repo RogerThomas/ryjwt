@@ -10,11 +10,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 6590,
-      "ops_per_sec": 58173,
-      "mean_us": 17.19,
-      "p50_us": 17.904,
-      "p99_us": 34.456
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22223,
+      "mean_us": 44.998,
+      "round_means_us": [
+        44.998
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -24,11 +26,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 7550,
-      "ops_per_sec": 50177,
-      "mean_us": 19.929,
-      "p50_us": 18.06,
-      "p99_us": 40.357
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21982,
+      "mean_us": 45.492,
+      "round_means_us": [
+        45.492
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -38,11 +42,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 6150,
-      "ops_per_sec": 35816,
-      "mean_us": 27.92,
-      "p50_us": 27.187,
-      "p99_us": 50.67
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 20132,
+      "mean_us": 49.673,
+      "round_means_us": [
+        49.673
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -52,11 +58,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1374,
-      "ops_per_sec": 7264,
-      "mean_us": 137.657,
-      "p50_us": 128.405,
-      "p99_us": 506.186
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5820,
+      "mean_us": 171.832,
+      "round_means_us": [
+        171.832
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -66,11 +74,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 12024,
-      "ops_per_sec": 63393,
-      "mean_us": 15.775,
-      "p50_us": 16.499,
-      "p99_us": 28.376
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 28491,
+      "mean_us": 35.099,
+      "round_means_us": [
+        35.099
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -80,11 +90,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 9381,
-      "ops_per_sec": 51469,
-      "mean_us": 19.429,
-      "p50_us": 20.214,
-      "p99_us": 37.698
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26203,
+      "mean_us": 38.164,
+      "round_means_us": [
+        38.164
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -94,11 +106,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 6420,
-      "ops_per_sec": 36700,
-      "mean_us": 27.248,
-      "p50_us": 27.183,
-      "p99_us": 48.345
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 20801,
+      "mean_us": 48.075,
+      "round_means_us": [
+        48.075
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -108,11 +122,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1332,
-      "ops_per_sec": 7255,
-      "mean_us": 137.827,
-      "p50_us": 127.428,
-      "p99_us": 741.51
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6043,
+      "mean_us": 165.489,
+      "round_means_us": [
+        165.489
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -122,11 +138,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 9726,
-      "ops_per_sec": 59417,
-      "mean_us": 16.83,
-      "p50_us": 17.986,
-      "p99_us": 32.609
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 29992,
+      "mean_us": 33.342,
+      "round_means_us": [
+        33.342
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -136,11 +154,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 9178,
-      "ops_per_sec": 53503,
-      "mean_us": 18.69,
-      "p50_us": 20.208,
-      "p99_us": 39.114
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25785,
+      "mean_us": 38.782,
+      "round_means_us": [
+        38.782
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -150,11 +170,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 6495,
-      "ops_per_sec": 35679,
-      "mean_us": 28.027,
-      "p50_us": 26.595,
-      "p99_us": 47.54
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 20267,
+      "mean_us": 49.341,
+      "round_means_us": [
+        49.341
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -164,11 +186,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1303,
-      "ops_per_sec": 7310,
-      "mean_us": 136.798,
-      "p50_us": 128.504,
-      "p99_us": 795.917
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6068,
+      "mean_us": 164.796,
+      "round_means_us": [
+        164.796
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -178,11 +202,13 @@
       "alg": "HS256",
       "payload_size": "small",
       "token_len": 231,
-      "iterations": 9409,
-      "ops_per_sec": 49214,
-      "mean_us": 20.319,
-      "p50_us": 20.597,
-      "p99_us": 36.143
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 25773,
+      "mean_us": 38.8,
+      "round_means_us": [
+        38.8
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -192,11 +218,13 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 6593,
-      "ops_per_sec": 43282,
-      "mean_us": 23.104,
-      "p50_us": 23.164,
-      "p99_us": 39.918
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22486,
+      "mean_us": 44.473,
+      "round_means_us": [
+        44.473
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -206,11 +234,13 @@
       "alg": "HS256",
       "payload_size": "medium",
       "token_len": 2244,
-      "iterations": 6186,
-      "ops_per_sec": 32430,
-      "mean_us": 30.836,
-      "p50_us": 29.879,
-      "p99_us": 59.26
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19679,
+      "mean_us": 50.816,
+      "round_means_us": [
+        50.816
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -220,11 +250,13 @@
       "alg": "HS256",
       "payload_size": "large",
       "token_len": 20884,
-      "iterations": 1314,
-      "ops_per_sec": 7322,
-      "mean_us": 136.566,
-      "p50_us": 130.494,
-      "p99_us": 759.732
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6007,
+      "mean_us": 166.461,
+      "round_means_us": [
+        166.461
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -234,11 +266,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 4542,
-      "ops_per_sec": 27480,
-      "mean_us": 36.389,
-      "p50_us": 35.804,
-      "p99_us": 59.149
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18309,
+      "mean_us": 54.617,
+      "round_means_us": [
+        54.617
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -248,11 +282,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 3135,
-      "ops_per_sec": 25527,
-      "mean_us": 39.174,
-      "p50_us": 38.188,
-      "p99_us": 64.954
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16588,
+      "mean_us": 60.285,
+      "round_means_us": [
+        60.285
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -262,11 +298,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 2997,
-      "ops_per_sec": 21667,
-      "mean_us": 46.153,
-      "p50_us": 45.286,
-      "p99_us": 73.044
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12831,
+      "mean_us": 77.935,
+      "round_means_us": [
+        77.935
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -276,11 +314,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 1185,
-      "ops_per_sec": 6325,
-      "mean_us": 158.093,
-      "p50_us": 149.546,
-      "p99_us": 759.546
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5243,
+      "mean_us": 190.736,
+      "round_means_us": [
+        190.736
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -290,11 +330,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 3236,
-      "ops_per_sec": 17522,
-      "mean_us": 57.073,
-      "p50_us": 56.241,
-      "p99_us": 81.241
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13295,
+      "mean_us": 75.214,
+      "round_means_us": [
+        75.214
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -304,11 +346,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 3161,
-      "ops_per_sec": 16803,
-      "mean_us": 59.514,
-      "p50_us": 58.528,
-      "p99_us": 85.067
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12612,
+      "mean_us": 79.29,
+      "round_means_us": [
+        79.29
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -318,11 +362,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 2800,
-      "ops_per_sec": 14715,
-      "mean_us": 67.957,
-      "p50_us": 65.84,
-      "p99_us": 99.912
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11021,
+      "mean_us": 90.735,
+      "round_means_us": [
+        90.735
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -332,11 +378,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 1072,
-      "ops_per_sec": 5548,
-      "mean_us": 180.243,
-      "p50_us": 168.533,
-      "p99_us": 772.555
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4718,
+      "mean_us": 211.96,
+      "round_means_us": [
+        211.96
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -346,11 +394,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 2266,
-      "ops_per_sec": 11538,
-      "mean_us": 86.669,
-      "p50_us": 85.142,
-      "p99_us": 132.046
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9598,
+      "mean_us": 104.185,
+      "round_means_us": [
+        104.185
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -360,11 +410,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 2173,
-      "ops_per_sec": 11194,
-      "mean_us": 89.33,
-      "p50_us": 86.904,
-      "p99_us": 118.193
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9218,
+      "mean_us": 108.487,
+      "round_means_us": [
+        108.487
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -374,11 +426,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 1925,
-      "ops_per_sec": 10205,
-      "mean_us": 97.989,
-      "p50_us": 94.325,
-      "p99_us": 138.595
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8310,
+      "mean_us": 120.33,
+      "round_means_us": [
+        120.33
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -388,11 +442,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 913,
-      "ops_per_sec": 4799,
-      "mean_us": 208.397,
-      "p50_us": 198.792,
-      "p99_us": 778.27
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4103,
+      "mean_us": 243.743,
+      "round_means_us": [
+        243.743
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -402,11 +458,13 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 2168,
-      "ops_per_sec": 12070,
-      "mean_us": 82.848,
-      "p50_us": 81.41,
-      "p99_us": 108.425
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10971,
+      "mean_us": 91.151,
+      "round_means_us": [
+        91.151
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -416,11 +474,13 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 2202,
-      "ops_per_sec": 11627,
-      "mean_us": 86.007,
-      "p50_us": 83.888,
-      "p99_us": 131.93
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10406,
+      "mean_us": 96.095,
+      "round_means_us": [
+        96.095
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -430,11 +490,13 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 1626,
-      "ops_per_sec": 10788,
-      "mean_us": 92.691,
-      "p50_us": 90.367,
-      "p99_us": 156.16
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9293,
+      "mean_us": 107.608,
+      "round_means_us": [
+        107.608
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -444,11 +506,13 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 905,
-      "ops_per_sec": 5053,
-      "mean_us": 197.896,
-      "p50_us": 191.794,
-      "p99_us": 775.65
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4360,
+      "mean_us": 229.372,
+      "round_means_us": [
+        229.372
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -458,11 +522,13 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 425,
-      "ops_per_sec": 2135,
-      "mean_us": 468.294,
-      "p50_us": 462.012,
-      "p99_us": 698.471
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1899,
+      "mean_us": 526.632,
+      "round_means_us": [
+        526.632
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -472,11 +538,13 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 419,
-      "ops_per_sec": 2118,
-      "mean_us": 472.081,
-      "p50_us": 470.087,
-      "p99_us": 833.395
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1845,
+      "mean_us": 542.044,
+      "round_means_us": [
+        542.044
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -486,11 +554,13 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 396,
-      "ops_per_sec": 2069,
-      "mean_us": 483.386,
-      "p50_us": 473.707,
-      "p99_us": 780.509
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1836,
+      "mean_us": 544.588,
+      "round_means_us": [
+        544.588
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -500,11 +570,13 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 310,
-      "ops_per_sec": 1642,
-      "mean_us": 609.197,
-      "p50_us": 591.954,
-      "p99_us": 1062.241
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1482,
+      "mean_us": 674.604,
+      "round_means_us": [
+        674.604
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -514,11 +586,13 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 173,
-      "ops_per_sec": 879,
-      "mean_us": 1137.995,
-      "p50_us": 1133.718,
-      "p99_us": 1593.697
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 757,
+      "mean_us": 1320.996,
+      "round_means_us": [
+        1320.996
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -528,11 +602,13 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 175,
-      "ops_per_sec": 884,
-      "mean_us": 1131.615,
-      "p50_us": 1104.62,
-      "p99_us": 1423.12
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 763,
+      "mean_us": 1311.14,
+      "round_means_us": [
+        1311.14
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -542,11 +618,13 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 175,
-      "ops_per_sec": 888,
-      "mean_us": 1126,
-      "p50_us": 1115.152,
-      "p99_us": 1482.315
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 761,
+      "mean_us": 1314.276,
+      "round_means_us": [
+        1314.276
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -556,11 +634,13 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 153,
-      "ops_per_sec": 778,
-      "mean_us": 1284.722,
-      "p50_us": 1262.319,
-      "p99_us": 4770.092
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 681,
+      "mean_us": 1468.845,
+      "round_means_us": [
+        1468.845
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -570,11 +650,13 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 2757,
-      "ops_per_sec": 14948,
-      "mean_us": 66.9,
-      "p50_us": 65.562,
-      "p99_us": 93.897
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11968,
+      "mean_us": 83.553,
+      "round_means_us": [
+        83.553
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -584,11 +666,13 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 2834,
-      "ops_per_sec": 14422,
-      "mean_us": 69.34,
-      "p50_us": 67.935,
-      "p99_us": 102.577
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11435,
+      "mean_us": 87.449,
+      "round_means_us": [
+        87.449
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -598,11 +682,13 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 2364,
-      "ops_per_sec": 12571,
-      "mean_us": 79.548,
-      "p50_us": 76.523,
-      "p99_us": 112.271
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10109,
+      "mean_us": 98.92,
+      "round_means_us": [
+        98.92
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -612,11 +698,13 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 885,
-      "ops_per_sec": 4848,
-      "mean_us": 206.257,
-      "p50_us": 194.815,
-      "p99_us": 773.735
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4365,
+      "mean_us": 229.096,
+      "round_means_us": [
+        229.096
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -626,11 +714,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 4281,
-      "ops_per_sec": 26664,
-      "mean_us": 37.504,
-      "p50_us": 36.189,
-      "p99_us": 57.126
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16528,
+      "mean_us": 60.502,
+      "round_means_us": [
+        60.502
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -640,11 +730,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 4769,
-      "ops_per_sec": 25365,
-      "mean_us": 39.424,
-      "p50_us": 38.577,
-      "p99_us": 66.99
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15325,
+      "mean_us": 65.251,
+      "round_means_us": [
+        65.251
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -654,11 +746,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 3407,
-      "ops_per_sec": 21103,
-      "mean_us": 47.387,
-      "p50_us": 44.741,
-      "p99_us": 75.529
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13585,
+      "mean_us": 73.611,
+      "round_means_us": [
+        73.611
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -668,11 +762,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 1257,
-      "ops_per_sec": 6673,
-      "mean_us": 149.849,
-      "p50_us": 141.789,
-      "p99_us": 793.992
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5066,
+      "mean_us": 197.396,
+      "round_means_us": [
+        197.396
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -682,11 +778,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 3382,
-      "ops_per_sec": 17107,
-      "mean_us": 58.454,
-      "p50_us": 56.58,
-      "p99_us": 84.486
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13137,
+      "mean_us": 76.119,
+      "round_means_us": [
+        76.119
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -696,11 +794,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 3128,
-      "ops_per_sec": 16626,
-      "mean_us": 60.148,
-      "p50_us": 58.838,
-      "p99_us": 111.476
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12209,
+      "mean_us": 81.907,
+      "round_means_us": [
+        81.907
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -710,11 +810,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 2026,
-      "ops_per_sec": 14683,
-      "mean_us": 68.108,
-      "p50_us": 65.143,
-      "p99_us": 94.081
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10470,
+      "mean_us": 95.51,
+      "round_means_us": [
+        95.51
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -724,11 +826,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 1051,
-      "ops_per_sec": 5696,
-      "mean_us": 175.548,
-      "p50_us": 162.86,
-      "p99_us": 770.185
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4602,
+      "mean_us": 217.276,
+      "round_means_us": [
+        217.276
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -738,11 +842,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 2239,
-      "ops_per_sec": 11410,
-      "mean_us": 87.642,
-      "p50_us": 85.431,
-      "p99_us": 157.902
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9327,
+      "mean_us": 107.218,
+      "round_means_us": [
+        107.218
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -752,11 +858,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 2199,
-      "ops_per_sec": 11175,
-      "mean_us": 89.487,
-      "p50_us": 86.975,
-      "p99_us": 116.444
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8870,
+      "mean_us": 112.734,
+      "round_means_us": [
+        112.734
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -766,11 +874,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 1964,
-      "ops_per_sec": 10165,
-      "mean_us": 98.373,
-      "p50_us": 92.888,
-      "p99_us": 134.914
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7913,
+      "mean_us": 126.367,
+      "round_means_us": [
+        126.367
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -780,11 +890,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 914,
-      "ops_per_sec": 5005,
-      "mean_us": 199.801,
-      "p50_us": 192.799,
-      "p99_us": 771.664
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4005,
+      "mean_us": 249.676,
+      "round_means_us": [
+        249.676
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -794,11 +906,13 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 2267,
-      "ops_per_sec": 11991,
-      "mean_us": 83.398,
-      "p50_us": 81.734,
-      "p99_us": 111.186
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10679,
+      "mean_us": 93.644,
+      "round_means_us": [
+        93.644
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -808,11 +922,13 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 1725,
-      "ops_per_sec": 11570,
-      "mean_us": 86.431,
-      "p50_us": 83.554,
-      "p99_us": 111.502
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10052,
+      "mean_us": 99.486,
+      "round_means_us": [
+        99.486
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -822,11 +938,13 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 2086,
-      "ops_per_sec": 10808,
-      "mean_us": 92.526,
-      "p50_us": 90.066,
-      "p99_us": 127.28
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9142,
+      "mean_us": 109.387,
+      "round_means_us": [
+        109.387
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -836,11 +954,13 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 949,
-      "ops_per_sec": 5033,
-      "mean_us": 198.698,
-      "p50_us": 191.894,
-      "p99_us": 803.762
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4219,
+      "mean_us": 237.019,
+      "round_means_us": [
+        237.019
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -850,11 +970,13 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 417,
-      "ops_per_sec": 2116,
-      "mean_us": 472.57,
-      "p50_us": 460.985,
-      "p99_us": 714.605
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1884,
+      "mean_us": 530.733,
+      "round_means_us": [
+        530.733
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -864,11 +986,13 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 419,
-      "ops_per_sec": 2122,
-      "mean_us": 471.186,
-      "p50_us": 466.651,
-      "p99_us": 816.564
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1859,
+      "mean_us": 537.892,
+      "round_means_us": [
+        537.892
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -878,11 +1002,13 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 409,
-      "ops_per_sec": 2075,
-      "mean_us": 481.835,
-      "p50_us": 473.597,
-      "p99_us": 793.852
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1808,
+      "mean_us": 553.126,
+      "round_means_us": [
+        553.126
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -892,11 +1018,13 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 323,
-      "ops_per_sec": 1651,
-      "mean_us": 605.846,
-      "p50_us": 592.662,
-      "p99_us": 1057.369
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1467,
+      "mean_us": 681.462,
+      "round_means_us": [
+        681.462
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -906,11 +1034,13 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 169,
-      "ops_per_sec": 873,
-      "mean_us": 1145.883,
-      "p50_us": 1122.926,
-      "p99_us": 1405.018
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 752,
+      "mean_us": 1329.69,
+      "round_means_us": [
+        1329.69
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -920,11 +1050,13 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 176,
-      "ops_per_sec": 890,
-      "mean_us": 1123.32,
-      "p50_us": 1100.19,
-      "p99_us": 1422.784
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 760,
+      "mean_us": 1315.929,
+      "round_means_us": [
+        1315.929
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -934,11 +1066,13 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 174,
-      "ops_per_sec": 887,
-      "mean_us": 1127.248,
-      "p50_us": 1116.372,
-      "p99_us": 1476.25
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 758,
+      "mean_us": 1320.012,
+      "round_means_us": [
+        1320.012
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -948,11 +1082,13 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 146,
-      "ops_per_sec": 773,
-      "mean_us": 1292.925,
-      "p50_us": 1255.319,
-      "p99_us": 1932.342
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 678,
+      "mean_us": 1474.579,
+      "round_means_us": [
+        1474.579
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -962,11 +1098,13 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 2716,
-      "ops_per_sec": 14661,
-      "mean_us": 68.206,
-      "p50_us": 66.132,
-      "p99_us": 95.856
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11541,
+      "mean_us": 86.65,
+      "round_means_us": [
+        86.65
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -976,11 +1114,13 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 2667,
-      "ops_per_sec": 14377,
-      "mean_us": 69.556,
-      "p50_us": 68.568,
-      "p99_us": 104.01
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11096,
+      "mean_us": 90.124,
+      "round_means_us": [
+        90.124
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -990,11 +1130,13 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 2440,
-      "ops_per_sec": 12524,
-      "mean_us": 79.846,
-      "p50_us": 77.615,
-      "p99_us": 119.425
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9806,
+      "mean_us": 101.973,
+      "round_means_us": [
+        101.973
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1004,11 +1146,13 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 902,
-      "ops_per_sec": 4848,
-      "mean_us": 206.267,
-      "p50_us": 197.975,
-      "p99_us": 784.17
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4285,
+      "mean_us": 233.368,
+      "round_means_us": [
+        233.368
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1018,11 +1162,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 561,
-      "iterations": 4383,
-      "ops_per_sec": 26883,
-      "mean_us": 37.198,
-      "p50_us": 36.065,
-      "p99_us": 57.323
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17161,
+      "mean_us": 58.27,
+      "round_means_us": [
+        58.27
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1032,11 +1178,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 961,
-      "iterations": 4755,
-      "ops_per_sec": 24965,
-      "mean_us": 40.057,
-      "p50_us": 38.518,
-      "p99_us": 60.651
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16232,
+      "mean_us": 61.607,
+      "round_means_us": [
+        61.607
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1046,11 +1194,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2574,
-      "iterations": 4169,
-      "ops_per_sec": 21168,
-      "mean_us": 47.242,
-      "p50_us": 45.161,
-      "p99_us": 79.386
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 13310,
+      "mean_us": 75.133,
+      "round_means_us": [
+        75.133
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1060,11 +1210,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21214,
-      "iterations": 1202,
-      "ops_per_sec": 6529,
-      "mean_us": 153.157,
-      "p50_us": 144.738,
-      "p99_us": 825.222
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5038,
+      "mean_us": 198.5,
+      "round_means_us": [
+        198.5
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1074,11 +1226,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 731,
-      "iterations": 3213,
-      "ops_per_sec": 17035,
-      "mean_us": 58.704,
-      "p50_us": 56.852,
-      "p99_us": 85.853
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12831,
+      "mean_us": 77.938,
+      "round_means_us": [
+        77.938
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1088,11 +1242,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 3181,
-      "ops_per_sec": 16615,
-      "mean_us": 60.186,
-      "p50_us": 58.792,
-      "p99_us": 87.689
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 12127,
+      "mean_us": 82.459,
+      "round_means_us": [
+        82.459
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1102,11 +1258,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2744,
-      "iterations": 2831,
-      "ops_per_sec": 14657,
-      "mean_us": 68.225,
-      "p50_us": 66.495,
-      "p99_us": 101.899
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10313,
+      "mean_us": 96.966,
+      "round_means_us": [
+        96.966
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1116,11 +1274,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21384,
-      "iterations": 1101,
-      "ops_per_sec": 5715,
-      "mean_us": 174.985,
-      "p50_us": 166.319,
-      "p99_us": 781.328
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4538,
+      "mean_us": 220.371,
+      "round_means_us": [
+        220.371
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1130,11 +1290,13 @@
       "alg": "RS256",
       "payload_size": "small",
       "token_len": 902,
-      "iterations": 2152,
-      "ops_per_sec": 11400,
-      "mean_us": 87.718,
-      "p50_us": 85.311,
-      "p99_us": 110.193
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9200,
+      "mean_us": 108.691,
+      "round_means_us": [
+        108.691
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1144,11 +1306,13 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1302,
-      "iterations": 2150,
-      "ops_per_sec": 11110,
-      "mean_us": 90.005,
-      "p50_us": 87.216,
-      "p99_us": 119.23
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8885,
+      "mean_us": 112.551,
+      "round_means_us": [
+        112.551
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1158,11 +1322,13 @@
       "alg": "RS256",
       "payload_size": "medium",
       "token_len": 2915,
-      "iterations": 1976,
-      "ops_per_sec": 10340,
-      "mean_us": 96.707,
-      "p50_us": 93.247,
-      "p99_us": 134.425
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7949,
+      "mean_us": 125.808,
+      "round_means_us": [
+        125.808
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1172,11 +1338,13 @@
       "alg": "RS256",
       "payload_size": "large",
       "token_len": 21555,
-      "iterations": 951,
-      "ops_per_sec": 4842,
-      "mean_us": 206.524,
-      "p50_us": 196.144,
-      "p99_us": 793.679
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 3851,
+      "mean_us": 259.678,
+      "round_means_us": [
+        259.678
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1186,11 +1354,13 @@
       "alg": "ES256",
       "payload_size": "small",
       "token_len": 304,
-      "iterations": 1620,
-      "ops_per_sec": 11890,
-      "mean_us": 84.106,
-      "p50_us": 82.214,
-      "p99_us": 115.89
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10922,
+      "mean_us": 91.56,
+      "round_means_us": [
+        91.56
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1200,11 +1370,13 @@
       "alg": "ES256",
       "payload_size": "typical",
       "token_len": 704,
-      "iterations": 2232,
-      "ops_per_sec": 11522,
-      "mean_us": 86.792,
-      "p50_us": 84.359,
-      "p99_us": 120.12
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10581,
+      "mean_us": 94.505,
+      "round_means_us": [
+        94.505
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1214,11 +1386,13 @@
       "alg": "ES256",
       "payload_size": "medium",
       "token_len": 2317,
-      "iterations": 2051,
-      "ops_per_sec": 10668,
-      "mean_us": 93.738,
-      "p50_us": 90.426,
-      "p99_us": 121.876
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9316,
+      "mean_us": 107.34,
+      "round_means_us": [
+        107.34
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1228,11 +1402,13 @@
       "alg": "ES256",
       "payload_size": "large",
       "token_len": 20957,
-      "iterations": 885,
-      "ops_per_sec": 5031,
-      "mean_us": 198.779,
-      "p50_us": 190.981,
-      "p99_us": 805.908
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4234,
+      "mean_us": 236.195,
+      "round_means_us": [
+        236.195
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1242,11 +1418,13 @@
       "alg": "ES384",
       "payload_size": "small",
       "token_len": 346,
-      "iterations": 414,
-      "ops_per_sec": 2116,
-      "mean_us": 472.501,
-      "p50_us": 463.02,
-      "p99_us": 740.979
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1893,
+      "mean_us": 528.336,
+      "round_means_us": [
+        528.336
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1256,11 +1434,13 @@
       "alg": "ES384",
       "payload_size": "typical",
       "token_len": 746,
-      "iterations": 409,
-      "ops_per_sec": 2111,
-      "mean_us": 473.709,
-      "p50_us": 467.345,
-      "p99_us": 866.37
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1872,
+      "mean_us": 534.264,
+      "round_means_us": [
+        534.264
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1270,11 +1450,13 @@
       "alg": "ES384",
       "payload_size": "medium",
       "token_len": 2359,
-      "iterations": 403,
-      "ops_per_sec": 2063,
-      "mean_us": 484.832,
-      "p50_us": 475.114,
-      "p99_us": 790.792
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1818,
+      "mean_us": 550.021,
+      "round_means_us": [
+        550.021
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1284,11 +1466,13 @@
       "alg": "ES384",
       "payload_size": "large",
       "token_len": 20999,
-      "iterations": 310,
-      "ops_per_sec": 1634,
-      "mean_us": 612.125,
-      "p50_us": 587.711,
-      "p99_us": 1246.747
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1460,
+      "mean_us": 684.755,
+      "round_means_us": [
+        684.755
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1298,11 +1482,13 @@
       "alg": "ES512",
       "payload_size": "small",
       "token_len": 394,
-      "iterations": 173,
-      "ops_per_sec": 876,
-      "mean_us": 1140.942,
-      "p50_us": 1134.717,
-      "p99_us": 1454.892
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 755,
+      "mean_us": 1324.835,
+      "round_means_us": [
+        1324.835
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1312,11 +1498,13 @@
       "alg": "ES512",
       "payload_size": "typical",
       "token_len": 794,
-      "iterations": 175,
-      "ops_per_sec": 888,
-      "mean_us": 1125.699,
-      "p50_us": 1103.941,
-      "p99_us": 1964.63
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 760,
+      "mean_us": 1316.373,
+      "round_means_us": [
+        1316.373
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1326,11 +1514,13 @@
       "alg": "ES512",
       "payload_size": "medium",
       "token_len": 2407,
-      "iterations": 167,
-      "ops_per_sec": 893,
-      "mean_us": 1119.316,
-      "p50_us": 1102.221,
-      "p99_us": 1438.339
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 760,
+      "mean_us": 1316.219,
+      "round_means_us": [
+        1316.219
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1340,11 +1530,13 @@
       "alg": "ES512",
       "payload_size": "large",
       "token_len": 21047,
-      "iterations": 153,
-      "ops_per_sec": 778,
-      "mean_us": 1285.753,
-      "p50_us": 1259.123,
-      "p99_us": 1743.155
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 676,
+      "mean_us": 1479.088,
+      "round_means_us": [
+        1479.088
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1354,11 +1546,13 @@
       "alg": "EdDSA",
       "payload_size": "small",
       "token_len": 306,
-      "iterations": 2794,
-      "ops_per_sec": 14858,
-      "mean_us": 67.304,
-      "p50_us": 66.301,
-      "p99_us": 96.067
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11710,
+      "mean_us": 85.395,
+      "round_means_us": [
+        85.395
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1368,11 +1562,13 @@
       "alg": "EdDSA",
       "payload_size": "typical",
       "token_len": 706,
-      "iterations": 2792,
-      "ops_per_sec": 14256,
-      "mean_us": 70.145,
-      "p50_us": 68.465,
-      "p99_us": 96.331
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 11453,
+      "mean_us": 87.311,
+      "round_means_us": [
+        87.311
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1382,11 +1578,13 @@
       "alg": "EdDSA",
       "payload_size": "medium",
       "token_len": 2319,
-      "iterations": 2402,
-      "ops_per_sec": 12413,
-      "mean_us": 80.56,
-      "p50_us": 77.517,
-      "p99_us": 172.33
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 10035,
+      "mean_us": 99.65,
+      "round_means_us": [
+        99.65
+      ]
     },
     {
       "impl": "jose 6.2.12",
@@ -1396,24 +1594,26 @@
       "alg": "EdDSA",
       "payload_size": "large",
       "token_len": 20959,
-      "iterations": 908,
-      "ops_per_sec": 4857,
-      "mean_us": 205.888,
-      "p50_us": 199.63,
-      "p99_us": 821.785
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 4256,
+      "mean_us": 234.935,
+      "round_means_us": [
+        234.935
+      ]
     }
   ],
   "first_fetch": [
     {
       "source": "jwks-url-async",
       "name": "typical-rs3072",
-      "ms": 1.669374,
+      "ms": 1.445287,
       "trials_ms": [
-        2.421095,
-        1.484545,
-        1.374404,
-        2.28648,
-        1.669374
+        2.484672,
+        1.445287,
+        1.301874,
+        1.730712,
+        1.221328
       ]
     }
   ],

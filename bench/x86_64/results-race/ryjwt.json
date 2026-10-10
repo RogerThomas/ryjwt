@@ -1,0 +1,48 @@
+{
+  "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+  "runtime": "CPython 3.14.8",
+  "rows": [
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+      "source": "hmac",
+      "name": "typical-k64",
+      "key": "k64",
+      "alg": "HS256",
+      "payload_size": "typical",
+      "token_len": 661,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 486785.26159744227,
+      "mean_us": 2.0542939133333333,
+      "round_means_us": [
+        2.05381084,
+        2.0618270400000003,
+        2.04724386
+      ]
+    },
+    {
+      "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+      "source": "pem",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 100000,
+      "rounds": 3,
+      "ops_per_sec": 28519.103325864373,
+      "mean_us": 35.064216030000004,
+      "round_means_us": [
+        35.10073987,
+        35.05648982,
+        35.035418400000005
+      ]
+    }
+  ],
+  "first_fetch": [],
+  "not_applicable": [],
+  "notes": [
+    "`SecretKey`, `PublicKey`, `PublicKey.from_jwks`, `JWKSClient.decode` and `.adecode`",
+    "JWKS URL: trusting the test CA through `SSL_CERT_FILE`"
+  ]
+}
