@@ -83,8 +83,12 @@ Calling ryjwt wrongly raises Python's own exceptions. A type checker catches mos
 `ValueError`:
 
 - `algorithms` is empty, names one the class doesn't support, or mixes ones a key can't serve;
+- a key's `kid` is empty;
 - `encode` has no `algorithm` but the key has several, or one the key doesn't have; or its
-  `header` sets `alg`, `crit` or `b64`, or has over 64 fields;
+  `header` sets `alg`, `crit` or `b64`, sets `kid` when the key has one, or has over 64 fields;
+- [`jwks`](keys.md#publishing-your-keys) has no keys, or several keys that don't each have their
+  own `kid`;
+- `jwk` is called on a `PublicKey` holding several keys (use `jwks`);
 - a `datetime` claim has no timezone;
 - `leeway` is negative or infinite;
 - a `JWKSClient`'s URL isn't [allowed](jwks-urls.md#allowed-urls), or a time is negative.
@@ -96,6 +100,7 @@ Calling ryjwt wrongly raises Python's own exceptions. A type checker catches mos
 - `token` isn't a `str` or `bytes`;
 - `audience` or `issuer` (on a key, client or `decode` call) isn't a `str` or iterable of them;
 - `leeway` isn't a number or a `timedelta`;
-- `encode`'s `header` has a `kid` that isn't a `str`.
+- a key's `kid`, or one in `encode`'s `header`, isn't a `str`;
+- `jwks` is given something other than a `PrivateKey` or `PublicKey`, such as a `SecretKey`.
 
 `OSError` (`FileNotFoundError`, `PermissionError`, ...): `from_path` couldn't read the file.

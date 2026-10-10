@@ -19,18 +19,28 @@ struct EncodingAlgorithm {
 /// The key prepared to sign tokens with, per configured algorithm.
 pub struct Encoder {
     algorithms: Vec<EncodingAlgorithm>,
+    /// The key's `kid`, written into every token's header.
+    kid: Option<Box<str>>,
     /// Claims class (a Struct or `BaseModel`) -> how its instances encode, built on the first use
     /// of each class: `ryjwt._types.payload_encoder`'s (encode, date attributes, encode with
     /// dates).
     payload_encoders: Py<PyDict>,
 }
 
-/// The header JSON for `alg`, with the parameters in `header` and a `"typ": "JWT"` unless it sets
-/// one.
-fn header_json(alg: &str, header: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec<u8>> {
+/// The header JSON for `alg`, with the key's `kid` if it has one, the parameters in `header`, and a
+/// `"typ": "JWT"` unless `header` sets one.
+fn header_json(
+    alg: &str,
+    kid: Option<&str>,
+    header: Option<&Bound<'_, PyMapping>>,
+) -> PyResult<Vec<u8>> {
     let mut out = Vec::with_capacity(64);
     out.extend_from_slice(b"{\"alg\":");
     json_write::write_str(&mut out, alg);
+    if let Some(kid) = kid {
+        out.extend_from_slice(b",\"kid\":");
+        json_write::write_str(&mut out, kid);
+    }
     let mut has_typ = false;
     let items = match header {
         Some(header) => header.items()?.iter().collect(),
@@ -65,6 +75,13 @@ fn header_json(alg: &str, header: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec
                     "Unencoded payloads (b64) aren't supported",
                 ));
             }
+            // The key's and the header's could disagree.
+            "kid" if let Some(kid) = kid => {
+                return Err(PyValueError::new_err(format!(
+                    "This key sets kid ({kid:?}) in every header: drop kid from header, or from \
+                     the key"
+                )));
+            }
             "kid" if !value.is_instance_of::<PyString>() => {
                 return Err(PyTypeError::new_err(format!(
                     "Header kid must be str, got {}",
@@ -82,10 +99,12 @@ fn header_json(alg: &str, header: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec
     if !has_typ {
         out.extend_from_slice(b",\"typ\":\"JWT\"");
     }
-    // With `alg`, and `typ` if added.
-    if parameters + 1 + usize::from(!has_typ) > jws::MAX_HEADER_PARAMETERS {
+    // With `alg`, and the key's `kid` and `typ` if added.
+    if parameters + 1 + usize::from(kid.is_some()) + usize::from(!has_typ)
+        > jws::MAX_HEADER_PARAMETERS
+    {
         return Err(PyValueError::new_err(format!(
-            "Header has more parameters than decode takes ({} with alg and typ)",
+            "Header has more parameters than decode takes ({}, with alg, typ and the key's kid)",
             jws::MAX_HEADER_PARAMETERS
         )));
     }
@@ -94,12 +113,15 @@ fn header_json(alg: &str, header: Option<&Bound<'_, PyMapping>>) -> PyResult<Vec
 }
 
 impl Encoder {
-    pub fn new(py: Python<'_>, signers: Vec<Signer>) -> PyResult<Self> {
+    pub fn new(py: Python<'_>, signers: Vec<Signer>, kid: Option<&str>) -> PyResult<Self> {
         let algorithms = signers
             .into_iter()
             .map(|signer| {
                 let mut default_header = Vec::new();
-                jws::b64_encode_append(&header_json(signer.algorithm, None)?, &mut default_header);
+                jws::b64_encode_append(
+                    &header_json(signer.algorithm, kid, None)?,
+                    &mut default_header,
+                );
                 Ok(EncodingAlgorithm {
                     signer,
                     default_header: default_header.into_boxed_slice(),
@@ -108,6 +130,7 @@ impl Encoder {
             .collect::<PyResult<_>>()?;
         Ok(Self {
             algorithms,
+            kid: kid.map(Into::into),
             payload_encoders: PyDict::new(py).unbind(),
         })
     }
@@ -191,7 +214,11 @@ impl Encoder {
         match header {
             None => token.extend_from_slice(&algorithm.default_header),
             Some(header) => jws::b64_encode_append(
-                &header_json(algorithm.signer.algorithm, Some(header))?,
+                &header_json(
+                    algorithm.signer.algorithm,
+                    self.kid.as_deref(),
+                    Some(header),
+                )?,
                 &mut token,
             ),
         }

@@ -217,15 +217,14 @@ names:
 
 <!-- test: with-key-files -->
 ```python
-from pathlib import Path
-
 import ryjwt
 
-signer = ryjwt.PrivateKey.from_path("private.pem", algorithms=["ES256"])
-token = signer.encode({"sub": "user-1"}, header={"kid": "key-1"})
+signer = ryjwt.PrivateKey.from_path("private.pem", algorithms=["ES256"], kid="key-1")
+token = signer.encode({"sub": "user-1"})  # its header has the kid "key-1"
 
-# jwks.json lists the public half of private.pem, with the kid "key-1"
-verifier = ryjwt.PublicKey.from_jwks(Path("jwks.json").read_bytes(), algorithms=["RS256", "ES256"])
+# What the issuer publishes: its public key, with the kid "key-1"
+document = ryjwt.jwks([signer])
+verifier = ryjwt.PublicKey.from_jwks(document, algorithms=["RS256", "ES256"])
 claims = verifier.decode(token)
 ```
 
@@ -283,3 +282,60 @@ signature is still checked).
     | `d` | the private part of an RSA, EC or Ed25519 key |
     | `p`, `q`, `dp`, `dq`, `qi`, `oth` | the private factors of an RSA key |
     | `k` | a symmetric (HMAC) secret |
+
+## Publishing your keys
+
+When other services verify your tokens, publish your public keys as a JWKS, usually at
+`/.well-known/jwks.json`. They read it with [`PublicKey.from_jwks`][ryjwt.PublicKey.from_jwks] or a
+[`JWKSClient`](jwks-urls.md).
+
+Give each key a `kid` when you create it. `encode` writes it into every token's header, so
+verifiers know which key to check it with. [`jwks`][ryjwt.jwks] returns the document to serve, as
+a dict:
+
+<!-- test: with-key-files -->
+```python
+import json
+
+import ryjwt
+
+signer = ryjwt.PrivateKey.from_path("private.pem", algorithms=["ES256"], kid="key-1")
+
+body = json.dumps(ryjwt.jwks([signer]))  # serve this, as application/json
+```
+
+The document holds only the public keys, never anything that can sign. To export a single key, as
+a JWK, call its [`jwk`][ryjwt.PrivateKey.jwk] method.
+
+### Rotating keys
+
+To replace a key without breaking the tokens it has already signed, publish both keys, and sign
+with the new one. Drop the old key from the document once its last tokens have expired:
+
+<!-- test: with-key-files -->
+```python
+import json
+
+import ryjwt
+
+previous = ryjwt.PrivateKey.from_path("private.pem", algorithms=["ES256"], kid="key-1")
+current = ryjwt.PrivateKey.from_path("new-private.pem", algorithms=["ES256"], kid="key-2")
+old_token = previous.encode({"sub": "user-1"})  # signed before the switch
+
+body = json.dumps(ryjwt.jwks([current, previous]))
+new_token = current.encode({"sub": "user-2"})
+
+# A verifier reading the document accepts tokens from both keys
+verifier = ryjwt.PublicKey.from_jwks(body, algorithms=["ES256"])
+assert verifier.decode(old_token) == {"sub": "user-1"}
+assert verifier.decode(new_token) == {"sub": "user-2"}
+```
+
+### Keys that can't be published
+
+`jwks` takes `PrivateKey`s and `PublicKey`s. It raises:
+
+- a `ValueError` if it has no keys, or several keys that don't each have their own `kid`: a
+  verifier couldn't tell which one signed a token;
+- a `TypeError` for a [`SecretKey`](#secretkey-hmac-secrets): whoever has the secret can sign
+  tokens, so it must never be published.
