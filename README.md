@@ -18,7 +18,8 @@ Fast, strictly typed JSON Web Tokens for Python, written in Rust.
 **Documentation: [rogerthomas.github.io/ryjwt](https://rogerthomas.github.io/ryjwt/)**
 
 It signs and verifies JWTs, checks their claims, and decodes them into a dict, msgspec `Struct` or
-pydantic `BaseModel`. It also fetches and caches keys from JWKS URLs.
+pydantic `BaseModel`. It also fetches and caches keys from JWKS URLs, and publishes yours as a
+JWKS.
 
 ![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) in about 0.4 to 0.5, fast-jwt (Bun) in 0.7, and joserfc, jose and PyJWT in about 3 to 6 seconds](https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/perf-race.svg)
 
@@ -109,4 +110,5 @@ assert claims_in == claims_out
   malformed tokens are rejected.
 - **JWKS URLs:** `JWKSClient` keeps a provider's keys current, from sync or async code, through
   outages.
+- **Publish your keys:** `ryjwt.jwks([key])` gives the JWKS to serve at `/.well-known/jwks.json`.
 - **Free-threaded:** objects are thread-safe, and decode in parallel on 3.14t.
