@@ -1,7 +1,7 @@
 import base64
 import json
-from datetime import UTC, datetime, timedelta, timezone
-from typing import Annotated, Any
+from datetime import UTC, datetime, timedelta, timezone, tzinfo
+from typing import Annotated, Any, override
 
 import jwt
 import msgspec
@@ -73,6 +73,54 @@ class Big(int):
 
     def __repr__(self) -> str:
         return "not-digits"
+
+
+class DumpedModel(pydantic.BaseModel):
+    """Dumps itself to JSON its own way: as the options `model_dump_json` is called with."""
+
+    sub: str
+
+    def model_dump_json(self, **kwargs: object) -> str:
+        return json.dumps(kwargs)
+
+
+class Later(datetime):
+    """A datetime subclass."""
+
+
+class Offset(tzinfo):
+    """A fixed offset that isn't a `datetime.timezone`."""
+
+    @override
+    def utcoffset(self, dt: datetime | None) -> timedelta:
+        return timedelta(hours=-3, minutes=-30)
+
+    @override
+    def dst(self, dt: datetime | None) -> timedelta:
+        return timedelta(0)
+
+    @override
+    def tzname(self, dt: datetime | None) -> str:
+        return "offset"
+
+
+class NoOffset(tzinfo):
+    """A tzinfo without an offset, which leaves a datetime naive."""
+
+    @override
+    def utcoffset(self, dt: datetime | None) -> None:
+        return None
+
+    @override
+    def dst(self, dt: datetime | None) -> None:
+        return None
+
+    @override
+    def tzname(self, dt: datetime | None) -> None:
+        return None
+
+
+EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
 
 
 class GenericStruct[T](msgspec.Struct):
@@ -250,9 +298,79 @@ def test_numeric_dates_drop_sub_second_precision(
     assert _payload(hmac_jwt.encode({"exp": value})) == {"exp": expected}
 
 
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param(datetime(2100, 1, 1, 0, 0, 0, 999_999, tzinfo=UTC), id="utc"),
+        pytest.param(
+            datetime(
+                2100, 1, 1, 5, 30, 0, 999_999, tzinfo=timezone(timedelta(hours=5, minutes=30))
+            ),
+            id="offset",
+        ),
+        pytest.param(
+            datetime(2100, 1, 1, tzinfo=timezone(-timedelta(hours=23, microseconds=1))),
+            id="offset-with-microseconds",
+        ),
+        pytest.param(datetime(2100, 1, 1, tzinfo=timezone(timedelta(0), "Z")), id="named-utc"),
+        pytest.param(datetime(1, 1, 1, 12, tzinfo=timezone(timedelta(hours=11))), id="year-1"),
+        pytest.param(datetime(9999, 12, 31, 23, 59, 59, 999_999, tzinfo=UTC), id="year-9999"),
+        pytest.param(datetime(1969, 12, 31, 23, 59, 59, 999_999, tzinfo=UTC), id="before-epoch"),
+        pytest.param(datetime(2100, 1, 1, tzinfo=Offset()), id="other-tzinfo"),
+    ],
+)
+def test_datetime_claims_encode_as_their_numeric_dates(
+    value: datetime,
+    hmac_jwt: ryjwt.SecretKey,
+) -> None:
+    """A datetime claim makes the very token its NumericDate does: its whole seconds since the
+    epoch, rounded down, whatever its timezone."""
+    seconds = (value - EPOCH) // timedelta(seconds=1)
+    struct = DatetimeClaimsStruct(sub="sub", exp=value, iat=value, nbf=value)
+    model = DatetimeClaimsModel(sub="sub", exp=value, iat=value, nbf=value)
+
+    assert hmac_jwt.encode({"exp": value, "nbf": value, "iat": value}) == hmac_jwt.encode({
+        "exp": seconds,
+        "nbf": seconds,
+        "iat": seconds,
+    })
+    expected = {"sub": "sub", "exp": seconds, "iat": seconds, "nbf": seconds}
+    assert hmac_jwt.encode(struct) == hmac_jwt.encode(expected)
+    assert hmac_jwt.encode(model) == hmac_jwt.encode(expected)
+
+
+def test_datetime_subclass_claims(hmac_jwt: ryjwt.SecretKey) -> None:
+    """A datetime subclass is a NumericDate too, though msgspec can't make a dict of a Struct
+    holding one."""
+    value = Later(2100, 1, 1, 0, 0, 0, 1, tzinfo=UTC)
+    expected = {"sub": "sub", "exp": 4_102_444_800, "iat": 4_102_444_800, "nbf": None}
+
+    assert hmac_jwt.encode({"exp": value}) == hmac_jwt.encode({"exp": 4_102_444_800})
+    assert hmac_jwt.encode(DatetimeClaimsModel(sub="sub", exp=value, iat=value)) == (
+        hmac_jwt.encode(expected)
+    )
+    with pytest.raises(TypeError, match="Encoding objects of type Later is unsupported"):
+        hmac_jwt.encode(DatetimeClaimsStruct(sub="sub", exp=value, iat=value))
+
+
+def test_overridden_model_dump_json_encodes(hmac_jwt: ryjwt.SecretKey) -> None:
+    """A model's own `model_dump_json` is what encodes it, by alias."""
+    assert _payload(hmac_jwt.encode(DumpedModel(sub="sub"))) == {"by_alias": True}
+
+
 @pytest.mark.parametrize("kind", ["struct", "model", "dict"])
-def test_naive_datetime_claims_are_rejected(kind: str, hmac_jwt: ryjwt.SecretKey) -> None:
-    naive = datetime(2100, 1, 1, tzinfo=UTC).replace(tzinfo=None)
+@pytest.mark.parametrize(
+    "naive",
+    [
+        pytest.param(datetime(2100, 1, 1, tzinfo=UTC).replace(tzinfo=None), id="naive"),
+        pytest.param(datetime(2100, 1, 1, tzinfo=NoOffset()), id="no-offset"),
+    ],
+)
+def test_naive_datetime_claims_are_rejected(
+    kind: str,
+    naive: datetime,
+    hmac_jwt: ryjwt.SecretKey,
+) -> None:
     claims: dict[str, DatetimeClaimsStruct | DatetimeClaimsModel | dict[str, Any]] = {
         "struct": DatetimeClaimsStruct(sub="sub", exp=naive, iat=datetime(2000, 1, 1, tzinfo=UTC)),
         "model": DatetimeClaimsModel(sub="sub", exp=naive, iat=datetime(2000, 1, 1, tzinfo=UTC)),

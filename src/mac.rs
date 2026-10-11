@@ -158,6 +158,15 @@ impl HmacKey {
         })
     }
 
+    /// The length of its tags.
+    pub fn tag_len(&self) -> usize {
+        match &self.0 {
+            States::Sha256 { .. } => Hash::Sha256.output_len(),
+            States::Sha384 { .. } => Hash::Sha384.output_len(),
+            States::Sha512 { .. } => Hash::Sha512.output_len(),
+        }
+    }
+
     /// The tag of `msg`, written to the start of `out`.
     pub fn sign<'o>(&self, msg: &[u8], out: &'o mut [u8; MAX_TAG_LEN]) -> &'o [u8] {
         match &self.0 {

@@ -90,6 +90,21 @@ pub fn b64_decode_to_pybytes<'py>(
     }
 }
 
+/// The length of the unpadded base64url encoding of `len` bytes.
+pub fn b64_encoded_len(len: usize) -> usize {
+    URL_SAFE_NO_PAD.encoded_length(len)
+}
+
+/// Writes the unpadded base64url encoding of `data` to `out`, which must be exactly
+/// `b64_encoded_len(data.len())` long (or this panics), so that it's all written: callers rely on
+/// that to treat `out` as initialised.
+pub fn b64_encode_into(data: &[u8], out: &mut [MaybeUninit<u8>]) {
+    let written = URL_SAFE_NO_PAD
+        .encode(data, Out::from_uninit_slice(out))
+        .len();
+    assert_eq!(written, out.len());
+}
+
 /// Appends the unpadded base64url encoding of `data` to `out`.
 pub fn b64_encode_append(data: &[u8], out: &mut Vec<u8>) {
     URL_SAFE_NO_PAD.encode_append(data, out);

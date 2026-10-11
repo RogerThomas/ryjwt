@@ -4,7 +4,10 @@
 use pyo3::exceptions::{PyTypeError, PyValueError};
 use pyo3::intern;
 use pyo3::prelude::*;
-use pyo3::types::{PyBool, PyDateTime, PyDict, PyFloat, PyInt, PyList, PyString, PyTuple};
+use pyo3::types::{
+    PyBool, PyDateAccess, PyDateTime, PyDelta, PyDeltaAccess, PyDict, PyFloat, PyInt, PyList,
+    PyString, PyTimeAccess, PyTuple, PyTzInfo, PyTzInfoAccess,
+};
 
 pub const MAX_DEPTH: u32 = 255;
 
@@ -134,13 +137,76 @@ fn write_array<'py>(
     Ok(())
 }
 
-/// A datetime `exp`, `nbf` or `iat` claim as a `NumericDate` (whole seconds since the epoch).
-fn write_numeric_date(out: &mut Vec<u8>, claim: &str, value: &Bound<'_, PyAny>) -> PyResult<()> {
+/// The days from 1970-01-01 to a (proleptic Gregorian) date: Howard Hinnant's `days_from_civil`.
+fn days_from_civil(year: i64, month: i64, day: i64) -> i64 {
+    let year = if month <= 2 { year - 1 } else { year };
+    let era = year.div_euclid(400);
+    let yoe = year - era * 400;
+    let doy = (153 * ((month + 9) % 12) + 2) / 5 + day - 1;
+    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    era * 146_097 + doe - 719_468
+}
+
+/// `ryjwt._types.numeric_date` of `value`, worked out here for an exact datetime whose tzinfo is a
+/// `datetime.timezone` (UTC or a fixed offset). None for any other value (a naive datetime, another
+/// tzinfo, a datetime subclass), which `numeric_date` itself must take.
+fn timezone_numeric_date(value: &Bound<'_, PyAny>) -> PyResult<Option<i64>> {
     let py = value.py();
-    let seconds = py
-        .import(intern!(py, "ryjwt._types"))?
-        .call_method1(intern!(py, "numeric_date"), (claim, value))?;
-    write_value(out, &seconds, 1)
+    let Ok(datetime) = value.cast_exact::<PyDateTime>() else {
+        return Ok(None);
+    };
+    let Some(tzinfo) = datetime.get_tzinfo() else {
+        return Ok(None);
+    };
+    let utc = PyTzInfo::utc(py)?;
+    let offset_micros = if tzinfo.is(&*utc) {
+        0
+    } else if tzinfo.get_type().is(utc.get_type()) {
+        // A `timezone`'s offset is the same for every datetime.
+        let offset = tzinfo.call_method1(intern!(py, "utcoffset"), (py.None(),))?;
+        let offset = offset.cast::<PyDelta>()?;
+        (i64::from(offset.get_days()) * 86_400 + i64::from(offset.get_seconds())) * 1_000_000
+            + i64::from(offset.get_microseconds())
+    } else {
+        return Ok(None);
+    };
+    let days = days_from_civil(
+        i64::from(datetime.get_year()),
+        i64::from(datetime.get_month()),
+        i64::from(datetime.get_day()),
+    );
+    let seconds = days * 86_400
+        + i64::from(datetime.get_hour()) * 3_600
+        + i64::from(datetime.get_minute()) * 60
+        + i64::from(datetime.get_second());
+    let micros = seconds * 1_000_000 + i64::from(datetime.get_microsecond()) - offset_micros;
+    // Rounded down, as `numeric_date`'s floor division is.
+    Ok(Some(micros.div_euclid(1_000_000)))
+}
+
+/// `ryjwt._types.numeric_date(claim, value)`, called.
+fn python_numeric_date<'py>(claim: &str, value: &Bound<'py, PyAny>) -> PyResult<Bound<'py, PyAny>> {
+    let py = value.py();
+    py.import(intern!(py, "ryjwt._types"))?
+        .call_method1(intern!(py, "numeric_date"), (claim, value))
+}
+
+/// A datetime `exp`, `nbf` or `iat` claim as a `NumericDate` (whole seconds since the epoch), an
+/// int: `ryjwt._types.numeric_date`'s (which rejects a naive datetime).
+pub fn numeric_date<'py>(claim: &str, value: &Bound<'py, PyAny>) -> PyResult<Bound<'py, PyAny>> {
+    match timezone_numeric_date(value)? {
+        Some(seconds) => Ok(seconds.into_pyobject(value.py())?.into_any()),
+        None => python_numeric_date(claim, value),
+    }
+}
+
+/// Writes a datetime `exp`, `nbf` or `iat` claim as a `NumericDate`, as `numeric_date` makes it.
+fn write_numeric_date(out: &mut Vec<u8>, claim: &str, value: &Bound<'_, PyAny>) -> PyResult<()> {
+    match timezone_numeric_date(value)? {
+        Some(seconds) => out.extend_from_slice(itoa::Buffer::new().format(seconds).as_bytes()),
+        None => write_value(out, &python_numeric_date(claim, value)?, 1)?,
+    }
+    Ok(())
 }
 
 /// Writes a dict as a JSON object; if `claims` (the claims object itself), a datetime `exp`, `nbf`

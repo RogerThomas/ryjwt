@@ -24,6 +24,9 @@ pub enum Claim<'a> {
     Number(f64),
     Str(Cow<'a, str>),
     StrList(Vec<Cow<'a, str>>),
+    /// A list from Python, whose items `Checks::validate` checks are each a str as it matches them
+    /// (rather than copying each out first).
+    List(&'a Bound<'a, PyList>),
     Other,
 }
 
@@ -36,7 +39,7 @@ pub struct Registered<'a> {
 }
 
 impl<'a> Claim<'a> {
-    fn from_json(value: JsonValue<'a>) -> Self {
+    pub fn from_json(value: JsonValue<'a>) -> Self {
         match value {
             #[allow(clippy::cast_precision_loss)] // timestamps are far below 2^53
             JsonValue::Int(i) => Self::Number(i as f64),
@@ -51,7 +54,7 @@ impl<'a> Claim<'a> {
                 .iter()
                 .map(|i| {
                     if let JsonValue::Str(s) = i {
-                        Some(Cow::Owned(s.to_string()))
+                        Some(s.clone())
                     } else {
                         None
                     }
@@ -83,14 +86,7 @@ impl<'a> Claim<'a> {
             s.to_str()
                 .map_or(Self::Other, |s| Self::Str(Cow::Borrowed(s)))
         } else if let Ok(list) = value.cast::<PyList>() {
-            list.iter()
-                .map(|i| {
-                    i.cast::<PyString>()
-                        .ok()
-                        .and_then(|s| s.to_str().ok().map(|s| Cow::Owned(s.to_owned())))
-                })
-                .collect::<Option<_>>()
-                .map_or(Self::Other, Self::StrList)
+            Self::List(list)
         } else {
             Self::Other
         }
@@ -106,6 +102,19 @@ const REGISTERED: [&str; 4] = ["exp", "nbf", "aud", "iss"];
 
 fn slot_index(key: &str) -> Option<usize> {
     REGISTERED.iter().position(|k| *k == key)
+}
+
+impl<'a> Registered<'a> {
+    /// The registered claim named `name` (as the payload spells it, unescaped), if it is one.
+    pub fn claim_mut(&mut self, name: &[u8]) -> Option<&mut Claim<'a>> {
+        match name {
+            b"exp" => Some(&mut self.exp),
+            b"nbf" => Some(&mut self.nbf),
+            b"aud" => Some(&mut self.aud),
+            b"iss" => Some(&mut self.iss),
+            _ => None,
+        }
+    }
 }
 
 /// Reads just the registered claims from a payload, skipping (but still syntax-checking) the rest.
@@ -201,7 +210,12 @@ pub fn validate_dict(payload: &Bound<'_, PyDict>, checks: &Checks) -> PyResult<(
     let exp = payload.get_item(intern!(py, "exp"))?;
     let nbf = payload.get_item(intern!(py, "nbf"))?;
     let aud = payload.get_item(intern!(py, "aud"))?;
-    let iss = payload.get_item(intern!(py, "iss"))?;
+    // Only an expected issuer looks at `iss`.
+    let iss = if checks.issuer.is_unchecked() {
+        None
+    } else {
+        payload.get_item(intern!(py, "iss"))?
+    };
     checks.validate(&Registered {
         exp: claim(exp.as_ref()),
         nbf: claim(nbf.as_ref()),
@@ -283,6 +297,17 @@ impl<'a> Expected<'a> {
             Self::AnyOf(expected) => expected.iter().any(|e| e == value),
         }
     }
+
+    /// Whether any item of `list` (an `aud` claim) `matches`; None if any isn't a str (that's valid
+    /// UTF-8), checked for every item, matched or not.
+    fn matches_any(&self, list: &Bound<'_, PyList>) -> Option<bool> {
+        let mut matched = false;
+        for item in list.iter() {
+            let item = item.cast::<PyString>().ok()?.to_str().ok()?;
+            matched = matched || self.matches(item);
+        }
+        Some(matched)
+    }
 }
 
 fn leeway_seconds(leeway: Option<&Bound<'_, PyAny>>) -> PyResult<f64> {
@@ -347,15 +372,17 @@ impl<'a> Checks<'a> {
                 ));
             }
         }
-        let token_audiences: &[Cow<'_, str>] = match &claims.aud {
-            Claim::Absent => &[],
-            Claim::Str(s) => std::slice::from_ref(s),
-            Claim::StrList(list) => list,
-            _ => {
-                return Err(InvalidAudienceError::new_err(
-                    "Audience (aud) must be a string or list of strings",
-                ));
-            }
+        let audience_matches = match &claims.aud {
+            Claim::Absent => Some(false),
+            Claim::Str(s) => Some(self.audience.matches(s)),
+            Claim::StrList(list) => Some(list.iter().any(|a| self.audience.matches(a))),
+            Claim::List(list) => self.audience.matches_any(list),
+            _ => None,
+        };
+        let Some(audience_matches) = audience_matches else {
+            return Err(InvalidAudienceError::new_err(
+                "Audience (aud) must be a string or list of strings",
+            ));
         };
         match (self.audience.is_unchecked(), &claims.aud) {
             (true, Claim::Absent) => {}
@@ -370,7 +397,7 @@ impl<'a> Checks<'a> {
                 ));
             }
             (false, _) => {
-                if !token_audiences.iter().any(|a| self.audience.matches(a)) {
+                if !audience_matches {
                     return Err(InvalidAudienceError::new_err("Audience doesn't match"));
                 }
             }

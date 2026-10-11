@@ -6,10 +6,10 @@ import time
 from collections import OrderedDict
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
-from typing import Annotated, Any, ClassVar, Protocol, TypedDict, Unpack
+from typing import Annotated, Any, ClassVar, Protocol, Self, TypedDict, Unpack
 
 import msgspec
 import pydantic
@@ -144,6 +144,24 @@ class RecordedDated(msgspec.Struct):
         RecordedDated.built.append(self)
 
 
+class DatetimeDeclaredStruct(msgspec.Struct):
+    """A datetime `exp`, and the other registered claims (none of which it decodes as they are)."""
+
+    exp: datetime
+    nbf: datetime | None = None
+    aud: str | list[str] = ""
+    iss: str = ""
+
+
+class DatetimeDeclaredModel(pydantic.BaseModel):
+    """`DatetimeDeclaredStruct`, as a model."""
+
+    exp: datetime
+    nbf: datetime | None = None
+    aud: str | list[str] = ""
+    iss: str = ""
+
+
 class DictClaims(dict[str, Any]):
     pass
 
@@ -187,6 +205,24 @@ class NumberedMembersModel(pydantic.BaseModel):
     exp: int
     amount: Decimal
     nested: dict[str, list[float | int]]
+
+
+class ValidatedModel(pydantic.BaseModel):
+    """Validates JSON its own way, recording the JSON (and options) it's given."""
+
+    given: ClassVar[list[tuple[str | bytes | bytearray, dict[str, object]]]] = []
+    sub: str
+
+    @classmethod
+    def model_validate_json(cls, json_data: str | bytes | bytearray, **kwargs: object) -> Self:
+        ValidatedModel.given.append((json_data, kwargs))
+        return super().model_validate_json(json_data)
+
+
+class ValidatedDatetimeModel(ValidatedModel):
+    """`ValidatedModel`, with a datetime `exp`."""
+
+    exp: datetime
 
 
 class Expectations(TypedDict, total=False):
@@ -388,6 +424,44 @@ def test_payload_only_pydantic_rejects_is_a_decode_error(
 
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload JSON"):
         hmac_jwt.decode(token, into=ClaimsModel)
+
+
+def test_payload_only_pydantic_rejects_quotes_datetime_claims_as_strings(
+    hmac_jwt: ryjwt.SecretKey,
+    raw_hs256_token: Callable[[bytes, bytes], str],
+) -> None:
+    """As above, into a model with datetime claims: pydantic is given (and quotes) the payload
+    with each NumericDate as the string `isoformat` writes for it."""
+    nested = b"[" * 201 + b"]" * 201
+    payload = b'{"sub":"sub","exp":4102444800,"iat":0,"x":' + nested + b"}"
+    token = raw_hs256_token(b'{"alg":"HS256"}', payload)
+
+    with pytest.raises(ryjwt.DecodeError, match="Invalid payload JSON") as error:
+        hmac_jwt.decode(token, into=DatetimeClaimsModel)
+
+    cause = error.value.__cause__
+    assert isinstance(cause, pydantic.ValidationError)
+    assert cause.errors()[0]["input"] == (
+        '{"sub":"sub","exp":"2100-01-01T00:00:00+00:00","iat":"1970-01-01T00:00:00+00:00","x":'
+        + nested.decode()
+        + "}"
+    )
+
+
+def test_overridden_model_validate_json_validates(hmac_jwt: ryjwt.SecretKey) -> None:
+    """A model's own `model_validate_json` is what validates the payload, given as it was before
+    `decode` could validate without it: bytes, or a str with datetime claims as strings."""
+    ValidatedModel.given.clear()
+    token = hmac_jwt.encode({"sub": "sub", "exp": 4_102_444_800})
+
+    assert hmac_jwt.decode(token, into=ValidatedModel) == ValidatedModel(sub="sub")
+    assert hmac_jwt.decode(token, into=ValidatedDatetimeModel) == ValidatedDatetimeModel(
+        sub="sub", exp=datetime(2100, 1, 1, tzinfo=UTC)
+    )
+    assert ValidatedModel.given == [
+        (b'{"sub":"sub","exp":4102444800}', {}),
+        ('{"sub":"sub","exp":"2100-01-01T00:00:00+00:00"}', {}),
+    ]
 
 
 @pytest.mark.parametrize(
@@ -781,6 +855,132 @@ def test_model_datetime_claim_leaves_the_other_members_alone(
     assert type(dated.nested["exp"][0]) is type(numbered.nested["exp"][0]) is int
 
 
+@pytest.mark.parametrize(
+    ("later", "earlier"),
+    [
+        pytest.param(
+            datetime(2100, 1, 1, 0, 0, 0, 999_999, tzinfo=UTC),
+            datetime(2000, 1, 1, 0, 0, 0, 1, tzinfo=UTC),
+            id="utc",
+        ),
+        pytest.param(
+            datetime(
+                2100, 1, 1, 5, 30, 0, 999_999, tzinfo=timezone(timedelta(hours=5, minutes=30))
+            ),
+            datetime(1999, 12, 31, 14, 0, 0, 1, tzinfo=timezone(timedelta(hours=-10))),
+            id="offsets",
+        ),
+    ],
+)
+@pytest.mark.parametrize("type_", [DatetimeClaimsStruct, DatetimeClaimsModel])
+def test_datetime_claims_decode_to_whole_utc_seconds(
+    later: datetime,
+    earlier: datetime,
+    type_: type[DatetimeClaimsStruct | DatetimeClaimsModel],
+    hmac_jwt: ryjwt.SecretKey,
+) -> None:
+    """Datetime claims decode in UTC, whatever offset they were encoded from, to the whole second
+    `encode` wrote them as."""
+    token = hmac_jwt.encode(type_(sub="sub", exp=later, iat=earlier, nbf=earlier))
+
+    claims = hmac_jwt.decode(token, into=type_)
+
+    assert claims == type_(sub="sub", exp=datetime(2100, 1, 1, tzinfo=UTC), iat=Y2K, nbf=Y2K)
+    for value in (claims.exp, claims.iat, claims.nbf):
+        assert value is not None
+        assert value.utcoffset() == timedelta(0)
+        assert value.microsecond == 0
+
+
+def test_datetime_claim_a_model_rejects_is_quoted_as_a_string(hmac_jwt: ryjwt.SecretKey) -> None:
+    """pydantic is given each NumericDate as the string `isoformat` writes for it, which its
+    error quotes."""
+    token = hmac_jwt.encode({"exp": 4_102_444_800, "iat": 946_684_800})
+
+    with pytest.raises(ryjwt.ClaimsValidationError, match="in the future - at `iat`") as error:
+        hmac_jwt.decode(token, into=FarDatetimeModel)
+
+    cause = error.value.__cause__
+    assert isinstance(cause, pydantic.ValidationError)
+    assert cause.errors(include_url=False) == [
+        {
+            "type": "datetime_future",
+            "loc": ("iat",),
+            "msg": "Input should be in the future",
+            "input": "2000-01-01T00:00:00+00:00",
+        }
+    ]
+
+
+@pytest.mark.parametrize(
+    ("payload", "expected"),
+    [
+        pytest.param('{{"exp":{future},"aud":"a","iss":"i"}}', None, id="valid"),
+        pytest.param('{{"exp":{future},"aud":["x","a"],"iss":"i"}}', None, id="aud-list"),
+        pytest.param('{{"exp":{past},"aud":"a","iss":"i"}}', ryjwt.ExpiredSignatureError, id="exp"),
+        pytest.param(
+            '{{"exp":{future},"nbf":{future},"aud":"a","iss":"i"}}',
+            ryjwt.ImmatureSignatureError,
+            id="nbf",
+        ),
+        pytest.param(
+            '{{"exp":{future},"aud":"b","iss":"i"}}', ryjwt.InvalidAudienceError, id="aud"
+        ),
+        pytest.param(
+            '{{"exp":{future},"aud":["a",1],"iss":"i"}}',
+            ryjwt.InvalidAudienceError,
+            id="aud-list-non-str",
+        ),
+        pytest.param('{{"exp":{future},"aud":"a","iss":"j"}}', ryjwt.InvalidIssuerError, id="iss"),
+        pytest.param('{{"exp":{future},"aud":"a"}}', ryjwt.InvalidIssuerError, id="iss-missing"),
+        pytest.param(
+            '{{"exp":{future},"aud":"a","iss":"i","exp":{past}}}',
+            ryjwt.ExpiredSignatureError,
+            id="repeated-exp-takes-last",
+        ),
+        pytest.param(
+            '{{"exp":{future},"aud":"a","iss":"i","e\\u0078p":{past}}}',
+            ryjwt.ExpiredSignatureError,
+            id="escaped-exp",
+        ),
+        pytest.param(
+            '{{"exp":{future}.5,"aud":"a","iss":"i","nbf":{future}}}',
+            ryjwt.ImmatureSignatureError,
+            id="fractional-exp",
+        ),
+        pytest.param(
+            '{{"exp":{future},"aud":"a","iss":"i","x":"\udcff"}}', ryjwt.DecodeError, id="bad-utf8"
+        ),
+        pytest.param(
+            '{{"exp":{future},"aud":"a","iss":"i","x":"\t"}}', ryjwt.DecodeError, id="control"
+        ),
+        pytest.param('{{"exp":{future},"aud":"a","iss":"i",}}', ryjwt.DecodeError, id="bad-json"),
+    ],
+)
+@pytest.mark.parametrize("type_", [DatetimeDeclaredStruct, DatetimeDeclaredModel])
+def test_datetime_claim_types_validate_the_registered_claims(
+    payload: str,
+    expected: type[Exception] | None,
+    type_: type[DatetimeDeclaredStruct | DatetimeDeclaredModel],
+    hmac_jwt: ryjwt.SecretKey,
+    raw_hs256_token: Callable[[bytes, bytes], str],
+    future: int,
+    past: int,
+) -> None:
+    """For a type with datetime claims, the registered claims are validated as for any other,
+    however the payload spells them."""
+    raw = payload.format(future=future, past=past).encode(errors="surrogateescape")
+    token = raw_hs256_token(b'{"alg":"HS256"}', raw)
+
+    if expected is None:
+        claims = hmac_jwt.decode(token, into=type_, audience="a", issuer="i")
+        assert claims.exp == EPOCH + timedelta(seconds=future)
+    else:
+        with pytest.raises(expected) as error:
+            hmac_jwt.decode(token, into=type_, audience="a", issuer="i")
+        assert type(error.value) is expected
+
+
 def test_out_of_range_datetime_claim_in_a_model(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": 2**40, "iat": 946_684_800})
 
@@ -937,6 +1137,27 @@ def test_datetime_claims_are_checked_before_post_init(
 
     assert RecordedDated.built == [claims]
     assert claims.exp == EPOCH + timedelta(seconds=future)
+
+
+@pytest.mark.parametrize("audience", ["aud", None], ids=["audience", "no-audience"])
+@pytest.mark.parametrize(
+    "aud",
+    [["aud", 1], [1, "aud"], ["aud", None], ["aud", ["aud"]]],
+    ids=["int-after", "int-before", "null", "list"],
+)
+def test_aud_list_of_other_than_str(
+    aud: list[object],
+    audience: str | None,
+    hmac_jwt: ryjwt.SecretKey,
+    decode: Decode,
+) -> None:
+    """Every item of an `aud` list must be a str, whether or not another one matches."""
+    token = hmac_jwt.encode({"aud": aud})
+
+    with pytest.raises(
+        ryjwt.InvalidAudienceError, match=r"^Audience \(aud\) must be a string or list of strings$"
+    ):
+        decode(token, audience=audience)
 
 
 def test_audience_accepts_any_iterable(hmac_jwt: ryjwt.SecretKey) -> None:
