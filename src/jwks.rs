@@ -14,6 +14,7 @@ use pyo3::types::{PyByteArray, PyBytes, PyDict, PyList, PyMapping, PySequence, P
 
 use crate::errors::InvalidKeyError;
 use crate::json_write;
+use crate::jwk::Jwk;
 use crate::keys::{self, AlgSpec, KeyClass, KeyKind, KeySet, Verifier};
 
 /// Members only private (or symmetric) keys have: a JWKS holding any of them leaks a secret.
@@ -196,13 +197,14 @@ fn public_key(members: &Members<'_>, kind: KeyKind) -> Result<Vec<u8>, String> {
     }
 }
 
-/// A JWK's verifiers, one per configured algorithm it may be used with: none if it isn't usable
-/// here (unsupported `kty`/`crv`, not a signing key for `mode`, or no fitting algorithm).
+/// A JWK's verifiers, one per configured algorithm it may be used with, and the key to export:
+/// None if it isn't usable here (unsupported `kty`/`crv`, not a signing key for `mode`, or no
+/// fitting algorithm).
 fn prepare_key(
     members: &Members<'_>,
     specs: &[&AlgSpec],
     mode: Mode,
-) -> Result<Vec<Verifier>, String> {
+) -> Result<Option<(Vec<Verifier>, Jwk)>, String> {
     if let Some(name) = duplicate_member(members) {
         return Err(format!("duplicate {name:?} member"));
     }
@@ -212,7 +214,7 @@ fn prepare_key(
     let crv = str_member(members, "crv")?;
     let usage = str_member(members, "use")?;
     let Some(jwk_kind) = key_kind(kty, crv) else {
-        return Ok(Vec::new());
+        return Ok(None);
     };
     let specs: Vec<&AlgSpec> = specs
         .iter()
@@ -224,13 +226,15 @@ fn prepare_key(
         Mode::Lenient => usage.is_some_and(|usage| usage != "sig"),
     };
     if not_for_signing || specs.is_empty() {
-        return Ok(Vec::new());
+        return Ok(None);
     }
     let public_key = public_key(members, jwk_kind)?;
-    specs
+    let verifiers = specs
         .into_iter()
         .map(|spec| Verifier::public(spec, &public_key, kid))
-        .collect()
+        .collect::<Result<Vec<_>, _>>()?;
+    let jwk = Jwk::new(jwk_kind, &verifiers, kid)?;
+    Ok(Some((verifiers, jwk)))
 }
 
 /// Validates `algorithms` and prepares the usable keys of the JWKS `jwks` (str, bytes or Mapping)
@@ -257,6 +261,7 @@ pub fn prepare(jwks: &Bound<'_, PyAny>, algorithms: Vec<String>, mode: Mode) -> 
         algorithm_names: specs.iter().map(|s| s.name).collect(),
         verifiers: Vec::new(),
         key_count: 0,
+        jwks: Vec::new(),
     };
     let mut kids = HashSet::new();
     for (i, key) in jwks.iter().enumerate() {
@@ -280,15 +285,13 @@ pub fn prepare(jwks: &Bound<'_, PyAny>, algorithms: Vec<String>, mode: Mode) -> 
                 "holds private key material ({name:?}); a JWKS must only hold public keys"
             )));
         }
-        let verifiers = match prepare_key(members, &specs, mode) {
-            Ok(verifiers) => verifiers,
+        let (verifiers, jwk) = match prepare_key(members, &specs, mode) {
+            Ok(Some(key)) => key,
+            Ok(None) => continue,
             Err(_) if mode == Mode::Lenient => continue,
             Err(e) => return Err(error(e)),
         };
-        let Some(first) = verifiers.first() else {
-            continue;
-        };
-        if let Some(kid) = &first.kid
+        if let Some(kid) = &jwk.kid
             && !kids.insert(kid.clone())
         {
             return Err(InvalidKeyError::new_err(format!(
@@ -297,6 +300,7 @@ pub fn prepare(jwks: &Bound<'_, PyAny>, algorithms: Vec<String>, mode: Mode) -> 
         }
         set.key_count += 1;
         set.verifiers.extend(verifiers);
+        set.jwks.push(jwk);
     }
     if set.key_count == 0 {
         let names: Vec<String> = set

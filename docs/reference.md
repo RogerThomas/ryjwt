@@ -10,6 +10,8 @@ Everything below is importable from `ryjwt`.
 
 ::: ryjwt.PublicKey
 
+::: ryjwt.jwks
+
 ## JWKS URLs
 
 ::: ryjwt.JWKSClient

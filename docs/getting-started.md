@@ -217,6 +217,9 @@ verifier = ryjwt.PublicKey.from_path("public.pem", algorithms=["ES256"])
 claims = verifier.decode(token)
 ```
 
+To let other services fetch your public keys, rather than copy `public.pem`, publish them as a
+JWKS: see [Publishing your keys](keys.md#publishing-your-keys).
+
 For tokens from an identity provider (Auth0, Okta, Entra ID, Google, Keycloak, ...), use a
 [`JWKSClient`](jwks-urls.md). It fetches the provider's public keys and keeps them up to date.
 

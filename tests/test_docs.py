@@ -8,8 +8,8 @@ indented like the block):
 
 - `<!-- test: skip, <reason> -->`: the block isn't run, e.g. because it needs a real JWKS URL.
 - `<!-- test: with-key-files -->`: the block runs in a temporary directory holding `private.pem`
-  and `public.pem` (an ES256 key pair, PKCS#8 and SubjectPublicKeyInfo), `jwks.json` (a JWKS of
-  that public key, with the `kid` `key-1`) and `secret.txt` (a 32-byte HMAC secret, then a
+  and `public.pem` (an ES256 key pair, PKCS#8 and SubjectPublicKeyInfo), `new-private.pem` (a
+  second, independent ES256 private key, PKCS#8) and `secret.txt` (a 32-byte HMAC secret, then a
   newline).
 
 A block tagged with `data-uv-extra` gets a "Copy for uv" button (docs/javascripts/extra.js), which
@@ -25,7 +25,6 @@ still run.
 import ast
 import asyncio
 import inspect
-import json
 import re
 import tomllib
 from dataclasses import dataclass
@@ -35,7 +34,7 @@ from typing import Any, ClassVar, Self
 
 import pytest
 import ryjwt
-from _support import make_jwk, private_pem, public_pem
+from _support import private_pem, public_pem
 from cryptography.hazmat.primitives.asymmetric import ec
 
 
@@ -159,8 +158,8 @@ def _write_key_files(directory: Path) -> None:
     private_key = ec.generate_private_key(ec.SECP256R1())
     (directory / "private.pem").write_bytes(private_pem(private_key))
     (directory / "public.pem").write_bytes(public_pem(private_key))
-    jwks = {"keys": [make_jwk(private_key, kid="key-1", alg="ES256", use="sig")]}
-    (directory / "jwks.json").write_text(json.dumps(jwks))
+    new_private_key = ec.generate_private_key(ec.SECP256R1())
+    (directory / "new-private.pem").write_bytes(private_pem(new_private_key))
     (directory / "secret.txt").write_text("s" * 32 + "\n")
 
 

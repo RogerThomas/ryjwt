@@ -10,7 +10,7 @@ Fast, strictly typed JSON Web Tokens for Python, written in Rust.
 It signs and verifies JWTs with HMAC, RSA, RSA-PSS, ECDSA and EdDSA keys, checks `exp`, `nbf`,
 `aud` and `iss`, and decodes the claims into a dict, [msgspec](https://jcristharif.com/msgspec/)
 `Struct` or [pydantic](https://docs.pydantic.dev/) `BaseModel`. It also fetches, caches and
-refreshes keys from JWKS URLs.
+refreshes keys from JWKS URLs, and publishes your own keys as a JWKS.
 
 ## Install
 

@@ -1,5 +1,5 @@
-"""`decode`, `encode`, the `unverified_*` functions and the constructors take only the arguments
-they declare, of their types."""
+"""`decode`, `encode`, `jwks`, the `unverified_*` functions and the constructors take only the
+arguments they declare, of their types; only `PrivateKey` and `PublicKey` export JWKs."""
 
 from typing import Any
 
@@ -54,3 +54,10 @@ ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"], audience=1)  # err
 ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"], issuer=[b"iss"])  # error
 ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"], cooldown="30")  # error
 ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"], http=None)  # error
+ryjwt.SecretKey("secret", algorithms=["HS256"], kid="kid")  # error
+ryjwt.PublicKey.from_jwks("{}", algorithms=["ES256"], kid="kid")  # error
+ryjwt.PrivateKey("pem", algorithms=["ES256"], kid=1)  # error
+ryjwt.PublicKey.from_path("public.pem", algorithms=["ES256"], kid=b"kid")  # error
+ryjwt.jwks([hmac])  # error
+ryjwt.jwks(public_key)  # error
+hmac.jwk()  # error

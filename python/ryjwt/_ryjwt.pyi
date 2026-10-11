@@ -113,11 +113,15 @@ class PrivateKey:
         algorithms: Sequence[AsymmetricAlgorithm],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
+        kid: str | None = None,
     ) -> None:
         """`audience` and `issuer` are what `decode` checks tokens' `aud` and `iss` claims against,
         unless a call passes its own. Each is a str, or an iterable of them, any one of which may
         match. Without `audience`, a token that has an `aud` is rejected. Without `issuer`, `iss`
         isn't checked: set it too, above all if one key signs for several issuers.
+
+        `kid` names the key: `encode` writes it into every token's header, and `jwk` exports it.
+        It must be a non-empty str. `decode` doesn't check tokens' `kid` against it.
         """
     @staticmethod
     def from_path(
@@ -126,6 +130,7 @@ class PrivateKey:
         algorithms: Sequence[AsymmetricAlgorithm],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
+        kid: str | None = None,
     ) -> PrivateKey:
         """Reads the PEM from the file at `path`.
 
@@ -134,6 +139,14 @@ class PrivateKey:
     @property
     def algorithms(self) -> list[AsymmetricAlgorithm]:
         """The configured algorithm names."""
+    def jwk(self) -> dict[str, str]:
+        """Returns its public key as a JWK, to publish (see `jwks`). It never holds any private key
+        material.
+
+        Its members, in this order: `kty`; `kid`, if the key has one; `"use": "sig"`; `alg`, only
+        if one algorithm is configured; `crv`, for EC and Ed25519 keys; then the public key
+        itself: `n` and `e` (RSA), `x` and `y` (EC), or `x` (Ed25519).
+        """
     def encode(
         self,
         claims: Claims,
@@ -144,11 +157,12 @@ class PrivateKey:
         """Signs `claims` (a dict, a msgspec Struct or a pydantic BaseModel) and returns the token.
 
         `algorithm` must be one of `algorithms`, and may be left out when only one is configured.
-        `header`'s fields are added to the token's header, which always has `alg`, and
-        `"typ": "JWT"` unless `header` sets `typ`. Setting `alg`, `crit` or `b64` in `header`, or
-        more fields than `decode` takes (64, with `alg` and `typ`), is a `ValueError`; a `kid` that
-        isn't a str is a `TypeError`. A `datetime` under `exp`, `nbf` or `iat` is written as whole
-        seconds since the epoch; a naive one is a `ValueError`.
+        `header`'s fields are added to the token's header, which always has `alg`, the key's `kid`
+        if it has one, and `"typ": "JWT"` unless `header` sets `typ`. Setting `alg`, `crit` or
+        `b64` in `header`, or `kid` when the key has one, or more fields than `decode` takes (64,
+        with `alg`, `typ` and the key's `kid`), is a `ValueError`; a `kid` that isn't a str is a
+        `TypeError`. A `datetime` under `exp`, `nbf` or `iat` is written as whole seconds since the
+        epoch; a naive one is a `ValueError`.
         """
     @overload
     def decode(
@@ -208,11 +222,15 @@ class PublicKey:
         algorithms: Sequence[AsymmetricAlgorithm],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
+        kid: str | None = None,
     ) -> None:
         """`audience` and `issuer` are what `decode` checks tokens' `aud` and `iss` claims against,
         unless a call passes its own. Each is a str, or an iterable of them, any one of which may
         match. Without `audience`, a token that has an `aud` is rejected. Without `issuer`, `iss`
         isn't checked: set it too, above all if one key signs for several issuers.
+
+        `kid` names the key in what `jwk` exports. It must be a non-empty str. `decode` doesn't
+        check tokens' `kid` against it.
         """
     @staticmethod
     def from_path(
@@ -221,6 +239,7 @@ class PublicKey:
         algorithms: Sequence[AsymmetricAlgorithm],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
+        kid: str | None = None,
     ) -> PublicKey:
         """Reads the PEM from the file at `path`.
 
@@ -244,6 +263,12 @@ class PublicKey:
     @property
     def algorithms(self) -> list[AsymmetricAlgorithm]:
         """The configured algorithm names."""
+    def jwk(self) -> dict[str, str]:
+        """Returns the public key as a JWK, as `PrivateKey.jwk` does.
+
+        Built with `from_jwks`, it's the document's key, with the document's `kid` (if any). If it
+        holds several keys, it's a `ValueError`: export them with `jwks([key])`.
+        """
     @overload
     def decode(
         self,
@@ -305,6 +330,16 @@ def unverified_token(token: str | bytes) -> tuple[dict[str, Any], dict[str, Any]
     `decode()` before trusting either.
 
     The token must still be well formed, as `decode` requires, or it raises `DecodeError`.
+    """
+
+def jwks(keys: Iterable[PrivateKey | PublicKey]) -> dict[str, list[dict[str, str]]]:
+    """Return a JWKS of the public keys of `keys`, to publish (e.g. at
+    `/.well-known/jwks.json`): `{"keys": [key.jwk(), ...]}`, in order. A `PublicKey` built with
+    `from_jwks` adds all its keys.
+
+    Its keys must be ones `PublicKey.from_jwks` can pick from: at least one, and if there are
+    several, each with its own `kid`. Otherwise it's a `ValueError`. A `SecretKey` is a
+    `TypeError`: its secret must never be published.
     """
 
 def public_key_from_fetched_jwks(
