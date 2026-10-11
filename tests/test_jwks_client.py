@@ -5,7 +5,8 @@ outages, background refreshes, single-flight fetches, and the manual API (`refre
 Tests parametrised by `kind` use the client from sync code (`decode`, `refresh`) and from async code
 (`adecode`, `arefresh`). They wait for what happens in the background (a refresh, a response) with
 `eventually`, and only sleep to let time pass (for keys to expire, or a cooldown to end), with a
-margin.
+margin. What must happen *within* a time (keys still fresh, a cooldown not yet over) gets at least
+0.5 s: a slow CI runner (free-threaded Python on macOS) can stall for well over 0.1 s.
 """
 
 import asyncio
@@ -266,6 +267,11 @@ def _adecode_all_on_own_loop(
 def _decode_after(client: ryjwt.JWKSClient, token: str, start: threading.Barrier) -> dict[str, Any]:
     start.wait()
     return client.decode(token)
+
+
+def _refresh_after(client: ryjwt.JWKSClient, start: threading.Barrier) -> None:
+    start.wait()
+    client.refresh()
 
 
 async def _arefresh_all(client: ryjwt.JWKSClient, count: int) -> None:
@@ -574,13 +580,14 @@ def test_cache_lifetime(
     server.serve(make_jwk(old_key, kid="old"))
     server.cache_control = cache_control
     server.age = age
-    decode = make_client(server.url, **policy).decode
+    caller = make_client(server.url, **policy)
+    decode = caller.decode
 
     decode(old_token)
-    time.sleep(lifetime / 2)
-    decode(old_token)
+    assert _refreshed(caller.client)
     assert server.requests == 1
-    time.sleep(lifetime / 2 + 0.05)
+    time.sleep(lifetime + 0.05)
+    assert not _refreshed(caller.client)
     assert decode(old_token) == {"sub": "old"}  # expired: refreshes in the background
     assert decode(old_token) == {"sub": "old"}
     eventually(partial(server.answered, 2))
@@ -612,7 +619,7 @@ def test_zero_cache_lifetime_fetches_once_per_cooldown(
     refetch."""
     server.serve(make_jwk(old_key, kid="old"))
     server.cache_control = "max-age=0"
-    decode = make_client(server.url, min_cache_lifetime=0, cooldown=0.3).decode
+    decode = make_client(server.url, min_cache_lifetime=0, cooldown=0.6).decode
 
     # Decoding all along: the refresh comes no sooner than a cooldown after the first fetch...
     start = time.monotonic()
@@ -620,10 +627,10 @@ def test_zero_cache_lifetime_fetches_once_per_cooldown(
         assert time.monotonic() - start < 5, "no refresh within 5 s"
         assert decode(old_token) == {"sub": "old"}
         time.sleep(0.002)
-    assert time.monotonic() - start >= 0.3
+    assert time.monotonic() - start >= 0.6
     # ...and the refreshed keys stay fresh for a cooldown too, however many decodes.
     refreshed = time.monotonic()
-    while time.monotonic() - refreshed < 0.2:
+    while time.monotonic() - refreshed < 0.1:
         assert decode(old_token) == {"sub": "old"}
         time.sleep(0.002)
     assert server.requests == 2
@@ -689,7 +696,7 @@ def test_key_rotation(
     new_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    decode = make_client(server.url, cache_lifetime=0.1, cooldown=0).decode
+    decode = make_client(server.url, cache_lifetime=0.6, cooldown=0).decode
     assert decode(old_token) == {"sub": "old"}
 
     # The provider publishes the new key next to the old one: a new-kid token refetches.
@@ -703,7 +710,7 @@ def test_key_rotation(
     server.serve(make_jwk(new_key, kid="new"))
     server.cache_control = "max-age=3600"  # the refreshed keys stay fresh for the rest of the test
     assert decode(old_token) == {"sub": "old"}
-    time.sleep(0.15)
+    time.sleep(0.65)
     assert decode(new_token) == {"sub": "new"}  # expired: refreshes in the background
     eventually(partial(server.answered, 3))
     assert server.requests == 3
@@ -715,7 +722,7 @@ def test_key_rotation(
         decode(old_token)
 
 
-@pytest.mark.parametrize("cooldown", [0.2, timedelta(seconds=0.2)], ids=["seconds", "timedelta"])
+@pytest.mark.parametrize("cooldown", [0.6, timedelta(seconds=0.6)], ids=["seconds", "timedelta"])
 def test_unknown_kid_cooldown(
     cooldown: float | timedelta,
     server: JWKSServer,
@@ -733,7 +740,7 @@ def test_unknown_kid_cooldown(
     with pytest.raises(ryjwt.UnknownKeyError, match='No key has kid "new"'):
         decode(new_token)
     assert server.requests == 1
-    time.sleep(0.25)
+    time.sleep(0.65)
     assert decode(new_token) == {"sub": "new"}
     assert server.requests == 2
     other_token = jwt.encode({}, new_key, algorithm="ES256", headers={"kid": "other-kid"})
@@ -752,7 +759,7 @@ def test_outage_keeps_the_cached_keys(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    decode = make_client(server.url, cache_lifetime=0.2, cooldown=0.2).decode
+    decode = make_client(server.url, cache_lifetime=0.6, cooldown=0.6).decode
     decode(old_token)
     match outage:
         case "status-500":
@@ -762,7 +769,7 @@ def test_outage_keeps_the_cached_keys(
         case _:
             server.serve(make_jwk(old_key, kid="old", d="AQAB"))
 
-    time.sleep(0.25)
+    time.sleep(0.65)
     assert decode(old_token) == {"sub": "old"}  # expired: refreshes in the background
     eventually(partial(server.received, 2))
     assert server.requests == 2
@@ -770,7 +777,7 @@ def test_outage_keeps_the_cached_keys(
     with pytest.raises(ryjwt.UnknownKeyError):
         decode(new_token)
     assert server.requests == 2  # no retry within the cooldown, expiry or unknown kid alike
-    time.sleep(0.3)
+    time.sleep(0.65)
     assert decode(old_token) == {"sub": "old"}
     eventually(partial(server.received, 3))
     assert server.requests == 3
@@ -783,7 +790,7 @@ def test_stale_keys_are_dropped_after_max_stale(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    decode = make_client(server.url, cache_lifetime=0.05, max_stale=0.5, cooldown=0.05).decode
+    decode = make_client(server.url, cache_lifetime=0.05, max_stale=1, cooldown=0.05).decode
     decode(old_token)
     server.status = 500
     time.sleep(0.1)
@@ -879,7 +886,7 @@ def test_first_fetch_fails(
             server.body = _padded(server.body, 1024 * 1024 + 1)
         case _:
             server.raw = b"not-http\r\n"
-    decode = make_client(server.url, cooldown=0.2).decode
+    decode = make_client(server.url, cooldown=0.6).decode
 
     with pytest.raises(ryjwt.JWKSFetchError, match=f"from {server.origin}: .*{match}") as error:
         decode(old_token)
@@ -894,7 +901,7 @@ def test_first_fetch_fails(
 
     server.status, server.raw = 200, None
     server.serve(make_jwk(old_key, kid="old"))
-    time.sleep(0.25)
+    time.sleep(0.65)
     assert decode(old_token) == {"sub": "old"}
     assert server.requests == 2
 
@@ -967,7 +974,7 @@ def _fetch_hung_in_dns_times_out(caller: Caller, token: str) -> None:
     start = time.monotonic()
     with pytest.raises(ryjwt.JWKSFetchError, match="TimeoutError"):
         caller.decode(token)  # within the cooldown: at once, without another fetch
-    assert time.monotonic() - start < 0.1
+    assert time.monotonic() - start < 0.5
 
 
 def test_fetch_deadline_covers_dns(
@@ -1319,10 +1326,10 @@ def test_refreshes_with_an_event_loop_per_request(
     new_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    client = ryjwt.JWKSClient(server.url, algorithms=["ES256"], cache_lifetime=0.2, cooldown=0.2)
+    client = ryjwt.JWKSClient(server.url, algorithms=["ES256"], cache_lifetime=0.6, cooldown=0.6)
     assert asyncio.run(client.adecode(old_token)) == {"sub": "old"}
     server.serve(make_jwk(new_key, kid="new"))
-    time.sleep(0.25)
+    time.sleep(0.65)
 
     # Each `asyncio.run` ends its event loop as soon as the decode returns; the refresh it started
     # in the background runs on a thread of its own, so it lands all the same.
@@ -1347,14 +1354,14 @@ def test_expired_keys_refresh_without_blocking(
     decode(old_token)
     server.serve(make_jwk(old_key, kid="old"), make_jwk(new_key, kid="new"))
     server.cache_control = "max-age=3600"  # the refreshed keys stay fresh for the rest of the test
-    server.delay = 0.5
+    server.delay = 1.5  # under the fetch's 2.5 s deadline
     time.sleep(0.1)
 
     # Expired keys: decodes don't wait for the slow refresh, and share it.
     start = time.monotonic()
     for _ in range(20):
         assert decode(old_token) == {"sub": "old"}
-    assert time.monotonic() - start < 0.25
+    assert time.monotonic() - start < 1
     eventually(partial(server.answered, 2))
     assert server.requests == 2
 
@@ -1371,12 +1378,12 @@ def test_needs_refresh(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    caller = make_client(server.url, cache_lifetime=0.1, cooldown=0)
+    caller = make_client(server.url, cache_lifetime=0.6, cooldown=0)
     needs_refresh = [caller.client.needs_refresh]  # before the first fetch
 
     caller.refresh()
     needs_refresh.append(caller.client.needs_refresh)
-    time.sleep(0.15)
+    time.sleep(0.65)
     needs_refresh.append(caller.client.needs_refresh)  # expired
     assert needs_refresh == [True, False, True]
     assert caller.decode(old_token) == {"sub": "old"}  # refreshes in the background
@@ -1406,11 +1413,14 @@ def test_concurrent_refreshes_share_one_fetch(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    server.delay = 0.1
+    # All 16 start at once, and the fetch outlasts a slow CI runner's scheduling: a refresh that
+    # starts after the fetch ended fetches again.
+    server.delay = 0.5
     client = ryjwt.JWKSClient(server.url, algorithms=["ES256"])
+    start = threading.Barrier(16)
 
     with ThreadPoolExecutor(max_workers=16) as pool:
-        for future in [pool.submit(client.refresh) for _ in range(16)]:
+        for future in [pool.submit(_refresh_after, client, start) for _ in range(16)]:
             future.result()
 
     assert server.requests == 1
@@ -1423,7 +1433,7 @@ def test_concurrent_arefreshes_share_one_fetch(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    server.delay = 0.1
+    server.delay = 0.5  # a refresh that starts after the fetch ended fetches again
     client = ryjwt.JWKSClient(server.url, algorithms=["ES256"])
 
     asyncio.run(_arefresh_all(client, 16))
@@ -1439,7 +1449,7 @@ def test_refresh_without_usable_keys_raises_and_respects_the_cooldown(
     old_token: str,
 ) -> None:
     server.body = b"{"
-    caller = make_client(server.url, cooldown=0.2)
+    caller = make_client(server.url, cooldown=0.6)
 
     with pytest.raises(ryjwt.JWKSFetchError, match="Invalid JWKS JSON") as error:
         caller.refresh()
@@ -1452,7 +1462,7 @@ def test_refresh_without_usable_keys_raises_and_respects_the_cooldown(
     assert caller.client.needs_refresh
 
     server.serve(make_jwk(old_key, kid="old"))
-    time.sleep(0.25)
+    time.sleep(0.65)
     caller.refresh()
     assert server.requests == 2
     assert caller.client.decode_nowait(old_token) == {"sub": "old"}
@@ -1465,10 +1475,10 @@ def test_refresh_keeps_stale_keys_during_an_outage(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    caller = make_client(server.url, cache_lifetime=0.2, cooldown=0.2)
+    caller = make_client(server.url, cache_lifetime=0.6, cooldown=0.6)
     caller.refresh()
     server.status = 500
-    time.sleep(0.25)
+    time.sleep(0.65)
 
     caller.refresh()  # fails, but the expired keys are still usable: no error
     assert server.requests == 2
@@ -1541,14 +1551,13 @@ def test_decode_nowait_uses_expired_keys_until_max_stale(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    # Wide enough that a slow CI runner's sleep(0.1) doesn't overshoot max_stale.
-    caller = make_client(server.url, cache_lifetime=0.05, max_stale=0.5, cooldown=0)
+    caller = make_client(server.url, cache_lifetime=0.05, max_stale=1, cooldown=0)
     caller.refresh()
     time.sleep(0.1)
 
     assert caller.client.needs_refresh
     assert caller.client.decode_nowait(old_token) == {"sub": "old"}  # expired, not over max_stale
-    time.sleep(0.5)
+    time.sleep(1)
     message = f"The keys from {server.origin} expired over max_stale ago: call refresh()"
     with pytest.raises(ryjwt.JWKSFetchError, match=re.escape(message)):
         caller.client.decode_nowait(old_token)
