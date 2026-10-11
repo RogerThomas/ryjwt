@@ -5,7 +5,7 @@
 
 # ryjwt
 
-Fast, strictly typed JSON Web Tokens for Python, written in Rust.
+Fast, strictly typed JSON Web Tokens for Python, powered by Rust.
 
 It signs and verifies JWTs with HMAC, RSA, RSA-PSS, ECDSA and EdDSA keys, checks `exp`, `nbf`,
 `aud` and `iss`, and decodes the claims into a dict, [msgspec](https://jcristharif.com/msgspec/)

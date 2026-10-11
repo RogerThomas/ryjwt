@@ -13,7 +13,7 @@
 [![License](https://img.shields.io/pypi/l/ryjwt)](https://github.com/RogerThomas/ryjwt/blob/main/LICENSE)
 [![Docs](https://img.shields.io/badge/docs-rogerthomas.github.io%2Fryjwt-blue)](https://rogerthomas.github.io/ryjwt/)
 
-Fast, strictly typed JSON Web Tokens for Python, written in Rust.
+Fast, strictly typed JSON Web Tokens for Python, powered by Rust.
 
 **Documentation: [rogerthomas.github.io/ryjwt](https://rogerthomas.github.io/ryjwt/)**
 
