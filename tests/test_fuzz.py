@@ -105,7 +105,7 @@ def test_fuzzed_payloads(
         except ryjwt.InvalidTokenError:
             as_dict = None
         try:
-            as_struct = hmac_jwt.decode(token, type=Empty)
+            as_struct = hmac_jwt.decode(token, into=Empty)
         except ryjwt.InvalidTokenError:
             as_struct = None
         # ryjwt may be stricter than json.loads (e.g. lone surrogates), never looser.
@@ -118,7 +118,7 @@ def test_fuzzed_payloads(
 def _outcome(hmac_jwt: ryjwt.SecretKey, token: str, type_: type[Claims]) -> object:
     """The decoded claims, or the type of the error decoding raised."""
     try:
-        return msgspec.structs.asdict(hmac_jwt.decode(token, type=type_, audience="a", issuer="i"))
+        return msgspec.structs.asdict(hmac_jwt.decode(token, into=type_, audience="a", issuer="i"))
     except ryjwt.RYJWTError as e:
         return type(e)
 
@@ -149,7 +149,7 @@ def _dated_outcome(hmac_jwt: ryjwt.SecretKey, token: str) -> object:
     """The decoded claims, or the error decoding raised: its type, and its message if it's about
     the claims (not where in the payload its JSON is malformed)."""
     try:
-        return msgspec.structs.asdict(hmac_jwt.decode(token, type=DatedClaims))
+        return msgspec.structs.asdict(hmac_jwt.decode(token, into=DatedClaims))
     except ryjwt.ClaimsValidationError as e:
         return type(e), str(e)
     except Exception as e:  # noqa: BLE001 - comparing whatever is raised

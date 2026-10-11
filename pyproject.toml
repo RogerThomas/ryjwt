@@ -177,9 +177,6 @@ runtime-evaluated-base-classes = ["msgspec.Struct", "pydantic.BaseModel"]
 exempt-modules = ["typing", "typing_extensions", "collections.abc", "ryjwt._algorithms"]
 
 [tool.ruff.lint.per-file-ignores]
-"python/ryjwt/_jwks_client.py" = [
-    "A002", # `decode(type=...)` is the public keyword, as on the Rust classes
-]
 "python/ryjwt/_http.py" = [
     "S310", # the URL is checked (https, or http to localhost) when a client is built, and the opener has no file: handler
 ]

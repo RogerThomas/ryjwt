@@ -243,12 +243,12 @@ class PythonBenchmark:
             struct = TypicalClaimsStruct if typical else BaseClaimsStruct
             return Prepared(
                 decode,
-                kwargs | {"type": struct},
+                kwargs | {"into": struct},
                 msgspec.convert(case.payload, struct),
             )
         if self._impl == "ryjwt-pydantic":
             model = TypicalClaimsModel if typical else BaseClaimsModel
-            return Prepared(decode, kwargs | {"type": model}, model.model_validate(case.payload))
+            return Prepared(decode, kwargs | {"into": model}, model.model_validate(case.payload))
         return Prepared(decode, kwargs, case.payload)
 
     def _loop_ns(self, prepared: Prepared, token: str, iterations: int) -> int:

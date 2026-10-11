@@ -526,7 +526,7 @@ class JWKSClient:
         self,
         token: str | bytes,
         *,
-        type: None = None,
+        into: None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -536,7 +536,7 @@ class JWKSClient:
         self,
         token: str | bytes,
         *,
-        type: type[T],
+        into: type[T],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -545,7 +545,7 @@ class JWKSClient:
         self,
         token: str | bytes,
         *,
-        type: type[Any] | None = None,
+        into: type[Any] | None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -564,19 +564,19 @@ class JWKSClient:
         elif time.monotonic() >= refresh_at:
             keys = self._expired_keys(keys, stale_at)
         try:
-            return keys.decode(token, type=type, audience=audience, issuer=issuer, leeway=leeway)
+            return keys.decode(token, into=into, audience=audience, issuer=issuer, leeway=leeway)
         except UnknownKeyError:
             refetched = self._refetched(keys)
             if refetched is keys:
                 raise
-        return refetched.decode(token, type=type, audience=audience, issuer=issuer, leeway=leeway)
+        return refetched.decode(token, into=into, audience=audience, issuer=issuer, leeway=leeway)
 
     @overload
     async def adecode(
         self,
         token: str | bytes,
         *,
-        type: None = None,
+        into: None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -586,7 +586,7 @@ class JWKSClient:
         self,
         token: str | bytes,
         *,
-        type: type[T],
+        into: type[T],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -595,7 +595,7 @@ class JWKSClient:
         self,
         token: str | bytes,
         *,
-        type: type[Any] | None = None,
+        into: type[Any] | None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -608,19 +608,19 @@ class JWKSClient:
         elif time.monotonic() >= refresh_at:
             keys = await self._aexpired_keys(keys, stale_at)
         try:
-            return keys.decode(token, type=type, audience=audience, issuer=issuer, leeway=leeway)
+            return keys.decode(token, into=into, audience=audience, issuer=issuer, leeway=leeway)
         except UnknownKeyError:
             refetched = await self._arefetched(keys)
             if refetched is keys:
                 raise
-        return refetched.decode(token, type=type, audience=audience, issuer=issuer, leeway=leeway)
+        return refetched.decode(token, into=into, audience=audience, issuer=issuer, leeway=leeway)
 
     @overload
     def decode_nowait(
         self,
         token: str | bytes,
         *,
-        type: None = None,
+        into: None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -630,7 +630,7 @@ class JWKSClient:
         self,
         token: str | bytes,
         *,
-        type: type[T],
+        into: type[T],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -639,7 +639,7 @@ class JWKSClient:
         self,
         token: str | bytes,
         *,
-        type: type[Any] | None = None,
+        into: type[Any] | None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -652,7 +652,7 @@ class JWKSClient:
         isn't in the keys held.
         """
         keys = self._usable_keys()
-        return keys.decode(token, type=type, audience=audience, issuer=issuer, leeway=leeway)
+        return keys.decode(token, into=into, audience=audience, issuer=issuer, leeway=leeway)
 
 
 __all__ = ["JWKSClient"]

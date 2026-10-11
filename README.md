@@ -70,7 +70,7 @@ expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
 claims_in = Claims(sub="user-1", exp=expires)
 
 token = key.encode(claims_in)
-claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
+claims_out = key.decode(token, into=Claims)  # a Claims, with exp checked
 assert claims_in == claims_out
 ```
 
@@ -96,7 +96,7 @@ expires = datetime.now(UTC).replace(microsecond=0) + timedelta(minutes=15)
 claims_in = Claims(sub="user-1", exp=expires)
 
 token = key.encode(claims_in)
-claims_out = key.decode(token, type=Claims)  # a Claims, with exp checked
+claims_out = key.decode(token, into=Claims)  # a Claims, with exp checked
 assert claims_in == claims_out
 ```
 
@@ -105,7 +105,7 @@ assert claims_in == claims_out
 - **Fast:** over 28 times faster than PyJWT 2.15 on a typical HS256 token, on one core.
 - **Every common algorithm:** HMAC, RSA, RSA-PSS, ECDSA and Ed25519 (`HS*`, `RS*`, `PS*`, `ES*`,
   `EdDSA`).
-- **Typed:** Literal algorithm names, and `decode(token, type=Claims)` returns a `Claims`.
+- **Typed:** Literal algorithm names, and `decode(token, into=Claims)` returns a `Claims`.
 - **Safe defaults:** keys accept only the algorithms you give them. Weak keys, short secrets and
   malformed tokens are rejected.
 - **JWKS URLs:** `JWKSClient` keeps a provider's keys current, from sync or async code, through

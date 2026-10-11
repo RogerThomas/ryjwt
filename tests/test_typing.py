@@ -32,23 +32,23 @@ def test_decode_return_types(
 
     assert_type(hmac_jwt.decode(token), dict[str, Any])
     assert_type(hmac_jwt.decode(token.encode()), dict[str, Any])
-    assert_type(hmac_jwt.decode(token, type=None), dict[str, Any])
-    assert_type(hmac_jwt.decode(token, type=ClaimsStruct), ClaimsStruct)
-    assert_type(hmac_jwt.decode(token, type=ClaimsModel), ClaimsModel)
-    assert_type(hmac_jwt.decode(token, type=GenericClaims[str]), GenericClaims[str])
+    assert_type(hmac_jwt.decode(token, into=None), dict[str, Any])
+    assert_type(hmac_jwt.decode(token, into=ClaimsStruct), ClaimsStruct)
+    assert_type(hmac_jwt.decode(token, into=ClaimsModel), ClaimsModel)
+    assert_type(hmac_jwt.decode(token, into=GenericClaims[str]), GenericClaims[str])
     for key in (private_key, public_key):
         assert_type(key.decode(es256_token), dict[str, Any])
         assert_type(key.decode(es256_token.encode()), dict[str, Any])
-        assert_type(key.decode(es256_token, type=None), dict[str, Any])
-        assert_type(key.decode(es256_token, type=ClaimsStruct), ClaimsStruct)
-        assert_type(key.decode(es256_token, type=ClaimsModel), ClaimsModel)
-        assert_type(key.decode(es256_token, type=GenericClaims[str]), GenericClaims[str])
+        assert_type(key.decode(es256_token, into=None), dict[str, Any])
+        assert_type(key.decode(es256_token, into=ClaimsStruct), ClaimsStruct)
+        assert_type(key.decode(es256_token, into=ClaimsModel), ClaimsModel)
+        assert_type(key.decode(es256_token, into=GenericClaims[str]), GenericClaims[str])
 
 
 def test_decode_datetime_claims_types(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": 4_102_444_800, "iat": 946_684_800})
 
-    claims = hmac_jwt.decode(token, type=DatetimeClaimsStruct)
+    claims = hmac_jwt.decode(token, into=DatetimeClaimsStruct)
 
     assert_type(claims, DatetimeClaimsStruct)
     assert_type(claims.exp, datetime)
@@ -130,7 +130,7 @@ def test_audience_and_issuer_constructor_types(
         ryjwt.PublicKey,
     )
     assert_type(private_key.decode(token, issuer="iss"), dict[str, Any])
-    assert_type(public_key.decode(token, audience="aud", type=ClaimsStruct), ClaimsStruct)
+    assert_type(public_key.decode(token, audience="aud", into=ClaimsStruct), ClaimsStruct)
 
 
 def test_from_path_types(
@@ -173,7 +173,7 @@ def test_from_jwks_types(
     )
     assert_type(from_mapping.algorithms, list[ryjwt.AsymmetricAlgorithm])
     assert_type(from_mapping.decode(token), dict[str, Any])
-    assert_type(from_mapping.decode(token, type=ClaimsStruct), ClaimsStruct)
+    assert_type(from_mapping.decode(token, into=ClaimsStruct), ClaimsStruct)
 
 
 def test_unknown_key_error_type() -> None:
@@ -186,18 +186,18 @@ def test_unknown_key_error_type() -> None:
 async def _jwks_client_calls(client: ryjwt.JWKSClient) -> None:
     """Type-checked, never run: these would fetch."""
     assert_type(client.decode("token"), dict[str, Any])
-    assert_type(client.decode("token", type=None, leeway=1), dict[str, Any])
-    assert_type(client.decode("token", type=ClaimsStruct), ClaimsStruct)
-    assert_type(client.decode("token", type=ClaimsModel, issuer="iss"), ClaimsModel)
-    assert_type(client.decode("token", type=GenericClaims[int]), GenericClaims[int])
+    assert_type(client.decode("token", into=None, leeway=1), dict[str, Any])
+    assert_type(client.decode("token", into=ClaimsStruct), ClaimsStruct)
+    assert_type(client.decode("token", into=ClaimsModel, issuer="iss"), ClaimsModel)
+    assert_type(client.decode("token", into=GenericClaims[int]), GenericClaims[int])
     assert_type(await client.adecode("token"), dict[str, Any])
-    assert_type(await client.adecode(b"token", type=None), dict[str, Any])
-    assert_type(await client.adecode("token", type=ClaimsStruct), ClaimsStruct)
-    assert_type(await client.adecode("token", type=ClaimsModel, audience="aud"), ClaimsModel)
+    assert_type(await client.adecode(b"token", into=None), dict[str, Any])
+    assert_type(await client.adecode("token", into=ClaimsStruct), ClaimsStruct)
+    assert_type(await client.adecode("token", into=ClaimsModel, audience="aud"), ClaimsModel)
     assert_type(client.decode_nowait("token"), dict[str, Any])
-    assert_type(client.decode_nowait(b"token", type=None, leeway=timedelta(1)), dict[str, Any])
-    assert_type(client.decode_nowait("token", type=ClaimsStruct), ClaimsStruct)
-    assert_type(client.decode_nowait("token", type=ClaimsModel, audience="aud"), ClaimsModel)
+    assert_type(client.decode_nowait(b"token", into=None, leeway=timedelta(1)), dict[str, Any])
+    assert_type(client.decode_nowait("token", into=ClaimsStruct), ClaimsStruct)
+    assert_type(client.decode_nowait("token", into=ClaimsModel, audience="aud"), ClaimsModel)
     assert_type(client.refresh(), None)
     assert_type(await client.arefresh(), None)
 

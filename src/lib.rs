@@ -94,18 +94,18 @@ impl SecretKey {
         self.encoder.encode(claims, algorithm, header)
     }
 
-    #[pyo3(signature = (token, *, r#type=None, audience=None, issuer=None, leeway=None))]
+    #[pyo3(signature = (token, *, into=None, audience=None, issuer=None, leeway=None))]
     fn decode<'py>(
         &self,
         py: Python<'py>,
         token: &Bound<'py, PyAny>,
-        r#type: Option<&Bound<'py, PyAny>>,
+        into: Option<&Bound<'py, PyAny>>,
         audience: Option<&Bound<'py, PyAny>>,
         issuer: Option<&Bound<'py, PyAny>>,
         leeway: Option<&Bound<'py, PyAny>>,
     ) -> PyResult<Bound<'py, PyAny>> {
         self.decoder
-            .decode(py, token, r#type, audience, issuer, leeway)
+            .decode(py, token, into, audience, issuer, leeway)
     }
 }
 
@@ -187,18 +187,18 @@ impl PrivateKey {
         self.encoder.encode(claims, algorithm, header)
     }
 
-    #[pyo3(signature = (token, *, r#type=None, audience=None, issuer=None, leeway=None))]
+    #[pyo3(signature = (token, *, into=None, audience=None, issuer=None, leeway=None))]
     fn decode<'py>(
         &self,
         py: Python<'py>,
         token: &Bound<'py, PyAny>,
-        r#type: Option<&Bound<'py, PyAny>>,
+        into: Option<&Bound<'py, PyAny>>,
         audience: Option<&Bound<'py, PyAny>>,
         issuer: Option<&Bound<'py, PyAny>>,
         leeway: Option<&Bound<'py, PyAny>>,
     ) -> PyResult<Bound<'py, PyAny>> {
         self.decoder
-            .decode(py, token, r#type, audience, issuer, leeway)
+            .decode(py, token, into, audience, issuer, leeway)
     }
 }
 
@@ -294,18 +294,18 @@ impl PublicKey {
         jwk::only(&self.jwks)?.to_dict(py)
     }
 
-    #[pyo3(signature = (token, *, r#type=None, audience=None, issuer=None, leeway=None))]
+    #[pyo3(signature = (token, *, into=None, audience=None, issuer=None, leeway=None))]
     fn decode<'py>(
         &self,
         py: Python<'py>,
         token: &Bound<'py, PyAny>,
-        r#type: Option<&Bound<'py, PyAny>>,
+        into: Option<&Bound<'py, PyAny>>,
         audience: Option<&Bound<'py, PyAny>>,
         issuer: Option<&Bound<'py, PyAny>>,
         leeway: Option<&Bound<'py, PyAny>>,
     ) -> PyResult<Bound<'py, PyAny>> {
         self.decoder
-            .decode(py, token, r#type, audience, issuer, leeway)
+            .decode(py, token, into, audience, issuer, leeway)
     }
 }
 

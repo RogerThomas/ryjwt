@@ -41,7 +41,7 @@ A `SecretKey` signs and verifies. The claims can be a `Struct`, a `BaseModel`
     claims_in = Claims(sub="user-1", exp=expires)
 
     token = key.encode(claims_in)
-    claims_out = key.decode(token, type=Claims)
+    claims_out = key.decode(token, into=Claims)
     assert claims_in == claims_out
     ```
 
@@ -67,7 +67,7 @@ A `SecretKey` signs and verifies. The claims can be a `Struct`, a `BaseModel`
     claims_in = Claims(sub="user-1", exp=expires)
 
     token = key.encode(claims_in)
-    claims_out = key.decode(token, type=Claims)
+    claims_out = key.decode(token, into=Claims)
     assert claims_in == claims_out
     ```
 
@@ -140,7 +140,7 @@ Its subclasses, in [Errors](errors.md), tell the reasons apart.
 
 ## Typed claims
 
-With `type=Claims` ([above](#encode-and-decode)), `decode` returns a `Claims`, and your type
+With `into=Claims` ([above](#encode-and-decode)), `decode` returns a `Claims`, and your type
 checker knows it.
 
 The class also validates the claims, raising
@@ -166,7 +166,7 @@ and never expire.
     token = key.encode({"sub": "user-1"})  # no exp
 
     try:
-        key.decode(token, type=Claims)
+        key.decode(token, into=Claims)
     except ryjwt.ClaimsValidationError as e:
         print(e)  # Claims don't match Claims: Object missing required field `exp`
     ```
@@ -189,7 +189,7 @@ and never expire.
     token = key.encode({"sub": "user-1"})  # no exp
 
     try:
-        key.decode(token, type=Claims)
+        key.decode(token, into=Claims)
     except ryjwt.ClaimsValidationError as e:
         print(e)  # Claims don't match Claims: Field required - at `exp`
     ```
@@ -228,5 +228,5 @@ For tokens from an identity provider (Auth0, Okta, Entra ID, Google, Keycloak, .
 `algorithms` takes Literals, so a type checker catches a typo or an algorithm that doesn't fit
 the key. Use [`HMACAlgorithm`][ryjwt.HMACAlgorithm] and
 [`AsymmetricAlgorithm`][ryjwt.AsymmetricAlgorithm] in your own annotations. `PublicKey` has no
-`encode`, and `decode(token, type=Claims)` returns a `Claims`. Untyped code gets runtime errors
+`encode`, and `decode(token, into=Claims)` returns a `Claims`. Untyped code gets runtime errors
 instead.

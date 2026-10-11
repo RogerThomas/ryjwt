@@ -214,7 +214,7 @@ class _DecodeTo:
     def __call__(self, token: str, **kwargs: Unpack[DecodeOptions]) -> object:
         if self.to == "dict":
             return self.key.decode(token, **kwargs)
-        return self.key.decode(token, type=NoClaims, **kwargs)
+        return self.key.decode(token, into=NoClaims, **kwargs)
 
 
 @pytest.fixture(name="decode", params=["dict", "struct"])
@@ -314,21 +314,21 @@ def test_decodes_to_dict_by_default(hmac_jwt: ryjwt.SecretKey) -> None:
 def test_decodes_to_struct_and_model(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "other": "other"})
 
-    assert hmac_jwt.decode(token, type=ClaimsStruct) == ClaimsStruct(sub="sub")
-    assert hmac_jwt.decode(token, type=ClaimsModel) == ClaimsModel(sub="sub")
+    assert hmac_jwt.decode(token, into=ClaimsStruct) == ClaimsStruct(sub="sub")
+    assert hmac_jwt.decode(token, into=ClaimsModel) == ClaimsModel(sub="sub")
 
 
 def test_decodes_to_a_generic_struct(hmac_jwt: ryjwt.SecretKey, future: int, past: int) -> None:
     token = hmac_jwt.encode({"sub": 1, "exp": future, "value": "value"})
 
-    assert hmac_jwt.decode(token, type=GenericClaims[int]) == GenericClaims(1)
-    assert hmac_jwt.decode(token, type=GenericDeclaredClaims[str]) == GenericDeclaredClaims(
+    assert hmac_jwt.decode(token, into=GenericClaims[int]) == GenericClaims(1)
+    assert hmac_jwt.decode(token, into=GenericDeclaredClaims[str]) == GenericDeclaredClaims(
         future, "value"
     )
     with pytest.raises(ryjwt.ClaimsValidationError, match="GenericClaims: Expected `str`"):
-        hmac_jwt.decode(token, type=GenericClaims[str])
+        hmac_jwt.decode(token, into=GenericClaims[str])
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(hmac_jwt.encode({"exp": past, "value": 1}), type=GenericDeclaredClaims[int])
+        hmac_jwt.decode(hmac_jwt.encode({"exp": past, "value": 1}), into=GenericDeclaredClaims[int])
 
 
 @pytest.mark.parametrize(
@@ -354,7 +354,7 @@ def test_claims_that_dont_fit_the_type(
     hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     with pytest.raises(ryjwt.ClaimsValidationError, match=match) as error:
-        hmac_jwt.decode(hmac_jwt.encode(claims), type=type_)
+        hmac_jwt.decode(hmac_jwt.encode(claims), into=type_)
 
     assert isinstance(error.value, ryjwt.InvalidTokenError)
     assert isinstance(error.value.__cause__, cause)
@@ -373,7 +373,7 @@ def test_claims_that_dont_fit_a_plain_type(
     hmac_jwt: ryjwt.SecretKey,
 ) -> None:
     with pytest.raises(ryjwt.ClaimsValidationError, match="sub") as error:
-        hmac_jwt.decode(hmac_jwt.encode({"other": "other"}), type=type_)
+        hmac_jwt.decode(hmac_jwt.encode({"other": "other"}), into=type_)
 
     assert isinstance(error.value.__cause__, cause)
 
@@ -387,7 +387,7 @@ def test_payload_only_pydantic_rejects_is_a_decode_error(
     token = raw_hs256_token(b'{"alg":"HS256"}', payload)
 
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload JSON"):
-        hmac_jwt.decode(token, type=ClaimsModel)
+        hmac_jwt.decode(token, into=ClaimsModel)
 
 
 @pytest.mark.parametrize(
@@ -407,8 +407,16 @@ def test_payload_only_pydantic_rejects_is_a_decode_error(
 def test_unsupported_type_raises_type_error(type_: object, hmac_jwt: ryjwt.SecretKey) -> None:
     untyped_caller: Any = type_  # what an untyped caller could pass
 
-    with pytest.raises(TypeError, match="type must be None, a msgspec Struct or a pydantic"):
-        hmac_jwt.decode(hmac_jwt.encode({"sub": "sub"}), type=untyped_caller)
+    with pytest.raises(TypeError, match="into must be None, a msgspec Struct or a pydantic"):
+        hmac_jwt.decode(hmac_jwt.encode({"sub": "sub"}), into=untyped_caller)
+
+
+def test_type_keyword_is_not_accepted(hmac_jwt: ryjwt.SecretKey) -> None:
+    """`into` was once called `type`; the old name is gone, not an alias."""
+    untyped_decode: Any = hmac_jwt.decode  # what an untyped caller could call
+
+    with pytest.raises(TypeError, match="unexpected keyword argument 'type'"):
+        untyped_decode(hmac_jwt.encode({"sub": "sub"}), type=ClaimsStruct)
 
 
 def test_claims_are_validated_even_when_the_type_omits_them(
@@ -418,7 +426,7 @@ def test_claims_are_validated_even_when_the_type_omits_them(
     token = hmac_jwt.encode({"sub": "sub", "exp": past})
 
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(token, type=ClaimsStruct)
+        hmac_jwt.decode(token, into=ClaimsStruct)
 
 
 @pytest.mark.parametrize(
@@ -587,16 +595,16 @@ def test_declared_claims(
     token = raw_hs256_token(b'{"alg":"HS256"}', raw)
 
     if expected is None:
-        hmac_jwt.decode(token, type=type_, audience="a")
+        hmac_jwt.decode(token, into=type_, audience="a")
     else:
         with pytest.raises(expected):
-            hmac_jwt.decode(token, type=type_, audience="a")
+            hmac_jwt.decode(token, into=type_, audience="a")
 
 
 def test_claim_with_default_is_absent_when_missing(hmac_jwt: ryjwt.SecretKey, past: int) -> None:
-    assert hmac_jwt.decode(hmac_jwt.encode({"sub": "sub"}), type=DefaultExp) == DefaultExp()
+    assert hmac_jwt.decode(hmac_jwt.encode({"sub": "sub"}), into=DefaultExp) == DefaultExp()
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), type=DefaultExp)
+        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), into=DefaultExp)
 
 
 def test_claim_of_another_type_is_validated_from_the_payload(
@@ -605,20 +613,20 @@ def test_claim_of_another_type_is_validated_from_the_payload(
 ) -> None:
     token = hmac_jwt.encode({"exp": future})
 
-    assert hmac_jwt.decode(token, type=DecimalExp) == DecimalExp(Decimal(future))
+    assert hmac_jwt.decode(token, into=DecimalExp) == DecimalExp(Decimal(future))
 
 
 def test_claims_follow_field_renames(hmac_jwt: ryjwt.SecretKey, future: int, past: int) -> None:
-    assert hmac_jwt.decode(hmac_jwt.encode({"exp": future}), type=RenamedExp) == RenamedExp(future)
+    assert hmac_jwt.decode(hmac_jwt.encode({"exp": future}), into=RenamedExp) == RenamedExp(future)
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), type=RenamedExp)
+        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), into=RenamedExp)
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(hmac_jwt.encode({"exp": past, "expires_at": future}), type=ShadowedExp)
+        hmac_jwt.decode(hmac_jwt.encode({"exp": past, "expires_at": future}), into=ShadowedExp)
 
 
 def test_type_never_sees_invalid_claims(hmac_jwt: ryjwt.SecretKey, past: int) -> None:
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), type=Recorded)
+        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), into=Recorded)
 
     assert Recorded.built == []
 
@@ -628,7 +636,7 @@ def test_array_like_struct_needs_an_object_payload(
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     with pytest.raises(ryjwt.DecodeError):
-        hmac_jwt.decode(raw_hs256_token(b'{"alg":"HS256"}', b"[4102444800]"), type=ArrayLike)
+        hmac_jwt.decode(raw_hs256_token(b'{"alg":"HS256"}', b"[4102444800]"), into=ArrayLike)
 
 
 @pytest.mark.parametrize("type_", [DatetimeClaimsStruct, DatetimeClaimsModel])
@@ -645,7 +653,7 @@ def test_datetime_claims_round_trip(
         )
     )
 
-    claims = hmac_jwt.decode(token, type=type_)
+    claims = hmac_jwt.decode(token, into=type_)
 
     assert claims == type_(
         sub="sub",
@@ -669,7 +677,7 @@ def test_datetime_claims_from_numbers(
 ) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": 4_102_444_800.5, "iat": 946_684_800})
 
-    assert hmac_jwt.decode(token, type=type_) == type_(
+    assert hmac_jwt.decode(token, into=type_) == type_(
         sub="sub",
         exp=datetime(2100, 1, 1, 0, 0, 0, 500_000, tzinfo=UTC),
         iat=datetime(2000, 1, 1, tzinfo=UTC),
@@ -701,7 +709,7 @@ def test_datetime_claims_are_validated(
     }
 
     with pytest.raises(expected) as error:
-        hmac_jwt.decode(hmac_jwt.encode(payload), type=type_)
+        hmac_jwt.decode(hmac_jwt.encode(payload), into=type_)
     assert type(error.value) is expected
 
 
@@ -716,8 +724,8 @@ def test_datetime_claim_leaves_the_other_members_alone(
         b'"amount": 0.1000000000000000055511151231257827}',
     )
 
-    dated = hmac_jwt.decode(token, type=DatedMembers)
-    numbered = hmac_jwt.decode(token, type=NumberedMembers)
+    dated = hmac_jwt.decode(token, into=DatedMembers)
+    numbered = hmac_jwt.decode(token, into=NumberedMembers)
 
     assert dated.exp == datetime(2100, 1, 1, tzinfo=UTC)
     assert numbered.exp == 4_102_444_800
@@ -731,8 +739,8 @@ def test_far_datetime_claims_in_models(hmac_jwt: ryjwt.SecretKey) -> None:
     `decode` validated them: whatever the annotation, by alias, `Optional` or `Annotated`."""
     token = hmac_jwt.encode({"exp": 30_000_000_000.5, "nbf": 0, "iat": 20_000_000_001})
 
-    claims = hmac_jwt.decode(token, type=FarDatetimeModel)
-    aliased = hmac_jwt.decode(token, type=AliasedDatetimeModel)
+    claims = hmac_jwt.decode(token, into=FarDatetimeModel)
+    aliased = hmac_jwt.decode(token, into=AliasedDatetimeModel)
 
     assert claims == FarDatetimeModel(
         exp=datetime(2920, 8, 30, 5, 20, 0, 500_000, tzinfo=UTC),
@@ -747,7 +755,7 @@ def test_far_datetime_claims_in_models(hmac_jwt: ryjwt.SecretKey) -> None:
 def test_numeric_date_claims_in_number_fields_are_unchanged(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"exp": 30_000_000_000, "nbf": 0.5, "iat": 20_000_000_001})
 
-    claims = hmac_jwt.decode(token, type=NumberModel)
+    claims = hmac_jwt.decode(token, into=NumberModel)
 
     assert claims.model_dump() == {"exp": 30_000_000_000, "nbf": 0.5, "iat": 20_000_000_001}
 
@@ -763,8 +771,8 @@ def test_model_datetime_claim_leaves_the_other_members_alone(
         b'"nested": {"\\u0065xp": [1, 2.50]}} ',
     )
 
-    dated = hmac_jwt.decode(token, type=DatedMembersModel)
-    numbered = hmac_jwt.decode(token, type=NumberedMembersModel)
+    dated = hmac_jwt.decode(token, into=DatedMembersModel)
+    numbered = hmac_jwt.decode(token, into=NumberedMembersModel)
 
     assert dated.exp == datetime(2920, 8, 30, 5, 20, tzinfo=UTC)
     assert numbered.exp == 30_000_000_000
@@ -777,7 +785,7 @@ def test_out_of_range_datetime_claim_in_a_model(hmac_jwt: ryjwt.SecretKey) -> No
     token = hmac_jwt.encode({"sub": "sub", "exp": 2**40, "iat": 946_684_800})
 
     with pytest.raises(ryjwt.ClaimsValidationError, match=r"out of range - at `exp`") as error:
-        hmac_jwt.decode(token, type=DatetimeClaimsModel)
+        hmac_jwt.decode(token, into=DatetimeClaimsModel)
     assert isinstance(error.value.__cause__, pydantic.ValidationError)
 
 
@@ -791,16 +799,16 @@ def test_expired_datetime_claim_is_rejected(hmac_jwt: ryjwt.SecretKey) -> None:
     )
 
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(token, type=DatetimeClaimsStruct)
+        hmac_jwt.decode(token, into=DatetimeClaimsStruct)
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(token, type=DatetimeClaimsModel)
+        hmac_jwt.decode(token, into=DatetimeClaimsModel)
 
 
 def test_out_of_range_datetime_claim(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub", "exp": 2**40, "iat": 946_684_800})
 
     with pytest.raises(ryjwt.ClaimsValidationError, match=r"out of range.*at `\$\.exp`"):
-        hmac_jwt.decode(token, type=DatetimeClaimsStruct)
+        hmac_jwt.decode(token, into=DatetimeClaimsStruct)
 
 
 def test_datetime_claim_among_claims_read_from_the_instance(
@@ -811,12 +819,12 @@ def test_datetime_claim_among_claims_read_from_the_instance(
     token = hmac_jwt.encode({"exp": future, "aud": "aud", "iat": 946_684_800})
 
     assert hmac_jwt.decode(
-        token, type=DeclaredClaimsWithDatetime, audience="aud"
+        token, into=DeclaredClaimsWithDatetime, audience="aud"
     ) == DeclaredClaimsWithDatetime(future, "aud", datetime(2000, 1, 1, tzinfo=UTC))
     with pytest.raises(ryjwt.ExpiredSignatureError):
         hmac_jwt.decode(
             hmac_jwt.encode({"exp": past, "aud": "aud", "iat": 946_684_800}),
-            type=DeclaredClaimsWithDatetime,
+            into=DeclaredClaimsWithDatetime,
             audience="aud",
         )
 
@@ -854,7 +862,7 @@ def test_datetime_claim_however_the_payload_spells_it(
     hmac_jwt: ryjwt.SecretKey,
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
-    claims = hmac_jwt.decode(raw_hs256_token(b'{"alg":"HS256"}', payload), type=Issued)
+    claims = hmac_jwt.decode(raw_hs256_token(b'{"alg":"HS256"}', payload), into=Issued)
 
     assert claims == expected
     assert claims.iat.tzinfo is UTC
@@ -880,7 +888,7 @@ def test_invalid_datetime_claim(
     raw_hs256_token: Callable[[bytes, bytes], str],
 ) -> None:
     with pytest.raises(ryjwt.ClaimsValidationError, match=match):
-        hmac_jwt.decode(raw_hs256_token(b'{"alg":"HS256"}', payload), type=Issued)
+        hmac_jwt.decode(raw_hs256_token(b'{"alg":"HS256"}', payload), into=Issued)
 
 
 def test_datetime_claims_from_whole_seconds(hmac_jwt: ryjwt.SecretKey) -> None:
@@ -888,31 +896,31 @@ def test_datetime_claims_from_whole_seconds(hmac_jwt: ryjwt.SecretKey) -> None:
     seconds = [rng.randrange(253_402_300_800) for _ in range(2000)]
 
     for n in seconds:
-        claims = hmac_jwt.decode(hmac_jwt.encode({"iat": n}), type=Issued)
+        claims = hmac_jwt.decode(hmac_jwt.encode({"iat": n}), into=Issued)
         assert claims == Issued(EPOCH + timedelta(seconds=n)), n
 
 
 def test_datetime_claims_in_a_frozen_struct(hmac_jwt: ryjwt.SecretKey, future: int) -> None:
     expires = EPOCH + timedelta(seconds=future)
 
-    assert hmac_jwt.decode(hmac_jwt.encode({"exp": future}), type=DatedSession) == DatedSession(
+    assert hmac_jwt.decode(hmac_jwt.encode({"exp": future}), into=DatedSession) == DatedSession(
         expires=expires
     )
     assert hmac_jwt.decode(
-        hmac_jwt.encode({"exp": future, "nbf": 946_684_800, "sub": "s"}), type=DatedSession
+        hmac_jwt.encode({"exp": future, "nbf": 946_684_800, "sub": "s"}), into=DatedSession
     ) == DatedSession(expires=expires, nbf=Y2K, sub="s")
     with pytest.raises(ryjwt.ClaimsValidationError, match="unknown field `iat`"):
-        hmac_jwt.decode(hmac_jwt.encode({"exp": future, "iat": 0}), type=DatedSession)
+        hmac_jwt.decode(hmac_jwt.encode({"exp": future, "iat": 0}), into=DatedSession)
 
 
 def test_datetime_claim_in_a_generic_struct(hmac_jwt: ryjwt.SecretKey, future: int) -> None:
     token = hmac_jwt.encode({"exp": future, "value": 1})
 
-    assert hmac_jwt.decode(token, type=GenericDated[int]) == GenericDated(
+    assert hmac_jwt.decode(token, into=GenericDated[int]) == GenericDated(
         EPOCH + timedelta(seconds=future), 1
     )
     with pytest.raises(ryjwt.ClaimsValidationError, match="Expected `str`, got `int`"):
-        hmac_jwt.decode(token, type=GenericDated[str])
+        hmac_jwt.decode(token, into=GenericDated[str])
 
 
 def test_datetime_claims_are_checked_before_post_init(
@@ -922,10 +930,10 @@ def test_datetime_claims_are_checked_before_post_init(
 ) -> None:
     RecordedDated.built.clear()
     with pytest.raises(ryjwt.ExpiredSignatureError):
-        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), type=RecordedDated)
+        hmac_jwt.decode(hmac_jwt.encode({"exp": past}), into=RecordedDated)
     assert RecordedDated.built == []
 
-    claims = hmac_jwt.decode(hmac_jwt.encode({"exp": future}), type=RecordedDated)
+    claims = hmac_jwt.decode(hmac_jwt.encode({"exp": future}), into=RecordedDated)
 
     assert RecordedDated.built == [claims]
     assert claims.exp == EPOCH + timedelta(seconds=future)
@@ -1204,9 +1212,9 @@ def test_deeply_nested_payload(
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload JSON"):
         hmac_jwt.decode(token)
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload JSON"):
-        hmac_jwt.decode(token, type=ClaimsStruct)
+        hmac_jwt.decode(token, into=ClaimsStruct)
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload JSON"):
-        hmac_jwt.decode(token, type=ClaimsModel)
+        hmac_jwt.decode(token, into=ClaimsModel)
 
 
 def _with_stray_bit(segment: str) -> str:
