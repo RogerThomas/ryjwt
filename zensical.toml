@@ -4,7 +4,7 @@
 # python/ryjwt/_ryjwt.pyi): the extension isn't built or imported.
 [project]
 site_name = "ryjwt"
-site_description = "Fast, strictly typed JWTs for Python, written in Rust"
+site_description = "Fast, strictly typed JWTs for Python, powered by Rust"
 site_url = "https://rogerthomas.github.io/ryjwt/"
 extra_css = ["stylesheets/extra.css"]
 # The "Copy for uv" button on examples tagged with `data-uv-extra` (see docs/javascripts/extra.js).
