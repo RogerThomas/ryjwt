@@ -1,7 +1,7 @@
 [project]
 name = "ryjwt"
 dynamic = ["version"] # from Cargo.toml (a pre-release such as 0.2.0-beta.0 is 0.2.0b0), by maturin
-description = "Fast, strictly typed JWTs for Python, written in Rust: HMAC, RSA, ECDSA and EdDSA, msgspec and pydantic claims, JWKS URLs"
+description = "Fast, strictly typed JWTs for Python, powered by Rust: HMAC, RSA, ECDSA and EdDSA, msgspec and pydantic claims, JWKS URLs"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE", "THIRD_PARTY_LICENSES"]
