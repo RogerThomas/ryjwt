@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/RogerThomas/ryjwt/compare/v0.1.2...v0.2.0) (2026-10-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* the decode methods' type= argument is now into=; type= is no longer accepted.
+
+### Features
+
+* decode(token, into=Claims), replacing type= ([#23](https://github.com/RogerThomas/ryjwt/issues/23)) ([eb87b82](https://github.com/RogerThomas/ryjwt/commit/eb87b82c2aeaa3e5732176867e68abc2be2af5fb))
+
 ## [0.1.2](https://github.com/RogerThomas/ryjwt/compare/v0.1.1...v0.1.2) (2026-10-11)
 
 
