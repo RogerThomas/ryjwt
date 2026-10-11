@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/RogerThomas/ryjwt/compare/v0.1.1...v0.1.2) (2026-10-11)
+
+
+### Features
+
+* publish your public keys as a JWKS, with a kid on the key ([#18](https://github.com/RogerThomas/ryjwt/issues/18)) ([5a47a65](https://github.com/RogerThomas/ryjwt/commit/5a47a650ef52e8e992946480e87fb56fe47837f6))
+
 ## [0.1.1](https://github.com/RogerThomas/ryjwt/compare/v0.1.0...v0.1.1) (2026-10-10)
 
 
