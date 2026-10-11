@@ -1569,7 +1569,9 @@ def test_manual_refresh_through_rotation_and_outage(
 ) -> None:
     """The manual pattern: `if client.needs_refresh: client.refresh()`, then `decode_nowait`."""
     server.serve(make_jwk(old_key, kid="old"))
-    caller = make_client(server.url, cache_lifetime=0.1, cooldown=0.1)
+    # Keys stay fresh for the cooldown, so each sleep outlasts it. Half a second, so a slow CI
+    # runner's two decodes still land inside the cooldown after the failed fetch.
+    caller = make_client(server.url, cache_lifetime=0.1, cooldown=0.5)
     assert caller.decode_manually(old_token) == {"sub": "old"}
     assert caller.decode_manually(old_token) == {"sub": "old"}
     assert server.requests == 1
@@ -1578,7 +1580,7 @@ def test_manual_refresh_through_rotation_and_outage(
     server.serve(make_jwk(new_key, kid="new"))
     with pytest.raises(ryjwt.UnknownKeyError):
         caller.decode_manually(new_token)
-    time.sleep(0.15)
+    time.sleep(0.6)
     assert caller.decode_manually(new_token) == {"sub": "new"}
     with pytest.raises(ryjwt.UnknownKeyError):
         caller.decode_manually(old_token)
@@ -1586,14 +1588,14 @@ def test_manual_refresh_through_rotation_and_outage(
 
     # An outage: refreshing fails, the expired keys stay in use, and the cooldown applies.
     server.status = 500
-    time.sleep(0.15)
+    time.sleep(0.6)
     assert caller.decode_manually(new_token) == {"sub": "new"}
     assert caller.decode_manually(new_token) == {"sub": "new"}
     assert server.requests == 3
 
     # Recovered: the first round after the cooldown refreshes.
     server.status = 200
-    time.sleep(0.25)
+    time.sleep(0.6)
     assert caller.decode_manually(new_token) == {"sub": "new"}
     assert server.requests == 4
     assert not caller.client.needs_refresh
