@@ -9,7 +9,7 @@ use pyo3::prelude::*;
 use pyo3::types::{PyBytes, PyDict, PyString, PyType};
 
 use crate::claims::{self, Checks, ClaimAttributes, Expected};
-use crate::dates::{self, DateClaims, Rewritten};
+use crate::dates::{self, DateClaims, Format, Rewritten};
 use crate::errors::{
     ClaimsValidationError, DecodeError, InvalidAlgorithmError, InvalidSignatureError,
     UnknownKeyError,
@@ -58,21 +58,45 @@ struct TypedParser {
     type_: Py<PyAny>,
     /// callable(bytes) -> instance.
     make: Py<PyAny>,
+    /// For a `BaseModel` whose `model_validate_json` is pydantic's own
+    /// (`ryjwt._types.plain_model`): the class, which `decode_plain` validates with as that does.
+    model: Option<Py<PyAny>>,
     /// Where instances hold the registered claims, if they can be read from there.
     claims: Option<ClaimAttributes>,
-    /// For a Struct declaring `NumericDate` claims as datetimes, a faster way to make one.
-    dated: Option<DatedStruct>,
+    /// For a type declaring `NumericDate` claims as datetimes, a faster way to make one.
+    dated: Option<Dated>,
 }
 
-/// How to decode a Struct declaring `NumericDate` claims as datetimes in one pass, from the payload
-/// with those claims as RFC 3339 strings (`ryjwt._types.struct_date_decoder`).
-struct DatedStruct {
+/// How to decode a Struct or `BaseModel` declaring `NumericDate` claims as datetimes in one pass,
+/// from the payload with those claims as datetime strings (`ryjwt._types.date_decoder`).
+struct Dated {
     claims: DateClaims,
-    /// callable(bytes) -> instance: the Struct's plain decoder.
+    /// callable(bytes) -> instance: the type's plain decoder.
     decode: Py<PyAny>,
-    /// The error `decode` raises for a payload that doesn't fit the Struct (any other it raises
-    /// is for malformed JSON).
+    /// The error `decode` raises for a payload that doesn't fit the type.
     validation_error: Py<PyType>,
+    /// How the type's library writes datetimes: whether it's a Struct or a `BaseModel`.
+    format: Format,
+}
+
+impl Dated {
+    /// Whether `error`, raised decoding the rewritten payload, says it's malformed JSON, which
+    /// `make` then reports as it would: where in the payload as given (as it would quote it).
+    fn malformed(&self, py: Python<'_>, error: &PyErr) -> PyResult<bool> {
+        let validation_error = error.is_instance(py, self.validation_error.bind(py));
+        Ok(match self.format {
+            // msgspec raises its DecodeError, a ValueError.
+            Format::Msgspec => error.is_instance_of::<PyValueError>(py) && !validation_error,
+            // pydantic raises a ValidationError of `json_invalid`.
+            Format::Isoformat => {
+                validation_error
+                    && py
+                        .import(intern!(py, "ryjwt._types"))?
+                        .call_method1(intern!(py, "is_json_invalid"), (error.value(py),))?
+                        .is_truthy()?
+            }
+        })
+    }
 }
 
 impl TypedParser {
@@ -80,51 +104,87 @@ impl TypedParser {
         let py = type_.py();
         let glue = py.import(intern!(py, "ryjwt._types"))?;
         let make = glue.call_method1(intern!(py, "payload_parser"), (type_,))?;
+        let model = glue
+            .call_method1(intern!(py, "plain_model"), (type_,))?
+            .extract::<Option<Bound<'_, PyAny>>>()?;
         let claims = glue
             .call_method1(intern!(py, "claim_attributes"), (type_,))?
             .extract::<Option<[Option<Bound<'_, PyString>>; 4]>>()?
             .map(ClaimAttributes::new);
         let dated = glue
-            .call_method1(intern!(py, "struct_date_decoder"), (type_,))?
+            .call_method1(intern!(py, "date_decoder"), (type_,))?
             .extract::<Option<(
                 Vec<Bound<'_, PyString>>,
                 Bound<'_, PyAny>,
                 Bound<'_, PyType>,
+                bool,
             )>>()?
-            .map(|(claims, decode, validation_error)| {
-                Ok::<_, PyErr>(DatedStruct {
+            .map(|(claims, decode, validation_error, is_model)| {
+                Ok::<_, PyErr>(Dated {
                     claims: DateClaims::new(&claims)?,
                     decode: decode.unbind(),
                     validation_error: validation_error.unbind(),
+                    format: if is_model {
+                        Format::Isoformat
+                    } else {
+                        Format::Msgspec
+                    },
                 })
             })
             .transpose()?;
         Ok(Self {
             type_: type_.clone().unbind(),
             make: make.unbind(),
+            model: model.map(Bound::unbind),
             claims,
             dated,
         })
     }
 
-    /// An instance of the type from the payload: `make`'s, in one decoding pass when `dated` can.
-    fn instantiate<'py>(&self, payload: &Bound<'py, PyBytes>) -> PyResult<Bound<'py, PyAny>> {
+    /// `decode(payload)`, where `decode` is the type's plain decoder (for a `BaseModel`, its
+    /// `model_validate_json`). For a `model`, without that call: what it does, validating with the
+    /// class's `__pydantic_validator__` (looked up each time, as pydantic replaces it when it
+    /// rebuilds the class).
+    fn decode_plain<'py>(
+        &self,
+        decode: &Py<PyAny>,
+        payload: &Bound<'py, PyAny>,
+    ) -> PyResult<Bound<'py, PyAny>> {
         let py = payload.py();
-        if let Some(dated) = &self.dated {
-            let decoded = match dates::rewrite(payload, dated.claims)? {
-                Rewritten::Unchanged => dated.decode.bind(py).call1((payload,)),
-                Rewritten::Payload(rewritten) => dated.decode.bind(py).call1((rewritten,)),
-                Rewritten::Unsupported => return self.make.bind(py).call1((payload,)),
-            };
-            match decoded {
-                // Malformed JSON: `make` reports it as it would (where in the payload it is).
-                Err(e)
-                    if e.is_instance_of::<PyValueError>(py)
-                        && !e.is_instance(py, dated.validation_error.bind(py)) => {}
-                decoded => return decoded,
-            }
+        match &self.model {
+            Some(model) => model
+                .bind(py)
+                .getattr(intern!(py, "__pydantic_validator__"))?
+                .call_method1(intern!(py, "validate_json"), (payload,)),
+            None => decode.bind(py).call1((payload,)),
         }
-        self.make.bind(py).call1((payload,))
+    }
+
+    /// An instance of the type from the payload: `make`'s, in one decoding pass when `dated` can
+    /// (from the payload `rewritten` for it, if given).
+    fn instantiate<'py>(
+        &self,
+        payload: &Bound<'py, PyBytes>,
+        rewritten: Option<Rewritten<'py>>,
+    ) -> PyResult<Bound<'py, PyAny>> {
+        let py = payload.py();
+        let Some(dated) = &self.dated else {
+            // Then `make` is the type's plain decoder.
+            return self.decode_plain(&self.make, payload);
+        };
+        let rewritten = match rewritten {
+            Some(rewritten) => rewritten,
+            None => dates::rewrite(payload, dated.claims, dated.format)?,
+        };
+        let decoded = match rewritten {
+            Rewritten::Unchanged => self.decode_plain(&dated.decode, payload),
+            Rewritten::Payload(rewritten) => self.decode_plain(&dated.decode, &rewritten),
+            Rewritten::Unsupported => return self.make.bind(py).call1((payload,)),
+        };
+        match decoded {
+            Err(e) if dated.malformed(py, &e)? => self.make.bind(py).call1((payload,)),
+            decoded => decoded,
+        }
     }
 
     /// `error`, raised by `instantiate`, as a `ClaimsValidationError` if it's msgspec or pydantic
@@ -160,13 +220,24 @@ impl TypedParser {
         let py = payload.py();
         let bytes = payload.as_bytes();
         let Some(claims) = self.claims.as_ref().filter(|c| c.cover(bytes)) else {
+            if let Some(dated) = &self.dated
+                && let Some((registered, rewritten)) =
+                    dates::scan_and_rewrite(payload, dated.claims, dated.format)?
+            {
+                checks.validate(&registered)?;
+                return self
+                    .instantiate(payload, Some(rewritten))
+                    .map_err(|e| self.mismatch(py, e));
+            }
             checks.validate(&claims::scan(bytes)?)?;
-            return self.instantiate(payload).map_err(|e| self.mismatch(py, e));
+            return self
+                .instantiate(payload, None)
+                .map_err(|e| self.mismatch(py, e));
         };
         // The parser rejects what `scan` would and decodes the claims as `scan` would, running no
         // user code: parse first and read the claims from the instance, scanning only to report
         // invalid claims ahead of the parser's own error.
-        let instance = self.instantiate(payload).map_err(|e| {
+        let instance = self.instantiate(payload, None).map_err(|e| {
             claims::scan(bytes)
                 .and_then(|registered| checks.validate(&registered))
                 .map_or_else(|invalid| invalid, |()| self.mismatch(py, e))

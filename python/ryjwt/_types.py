@@ -22,9 +22,18 @@ type ClaimAttributes = tuple[str | None, str | None, str | None, str | None]
 type DateClaims = tuple[tuple[str, str], ...]
 """Per NumericDate claim (`exp`, `nbf`, `iat`) a class has a field for: its JSON name, and the
 field's attribute."""
-type PayloadEncoder = tuple[Callable[[Any], bytes], tuple[str, ...], Callable[[Any], bytes]]
-"""How instances of a claims class encode: plainly, unless any of the attributes holding their
-NumericDate claims holds a datetime (as the encoder checks), then with the other callable."""
+type PayloadEncoder = tuple[
+    Callable[[Any], bytes] | None,
+    bool,
+    DateClaims,
+    Callable[[Any], Any],
+    Callable[[Any], bytes],
+]
+"""How instances of a claims class encode: with the first callable, or if that's None (a BaseModel
+whose `model_dump_json` is pydantic's own) as that does, with the class's `__pydantic_serializer__`,
+by alias if the bool says so. Unless any of its NumericDate claims (`DateClaims`) holds a datetime,
+as the encoder checks: then the encoder makes a dict of the instance (the next callable), sets
+those claims in it that hold one to their NumericDates, and makes JSON of that (the last)."""
 
 
 def _members(value: object) -> Iterator[object]:
@@ -337,22 +346,6 @@ def _validate_with_dates(
     return validate("".join(pieces))
 
 
-def _encode_with_dates(
-    to_dict: Callable[[Any], dict[str, Any]],
-    to_json: Callable[[Any], bytes],
-    claims: DateClaims,
-    instance: object,
-) -> bytes:
-    """`to_json(to_dict(instance))`, with each of the instance's `claims` that holds a datetime as a
-    NumericDate."""
-    data = to_dict(instance)
-    for key, attribute in claims:
-        value = getattr(instance, attribute)
-        if key in data and isinstance(value, datetime):
-            data[key] = numeric_date(key, value)
-    return to_json(data)
-
-
 def claim_attributes(type_: object) -> ClaimAttributes | None:
     """Where the registered claims (`exp`, `nbf`, `aud`, `iss`) of a decoded `type_` instance are,
     so the payload needn't be scanned for them as well: per claim, the attribute holding it, or
@@ -394,7 +387,8 @@ def claim_attributes(type_: object) -> ClaimAttributes | None:
 
 def payload_parser(type_: object) -> Callable[[bytes], Any]:
     """A callable turning payload JSON bytes into an instance of `type_` (a class, or a
-    parametrised generic Struct such as `G[int]`)."""
+    parametrised generic Struct such as `G[int]`): for a BaseModel without datetime claims, its
+    `model_validate_json`."""
     origin = _origin(type_)
     if origin is not None and issubclass(origin, Struct):
         decode = msgspec.json.Decoder(type_).decode
@@ -413,22 +407,60 @@ def payload_parser(type_: object) -> Callable[[bytes], Any]:
     raise TypeError(f"into must be None, a msgspec Struct or a pydantic BaseModel, got {type_!r}")
 
 
-def struct_date_decoder(
+def _is_pydantic_own(cls: "type[BaseModel]", name: str) -> bool:
+    """Whether model class `cls` has pydantic's own method `name`, not an override."""
+    import pydantic  # imported already: the model's class was made with it
+
+    return inspect.getattr_static(cls, name) is inspect.getattr_static(pydantic.BaseModel, name)
+
+
+def plain_model(type_: object) -> "type[BaseModel] | None":
+    """The BaseModel class `type_` is, if its `model_validate_json` is pydantic's own, which just
+    validates with the class's `__pydantic_validator__` (as `decode` then does itself); else
+    None."""
+    origin = _origin(type_)
+    if origin is None or not is_model_class(origin):
+        return None
+    return origin if _is_pydantic_own(origin, "model_validate_json") else None
+
+
+def date_decoder(
     type_: object,
-) -> tuple[tuple[str, ...], Callable[[bytes], Any], type[Exception]] | None:
-    """For a Struct that declares NumericDate claims (`exp`, `nbf`, `iat`) as datetimes, which its
-    `payload_parser` converts: those claims (by JSON name), the Struct's plain decoder, and the
-    error that raises for a payload that doesn't fit. Given the payload with those claims (each a
-    whole number of seconds) as RFC 3339 strings, as `_parse_with_dates` makes it, the decoder
-    decodes as `payload_parser` would; `decode` makes that payload itself when it can. None for any
-    other type."""
+) -> tuple[tuple[str, ...], Callable[[bytes], Any], type[Exception], bool] | None:
+    """For a Struct or BaseModel that declares NumericDate claims (`exp`, `nbf`, `iat`) as
+    datetimes, which its `payload_parser` converts: those claims (by JSON name), the type's plain
+    decoder, the error that raises for a payload that doesn't fit, and whether it's a BaseModel.
+    Given the payload with those claims (each a whole number of seconds) as datetime strings, as
+    `_parse_with_dates` (for a Struct) or `_validate_with_dates` (for a BaseModel) writes them, the
+    decoder decodes as `payload_parser` would; `decode` makes that payload itself when it can.
+
+    None for any other type, and for a BaseModel that isn't a `plain_model`: an override of
+    `model_validate_json` could tell the bytes `decode` makes from the str `_validate_with_dates`
+    makes."""
+    model = plain_model(type_)
+    if model is not None:
+        from pydantic_core import ValidationError  # only here: pydantic is optional
+
+        model_claims = _model_datetime_claims(model)
+        if not model_claims:
+            return None
+        return model_claims, model.model_validate_json, ValidationError, True
     origin = _origin(type_)
     if origin is None or not issubclass(origin, Struct):
         return None
     date_claims = _struct_datetime_claims(type_)
     if not date_claims:
         return None
-    return date_claims, msgspec.json.Decoder(type_).decode, msgspec.ValidationError
+    return date_claims, msgspec.json.Decoder(type_).decode, msgspec.ValidationError, False
+
+
+def is_json_invalid(error: BaseException) -> bool:
+    """Whether `error`, a pydantic `ValidationError`, says the JSON it was given is malformed."""
+    from pydantic_core import ValidationError  # only here: pydantic is optional
+
+    return isinstance(error, ValidationError) and any(
+        e["type"] == "json_invalid" for e in error.errors(include_url=False)
+    )
 
 
 def mismatch(type_: object, error: BaseException) -> tuple[str, bool] | None:
@@ -462,39 +494,27 @@ def _model_dump_json(claims: "BaseModel", *, by_alias: bool) -> bytes:
     return claims.model_dump_json(by_alias=by_alias).encode()
 
 
-def _payload_encoder(
-    encode: Callable[[Any], bytes],
-    to_dict: Callable[[Any], dict[str, Any]],
-    to_json: Callable[[Any], bytes],
-    date_claims: DateClaims,
-) -> PayloadEncoder:
-    if not date_claims:
-        return encode, (), encode
-    attributes = tuple(attribute for _, attribute in date_claims)
-    return encode, attributes, partial(_encode_with_dates, to_dict, to_json, date_claims)
-
-
 def payload_encoder(cls: type[object]) -> PayloadEncoder:
-    """How to turn an instance of `cls` (a Struct or BaseModel class) into JSON bytes: a callable;
-    the attributes of the NumericDate claims (`exp`, `nbf`, `iat`) `cls` has fields for, whatever
-    their annotations; and the callable to use instead if any of those holds a datetime (as only
-    the value can tell, e.g. for a generic Struct), which encodes those as NumericDates."""
+    """How to turn an instance of `cls` (a Struct or BaseModel class) into JSON bytes (see
+    `PayloadEncoder`), with the NumericDate claims (`exp`, `nbf`, `iat`) `cls` has fields for,
+    whatever their annotations: only the value can tell whether one holds a datetime (e.g. for a
+    generic Struct)."""
     if issubclass(cls, Struct):
         date_claims = _struct_date_claims(cls)
-        return _payload_encoder(
-            msgspec.json.encode, msgspec.to_builtins, msgspec.json.encode, date_claims
-        )
+        return msgspec.json.encode, False, date_claims, msgspec.to_builtins, msgspec.json.encode
     if is_model_class(cls):
         from pydantic_core import to_json  # only here: pydantic is optional
 
         # Encode by alias (matching how the model decodes) unless the model opts out.
         by_alias: bool = cls.model_config.get("serialize_by_alias", True)
         date_claims = _model_date_claims(cls, by_alias=by_alias)
-        return _payload_encoder(
-            partial(_model_dump_json, by_alias=by_alias),
+        plain = _is_pydantic_own(cls, "model_dump_json")
+        return (
+            None if plain else partial(_model_dump_json, by_alias=by_alias),
+            by_alias,
+            date_claims,
             partial(_model_dump, by_alias=by_alias),
             to_json,
-            date_claims,
         )
     raise TypeError(
         f"claims must be a dict, a msgspec Struct or a pydantic BaseModel, got {cls.__name__}"

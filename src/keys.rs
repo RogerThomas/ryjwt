@@ -334,26 +334,43 @@ impl Verifier {
     }
 }
 
+/// The longest RSA signature: RSA-8192's, the largest key `RSA_BITS` allows.
+const MAX_RSA_SIGNATURE_LEN: usize = 1024;
+
 impl Signer {
-    pub fn sign(&self, signing_input: &[u8]) -> PyResult<Vec<u8>> {
-        let failed = |_| InvalidKeyError::new_err("Signing failed");
+    /// The length of this signer's signatures, which is the same for every signature.
+    pub fn signature_len(&self) -> usize {
         match &self.key {
-            SigningKey::Hmac(key) => {
-                Ok(key.sign(signing_input, &mut [0; mac::MAX_TAG_LEN]).to_vec())
-            }
-            SigningKey::Rsa(pair, encoding) => {
-                let mut sig = vec![0; pair.public_modulus_len()];
-                pair.sign(*encoding, &SystemRandom::new(), signing_input, &mut sig)
-                    .map_err(failed)?;
-                Ok(sig)
-            }
-            SigningKey::Ecdsa(pair) => Ok(pair
-                .sign(&SystemRandom::new(), signing_input)
-                .map_err(failed)?
-                .as_ref()
-                .to_vec()),
-            SigningKey::Ed25519(pair) => Ok(pair.sign(signing_input).as_ref().to_vec()),
+            SigningKey::Hmac(key) => key.tag_len(),
+            SigningKey::Rsa(pair, _) => pair.public_modulus_len(),
+            // A fixed-size signature is r then s, each as long as a coordinate of the public
+            // key's point, which is uncompressed: a 0x04 byte, x, then y.
+            SigningKey::Ecdsa(pair) => pair.public_key().as_ref().len() - 1,
+            // RFC 8032 §5.1.6.
+            SigningKey::Ed25519(_) => 64,
         }
+    }
+
+    /// Signs `signing_input`, and runs `f` on the signature, made on the stack.
+    pub fn sign<R>(&self, signing_input: &[u8], f: impl FnOnce(&[u8]) -> R) -> PyResult<R> {
+        let failed = || InvalidKeyError::new_err("Signing failed");
+        Ok(match &self.key {
+            SigningKey::Hmac(key) => f(key.sign(signing_input, &mut [0; mac::MAX_TAG_LEN])),
+            SigningKey::Rsa(pair, encoding) => {
+                let mut signature = [0; MAX_RSA_SIGNATURE_LEN];
+                let signature = signature
+                    .get_mut(..pair.public_modulus_len())
+                    .ok_or_else(failed)?;
+                pair.sign(*encoding, &SystemRandom::new(), signing_input, signature)
+                    .map_err(|_| failed())?;
+                f(signature)
+            }
+            SigningKey::Ecdsa(pair) => f(pair
+                .sign(&SystemRandom::new(), signing_input)
+                .map_err(|_| failed())?
+                .as_ref()),
+            SigningKey::Ed25519(pair) => f(pair.sign(signing_input).as_ref()),
+        })
     }
 }
 
