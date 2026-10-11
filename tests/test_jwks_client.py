@@ -268,6 +268,11 @@ def _decode_after(client: ryjwt.JWKSClient, token: str, start: threading.Barrier
     return client.decode(token)
 
 
+def _refresh_after(client: ryjwt.JWKSClient, start: threading.Barrier) -> None:
+    start.wait()
+    client.refresh()
+
+
 async def _arefresh_all(client: ryjwt.JWKSClient, count: int) -> None:
     """`count` concurrent `arefresh`es."""
     await asyncio.gather(*(client.arefresh() for _ in range(count)))
@@ -1406,11 +1411,14 @@ def test_concurrent_refreshes_share_one_fetch(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    server.delay = 0.1
+    # All 16 start at once, and the fetch outlasts a slow CI runner's scheduling: a refresh that
+    # starts after the fetch ended fetches again.
+    server.delay = 0.5
     client = ryjwt.JWKSClient(server.url, algorithms=["ES256"])
+    start = threading.Barrier(16)
 
     with ThreadPoolExecutor(max_workers=16) as pool:
-        for future in [pool.submit(client.refresh) for _ in range(16)]:
+        for future in [pool.submit(_refresh_after, client, start) for _ in range(16)]:
             future.result()
 
     assert server.requests == 1
