@@ -38,7 +38,7 @@ pub struct Decoder {
     key_count: usize,
     /// Whether any key has a `kid`, so tokens' `kid`s must be read to pick the key.
     any_kid: bool,
-    /// `type` -> its `TypedParser`, built on first use of each `type`.
+    /// `into` class -> its `TypedParser`, built on first use of each one.
     parsers: Py<PyDict>,
     /// msgspec's untyped JSON decoder if msgspec is installed (it builds typical-sized payload
     /// dicts faster than jiter), else None for jiter. Resolved once, in `new`.
@@ -51,10 +51,10 @@ pub struct Decoder {
     known_headers: [OnceLock<(Box<[u8]>, usize)>; KNOWN_HEADERS],
 }
 
-/// How `decode` turns a payload into an instance of one `type`.
+/// How `decode` turns a payload into an instance of one `into` class.
 #[pyclass(frozen)]
 struct TypedParser {
-    /// The `type` itself.
+    /// The `into` class itself.
     type_: Py<PyAny>,
     /// callable(bytes) -> instance.
     make: Py<PyAny>,
@@ -414,24 +414,24 @@ impl Decoder {
         Ok(parser)
     }
 
-    /// Decodes the (verified) payload to a dict, or an instance of `type`, and validates its
+    /// Decodes the (verified) payload to a dict, or an instance of `into`, and validates its
     /// registered claims.
     #[inline]
     fn decode_payload<'py>(
         &self,
         py: Python<'py>,
         token: &jws::Segments<'_>,
-        r#type: Option<&Bound<'py, PyAny>>,
+        into: Option<&Bound<'py, PyAny>>,
         checks: &Checks<'_>,
     ) -> PyResult<Bound<'py, PyAny>> {
-        let Some(type_) = r#type else {
+        let Some(type_) = into else {
             return Ok(self.decode_dict(py, token, checks)?.into_any());
         };
 
         // A class, or a parametrised generic (`G[int]`), whose origin the parser checks.
         if !type_.is_instance_of::<PyType>() && !type_.hasattr(intern!(py, "__origin__"))? {
             return Err(PyTypeError::new_err(format!(
-                "type must be None, a msgspec Struct or a pydantic BaseModel, got {}",
+                "into must be None, a msgspec Struct or a pydantic BaseModel, got {}",
                 type_.repr()?
             )));
         }
@@ -445,18 +445,18 @@ impl Decoder {
         &self,
         py: Python<'py>,
         token: &jws::Segments<'_>,
-        r#type: Option<&Bound<'py, PyAny>>,
+        into: Option<&Bound<'py, PyAny>>,
         checks: &Checks<'_>,
     ) -> PyResult<Bound<'py, PyAny>> {
         self.verify_signature(token)?;
-        self.decode_payload(py, token, r#type, checks)
+        self.decode_payload(py, token, into, checks)
     }
 
     pub fn decode<'py>(
         &self,
         py: Python<'py>,
         token: &Bound<'py, PyAny>,
-        r#type: Option<&Bound<'py, PyAny>>,
+        into: Option<&Bound<'py, PyAny>>,
         audience: Option<&Bound<'py, PyAny>>,
         issuer: Option<&Bound<'py, PyAny>>,
         leeway: Option<&Bound<'py, PyAny>>,
@@ -465,7 +465,7 @@ impl Decoder {
         let issuer = Expected::parse(issuer, "issuer")?;
         let checks = Checks::new(audience.or(&self.audience), issuer.or(&self.issuer), leeway)?;
         with_segments(token, |token| {
-            self.decode_segments(py, token, r#type, &checks)
+            self.decode_segments(py, token, into, &checks)
         })
     }
 }

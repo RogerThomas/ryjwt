@@ -27,7 +27,7 @@ class Claims(msgspec.Struct):
 
 key = ryjwt.SecretKey("s" * 32, algorithms=["HS256"])
 token = key.encode(Claims(sub="sub", exp=datetime(2100, 1, 1, tzinfo=UTC)))
-assert key.decode(token, type=Claims).sub == "sub"
+assert key.decode(token, into=Claims).sub == "sub"
 """
 
 _DICT_ROUND_TRIP = """

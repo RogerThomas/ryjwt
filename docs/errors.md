@@ -56,7 +56,7 @@ except ryjwt.InvalidTokenError as e:
 | [`ImmatureSignatureError`][ryjwt.ImmatureSignatureError] | it isn't valid yet (`nbf`) |
 | [`InvalidAudienceError`][ryjwt.InvalidAudienceError] | its `aud` is missing, doesn't match `audience`, or isn't a string or list of strings; or it has an `aud` and you set no `audience` |
 | [`InvalidIssuerError`][ryjwt.InvalidIssuerError] | you set `issuer`, and its `iss` is missing, doesn't match, or isn't a string |
-| [`ClaimsValidationError`][ryjwt.ClaimsValidationError] | its claims don't fit your `type`: a field is missing, of the wrong type or out of range. Its `__cause__` is msgspec's or pydantic's `ValidationError` |
+| [`ClaimsValidationError`][ryjwt.ClaimsValidationError] | its claims don't fit your `into` class: a field is missing, of the wrong type or out of range. Its `__cause__` is msgspec's or pydantic's `ValidationError` |
 | `InvalidTokenError` itself | its header has a `crit` field, which ryjwt must reject |
 
 The message gives details.
@@ -95,7 +95,7 @@ Calling ryjwt wrongly raises Python's own exceptions. A type checker catches mos
 
 `TypeError`:
 
-- `type` isn't a msgspec `Struct` or pydantic `BaseModel` class;
+- `into` isn't a msgspec `Struct` or pydantic `BaseModel` class;
 - `claims` isn't a dict, `Struct` or `BaseModel`;
 - `token` isn't a `str` or `bytes`;
 - `audience` or `issuer` (on a key, client or `decode` call) isn't a `str` or iterable of them;

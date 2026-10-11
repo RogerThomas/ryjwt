@@ -120,7 +120,7 @@ def test_typed_claims(hmac_jwt: ryjwt.SecretKey) -> None:
     assert _payload(hmac_jwt.encode(AliasedModel(sub="sub"))) == {"sub": "sub"}
     assert hmac_jwt.decode(
         hmac_jwt.encode(AliasedModel(sub="sub")),
-        type=AliasedModel,
+        into=AliasedModel,
     ) == AliasedModel(sub="sub")
 
 
@@ -210,7 +210,7 @@ def test_annotated_datetime_claims_round_trip(
     token = hmac_jwt.encode(claims)
 
     assert json.dumps(_payload(token)) == '{"exp": 4102444800, "nbf": 946684800, "iat": 946684800}'
-    assert hmac_jwt.decode(token, type=type_) == claims
+    assert hmac_jwt.decode(token, into=type_) == claims
 
 
 def test_generic_struct_datetime_claims_round_trip(hmac_jwt: ryjwt.SecretKey) -> None:
@@ -221,8 +221,8 @@ def test_generic_struct_datetime_claims_round_trip(hmac_jwt: ryjwt.SecretKey) ->
     token = hmac_jwt.encode(claims)
 
     assert json.dumps(_payload(token)) == '{"sub": "sub", "exp": 4102444800}'
-    assert hmac_jwt.decode(token, type=GenericStruct[datetime]) == claims
-    assert hmac_jwt.decode(token, type=GenericStruct[int]) == GenericStruct[int](
+    assert hmac_jwt.decode(token, into=GenericStruct[datetime]) == claims
+    assert hmac_jwt.decode(token, into=GenericStruct[int]) == GenericStruct[int](
         sub="sub", exp=4_102_444_800
     )
 

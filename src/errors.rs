@@ -46,8 +46,8 @@ create_exception!(
     ryjwt,
     ClaimsValidationError,
     InvalidTokenError,
-    "The claims don't fit the `type` given to `decode`: a required claim is missing, or one has \
-     the wrong type or is out of range. Its `__cause__` is msgspec's or pydantic's \
+    "The claims don't fit the `into` class given to `decode`: a required claim is missing, or one \
+     has the wrong type or is out of range. Its `__cause__` is msgspec's or pydantic's \
      `ValidationError`."
 );
 create_exception!(

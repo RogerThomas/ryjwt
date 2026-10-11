@@ -297,9 +297,9 @@ async def _check_adecode_api(
     claims = {"sub": "sub", "aud": "aud", "iss": "iss"}
     assert await client.adecode(tokens["rs256"], audience="aud", issuer="iss") == claims
     assert await client.adecode(tokens["es256"].encode(), audience=["aud"]) == claims
-    struct = await client.adecode(tokens["es256"], type=ClaimsStruct, audience="aud")
+    struct = await client.adecode(tokens["es256"], into=ClaimsStruct, audience="aud")
     assert struct == ClaimsStruct("sub")
-    model = await client.adecode(tokens["rs256"], type=ClaimsModel, audience="aud")
+    model = await client.adecode(tokens["rs256"], into=ClaimsModel, audience="aud")
     assert model == ClaimsModel(sub="sub")
     with pytest.raises(ryjwt.InvalidAudienceError):
         await client.adecode(tokens["es256"], audience="other-aud")
@@ -309,7 +309,7 @@ async def _check_adecode_api(
         await client.adecode(tokens["expired"])
     assert await client.adecode(tokens["expired"], leeway=7200) == {"exp": past}
     with pytest.raises(ryjwt.ClaimsValidationError):
-        await client.adecode(tokens["expired"], type=ClaimsModel, leeway=7200)
+        await client.adecode(tokens["expired"], into=ClaimsModel, leeway=7200)
     with pytest.raises(ryjwt.DecodeError):
         await client.adecode("not-a-token")
 
@@ -1775,8 +1775,8 @@ def test_full_decode_api(mixed_server: JWKSServer, tokens: dict[str, str], past:
 
     assert client.decode(tokens["rs256"], audience="aud", issuer="iss") == claims
     assert client.decode(tokens["es256"].encode(), audience=["aud"]) == claims
-    assert client.decode(tokens["es256"], type=ClaimsStruct, audience="aud") == ClaimsStruct("sub")
-    assert client.decode(tokens["rs256"], type=ClaimsModel, audience="aud") == ClaimsModel(
+    assert client.decode(tokens["es256"], into=ClaimsStruct, audience="aud") == ClaimsStruct("sub")
+    assert client.decode(tokens["rs256"], into=ClaimsModel, audience="aud") == ClaimsModel(
         sub="sub"
     )
     with pytest.raises(ryjwt.InvalidAudienceError):
@@ -1787,7 +1787,7 @@ def test_full_decode_api(mixed_server: JWKSServer, tokens: dict[str, str], past:
         client.decode(tokens["expired"])
     assert client.decode(tokens["expired"], leeway=timedelta(hours=2)) == {"exp": past}
     with pytest.raises(ryjwt.ClaimsValidationError):
-        client.decode(tokens["expired"], type=ClaimsStruct, leeway=timedelta(hours=2))
+        client.decode(tokens["expired"], into=ClaimsStruct, leeway=timedelta(hours=2))
     with pytest.raises(ryjwt.DecodeError):
         client.decode("not-a-token")
     assert mixed_server.requests == 1  # invalid tokens never refetch, even without a cooldown
@@ -1811,9 +1811,9 @@ def test_full_decode_nowait_api(
 
     assert client.decode_nowait(tokens["rs256"], audience="aud", issuer="iss") == claims
     assert client.decode_nowait(tokens["es256"].encode(), audience=["aud"]) == claims
-    struct = client.decode_nowait(tokens["es256"], type=ClaimsStruct, audience="aud")
+    struct = client.decode_nowait(tokens["es256"], into=ClaimsStruct, audience="aud")
     assert struct == ClaimsStruct("sub")
-    model = client.decode_nowait(tokens["rs256"], type=ClaimsModel, audience="aud")
+    model = client.decode_nowait(tokens["rs256"], into=ClaimsModel, audience="aud")
     assert model == ClaimsModel(sub="sub")
     with pytest.raises(ryjwt.InvalidAudienceError):
         client.decode_nowait(tokens["es256"], audience="other-aud")

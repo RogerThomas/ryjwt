@@ -19,16 +19,18 @@ hmac = ryjwt.SecretKey("secret", algorithms=["HS256"])
 public_key = ryjwt.PublicKey("pem", algorithms=["ES256"])
 jwks_client = ryjwt.JWKSClient("https://issuer/jwks", algorithms=["ES256"])
 
-hmac.decode("token", type=int)  # error
-hmac.decode("token", type=dict)  # error
-hmac.decode("token", type=dict[str, Any])  # error
-hmac.decode("token", type=DictClaims)  # error
-jwks_client.decode("token", type=dict)  # error
-jwks_client.decode("token", type=dict[str, Any])  # error
-jwks_client.decode("token", type=DictClaims)  # error
-hmac.decode("token", type=list[int])  # error
-hmac.decode("token", type=Claims(sub="sub"))  # error
-public_key.decode("token", type=str)  # error
+hmac.decode("token", into=int)  # error
+hmac.decode("token", into=dict)  # error
+hmac.decode("token", into=dict[str, Any])  # error
+hmac.decode("token", into=DictClaims)  # error
+jwks_client.decode("token", into=dict)  # error
+jwks_client.decode("token", into=dict[str, Any])  # error
+jwks_client.decode("token", into=DictClaims)  # error
+hmac.decode("token", into=list[int])  # error
+hmac.decode("token", into=Claims(sub="sub"))  # error
+public_key.decode("token", into=str)  # error
+hmac.decode("token", type=Claims)  # error
+jwks_client.decode("token", type=Claims)  # error
 hmac.decode("token", audiences="aud")  # error
 jwks_client.decode_nowait("token", audiences="aud")  # error
 hmac.decode("token", issuer=1)  # error
@@ -38,7 +40,7 @@ hmac.encode([1])  # error
 hmac.encode({}, header=[("kid", "kid")])  # error
 hmac.encode({}, headers={"kid": "kid"})  # error
 ryjwt.unverified_header(1)  # error
-ryjwt.unverified_claims("token", type=Claims)  # error
+ryjwt.unverified_claims("token", into=Claims)  # error
 ryjwt.unverified_token("token", audience="aud")  # error
 ryjwt.SecretKey("secret", algorithm=["HS256"])  # error
 ryjwt.SecretKey(1, algorithms=["HS256"])  # error

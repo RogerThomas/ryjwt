@@ -301,11 +301,11 @@ class Sources:
         expected: object = case.payload
         if self._impl == "ryjwt-msgspec":
             struct = TypicalClaimsStruct if case.payload_size == "typical" else BaseClaimsStruct
-            kwargs["type"] = struct
+            kwargs["into"] = struct
             expected = msgspec.convert(case.payload, struct)
         if self._impl == "ryjwt-pydantic":
             model = TypicalClaimsModel if case.payload_size == "typical" else BaseClaimsModel
-            kwargs["type"] = model
+            kwargs["into"] = model
             expected = model.model_validate(case.payload)
         if source == "hmac":
             decode = ryjwt.SecretKey(str(case.secret), algorithms=["HS256"]).decode

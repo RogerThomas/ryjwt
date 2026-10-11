@@ -529,8 +529,8 @@ def test_full_decode_api(mixed_jwks: ryjwt.PublicKey, ec_key: SigningKey, past: 
     expired = jwt.encode({"exp": past}, ec_key, algorithm="ES256", headers={"kid": "ec"})
 
     assert mixed_jwks.decode(token, audience="aud", issuer="iss") == claims
-    assert mixed_jwks.decode(token, type=ClaimsStruct, audience="aud") == ClaimsStruct(sub="sub")
-    assert mixed_jwks.decode(token, type=ClaimsModel, audience="aud") == ClaimsModel(sub="sub")
+    assert mixed_jwks.decode(token, into=ClaimsStruct, audience="aud") == ClaimsStruct(sub="sub")
+    assert mixed_jwks.decode(token, into=ClaimsModel, audience="aud") == ClaimsModel(sub="sub")
     with pytest.raises(ryjwt.InvalidAudienceError):
         mixed_jwks.decode(token, audience="other-aud")
     with pytest.raises(ryjwt.InvalidIssuerError):

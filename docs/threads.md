@@ -2,7 +2,7 @@
 
 `SecretKey`, `PrivateKey`, `PublicKey` and `JWKSClient` objects are thread-safe: create one per
 key or JWKS URL, and share it. Key objects are immutable, apart from caches (of token headers, and
-of how to decode each `type`) that threads may fill concurrently. A `JWKSClient` guards its keys
+of how to decode into each class) that threads may fill concurrently. A `JWKSClient` guards its keys
 with a lock.
 
 ```python

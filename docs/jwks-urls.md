@@ -41,8 +41,8 @@ Creating it fetches nothing.
         issuer="https://issuer.example/",
     )
 
-    claims = client.decode(token, type=Claims)  # in sync code
-    claims = await client.adecode(token, type=Claims)  # in async code
+    claims = client.decode(token, into=Claims)  # in sync code
+    claims = await client.adecode(token, into=Claims)  # in async code
     ```
 
 === "pydantic"
@@ -65,8 +65,8 @@ Creating it fetches nothing.
         issuer="https://issuer.example/",
     )
 
-    claims = client.decode(token, type=Claims)  # in sync code
-    claims = await client.adecode(token, type=Claims)  # in async code
+    claims = client.decode(token, into=Claims)  # in sync code
+    claims = await client.adecode(token, into=Claims)  # in async code
     ```
 
 === "dict"

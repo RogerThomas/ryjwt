@@ -1,4 +1,4 @@
-"""Glue between ryjwt's Rust core and msgspec/pydantic, for `decode(type=...)` and `encode`."""
+"""Glue between ryjwt's Rust core and msgspec/pydantic, for `decode(into=...)` and `encode`."""
 
 import inspect
 from collections.abc import Callable, Iterator
@@ -410,7 +410,7 @@ def payload_parser(type_: object) -> Callable[[bytes], Any]:
                 _validate_with_dates, origin.model_validate_json, origin.__name__, date_claims
             )
         return origin.model_validate_json
-    raise TypeError(f"type must be None, a msgspec Struct or a pydantic BaseModel, got {type_!r}")
+    raise TypeError(f"into must be None, a msgspec Struct or a pydantic BaseModel, got {type_!r}")
 
 
 def struct_date_decoder(

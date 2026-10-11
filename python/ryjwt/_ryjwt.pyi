@@ -63,13 +63,13 @@ class SecretKey:
         self,
         token: str | bytes,
         *,
-        type: None = None,
+        into: None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
     ) -> dict[str, Any]:
-        """Verifies `token` and returns its claims as a dict, or (given `type`, a msgspec Struct or
-        pydantic BaseModel class) as an instance of `type`.
+        """Verifies `token` and returns its claims as a dict, or (given `into`, a msgspec Struct or
+        pydantic BaseModel class) as an instance of `into`.
 
         Checks the signature, with the algorithm the token's header names: it must be one of
         `algorithms`. Then checks the claims:
@@ -92,7 +92,7 @@ class SecretKey:
         self,
         token: str | bytes,
         *,
-        type: type[T],
+        into: type[T],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -169,13 +169,13 @@ class PrivateKey:
         self,
         token: str | bytes,
         *,
-        type: None = None,
+        into: None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
     ) -> dict[str, Any]:
-        """Verifies `token` and returns its claims as a dict, or (given `type`, a msgspec Struct or
-        pydantic BaseModel class) as an instance of `type`.
+        """Verifies `token` and returns its claims as a dict, or (given `into`, a msgspec Struct or
+        pydantic BaseModel class) as an instance of `into`.
 
         Checks the signature, with the algorithm the token's header names: it must be one of
         `algorithms`. Then checks the claims:
@@ -198,7 +198,7 @@ class PrivateKey:
         self,
         token: str | bytes,
         *,
-        type: type[T],
+        into: type[T],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -274,13 +274,13 @@ class PublicKey:
         self,
         token: str | bytes,
         *,
-        type: None = None,
+        into: None = None,
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
     ) -> dict[str, Any]:
-        """Verifies `token` and returns its claims as a dict, or (given `type`, a msgspec Struct or
-        pydantic BaseModel class) as an instance of `type`.
+        """Verifies `token` and returns its claims as a dict, or (given `into`, a msgspec Struct or
+        pydantic BaseModel class) as an instance of `into`.
 
         Checks the signature, with the algorithm the token's header names: it must be one of
         `algorithms`. Then checks the claims:
@@ -303,7 +303,7 @@ class PublicKey:
         self,
         token: str | bytes,
         *,
-        type: type[T],
+        into: type[T],
         audience: str | Iterable[str] | None = None,
         issuer: str | Iterable[str] | None = None,
         leeway: float | timedelta = 0,
@@ -392,8 +392,8 @@ class InvalidSignatureError(DecodeError):
     """The signature doesn't match."""
 
 class ClaimsValidationError(InvalidTokenError):
-    """The claims don't fit the `type` given to `decode`: a required claim is missing, or one has
-    the wrong type or is out of range. Its `__cause__` is msgspec's or pydantic's
+    """The claims don't fit the `into` class given to `decode`: a required claim is missing, or one
+    has the wrong type or is out of range. Its `__cause__` is msgspec's or pydantic's
     `ValidationError`."""
 
 class InvalidAlgorithmError(InvalidTokenError):

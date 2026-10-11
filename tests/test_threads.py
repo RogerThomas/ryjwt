@@ -63,8 +63,8 @@ class _RoundTrips:
                 token = self.signer.encode(claims, header={"kid": f"kid-{n % 8}"})
                 for key in self.verifiers:
                     assert key.decode(token) == {"sub": sub}
-                    assert key.decode(token, type=ClaimsStruct) == ClaimsStruct(sub)
-                    assert key.decode(token, type=ClaimsModel) == ClaimsModel(sub=sub)
+                    assert key.decode(token, into=ClaimsStruct) == ClaimsStruct(sub)
+                    assert key.decode(token, into=ClaimsModel) == ClaimsModel(sub=sub)
 
 
 @dataclass(frozen=True, slots=True)

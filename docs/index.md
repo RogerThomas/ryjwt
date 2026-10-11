@@ -53,7 +53,7 @@ example, extra and all, with nothing installed first.
     claims_in = Claims(sub="user-1", aud="my-api", exp=expires)
 
     token = key.encode(claims_in)
-    claims_out = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    claims_out = key.decode(token, into=Claims)  # a Claims: signature, exp and aud checked
     assert claims_in == claims_out
     ```
 
@@ -80,7 +80,7 @@ example, extra and all, with nothing installed first.
     claims_in = Claims(sub="user-1", aud="my-api", exp=expires)
 
     token = key.encode(claims_in)
-    claims_out = key.decode(token, type=Claims)  # a Claims: signature, exp and aud checked
+    claims_out = key.decode(token, into=Claims)  # a Claims: signature, exp and aud checked
     assert claims_in == claims_out
     ```
 
@@ -113,7 +113,7 @@ One bar per library, decoding 100,000 HS256 tokens in real time
 - **Repeat headers are free.** Tokens from one issuer share a header. Once one verifies, ryjwt
   remembers which key it picks and skips parsing it. The signature and claims are still checked
   every time.
-- **Typed claims skip the dict.** With `type=`, your class is built straight from the payload.
+- **Typed claims skip the dict.** With `into=`, your class is built straight from the payload.
   Dicts are built by msgspec if installed, otherwise by the built-in
   [jiter](https://github.com/pydantic/jiter).
 

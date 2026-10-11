@@ -29,7 +29,7 @@ reject: `alg`, `crit` or `b64` in `header`, or over 64 fields, is a `ValueError`
 
 ## Decoding
 
-`decode(token, *, type=None, audience=None, issuer=None, leeway=0)` verifies `token` (`str` or
+`decode(token, *, into=None, audience=None, issuer=None, leeway=0)` verifies `token` (`str` or
 `bytes`) and returns its claims. `audience` and `issuer` usually go [on the
 key](#on-the-key-or-for-one-call) instead.
 
@@ -52,7 +52,7 @@ key](#on-the-key-or-for-one-call) instead.
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
     token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
 
-    claims = key.decode(token, type=Claims)
+    claims = key.decode(token, into=Claims)
     assert claims.sub == "user-1"
     ```
 
@@ -75,7 +75,7 @@ key](#on-the-key-or-for-one-call) instead.
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"], audience="my-api")
     token = key.encode({"sub": "user-1", "aud": "my-api", "exp": int(time.time()) + 900})
 
-    claims = key.decode(token, type=Claims)
+    claims = key.decode(token, into=Claims)
     assert claims.sub == "user-1"
     ```
 
@@ -95,9 +95,9 @@ key](#on-the-key-or-for-one-call) instead.
     ```
 
 `decode` checks the header's `alg` is one of the key's `algorithms`, then the signature. Only then
-does it read the payload, into a dict or a [`type`](#typed-claims), and check the claims below.
-Any failure is an [`InvalidTokenError`][ryjwt.InvalidTokenError] ([Errors](errors.md) lists the
-kinds).
+does it read the payload, into a dict or your [`into` class](#typed-claims), and check the claims
+below. Any failure is an [`InvalidTokenError`][ryjwt.InvalidTokenError] ([Errors](errors.md) lists
+the kinds).
 
 ### Claims checks
 
@@ -109,8 +109,8 @@ kinds).
 | `iss` (who issued it) | only if you set `issuer` | it doesn't match `issuer` | [`InvalidIssuerError`][ryjwt.InvalidIssuerError] |
 
 **`exp` and `nbf`** are seconds since 1970 (UTC); a non-number is rejected too. Neither is
-required, so a token without `exp` never expires. To require them, make them required fields of a
-[`type`](#typed-claims).
+required, so a token without `exp` never expires. To require them, make them required fields of your
+[`into` class](#typed-claims).
 
 **`aud`** is a string or list of strings. With an `audience`, the token must have a matching `aud`.
 Without one, a token with an `aud` is rejected: it's meant for some service, and ryjwt won't
@@ -214,11 +214,11 @@ you picked by is checked too. Never use them to decide, say, who the user is fro
 and [`JWKSClient`](jwks-urls.md) already do it.
 
 The token must still be well formed: three base64url parts, with a JSON object as header and
-payload. If not, they raise [`DecodeError`][ryjwt.DecodeError]. They return dicts (no `type`).
+payload. If not, they raise [`DecodeError`][ryjwt.DecodeError]. They return dicts (no `into`).
 
 ## Typed claims
 
-Pass a msgspec `Struct` or pydantic `BaseModel` class as `type`, and `decode` returns an instance
+Pass a msgspec `Struct` or pydantic `BaseModel` class as `into`, and `decode` returns an instance
 of it instead of a dict:
 
 === "msgspec"
@@ -240,7 +240,7 @@ of it instead of a dict:
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
     token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, roles=["admin"]))
 
-    claims = key.decode(token, type=Claims)
+    claims = key.decode(token, into=Claims)
     assert claims.roles == ["admin"]
     ```
 
@@ -263,11 +263,11 @@ of it instead of a dict:
     key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
     token = key.encode(Claims(sub="user-1", exp=int(time.time()) + 900, roles=["admin"]))
 
-    claims = key.decode(token, type=Claims)
+    claims = key.decode(token, into=Claims)
     assert claims.roles == ["admin"]
     ```
 
-A parametrised generic Struct works too (`type=Claims[int]`). Any other `type` is a `TypeError`.
+A parametrised generic Struct works too (`into=Claims[int]`). Any other `into` is a `TypeError`.
 
 If the claims don't fit (a missing required field, or a value of the wrong type or out of range),
 `decode` raises [`ClaimsValidationError`][ryjwt.ClaimsValidationError]. The message names the
@@ -291,7 +291,7 @@ claim; `__cause__` is the msgspec or pydantic `ValidationError`:
     token = key.encode({"sub": "user-1"})  # no exp
 
     try:
-        key.decode(token, type=Claims)
+        key.decode(token, into=Claims)
     except ryjwt.ClaimsValidationError as e:
         print(e)  # Claims don't match Claims: Object missing required field `exp`
         assert isinstance(e.__cause__, msgspec.ValidationError)
@@ -315,7 +315,7 @@ claim; `__cause__` is the msgspec or pydantic `ValidationError`:
     token = key.encode({"sub": "user-1"})  # no exp
 
     try:
-        key.decode(token, type=Claims)
+        key.decode(token, into=Claims)
     except ryjwt.ClaimsValidationError as e:
         print(e)  # Claims don't match Claims: Field required - at `exp`
         assert isinstance(e.__cause__, pydantic.ValidationError)
@@ -349,7 +349,7 @@ than seconds since 1970:
     now = datetime.now(UTC)
     token = key.encode(Claims(sub="user-1", exp=now + timedelta(minutes=15), iat=now))
 
-    claims = key.decode(token, type=Claims)
+    claims = key.decode(token, into=Claims)
     assert claims.exp.tzinfo is not None  # a datetime, in UTC
     ```
 
@@ -373,7 +373,7 @@ than seconds since 1970:
     now = datetime.now(UTC)
     token = key.encode(Claims(sub="user-1", exp=now + timedelta(minutes=15), iat=now))
 
-    claims = key.decode(token, type=Claims)
+    claims = key.decode(token, into=Claims)
     assert claims.exp.tzinfo is not None  # a datetime, in UTC
     ```
 
