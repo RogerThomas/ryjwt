@@ -5,7 +5,7 @@
 
 # ryjwt
 
-ryjwt is a Rust-powered, AI-implemented JWT library for Python ([why](why.md)).
+ryjwt is a Rust-powered, AI-implemented JWT library for Python ([a note on AI, and the motivation behind ryjwt](why.md)).
 
 It signs and verifies JWTs with HMAC, RSA, RSA-PSS, ECDSA and EdDSA keys, checks `exp`, `nbf`,
 `aud` and `iss`, and decodes the claims into a dict, [msgspec](https://jcristharif.com/msgspec/)
