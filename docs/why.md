@@ -3,8 +3,8 @@
 ## From the author
 
 The vision and design of ryjwt are the author's, but AI has been used for nearly 100% of the
-implementation, both code and docs (except for this note). It's driven by two pillars of modern
-Python:
+implementation, both code and docs (except for this note). It's driven by two exciting and modern
+developments in the Python ecosystem:
 
 1. Python's modern type system, especially around generics (for example:
    `def decode[T](token: str, *, into: type[T]) -> T`), allows us to build elegant, generic and
