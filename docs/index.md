@@ -5,25 +5,12 @@
 
 # ryjwt
 
-ryjwt is a Rust-powered, AI-implemented JWT library for Python (see the note below).
+ryjwt is a Rust-powered, AI-implemented JWT library for Python ([a note on AI, and the motivation behind ryjwt](why.md)).
 
 It signs and verifies JWTs with HMAC, RSA, RSA-PSS, ECDSA and EdDSA keys, checks `exp`, `nbf`,
 `aud` and `iss`, and decodes the claims into a dict, [msgspec](https://jcristharif.com/msgspec/)
 `Struct` or [pydantic](https://docs.pydantic.dev/) `BaseModel`. It also fetches, caches and
 refreshes keys from JWKS URLs, and publishes your own keys as a JWKS.
-
-!!! note
-
-    The vision and design of ryjwt are the author's, but AI has been used for nearly 100% of the
-    implementation, both code and docs (except for this note). It's driven by two pillars of modern
-    Python:
-
-    1. Python's modern type system, especially around generics (for example:
-       `def decode[T](token: str, *, into: type[T]) -> T`), allows us to build elegant, generic and
-       still strictly typed libraries in Python.
-    2. PyO3 and maturin have changed the game. Writing Python libraries in Rust is now (especially
-       with AI) relatively easy, so we get the speed and safety of Rust with the high-level
-       abstractions and beauty of a Python interface (for example: pyreqwest, Polars, Daft).
 
 ## Install
 
