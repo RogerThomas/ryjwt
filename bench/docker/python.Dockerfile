@@ -8,7 +8,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 RUN curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.98.1
 ENV PATH=/root/.cargo/bin:$PATH
-COPY --from=ghcr.io/astral-sh/uv:0.12.23 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.0 /uv /bin/uv
 WORKDIR /src
 COPY Cargo.toml Cargo.lock pyproject.toml uv.lock README.md ./
 COPY src src
@@ -17,7 +17,7 @@ RUN uv build --wheel --out-dir /dist \
     && uv export --frozen --no-hashes --no-emit-project --only-group bench -o /dist/bench.txt
 
 FROM python:3.14.8-slim
-COPY --from=ghcr.io/astral-sh/uv:0.12.23 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.0 /uv /bin/uv
 RUN --mount=type=bind,from=build,source=/dist,target=/dist \
     uv pip install --system --no-cache -r /dist/bench.txt /dist/ryjwt-*.whl
 WORKDIR /app/bench
