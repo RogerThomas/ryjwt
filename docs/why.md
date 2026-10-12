@@ -3,7 +3,7 @@
 ## From the author
 
 The vision and design of ryjwt are the author's, but AI has been used for nearly 100% of the
-implementation, both code and docs (except for this note). It's driven by two exciting and modern
+implementation, both code and docs (except for this note). It's driven by three exciting and modern
 developments in the Python ecosystem:
 
 1. Python's modern type system, especially around generics (for example:
@@ -12,6 +12,9 @@ developments in the Python ecosystem:
 2. PyO3 and maturin have changed the game. Writing Python libraries in Rust is now (especially
    with AI) relatively easy, so we get the speed and safety of Rust with the high-level
    abstractions and beauty of a Python interface (pyreqwest, Polars, Daft, etc.).
+3. Fast, highly optimised serialisation and validation libraries (msgspec, pydantic) mean data
+   crossing an I/O boundary can become a typed object (a `Struct` or `BaseModel`), validated on
+   the way in, at very little cost.
 
 JWT encoding/decoding is a near-perfect fit for this. Verifying a token is small, self-contained,
 CPU-bound work: split it, base64-decode it, check a signature, parse some small(ish) JSON and check
