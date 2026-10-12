@@ -91,3 +91,10 @@ A [`JWKSClient`](jwks-urls.md):
 - **Keep `leeway` small**, a minute at most. It extends every token's life by that much.
 - **Limit request sizes.** ryjwt doesn't cap token size, so cap your server's request headers.
 - **Keep the clock right.** `exp` and `nbf` are checked against the system clock.
+
+## Reporting a vulnerability
+
+Report it privately, through GitHub:
+[report a vulnerability](https://github.com/RogerThomas/ryjwt/security/advisories/new), not in a
+public issue. The [security policy](https://github.com/RogerThomas/ryjwt/blob/main/SECURITY.md)
+says what to include, and what's in scope.
