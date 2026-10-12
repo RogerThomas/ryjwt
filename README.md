@@ -26,12 +26,12 @@ JWKS.
 > implementation, both code and docs (except for this note). It's driven by two pillars of modern
 > Python:
 >
-> 1. Python's modern type system, especially around generics (e.g.
+> 1. Python's modern type system, especially around generics (for example:
 >    `def decode[T](token: str, *, into: type[T]) -> T`), allows us to build elegant and strictly
 >    typed libraries in Python.
 > 2. PyO3 and maturin have changed the game. Writing Python libraries in Rust is now (especially
 >    with AI) relatively easy, so we get the speed and safety of Rust with the high-level
->    abstractions and beauty of a Python interface (e.g. pyreqwest, Polars, Daft).
+>    abstractions and beauty of a Python interface (for example: pyreqwest, Polars, Daft).
 
 ![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) in about 0.4 to 0.5, fast-jwt (Bun) in 0.7, and joserfc, jose and PyJWT in about 3 to 6 seconds](https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/perf-race.svg)
 
