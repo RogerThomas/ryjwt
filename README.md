@@ -27,8 +27,8 @@ JWKS.
 > Python:
 >
 > 1. Python's modern type system, especially around generics (e.g.
->    `def my_generic_func[T](items: list[T]) -> T`), allows us to build elegant and strictly typed
->    libraries in Python.
+>    `def decode[T](token: str, *, into: type[T]) -> T`), allows us to build elegant and strictly
+>    typed libraries in Python.
 > 2. PyO3 and maturin have changed the game. Writing Python libraries in Rust is now (especially
 >    with AI) relatively easy, so we get the speed and safety of Rust with the high-level
 >    abstractions and beauty of a Python interface (e.g. pyreqwest, Polars, Daft).
