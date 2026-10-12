@@ -22,7 +22,7 @@ pydantic `BaseModel`. It also fetches and caches keys from JWKS URLs, and publis
 JWKS.
 
 > [!NOTE]
-> The vision and design of ryjwt are the author's, but AI wrote nearly 100% of the
+> The vision and design of ryjwt are the author's, but AI has been used for nearly 100% of the
 > implementation, both code and docs (except for this note). It's driven by two pillars of modern
 > Python:
 >
