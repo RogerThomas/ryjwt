@@ -5,7 +5,7 @@
 
 # ryjwt
 
-Fast, strictly typed JSON Web Tokens for Python, powered by Rust.
+ryjwt is a Rust-powered, AI-implemented JWT library for Python.\*
 
 It signs and verifies JWTs with HMAC, RSA, RSA-PSS, ECDSA and EdDSA keys, checks `exp`, `nbf`,
 `aud` and `iss`, and decodes the claims into a dict, [msgspec](https://jcristharif.com/msgspec/)
@@ -15,6 +15,17 @@ refreshes keys from JWKS URLs, and publishes your own keys as a JWKS.
 **Status:** 0.x, so the API may still change. Signatures are checked by
 [aws-lc](https://github.com/aws/aws-lc), AWS's cryptography library; ryjwt's own code (parsing
 tokens, checking claims, loading keys) hasn't had an outside security audit yet.
+
+\* The vision and design of ryjwt are the author's, but AI wrote nearly 100% of the
+implementation, both code and docs (except for this note). It's driven by two pillars of modern
+Python:
+
+1. Python's modern type system, especially around generics (e.g.
+   `def my_generic_func[T](items: list[T]) -> T`), allows us to build elegant and strictly typed
+   libraries in Python.
+2. PyO3 and maturin have changed the game. Writing Python libraries in Rust is now (especially
+   with AI) relatively easy, so we get the speed and safety of Rust with the high-level
+   abstractions and beauty of a Python interface (e.g. pyreqwest, Polars, Daft).
 
 ## Install
 

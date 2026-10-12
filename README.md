@@ -13,7 +13,7 @@
 [![License](https://img.shields.io/pypi/l/ryjwt)](https://github.com/RogerThomas/ryjwt/blob/main/LICENSE)
 [![Docs](https://img.shields.io/badge/docs-rogerthomas.github.io%2Fryjwt-blue)](https://rogerthomas.github.io/ryjwt/)
 
-Fast, strictly typed JSON Web Tokens for Python, powered by Rust.
+ryjwt is a Rust-powered, AI-implemented JWT library for Python.\*
 
 **Documentation: [rogerthomas.github.io/ryjwt](https://rogerthomas.github.io/ryjwt/)**
 
@@ -24,6 +24,17 @@ JWKS.
 **Status:** 0.x, so the API may still change. Signatures are checked by
 [aws-lc](https://github.com/aws/aws-lc), AWS's cryptography library; ryjwt's own code (parsing
 tokens, checking claims, loading keys) hasn't had an outside security audit yet.
+
+\* The vision and design of ryjwt are the author's, but AI wrote nearly 100% of the
+implementation, both code and docs (except for this note). It's driven by two pillars of modern
+Python:
+
+1. Python's modern type system, especially around generics (e.g.
+   `def my_generic_func[T](items: list[T]) -> T`), allows us to build elegant and strictly typed
+   libraries in Python.
+2. PyO3 and maturin have changed the game. Writing Python libraries in Rust is now (especially
+   with AI) relatively easy, so we get the speed and safety of Rust with the high-level
+   abstractions and beauty of a Python interface (e.g. pyreqwest, Polars, Daft).
 
 ![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) in about 0.4 to 0.5, fast-jwt (Bun) in 0.7, and joserfc, jose and PyJWT in about 3 to 6 seconds](https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/perf-race.svg)
 
