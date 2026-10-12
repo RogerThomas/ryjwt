@@ -13,6 +13,14 @@ Python:
    with AI) relatively easy, so we get the speed and safety of Rust with the high-level
    abstractions and beauty of a Python interface (for example: pyreqwest, Polars, Daft).
 
+## Why JWTs
+
+JWTs are a near-perfect fit for this. Verifying a token is small, self-contained, CPU-bound work:
+split it, base64-decode it, check a signature, parse some small(ish) JSON and check a few claims.
+There's no I/O, nothing to wait on and no shared state. It also sits on the hot path of nearly
+every authenticated request, so every microsecond saved is saved on every call. That's exactly
+where Rust shines, and it all fits behind one typed call: `key.decode(token, into=Claims)`.
+
 ## Compared with PyJWT
 
 - **Faster.** With HS256, ryjwt decodes a typical token over 27 times faster than PyJWT into a
