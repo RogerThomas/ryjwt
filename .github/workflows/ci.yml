@@ -21,7 +21,7 @@ env:
   CARGO_TERM_COLOR: always
   TASK_VERSION: 3.54.0
   UV_LOCKED: 1 # fail if uv.lock is out of date with pyproject.toml
-  UV_VERSION: 0.12.23 # as bench/docker/python.Dockerfile
+  UV_VERSION: 0.13.0 # as bench/docker/python.Dockerfile
 
 jobs:
   lint:
@@ -78,10 +78,12 @@ jobs:
           - { os: ubuntu-24.04, python: "3.13" }
           - { os: ubuntu-24.04, python: "3.14" }
           - { os: ubuntu-24.04, python: "3.14t" }
+          - { os: ubuntu-24.04, python: "3.15" }
+          - { os: ubuntu-24.04, python: "3.15t" }
           - { os: macos-15, python: "3.12" }
-          - { os: macos-15, python: "3.14" }
+          - { os: macos-15, python: "3.15" }
           - { os: windows-2025, python: "3.12" }
-          - { os: windows-2025, python: "3.14" }
+          - { os: windows-2025, python: "3.15" }
     env:
       UV_PYTHON: ${{ matrix.python }} # instead of .python-version's; uv downloads it if need be
       UV_PYTHON_PREFERENCE: only-managed # the latest patch release, not the runner's own Python

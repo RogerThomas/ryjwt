@@ -13,9 +13,9 @@
 # deploys just the docs, as they are on the branch it runs on, without building or publishing.
 #
 # Each platform's job builds (and tests) a wheel per supported Python: cp312, cp313, cp314 and
-# cp314t, the free-threaded build. Not abi3: the extension uses CPython APIs outside the limited API
-# (e.g. PyO3's PyDelta accessors), jiter's fast string path needs them, and an abi3 wheel doesn't
-# load on a free-threaded Python anyway.
+# cp315, and the free-threaded cp314t and cp315t. Not abi3: the extension uses CPython APIs outside
+# the limited API (e.g. PyO3's PyDelta accessors), jiter's fast string path needs them, and an abi3
+# wheel doesn't load on a free-threaded Python anyway.
 name: Release
 
 on:
@@ -54,7 +54,7 @@ defaults:
 env:
   CARGO_TERM_COLOR: always
   MATURIN_VERSION: v1.15.0
-  UV_VERSION: 0.12.23 # as bench/docker/python.Dockerfile
+  UV_VERSION: 0.13.0 # as bench/docker/python.Dockerfile
 
 jobs:
   release-please:
@@ -89,18 +89,18 @@ jobs:
       matrix:
         # Each on a runner of its own architecture (no emulation), as its test job is. The images are
         # the ones maturin-action picks for each, pinned. The manylinux ones hold every CPython
-        # (cp314-cp314t included); for musl, maturin cross-compiles with its own sysconfig data.
+        # (cp315-cp315t included); for musl, maturin cross-compiles with its own sysconfig data.
         platform:
           - name: manylinux x86_64
             runner: ubuntu-24.04
             target: x86_64-unknown-linux-gnu
             manylinux: "2_28"
-            container: quay.io/pypa/manylinux_2_28_x86_64@sha256:39df0042d5cc900b085aa25a0659368b42a0006c54c474299b785b44c1b4ff82 # latest
+            container: quay.io/pypa/manylinux_2_28_x86_64@sha256:4131ddd7acb9c6c966af02fe7e71edc51e078c2d41f475966697676430bfa2ae # latest
           - name: manylinux aarch64
             runner: ubuntu-24.04-arm
             target: aarch64-unknown-linux-gnu
             manylinux: "2_28"
-            container: quay.io/pypa/manylinux_2_28_aarch64@sha256:f5f03dedf61b47d69d0742d36047db78adeee3bdb7a9910ff52304750ecf2514 # latest
+            container: quay.io/pypa/manylinux_2_28_aarch64@sha256:abd1230aa9e4058a74b89d27cd14ba18c0db036d7bfe6e6f219a29ea63c24eb6 # latest
           - name: musllinux x86_64
             runner: ubuntu-24.04
             target: x86_64-unknown-linux-musl
@@ -125,8 +125,10 @@ jobs:
           # Caches compiled crates between runs, on pull requests only: no caches in a build that
           # may be published.
           sccache: ${{ github.event_name == 'pull_request' }}
-          # Listed rather than --find-interpreter, which would also take the images' 3.15 betas.
-          args: --release --out dist --interpreter python3.12 python3.13 python3.14 python3.14t
+          # Listed rather than --find-interpreter, which would also take the images' PyPy.
+          args: >-
+            --release --out dist --interpreter
+            python3.12 python3.13 python3.14 python3.14t python3.15 python3.15t
       - name: Record the SHA-256
         run: sh .github/scripts/sha256.sh record dist/*.whl
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -188,14 +190,15 @@ jobs:
         # On the Pythons uv downloads (python-build-standalone's).
         env:
           UV_PYTHON_PREFERENCE: only-managed # not the runner's own python3.12 (an old patch release)
-        run: sh .github/scripts/test-wheel.sh dist 3.12 3.13 3.14 3.14t
+        run: sh .github/scripts/test-wheel.sh dist 3.12 3.13 3.14 3.14t 3.15 3.15t
       - name: Test (musl, in Alpine)
         if: matrix.platform.libc == 'musl'
-        # Each on the Python of an Alpine image of its version; 3.14t on one uv downloads, in the
-        # 3.14 image (there's no free-threaded one). Node for pyright, which
+        # Each on the Python of an Alpine image of its version; 3.14t, 3.15 and 3.15t on ones uv
+        # downloads, in the 3.14 image (there's no free-threaded image, and no 3.15.0 one yet: switch
+        # 3.15 to it, pinned like these, once it's out). Node for pyright, which
         # tests/test_typing_errors.py runs. The wheels are mounted read-only.
         run: |
-          for python in 3.12 3.13 3.14 3.14t; do
+          for python in 3.12 3.13 3.14 3.14t 3.15 3.15t; do
             case $python in
               3.12) image=$ALPINE_PYTHON_312 ;;
               3.13) image=$ALPINE_PYTHON_313 ;;
@@ -255,6 +258,14 @@ jobs:
         id: python314t
         with:
           python-version: "3.14t"
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        id: python315
+        with:
+          python-version: "3.15"
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        id: python315t
+        with:
+          python-version: "3.15t"
       - name: Build
         uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
         with:
@@ -268,6 +279,8 @@ jobs:
             ${{ steps.python313.outputs.python-path }}
             ${{ steps.python314.outputs.python-path }}
             ${{ steps.python314t.outputs.python-path }}
+            ${{ steps.python315.outputs.python-path }}
+            ${{ steps.python315t.outputs.python-path }}
       - name: Record the SHA-256
         run: sh .github/scripts/sha256.sh record dist/*.whl
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -290,19 +303,22 @@ jobs:
         # Each wheel on its own architecture, unlike the builds: an arm64 runner can't test the
         # x86_64 wheels under Rosetta, as cryptography (which the tests use) has no x86_64 macOS
         # wheels and can't be built for x86_64 there. On the slow Intel runner, where building
-        # cryptography takes as long as the tests, each Python in a job of its own, in parallel;
-        # on the arm64 one, all four in one job, as GitHub runs at most 5 macOS jobs at once.
-        # Windows, which has no such limit, as Intel.
+        # cryptography takes as long as the tests, four jobs in parallel: the GIL Pythons in pairs,
+        # which share one build (an abi3 wheel), and each free-threaded one, which can't use it, on
+        # its own. On the arm64 one, all six in one job, as GitHub runs at most 5 macOS jobs at
+        # once. Windows, which has no such limit, one job per Python.
         include:
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.12" }
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.13" }
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14" }
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.12 3.13" }
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14 3.15" }
           - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14t" }
-          - { name: macOS arm64, runner: macos-15, target: aarch64-apple-darwin, pythons: "3.12 3.13 3.14 3.14t" }
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.15t" }
+          - { name: macOS arm64, runner: macos-15, target: aarch64-apple-darwin, pythons: "3.12 3.13 3.14 3.14t 3.15 3.15t" }
           - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.12" }
           - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.13" }
           - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.14" }
           - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.14t" }
+          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.15" }
+          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.15t" }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

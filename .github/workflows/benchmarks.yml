@@ -42,7 +42,7 @@ concurrency:
 
 env:
   TASK_VERSION: 3.54.0 # as ci.yml
-  UV_VERSION: 0.12.23 # as bench/docker/python.Dockerfile
+  UV_VERSION: 0.13.0 # as bench/docker/python.Dockerfile
 
 jobs:
   bench:
