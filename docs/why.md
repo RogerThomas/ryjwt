@@ -11,13 +11,13 @@ developments in the Python ecosystem:
    still strictly typed libraries in Python.
 2. PyO3 and maturin have changed the game. Writing Python libraries in Rust is now (especially
    with AI) relatively easy, so we get the speed and safety of Rust with the high-level
-   abstractions and beauty of a Python interface (for example: pyreqwest, Polars, Daft).
+   abstractions and beauty of a Python interface (pyreqwest, Polars, Daft, etc.).
 
-JWTs are a near-perfect fit for this. Verifying a token is small, self-contained, CPU-bound work:
-split it, base64-decode it, check a signature, parse some small(ish) JSON and check a few claims.
-There's no I/O, nothing to wait on and no shared state. It also sits on the hot path of nearly
-every authenticated request, so every microsecond saved is saved on every call. That's exactly
-where Rust shines, and it all fits behind one typed call: `key.decode(token, into=Claims)`.
+JWT encoding/decoding is a near-perfect fit for this. Verifying a token is small, self-contained,
+CPU-bound work: split it, base64-decode it, check a signature, parse some small(ish) JSON and check
+a few claims. There's no I/O, nothing to wait on and no shared state. It also sits on the hot path
+of nearly every authenticated request, so every microsecond saved is saved on every call. That's
+exactly where Rust shines, and it all fits behind one typed call: `key.decode(token, into=Claims)`.
 
 ## Compared with PyJWT
 
