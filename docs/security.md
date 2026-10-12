@@ -92,6 +92,12 @@ A [`JWKSClient`](jwks-urls.md):
 - **Limit request sizes.** ryjwt doesn't cap token size, so cap your server's request headers.
 - **Keep the clock right.** `exp` and `nbf` are checked against the system clock.
 
+## Audits
+
+Signatures are checked by [aws-lc](https://github.com/aws/aws-lc), AWS's cryptography library.
+ryjwt's own code (parsing tokens, checking claims, loading keys and JWKS) hasn't had an outside
+security audit yet.
+
 ## Reporting a vulnerability
 
 Report it privately, through GitHub:

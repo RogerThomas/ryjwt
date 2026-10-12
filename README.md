@@ -21,10 +21,6 @@ It signs and verifies JWTs, checks their claims, and decodes them into a dict, m
 pydantic `BaseModel`. It also fetches and caches keys from JWKS URLs, and publishes yours as a
 JWKS.
 
-**Status:** 0.x, so the API may still change. Signatures are checked by
-[aws-lc](https://github.com/aws/aws-lc), AWS's cryptography library; ryjwt's own code (parsing
-tokens, checking claims, loading keys) hasn't had an outside security audit yet.
-
 > [!NOTE]
 > The vision and design of ryjwt are the author's, but AI wrote nearly 100% of the
 > implementation, both code and docs (except for this note). It's driven by two pillars of modern
