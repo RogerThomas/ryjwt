@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/RogerThomas/ryjwt/compare/v0.2.1...v0.2.2) (2026-10-12)
+
+
+### Features
+
+* support Python 3.15 and free-threaded 3.15t ([#30](https://github.com/RogerThomas/ryjwt/issues/30)) ([44e9d8f](https://github.com/RogerThomas/ryjwt/commit/44e9d8f62fcc7c0129458377873ef0d9ddf0a26f))
+
 ## [0.2.1](https://github.com/RogerThomas/ryjwt/compare/v0.2.0...v0.2.1) (2026-10-12)
 
 
