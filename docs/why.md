@@ -20,8 +20,8 @@ JWT encoding/decoding is a near-perfect fit for this. Verifying a token is small
 CPU-bound work: split it, base64-decode it, check a signature, parse some small(ish) JSON and check
 a few claims. It's pure computation: no network calls, no disk, no locks. It also sits on the hot
 path of nearly every authenticated request, so every microsecond saved is saved on every call.
-That's exactly where Rust shines, and it all fits behind one typed call: `key.decode(token,
-into=Claims)`.
+That's exactly where Rust shines, and it all fits behind one typed call:
+`key.decode(token, into=Claims)`.
 
 ## Compared with PyJWT
 
