@@ -15,6 +15,7 @@ edit_uri = "edit/main/docs/"
 copyright = "Copyright &copy; Roger Thomas, MIT License"
 nav = [
   { "Home" = "index.md" },
+  { "Why ryjwt" = "why.md" },
   { "Getting started" = "getting-started.md" },
   { "Guide" = [
     { "Keys and algorithms" = "keys.md" },
