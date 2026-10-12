@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/RogerThomas/ryjwt/compare/v0.2.0...v0.2.1) (2026-10-12)
+
+
+### Performance Improvements
+
+* decode and encode datetime claims in Rust; build tokens in place ([#25](https://github.com/RogerThomas/ryjwt/issues/25)) ([2318c0d](https://github.com/RogerThomas/ryjwt/commit/2318c0d641fb1d75a5a17209c1c13350628b17fc))
+
 ## [0.2.0](https://github.com/RogerThomas/ryjwt/compare/v0.1.2...v0.2.0) (2026-10-11)
 
 
