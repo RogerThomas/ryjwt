@@ -19,8 +19,8 @@ refreshes keys from JWKS URLs, and publishes your own keys as a JWKS.
     Python:
 
     1. Python's modern type system, especially around generics (for example:
-       `def decode[T](token: str, *, into: type[T]) -> T`), allows us to build elegant and generic
-       but strictly typed libraries in Python.
+       `def decode[T](token: str, *, into: type[T]) -> T`), allows us to build elegant, generic and
+       still strictly typed libraries in Python.
     2. PyO3 and maturin have changed the game. Writing Python libraries in Rust is now (especially
        with AI) relatively easy, so we get the speed and safety of Rust with the high-level
        abstractions and beauty of a Python interface (for example: pyreqwest, Polars, Daft).
