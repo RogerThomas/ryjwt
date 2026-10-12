@@ -1075,11 +1075,11 @@ def test_decode_reads_keys_and_their_expiry_from_one_fetch(
     looks at them: the decode doesn't take the stale keys with the refreshed keys' expiry."""
     server.serve(make_jwk(old_key, kid="old"))
     client = ryjwt.JWKSClient(
-        server.url, algorithms=["ES256"], cache_lifetime=0.05, max_stale=0, cooldown=0
+        server.url, algorithms=["ES256"], cache_lifetime=0.6, max_stale=0, cooldown=0
     )
     client.refresh()
     server.serve(make_jwk(new_key, kid="new"))  # the provider drops the old key
-    time.sleep(0.1)  # the old key is over max_stale out of date
+    time.sleep(0.65)  # the old key is over max_stale out of date
     clock = RefreshOnClockRead(time.monotonic)
     monkeypatch.setattr(time, "monotonic", clock)
 
@@ -1495,10 +1495,10 @@ def test_refresh_raises_once_the_keys_are_over_max_stale(
     old_token: str,
 ) -> None:
     server.serve(make_jwk(old_key, kid="old"))
-    caller = make_client(server.url, cache_lifetime=0.05, max_stale=0.1, cooldown=0)
+    caller = make_client(server.url, cache_lifetime=0.6, max_stale=0.1, cooldown=0)
     caller.refresh()
     server.status = 500
-    time.sleep(0.2)
+    time.sleep(0.75)
 
     with pytest.raises(
         ryjwt.JWKSFetchError,
