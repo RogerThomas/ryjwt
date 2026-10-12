@@ -14,7 +14,7 @@ and rustup; `.python-version` and `rust-toolchain.toml` pin the versions.
 | `task docs-test` | builds the site strictly, failing on any warning, broken link or unresolved reference |
 
 For another Python, use its own venv: `UV_PROJECT_ENVIRONMENT=.venv-312 uv run --python 3.12 pytest`
-(`.venv-313` for `3.13`, `.venv-314t` for `3.14t`).
+(`.venv-313` for `3.13`, `.venv-315t` for `3.15t`).
 
 CI runs the same tasks on each supported Python. The Python examples in these pages and the README
 run as tests (`tests/test_docs.py`).
@@ -27,6 +27,6 @@ follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat: …`
 (`.github/workflows/release.yml`) keeps a release PR open. It bumps the version in `Cargo.toml`
 (the package's version comes from it) and updates `CHANGELOG.md`.
 
-Merging it tags the release. The same run builds the sdist and the wheels (cp312, cp313, cp314 and
-cp314t, per platform), and tests each wheel on its own Python, in its own job. It publishes them
+Merging it tags the release. The same run builds the sdist and the wheels (cp312, cp313, cp314,
+cp314t, cp315 and cp315t, per platform), and tests each wheel on its own Python. It publishes them
 to PyPI, checking by SHA-256 that they're the files tested, then deploys this site to GitHub Pages.

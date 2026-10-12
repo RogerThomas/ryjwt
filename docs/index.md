@@ -18,7 +18,7 @@ refreshes keys from JWKS URLs, and publishes your own keys as a JWKS.
 uv add ryjwt
 ```
 
-Python 3.12 to 3.14, including free-threaded 3.14t ([threads](threads.md)). No runtime
+Python 3.12 to 3.15, including free-threaded 3.14t and 3.15t ([threads](threads.md)). No runtime
 dependencies. Wheels for Linux (glibc and musl, x86_64 and aarch64), macOS (x86_64 and arm64) and
 Windows (x64).
 

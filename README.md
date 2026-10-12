@@ -32,7 +32,7 @@ One bar per library, decoding 100,000 HS256 tokens in real time
 uv add ryjwt
 ```
 
-Python 3.12 to 3.14, including free-threaded 3.14t.
+Python 3.12 to 3.15, including free-threaded 3.14t and 3.15t.
 
 ## Example
 
@@ -111,4 +111,4 @@ assert claims_in == claims_out
 - **JWKS URLs:** `JWKSClient` keeps a provider's keys current, from sync or async code, through
   outages.
 - **Publish your keys:** `ryjwt.jwks([key])` gives the JWKS to serve at `/.well-known/jwks.json`.
-- **Free-threaded:** objects are thread-safe, and decode in parallel on 3.14t.
+- **Free-threaded:** objects are thread-safe, and decode in parallel on free-threaded Python.
