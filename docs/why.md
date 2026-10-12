@@ -3,7 +3,7 @@
 ## From the author
 
 The vision and design of ryjwt are the author's, but AI has been used for nearly 100% of the
-implementation, both code and docs (except for this note). It's driven by three exciting and modern
+implementation, both code and docs (except for this note). It's driven by three modern
 developments in the Python ecosystem:
 
 1. Python's modern type system, especially around generics (for example:
