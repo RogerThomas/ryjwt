@@ -1,7 +1,7 @@
 # The fuzz targets (cargo-fuzz: libFuzzer and AddressSanitizer, on nightly Rust), run with
 # `task fuzz`. A package and workspace of its own, outside ryjwt's: nothing here is built into the
-# wheels, and its Cargo.lock (which `task fuzz` copies from ryjwt's, so it fuzzes the versions the
-# wheels are built with) isn't committed.
+# wheels, and its Cargo.lock (which `task fuzz-build` copies from ryjwt's, so it fuzzes the versions
+# the wheels are built with) isn't committed.
 [package]
 name = "ryjwt-fuzz"
 version = "0.0.0"
@@ -12,13 +12,18 @@ publish = false
 cargo-fuzz = true
 
 [dependencies]
-libfuzzer-sys = "0.4"
-# The version ryjwt uses, whatever it is: only one copy of PyO3 can link libpython.
+# libFuzzer's bindings, pinned (as the nightly is) so a new release can't change the scheduled runs
+# unannounced, with arbitrary, the one dependency of theirs ryjwt's Cargo.lock doesn't hold. Bump
+# them by hand.
+arbitrary = "=1.5.0"
+libfuzzer-sys = "=0.4.13"
+# ryjwt's version, whatever it is: "*" keeps the one in the Cargo.lock copied from ryjwt's (cargo
+# keeps a locked version that meets a requirement), and only one copy of PyO3 can link libpython.
 pyo3 = "*"
 ryjwt = { path = ".." }
 
 [build-dependencies]
-pyo3-build-config = "*" # PyO3's own
+pyo3-build-config = "*" # PyO3's own, so ryjwt's version too
 
 [lints.clippy]
 undocumented_unsafe_blocks = "deny"

@@ -124,7 +124,10 @@ def _jwks_seeds() -> dict[str, bytes]:
 
 def _keys_seeds(fixtures: dict[str, dict[str, str]]) -> dict[str, bytes]:
     seeds: dict[str, bytes] = {}
-    pkcs1, sec1 = serialization.PrivateFormat.TraditionalOpenSSL, serialization.NoEncryption()
+    pkcs1, unencrypted = (
+        serialization.PrivateFormat.TraditionalOpenSSL,
+        serialization.NoEncryption(),
+    )
     pem, der = serialization.Encoding.PEM, serialization.Encoding.DER
     spki = serialization.PublicFormat.SubjectPublicKeyInfo
     for key in KEYS:
@@ -136,14 +139,14 @@ def _keys_seeds(fixtures: dict[str, dict[str, str]]) -> dict[str, bytes]:
         seeds[f"{key}-public-der"] = public_der
         seeds[f"{key}-public-base64"] = base64.b64encode(public_der)
         if isinstance(private, rsa.RSAPrivateKey | ec.EllipticCurvePrivateKey):
-            seeds[f"{key}-private-traditional"] = private.private_bytes(pem, pkcs1, sec1)
+            seeds[f"{key}-private-traditional"] = private.private_bytes(pem, pkcs1, unencrypted)
         if isinstance(private, rsa.RSAPrivateKey):
             pkcs1_public = serialization.PublicFormat.PKCS1
             seeds[f"{key}-public-pkcs1"] = private.public_key().public_bytes(pem, pkcs1_public)
         ssh = serialization.Encoding.OpenSSH, serialization.PublicFormat.OpenSSH
         seeds[f"{key}-ssh"] = private.public_key().public_bytes(*ssh)
     pkcs8 = serialization.PrivateFormat.PKCS8
-    seeds["es256k-private"] = _secp256k1_key().private_bytes(pem, pkcs8, sec1)
+    seeds["es256k-private"] = _secp256k1_key().private_bytes(pem, pkcs8, unencrypted)
     seeds["es256k-public"] = _secp256k1_key().public_key().public_bytes(pem, spki)
     seeds = {name: b"\0" + seed for name, seed in seeds.items()}
     # A curve's parameters ahead of its key, as `openssl ecparam -genkey` writes them.

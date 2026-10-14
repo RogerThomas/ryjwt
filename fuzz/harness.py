@@ -402,7 +402,19 @@ def hmac_token(header: bytes, payload: bytes, algorithm: str) -> str:
 # has its memory filled first, with headers no input makes (`freeze`): every input's header is new
 # to it. And a token a key verifies is decoded twice by a new key, which remembers its header the
 # second time, where making one is cheap.
-REMEMBERED_HEADERS: Final = 4
+
+
+def _remembered_headers() -> int:
+    """How many headers a decoder remembers: KNOWN_HEADERS, read from the src/decoder.rs the targets
+    are built from, so that `freeze` fills them all, however many there come to be."""
+    source = (ROOT / "src" / "decoder.rs").read_text()
+    found = re.search(r"^const KNOWN_HEADERS: usize = (\d+);$", source, re.MULTILINE)
+    if found is None:
+        raise RuntimeError("src/decoder.rs no longer has `const KNOWN_HEADERS: usize = <n>;`")
+    return int(found.group(1))
+
+
+REMEMBERED_HEADERS: Final = _remembered_headers()
 
 
 def secret_key(*, jiter: bool = False) -> ryjwt.SecretKey:
