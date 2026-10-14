@@ -1092,7 +1092,8 @@ def check_encode(data: bytes) -> None:
     count = source.byte()
     extra: dict[object, object] = {
         (make_text(source) if source.byte() % 8 else 1): make_value(source, 1)
-        for _ in range(count % 4 if count < 250 else 60)
+        # Now and then, around the 64-parameter limit, either side of it.
+        for _ in range(count % 4 if count < 248 else 58 + count % 8)
     }
     signer = SIGNERS[algorithm]
     try:

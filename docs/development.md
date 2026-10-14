@@ -42,8 +42,10 @@ cryptography package, and ryjwt's own slower paths. The checks are in `fuzz/harn
 `task fuzz` runs each target for `FUZZ_TIME` seconds (600 by default); `task fuzz -- decode` runs
 one. The inputs found are kept in `fuzz/corpus/`, which `fuzz/seeds.py` seeds from the bench's keys
 and tokens. A crash, a sanitizer error or a failed check stops the run and saves the input in
-`fuzz/artifacts/<target>/`; `task fuzz -- decode fuzz/artifacts/decode/crash-…` reruns it. The
-Fuzz workflow (`.github/workflows/fuzz.yml`) runs every target for five minutes each week.
+`fuzz/artifacts/<target>/`; `task fuzz -- decode artifacts/decode/crash-…` (the path relative to
+`fuzz/`) reruns it. The Fuzz workflow (`.github/workflows/fuzz.yml`) runs every target for five
+minutes twice a week. If one fails, its log shows only the sanitizer's summary, as the input may be
+an exploit and the logs are public: find it again locally.
 
 A crash may be a vulnerability: report it privately, as the
 [security policy](https://github.com/RogerThomas/ryjwt/blob/main/SECURITY.md) says.

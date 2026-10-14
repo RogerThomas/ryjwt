@@ -1,14 +1,16 @@
 # Fuzzes ryjwt (task fuzz: cargo-fuzz, libFuzzer with AddressSanitizer on nightly Rust; see
 # docs/development.md) weekly and on demand, never on pull requests: each target in a job of its
 # own, for FUZZ_TIME seconds. Each target's corpus is cached for its next run to grow. A crash fails
-# the job, and its log shows what failed. Its input isn't uploaded: anyone signed in to GitHub can
-# download a public repository's artifacts, and it may be an exploit for a vulnerability
-# (SECURITY.md). Find it again locally with task fuzz -- <target>.
+# the job, and only the sanitizer's one-line summary is shown: the input may be an exploit for a
+# vulnerability (SECURITY.md), and a public repository's logs and artifacts are public, while
+# libFuzzer prints small inputs and the harness's checks quote what they compared. So the full log
+# stays on the runner: find the failure again locally with task fuzz -- <target>.
 name: Fuzz
 
 on:
   schedule:
-    - cron: "0 4 * * 1" # Mondays, 04:00 UTC
+    # Twice a week: GitHub evicts a cache unused for 7 days, which a weekly run cuts too close.
+    - cron: "0 4 * * 1,4" # Mondays and Thursdays, 04:00 UTC
   workflow_dispatch:
     inputs:
       seconds:
@@ -26,7 +28,6 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
   CARGO_FUZZ_VERSION: 0.13.2
-  FUZZ_TIME: ${{ inputs.seconds || 300 }}
   TASK_VERSION: 3.54.0
   UV_LOCKED: 1 # fail if uv.lock is out of date with pyproject.toml
   UV_PYTHON_PREFERENCE: only-managed # a uv-managed Python, whose libpython the targets embed
@@ -59,15 +60,24 @@ jobs:
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: fuzz/corpus/${{ matrix.target }}
-          key: fuzz-corpus-${{ matrix.target }}-${{ github.run_id }}
+          key: fuzz-corpus-${{ matrix.target }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: fuzz-corpus-${{ matrix.target }}-
       - name: Fuzz
         env:
           TARGET: ${{ matrix.target }}
-        run: task fuzz -- "$TARGET"
+          SECONDS_ASKED: ${{ inputs.seconds || 300 }}
+        run: |
+          FUZZ_TIME=$(( SECONDS_ASKED > 3600 ? 3600 : SECONDS_ASKED ))
+          export FUZZ_TIME
+          if ! task fuzz -- "$TARGET" > fuzz.log 2>&1; then
+            grep -E '^SUMMARY: ' fuzz.log || echo "No sanitizer summary: a panic or a failed check."
+            echo "::error::Fuzzing $TARGET failed. Reproduce it locally (task fuzz -- $TARGET), and treat it as a possible vulnerability (SECURITY.md)."
+            exit 1
+          fi
+          grep -E '^(Done |stat::)' fuzz.log
       - name: Save the corpus
         if: ${{ !cancelled() }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: fuzz/corpus/${{ matrix.target }}
-          key: fuzz-corpus-${{ matrix.target }}-${{ github.run_id }}
+          key: fuzz-corpus-${{ matrix.target }}-${{ github.run_id }}-${{ github.run_attempt }}
