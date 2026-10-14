@@ -15,11 +15,12 @@ import hashlib
 import hmac
 import json
 import math
+import re
 import struct
 import sys
 import time
 from collections.abc import Callable, Collection, Generator, Iterator, Mapping, Sequence
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from datetime import UTC, datetime, timedelta, timezone, tzinfo
 from enum import Enum
 from functools import partial
@@ -51,7 +52,14 @@ class MismatchError(AssertionError):
 
 def expect(condition: bool, what: str, *details: object) -> None:  # noqa: FBT001 - an assertion
     if not condition:
-        raise MismatchError("\n  ".join([what, *(repr(d) for d in details)]))
+        raise MismatchError("\n  ".join([what, *map(_shown, details)]))
+
+
+def _shown(value: object) -> str:
+    try:
+        return repr(value)
+    except RecursionError:
+        return f"<a {type(value).__name__} too deeply nested to show>"
 
 
 class Input:
@@ -87,7 +95,24 @@ class Invalid(Enum):
     """What the JSON reference makes of a document it rejects, or can't judge."""
 
     JSON = "not JSON"
-    DEEP = "nested too deeply for Python's json to judge"
+    DEEP = "nested deeper than the reference judges"
+
+
+# The deepest JSON the reference parses: deeper than ryjwt reads it (jiter stops at 200) or writes
+# it (json_write's MAX_DEPTH, 255, under the claims object). It's measured without recursion first,
+# as Python's json (and the checks' own walks) would otherwise go as deep as the input does.
+MAX_REFERENCE_DEPTH: Final = 300
+_STRINGS: Final = re.compile(rb'"(?:[^"\\]|\\.)*+\\?(?:"|\Z)', re.DOTALL)  # unterminated too
+_NOT_BRACKETS: Final = bytes(b for b in range(256) if b not in b"[]{}")
+
+
+def _nesting(data: bytes) -> int:
+    """How deeply JSON text nests arrays and objects, outside its strings."""
+    depth = deepest = 0
+    for bracket in _STRINGS.sub(b"", data).translate(None, _NOT_BRACKETS):
+        depth += 1 if bracket in b"[{" else -1
+        deepest = max(deepest, depth)
+    return deepest
 
 
 type JSON = bool | int | float | str | list[JSON] | dict[str, JSON] | None
@@ -109,35 +134,44 @@ def _reject_constant(name: str) -> NoReturn:
 
 def reference_json(data: bytes) -> JSON | Invalid:
     """`data` as strict JSON (UTF-8, no NaN or Infinity), parsed by Python's json."""
+    if _nesting(data) > MAX_REFERENCE_DEPTH:
+        return Invalid.DEEP
     try:
         parsed = json.loads(
             data.decode(), object_pairs_hook=_object, parse_constant=_reject_constant
         )
-        return cast("JSON", parsed)
     except ValueError:
         return Invalid.JSON
-    except RecursionError:
-        return Invalid.DEEP
+    return cast("JSON", parsed)
+
+
+def _children(value: object) -> list[object]:
+    """What a dict, list or tuple holds (a dict's member names too); nothing for anything else."""
+    if isinstance(value, dict):
+        members = cast("dict[object, object]", value)
+        return [*members, *members.values()]
+    return list(cast("Sequence[object]", value)) if isinstance(value, list | tuple) else []
 
 
 def _values(value: object) -> Iterator[object]:
-    """`value` and every value in it, member names included."""
-    yield value
-    if isinstance(value, dict):
-        for name, member in cast("dict[object, object]", value).items():
-            yield name
-            yield from _values(member)
-    elif isinstance(value, list | tuple):
-        for item in cast("Sequence[object]", value):
-            yield from _values(item)
+    """`value` and every value in it, member names included, however deeply nested."""
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        yield item
+        pending.extend(_children(item))
 
 
 def _depth(value: object) -> int:
-    if isinstance(value, dict):
-        return 1 + max(map(_depth, cast("dict[object, object]", value).values()), default=0)
-    if isinstance(value, list):
-        return 1 + max(map(_depth, cast("list[object]", value)), default=0)
-    return 0
+    """How deeply `value` nests dicts and lists (or tuples), however deeply."""
+    deepest, pending = 0, [(value, 0)]
+    while pending:
+        item, depth = pending.pop()
+        children = _children(item)
+        if isinstance(item, dict | list | tuple):
+            deepest = max(deepest, depth + 1)
+        pending.extend((child, depth + 1) for child in children)
+    return deepest
 
 
 def _is_text(value: object) -> bool:
@@ -168,24 +202,40 @@ def _flatten(pairs: list[tuple[str, JSON]]) -> list[JSON]:
 def diverges_json(data: bytes) -> bool:
     """`diverges`, for JSON text: for every value in it, repeated members' included (each of which
     ryjwt's parsers read, though only the last is kept)."""
+    if _nesting(data) > MAX_REFERENCE_DEPTH:
+        return True
     try:
         everything = json.loads(data.decode(), object_pairs_hook=_flatten)
-    except (ValueError, RecursionError):
+    except ValueError:
         return False
     return diverges(everything)
 
 
 def same(a: object, b: object) -> bool:
     """Whether `a` and `b` are the same value, types included (unlike ==: 1 == 1.0 == True), for
-    JSON values (a dict and a dict subclass alike) and for instances of a Struct or model."""
-    if isinstance(a, dict) != isinstance(b, dict) or isinstance(a, list) != isinstance(b, list):
-        return False
-    if isinstance(a, dict):
-        x, y = cast("dict[object, object]", a), cast("dict[object, object]", b)
-        return x.keys() == y.keys() and all(same(x[k], y[k]) for k in x)
-    if isinstance(a, list):
-        x, y = cast("list[object]", a), cast("list[object]", b)
-        return len(x) == len(y) and all(map(same, x, y))
+    JSON values (a dict and a dict subclass alike), however deeply nested, and for instances of a
+    Struct or model."""
+    pending = [(a, b)]
+    while pending:
+        x, y = pending.pop()
+        if isinstance(x, dict) != isinstance(y, dict) or isinstance(x, list) != isinstance(y, list):
+            return False
+        if isinstance(x, dict):
+            xs, ys = cast("dict[object, object]", x), cast("dict[object, object]", y)
+            if xs.keys() != ys.keys():
+                return False
+            pending.extend((xs[k], ys[k]) for k in xs)
+        elif isinstance(x, list):
+            xs, ys = cast("list[object]", x), cast("list[object]", y)
+            if len(xs) != len(ys):
+                return False
+            pending.extend(zip(xs, ys, strict=True))
+        elif not _same_scalar(x, y):
+            return False
+    return True
+
+
+def _same_scalar(a: object, b: object) -> bool:
     if type(a) is not type(b):
         return False
     if isinstance(a, float) and isinstance(b, float):
@@ -218,7 +268,6 @@ ASYMMETRIC_ALGORITHMS: Final[tuple[AsymmetricAlgorithm, ...]] = (
     "RS256", "RS384", "RS512", "PS256", "PS384", "PS512",
     "ES256", "ES256K", "ES384", "ES512", "ES521", "EdDSA",
 )  # fmt: skip
-SHA2: Final = {"256": hashes.SHA256(), "384": hashes.SHA384(), "512": hashes.SHA512()}
 CURVES: Final = {
     "P-256": ec.SECP256R1(),
     "secp256k1": ec.SECP256K1(),
@@ -256,62 +305,6 @@ def jiter_payloads() -> Generator[None, None, None]:
         sys.modules["msgspec.json"] = saved
 
 
-SECRET_KEY: Final = ryjwt.SecretKey(SECRET, algorithms=list(HMAC_ALGORITHMS))
-with jiter_payloads():
-    JITER_SECRET_KEY: Final = ryjwt.SecretKey(SECRET, algorithms=list(HMAC_ALGORITHMS))
-JWKS_KEY: Final = ryjwt.PublicKey.from_jwks(JWKS, algorithms=list(ASYMMETRIC_ALGORITHMS))
-ES256_PUBLIC_KEY: Final = ryjwt.PublicKey(FIXTURES["keys"]["es256"]["pem"], algorithms=["ES256"])
-ED25519_KEY: Final = ryjwt.PrivateKey(
-    _private_pem("ed25519"), algorithms=["EdDSA"], kid="ed25519-signing"
-)
-REFERENCE_KEYS: Final = {
-    name: serialization.load_pem_private_key(_private_pem(name), None).public_key()
-    for name in ("es256", "ed25519", "rs2048")
-}
-
-
-class Signer(NamedTuple):
-    """How `encode` is checked for an algorithm: `encode`, the key's with that algorithm; the key,
-    to decode with; the kid it puts in headers; and its public key by the reference (None for the
-    HMAC secret)."""
-
-    encode: Callable[..., str]
-    key: ryjwt.SecretKey | ryjwt.PrivateKey
-    kid: str | None
-    public: PublicKeyTypes | None
-
-
-def _signers() -> dict[str, Signer]:
-    es256 = ryjwt.PrivateKey(_private_pem("es256"), algorithms=["ES256"], kid="es256-signing")
-    rs2048 = ryjwt.PrivateKey(
-        _private_pem("rs2048"), algorithms=["RS256", "PS256"], kid="rs2048-signing"
-    )
-    return {
-        "HS256": Signer(partial(SECRET_KEY.encode, algorithm="HS256"), SECRET_KEY, None, None),
-        "HS384": Signer(partial(SECRET_KEY.encode, algorithm="HS384"), SECRET_KEY, None, None),
-        "HS512": Signer(partial(SECRET_KEY.encode, algorithm="HS512"), SECRET_KEY, None, None),
-        "ES256": Signer(es256.encode, es256, "es256-signing", REFERENCE_KEYS["es256"]),
-        "EdDSA": Signer(
-            ED25519_KEY.encode, ED25519_KEY, "ed25519-signing", REFERENCE_KEYS["ed25519"]
-        ),
-        "RS256": Signer(
-            partial(rs2048.encode, algorithm="RS256"),
-            rs2048,
-            "rs2048-signing",
-            REFERENCE_KEYS["rs2048"],
-        ),
-        "PS256": Signer(
-            partial(rs2048.encode, algorithm="PS256"),
-            rs2048,
-            "rs2048-signing",
-            REFERENCE_KEYS["rs2048"],
-        ),
-    }
-
-
-SIGNERS: Final = _signers()
-
-
 def reference_public_key(jwk: Mapping[str, object]) -> PublicKeyTypes | None:
     """The public key of a JWK, by the cryptography package; None if it isn't one."""
     members = {name: b64decode(v) if isinstance(v, str) else None for name, v in jwk.items()}
@@ -333,25 +326,58 @@ def reference_public_key(jwk: Mapping[str, object]) -> PublicKeyTypes | None:
         return None
 
 
+class Scheme(NamedTuple):
+    """How the reference verifies an algorithm's signatures: `family` (RSA's PKCS #1 v1.5 or PSS,
+    ECDSA, or EdDSA), with `digest`, on the `curve` (a JWK's crv) for ECDSA (RFC 7518, RFC 8037)."""
+
+    family: str
+    digest: hashes.HashAlgorithm
+    curve: str | None = None
+
+
+SCHEMES: Final[Mapping[str, Scheme]] = {
+    "RS256": Scheme("PKCS1", hashes.SHA256()),
+    "RS384": Scheme("PKCS1", hashes.SHA384()),
+    "RS512": Scheme("PKCS1", hashes.SHA512()),
+    "PS256": Scheme("PSS", hashes.SHA256()),
+    "PS384": Scheme("PSS", hashes.SHA384()),
+    "PS512": Scheme("PSS", hashes.SHA512()),
+    "ES256": Scheme("ECDSA", hashes.SHA256(), "P-256"),
+    "ES256K": Scheme("ECDSA", hashes.SHA256(), "secp256k1"),
+    "ES384": Scheme("ECDSA", hashes.SHA384(), "P-384"),
+    "ES512": Scheme("ECDSA", hashes.SHA512(), "P-521"),
+    "ES521": Scheme("ECDSA", hashes.SHA512(), "P-521"),
+    "EdDSA": Scheme("EdDSA", hashes.SHA512()),  # Ed25519 hashes with SHA-512 itself
+}
+# The RSA key sizes ryjwt verifies with (src/keys.rs RSA_BITS).
+RSA_BITS: Final = range(2048, 8193)
+
+
 def reference_verify(
     algorithm: str, key: PublicKeyTypes, signing_input: bytes, signature: bytes
 ) -> bool:
-    """Whether `signature` is `key`'s for `algorithm`, by the cryptography package."""
-    digest = SHA2.get(algorithm[-3:], hashes.SHA512())
+    """Whether `signature` is `key`'s for `algorithm`, by the cryptography package: an RSA key of a
+    size ryjwt takes, an EC key on the algorithm's curve."""
+    scheme = SCHEMES.get(algorithm)
+    if scheme is None:
+        return False
+    digest = scheme.digest
     try:
-        match algorithm[:2], key:
-            case "RS", rsa.RSAPublicKey():
+        match scheme.family, key:
+            case "PKCS1", rsa.RSAPublicKey() if key.key_size in RSA_BITS:
                 key.verify(signature, signing_input, padding.PKCS1v15(), digest)
-            case "PS", rsa.RSAPublicKey():
+            case "PSS", rsa.RSAPublicKey() if key.key_size in RSA_BITS:
                 pss = padding.PSS(padding.MGF1(digest), salt_length=digest.digest_size)
                 key.verify(signature, signing_input, pss, digest)
-            case "ES", ec.EllipticCurvePublicKey():
+            case "ECDSA", ec.EllipticCurvePublicKey() if (
+                key.curve.name == CURVES[scheme.curve or ""].name
+            ):
                 size = (key.curve.key_size + 7) // 8
                 if len(signature) != 2 * size:
                     return False
                 r, s = int.from_bytes(signature[:size]), int.from_bytes(signature[size:])
                 key.verify(encode_dss_signature(r, s), signing_input, ec.ECDSA(digest))
-            case "Ed", ed25519.Ed25519PublicKey():
+            case "EdDSA", ed25519.Ed25519PublicKey():
                 key.verify(signature, signing_input)
             case _:
                 return False
@@ -362,6 +388,106 @@ def reference_verify(
 
 def reference_mac(algorithm: str, secret: bytes, signing_input: bytes) -> bytes:
     return hmac.new(secret, signing_input, HMAC_HASHES[algorithm]).digest()
+
+
+def hmac_token(header: bytes, payload: bytes, algorithm: str) -> str:
+    """The token of `header` and `payload`, signed with the secret by the reference."""
+    signing_input = b64encode(header) + b"." + b64encode(payload)
+    signature = reference_mac(algorithm, SECRET, signing_input)
+    return (signing_input + b"." + b64encode(signature)).decode()
+
+
+# A decoder remembers the headers of the first tokens it verifies (src/decoder.rs KNOWN_HEADERS), so
+# what a key does with an input could depend on the inputs before it. So each key the checks keep
+# has its memory filled first, with headers no input makes (`freeze`): every input's header is new
+# to it. And a token a key verifies is decoded twice by a new key, which remembers its header the
+# second time, where making one is cheap.
+REMEMBERED_HEADERS: Final = 4
+
+
+def secret_key(*, jiter: bool = False) -> ryjwt.SecretKey:
+    """A new SecretKey for the secret, parsing payloads into dicts with msgspec (or jiter)."""
+    with jiter_payloads() if jiter else nullcontext():
+        return ryjwt.SecretKey(SECRET, algorithms=list(HMAC_ALGORITHMS))
+
+
+def jwks_key() -> ryjwt.PublicKey:
+    return ryjwt.PublicKey.from_jwks(JWKS, algorithms=list(ASYMMETRIC_ALGORITHMS))
+
+
+def es256_public_key() -> ryjwt.PublicKey:
+    return ryjwt.PublicKey(FIXTURES["keys"]["es256"]["pem"], algorithms=["ES256"])
+
+
+def ed25519_key() -> ryjwt.PrivateKey:
+    return ryjwt.PrivateKey(_private_pem("ed25519"), algorithms=["EdDSA"], kid="ed25519-signing")
+
+
+def freeze(key: ryjwt.SecretKey | ryjwt.PublicKey | ryjwt.PrivateKey, tokens: list[str]) -> None:
+    """Decodes `tokens` with `key`, filling its memory of headers with theirs."""
+    expect(len({t.split(".")[0] for t in tokens}) == REMEMBERED_HEADERS, "not a header per slot")
+    for token in tokens:
+        key.decode(token)
+
+
+def _harness_tokens(sign: Callable[..., str]) -> list[str]:
+    """Tokens `sign` (a key's encode) makes with headers no input makes (with a parameter the
+    harness names for itself), one for each header a decoder remembers."""
+    return [sign({}, header={"ryjwt-fuzz-harness": i}) for i in range(REMEMBERED_HEADERS)]
+
+
+ES256_KEY: Final = ryjwt.PrivateKey(
+    _private_pem("es256"), algorithms=["ES256"], kid="es256-signing"
+)
+RS2048_KEY: Final = ryjwt.PrivateKey(
+    _private_pem("rs2048"), algorithms=["RS256", "PS256"], kid="rs2048-signing"
+)
+ED25519_KEY: Final = ed25519_key()
+JWKS_KEY: Final = jwks_key()
+ES256_PUBLIC_KEY: Final = es256_public_key()
+# For tokens the secret didn't sign, and for typed decodes, whose parsers are costly to make.
+SECRET_KEY: Final = secret_key()
+JITER_SECRET_KEY: Final = secret_key(jiter=True)
+freeze(ED25519_KEY, _harness_tokens(ED25519_KEY.encode))
+freeze(JWKS_KEY, _harness_tokens(ES256_KEY.encode))
+freeze(ES256_PUBLIC_KEY, _harness_tokens(ES256_KEY.encode))
+freeze(SECRET_KEY, _harness_tokens(partial(SECRET_KEY.encode, algorithm="HS256")))
+freeze(JITER_SECRET_KEY, _harness_tokens(partial(SECRET_KEY.encode, algorithm="HS256")))
+REFERENCE_KEYS: Final = {
+    name: serialization.load_pem_private_key(_private_pem(name), None).public_key()
+    for name in ("es256", "ed25519", "rs2048")
+}
+
+
+class Signer(NamedTuple):
+    """How `encode` is checked for an algorithm: `encode`, the key's with that algorithm; the kid it
+    puts in headers; `verifier`, a public key kept to decode its tokens with (None for HMAC, whose
+    tokens a new SecretKey decodes, twice); and its public key by the reference (None for HMAC)."""
+
+    encode: Callable[..., str]
+    kid: str | None
+    verifier: ryjwt.PublicKey | None
+    public: PublicKeyTypes | None
+
+
+def _asymmetric_signer(key: ryjwt.PrivateKey, algorithm: AsymmetricAlgorithm) -> Signer:
+    name = key.jwk()["kid"]
+    encode = partial(key.encode, algorithm=algorithm)
+    verifier = ryjwt.PublicKey.from_jwks({"keys": [key.jwk()]}, algorithms=[algorithm])
+    freeze(verifier, _harness_tokens(encode))
+    return Signer(encode, name, verifier, REFERENCE_KEYS[name.removesuffix("-signing")])
+
+
+SIGNERS: Final = {
+    **{
+        algorithm: Signer(partial(SECRET_KEY.encode, algorithm=algorithm), None, None, None)
+        for algorithm in HMAC_ALGORITHMS
+    },
+    "ES256": _asymmetric_signer(ES256_KEY, "ES256"),
+    "EdDSA": _asymmetric_signer(ED25519_KEY, "EdDSA"),
+    "RS256": _asymmetric_signer(RS2048_KEY, "RS256"),
+    "PS256": _asymmetric_signer(RS2048_KEY, "PS256"),
+}
 
 
 # ---- Registered claims, as ryjwt documents it validates them ----
@@ -496,9 +622,48 @@ def expect_error(outcome: Outcome, allowed: Collection[type[Exception]], what: s
     )
 
 
+def same_outcome(a: Outcome, b: Outcome) -> bool:
+    """Whether two calls did the same: returned the same value, or raised the same error."""
+    if a.error is not None or b.error is not None:
+        return type(a.error) is type(b.error) and str(a.error) == str(b.error)
+    return same(a.value, b.value)
+
+
+def again(call: Callable[[], object], first: Outcome) -> None:
+    """Checks `call`, a decode that did `first`, does the same again, now that the key remembers
+    the token's header (if it verified)."""
+    second = attempt(call, ryjwt.InvalidTokenError)
+    expect(same_outcome(first, second), "decoding again (header remembered) differs", first, second)
+
+
+def decode_twice(call: Callable[[], object]) -> Outcome:
+    """What `call` (a decode, with a new key) does, checked to do the same the second time."""
+    first = attempt(call, ryjwt.InvalidTokenError)
+    again(call, first)
+    return first
+
+
 # ---- decode: tokens as they arrive, unverified ----
 
 DECODE_CHECKS: Final = Checks(audience=AUDIENCE, issuer=None, leeway=0.0)
+# The asymmetric keys decode tries every token with, each with how to make a new one like it.
+LASTING_KEYS: Final[
+    Sequence[
+        tuple[ryjwt.PublicKey | ryjwt.PrivateKey, Callable[[], ryjwt.PublicKey | ryjwt.PrivateKey]]
+    ]
+] = (
+    (JWKS_KEY, jwks_key),
+    (ES256_PUBLIC_KEY, es256_public_key),
+    (ED25519_KEY, ed25519_key),
+)
+# What decode raises only once a token's signature checked out (and its header is remembered).
+CLAIMS_ERRORS: Final = (
+    ryjwt.ExpiredSignatureError,
+    ryjwt.ImmatureSignatureError,
+    ryjwt.InvalidAudienceError,
+    ryjwt.InvalidIssuerError,
+    ryjwt.ClaimsValidationError,
+)
 
 
 def _verified_by_reference(
@@ -511,7 +676,7 @@ def _verified_by_reference(
     signature = b64decode(segments[2])
     if not isinstance(algorithm, str) or signature is None:
         return False
-    if key is SECRET_KEY or key is JITER_SECRET_KEY:
+    if isinstance(key, ryjwt.SecretKey):
         return algorithm in HMAC_HASHES and hmac.compare_digest(
             signature, reference_mac(algorithm, SECRET, signing_input)
         )
@@ -540,6 +705,8 @@ def _check_accepted(key: object, token: bytes, claims: object) -> None:
     expect(header_error(header, allowed) is None, "decode accepted a bad header", header)
     header = cast("dict[str, JSON]", header)
     expect(_verified_by_reference(key, header, segments), "decode accepted a bad signature", token)
+    if payload is Invalid.DEEP:  # too deep for the reference to judge
+        return
     expect(isinstance(payload, dict), "decode accepted a payload that isn't valid", token)
     payload = cast("dict[str, JSON]", payload)
     verdict = claims_error(payload, DECODE_CHECKS, time.time())
@@ -563,12 +730,34 @@ def _check_unverified(token: bytes, outcome: Outcome) -> None:
             value,
             parsed,
         )
-    expect(not isinstance(reference_json(decoded[0] or b""), DuplicatedObject), "duplicate header")
+    parsed = reference_json(decoded[0] or b"")
+    expect(not isinstance(parsed, DuplicatedObject), "unverified_token took a repeated parameter")
+    expect(
+        not isinstance(parsed, dict) or len(parsed) <= MAX_HEADER_PARAMETERS,
+        "unverified_token took a header with too many parameters",
+    )
+
+
+def _signed_by_secret(token: bytes) -> bool:
+    """Whether `token` is signed with the secret, for the HMAC algorithm its header names, by the
+    reference: if it isn't, no HMAC key can verify it (and so remember its header)."""
+    segments = token.split(b".")
+    if len(segments) != 3:
+        return False
+    header, signature = reference_json(b64decode(segments[0]) or b""), b64decode(segments[2])
+    algorithm = header.get("alg") if isinstance(header, dict) else None
+    return (
+        isinstance(algorithm, str)
+        and algorithm in HMAC_HASHES
+        and signature == reference_mac(algorithm, SECRET, segments[0] + b"." + segments[1])
+    )
 
 
 def check_decode(data: bytes) -> None:
-    """A token, decoded by each of the keys (HMAC with msgspec and with jiter payloads, a JWKS, a
-    public and a private key), as bytes and as str, and read unverified."""
+    """A token, read unverified, and decoded by each kind of key: HMAC (parsing payloads with
+    msgspec, or jiter) as bytes and as str, a JWKS, a public key and a private key. Each is made
+    once, its memory of headers filled with the harness's, but a token one verifies is decoded
+    twice by a new key."""
     as_str = data.decode(errors="surrogateescape")
     for token in (data, as_str):
         outcome = attempt(partial(ryjwt.unverified_token, token), ryjwt.DecodeError)
@@ -576,13 +765,21 @@ def check_decode(data: bytes) -> None:
     with jiter_payloads():
         outcome = attempt(partial(ryjwt.unverified_token, data), ryjwt.DecodeError)
     _check_unverified(data, outcome)
-    for key in (SECRET_KEY, JITER_SECRET_KEY, JWKS_KEY, ES256_PUBLIC_KEY, ED25519_KEY):
-        for token in (data, as_str) if key is SECRET_KEY else (data,):
-            outcome = attempt(
-                partial(key.decode, token, audience=AUDIENCE), ryjwt.InvalidTokenError
-            )
+    signed = _signed_by_secret(data)
+    for jiter in (False, True):
+        key = (JITER_SECRET_KEY if jiter else SECRET_KEY) if not signed else secret_key(jiter=jiter)
+        for token in (data,) if jiter else (data, as_str):
+            call = partial(key.decode, token, audience=AUDIENCE)
+            outcome = decode_twice(call) if signed else attempt(call, ryjwt.InvalidTokenError)
             if outcome.error is None:
                 _check_accepted(key, data, outcome.value)
+    for key, make in LASTING_KEYS:
+        outcome = attempt(partial(key.decode, data, audience=AUDIENCE), ryjwt.InvalidTokenError)
+        if outcome.error is None:
+            _check_accepted(key, data, outcome.value)
+        if outcome.error is None or isinstance(outcome.error, CLAIMS_ERRORS):
+            renewed = decode_twice(partial(make().decode, data, audience=AUDIENCE))
+            expect(same_outcome(outcome, renewed), "a new key decoded otherwise", outcome, renewed)
 
 
 # ---- claims: payloads (and headers), signed, decoded every way ----
@@ -679,30 +876,50 @@ def _expected_type(type_: type, payload: bytes) -> Expected:
         return Expected(accepts=False, errors=frozenset({ryjwt.DecodeError}))
 
 
-def expected_decode(
-    header_bytes: bytes, payload: bytes, type_: type | None, checks: Checks, now: float
-) -> Expected:
-    """What decoding the signed token of `header_bytes` and `payload` must do."""
-    header, parsed = reference_json(header_bytes), reference_json(payload)
-    if header is Invalid.DEEP or parsed is Invalid.DEEP:
+class Reference(NamedTuple):
+    """What the reference makes of a token's header and payload, read once for every decode of it:
+    their JSON; the error the header must be rejected with, if any; the claims' verdict (for the
+    input's checks); and whether ryjwt's parsers may reject the header, or the payload, though the
+    reference takes it (`diverges`)."""
+
+    header: JSON | Invalid
+    payload: JSON | Invalid
+    header_error: type[ryjwt.InvalidTokenError] | None
+    verdict: ClaimsVerdict
+    header_diverges: bool
+    payload_diverges: bool
+
+
+def reference(header: bytes, payload: bytes, checks: Checks, now: float) -> Reference:
+    parsed_header, parsed = reference_json(header), reference_json(payload)
+    return Reference(
+        parsed_header,
+        parsed,
+        header_error(parsed_header, HMAC_ALGORITHMS),
+        claims_error(parsed, checks, now) if isinstance(parsed, dict) else None,
+        diverges_json(header),
+        diverges_json(payload),
+    )
+
+
+def expected_decode(ref: Reference, payload: bytes, type_: type | None) -> Expected:
+    """What decoding the signed token of the header and `payload` the reference read must do, into
+    `type_` (or a dict, if None)."""
+    if ref.header is Invalid.DEEP or ref.payload is Invalid.DEEP:
         return ANYTHING
-    error = header_error(header, HMAC_ALGORITHMS)
-    if error is not None:
-        expected = Expected(accepts=False, errors=frozenset({error}))
-    elif not isinstance(parsed, dict):
+    if ref.header_error is not None:
+        expected = Expected(accepts=False, errors=frozenset({ref.header_error}))
+    elif not isinstance(ref.payload, dict):
         expected = Expected(accepts=False, errors=frozenset({ryjwt.DecodeError}))
+    elif ref.verdict is Clock.EDGE:
+        return ANYTHING
+    elif ref.verdict is not None:
+        expected = Expected(accepts=False, errors=frozenset({ref.verdict}))
+    elif type_ is None:
+        expected = Expected(accepts=True, value=ref.payload)
     else:
-        claims = parsed
-        verdict = claims_error(claims, checks, now)
-        if verdict is Clock.EDGE:
-            return ANYTHING
-        if verdict is not None:
-            expected = Expected(accepts=False, errors=frozenset({verdict}))
-        elif type_ is None:
-            expected = Expected(accepts=True, value=claims)
-        else:
-            expected = _expected_type(type_, payload)
-    if diverges_json(header_bytes) or (error is None and diverges_json(payload)):
+        expected = _expected_type(type_, payload)
+    if ref.header_diverges or (ref.header_error is None and ref.payload_diverges):
         return expected._replace(errors=expected.errors | {ryjwt.DecodeError}, message=None)
     return expected
 
@@ -721,18 +938,12 @@ def check_outcome(outcome: Outcome, expected: Expected, what: str) -> None:
         expect(str(outcome.error) == expected.message, f"{what}'s message", outcome, expected)
 
 
-def hmac_token(header: bytes, payload: bytes, algorithm: str) -> str:
-    signing_input = b64encode(header) + b"." + b64encode(payload)
-    signature = reference_mac(algorithm, SECRET, signing_input)
-    return (signing_input + b"." + b64encode(signature)).decode()
-
-
-def _check_claims_unverified(token: str, header_bytes: bytes, payload: bytes) -> None:
+def _check_claims_unverified(token: str, ref: Reference) -> None:
     """unverified_* checks only that the header and payload are JSON objects (and the header has
     no repeated or too many parameters)."""
-    header, parsed = reference_json(header_bytes), reference_json(payload)
+    header, parsed = ref.header, ref.payload
     for jiter in (False, True):
-        with jiter_payloads() if jiter else _nothing():
+        with jiter_payloads() if jiter else nullcontext():
             outcome = attempt(partial(ryjwt.unverified_token, token), ryjwt.DecodeError)
         if header is Invalid.DEEP or parsed is Invalid.DEEP:
             continue
@@ -745,7 +956,7 @@ def _check_claims_unverified(token: str, header_bytes: bytes, payload: bytes) ->
             expect_error(outcome, {ryjwt.DecodeError}, "unverified_token raised")
             continue
         if outcome.error is not None:
-            lax = diverges_json(header_bytes) or diverges_json(payload)
+            lax = ref.header_diverges or ref.payload_diverges
             expect(lax, "unverified_token rejected", outcome)
             continue
         got_header, got_claims = cast("tuple[object, object]", outcome.value)
@@ -753,12 +964,7 @@ def _check_claims_unverified(token: str, header_bytes: bytes, payload: bytes) ->
         expect(same(got_claims, parsed), "unverified claims", got_claims, parsed)
 
 
-@contextmanager
-def _nothing() -> Generator[None, None, None]:
-    yield
-
-
-def _same_outcome(a: Outcome, b: Outcome) -> bool:
+def _same_structs(a: Outcome, b: Outcome) -> bool:
     """Whether two decodes into Structs did the same: the same fields, or the same error."""
     if a.error is not None or b.error is not None:
         # Their messages name their own class.
@@ -774,38 +980,28 @@ def check_claims(data: bytes) -> None:
     with the HMAC algorithm option bits 0-1 pick (unless the header names another), and decoded by
     every path ryjwt has (a dict from msgspec or jiter, a Struct whose claims are read from it or
     scanned for, datetime claims rewritten for msgspec or pydantic) with the audience, issuer and
-    leeway bits 2-4 pick; and read unverified."""
+    leeway bits 2-4 pick; and read unverified. Dicts are decoded twice with new keys; the typed
+    decodes with SECRET_KEY, which no input's header is remembered by."""
     source = Input(data)
     options = source.byte()
     algorithm: str = HMAC_ALGORITHMS[options % 4 % 3]
     checks = CLAIMS_CHECKS[options >> 2 & 7]
     if options & 0x80:
-        header_bytes, _, payload = source.rest().partition(b"\0")
+        header, _, payload = source.rest().partition(b"\0")
     else:
-        header_bytes, payload = b'{"alg":"%s","typ":"JWT"}' % algorithm.encode(), source.rest()
-    header = reference_json(header_bytes)
-    if isinstance(header, dict):
-        named = header.get("alg")
+        header, payload = b'{"alg":"%s","typ":"JWT"}' % algorithm.encode(), source.rest()
+    ref = reference(header, payload, checks, time.time())
+    if isinstance(ref.header, dict):
+        named = ref.header.get("alg")
         algorithm = named if isinstance(named, str) and named in HMAC_HASHES else algorithm
-    token = hmac_token(header_bytes, payload, algorithm)
-    now = time.time()
-    for key in (SECRET_KEY, JITER_SECRET_KEY):
-        outcome = attempt(
-            partial(
-                key.decode,
-                token,
-                audience=checks.audience,
-                issuer=checks.issuer,
-                leeway=checks.leeway,
-            ),
-            ryjwt.InvalidTokenError,
-        )
-        expected = expected_decode(header_bytes, payload, None, checks, now)
-        check_outcome(
-            outcome,
-            expected,
-            "decode (dict, jiter)" if key is JITER_SECRET_KEY else "decode (dict)",
-        )
+    token = hmac_token(header, payload, algorithm)
+    audience, issuer, leeway = checks
+    for jiter in (False, True):
+        key = secret_key(jiter=jiter)
+        call = partial(key.decode, token, audience=audience, issuer=issuer, leeway=leeway)
+        outcome = decode_twice(call)
+        what = "decode (dict, jiter)" if jiter else "decode (dict)"
+        check_outcome(outcome, expected_decode(ref, payload, None), what)
     outcomes: dict[type, Outcome] = {}
     for type_ in TYPES:
         outcome = attempt(
@@ -813,22 +1009,19 @@ def check_claims(data: bytes) -> None:
                 SECRET_KEY.decode,
                 token,
                 into=type_,
-                audience=checks.audience,
-                issuer=checks.issuer,
-                leeway=checks.leeway,
+                audience=audience,
+                issuer=issuer,
+                leeway=leeway,
             ),
             ryjwt.InvalidTokenError,
         )
-        check_outcome(
-            outcome,
-            expected_decode(header_bytes, payload, type_, checks, now),
-            f"decode into {type_.__name__}",
-        )
+        expected = expected_decode(ref, payload, type_)
+        check_outcome(outcome, expected, f"decode into {type_.__name__}")
         outcomes[type_] = outcome
     # Reading the claims from the instance must validate them exactly as scanning does.
     read, scanned = outcomes[Claims], outcomes[ScannedClaims]
-    expect(_same_outcome(read, scanned), "Claims and ScannedClaims disagree", read, scanned)
-    _check_claims_unverified(token, header_bytes, payload)
+    expect(_same_structs(read, scanned), "Claims and ScannedClaims disagree", read, scanned)
+    _check_claims_unverified(token, ref)
 
 
 # ---- encode: claims of every kind, encoded, then decoded back ----
@@ -1125,22 +1318,21 @@ def check_encode(data: bytes) -> None:
         same(reference_json(payload), expected_claims), "encode's claims", payload, expected_claims
     )
     _check_signature(signer, algorithm, segments[0] + b"." + segments[1], signature)
-    _check_decodes(signer.key, token, expected_header, expected_claims)
+    _check_decodes(signer.verifier, token, expected_header, expected_claims)
 
 
 def _check_decodes(
-    key: ryjwt.SecretKey | ryjwt.PrivateKey,
+    verifier: ryjwt.PublicKey | None,
     token: str,
     header: dict[str, object],
     claims: dict[str, object],
 ) -> None:
-    """Checks `key` decodes the token it encoded as `header` and `claims`, unless the claims are
-    invalid, and that unverified_claims reads the claims."""
+    """Checks `verifier` (or, if None, a new SecretKey, twice) decodes a token encoded as `header`
+    and `claims`, unless the claims are invalid, and that unverified_claims reads the claims."""
     checks = Checks(audience=_audience(claims), issuer=None, leeway=HUGE_LEEWAY)
-    outcome = attempt(
-        partial(key.decode, token, audience=checks.audience, leeway=checks.leeway),
-        ryjwt.InvalidTokenError,
-    )
+    key = secret_key() if verifier is None else verifier
+    call = partial(key.decode, token, audience=checks.audience, leeway=checks.leeway)
+    outcome = decode_twice(call) if verifier is None else attempt(call, ryjwt.InvalidTokenError)
     verdict = claims_error(claims, checks, time.time())
     if verdict is Clock.EDGE:
         return
@@ -1226,8 +1418,8 @@ def _check_exported(
         expect(public is not None, "from_jwks took a key the reference rejects", jwk)
         if isinstance(public, rsa.RSAPublicKey):
             expect(2048 <= public.key_size <= 8192, "from_jwks took an RSA key's wrong size", jwk)
-    again = ryjwt.PublicKey.from_jwks({"keys": jwk_set}, algorithms=list(algorithms))
-    expect(exported(again) == jwk_set, "a JWKS from_jwks exported doesn't take back the same")
+    reread = ryjwt.PublicKey.from_jwks({"keys": jwk_set}, algorithms=list(algorithms))
+    expect(exported(reread) == jwk_set, "a JWKS from_jwks exported doesn't take back the same")
 
 
 def _verifies(jwk: Mapping[str, object], header: Mapping[str, object], token: bytes) -> bool:
@@ -1248,10 +1440,15 @@ def _verifies(jwk: Mapping[str, object], header: Mapping[str, object], token: by
 def _check_signed_tokens(jwks: Mapping[str, object], key: ryjwt.PublicKey) -> None:
     """Checks `key` verifies the bench's tokens only if a reference does with a key in `jwks` the
     token's kid could pick (one with that kid, or any key if either has no kid)."""
+    remembered = False
     for token in SIGNED_TOKENS:
-        outcome = attempt(partial(key.decode, token, audience=AUDIENCE), ryjwt.InvalidTokenError)
+        call = partial(key.decode, token, audience=AUDIENCE)
+        outcome = attempt(call, ryjwt.InvalidTokenError)
         if outcome.error is not None:
             continue
+        if not remembered:  # the first token it verifies, again with its header remembered
+            again(call, outcome)
+            remembered = True
         header = cast("dict[str, object]", reference_json(b64decode(token.split(".")[0]) or b""))
         kid = header.get("kid")
         candidates = [k for k in _given(jwks) if kid is None or k.get("kid", kid) == kid]
@@ -1367,7 +1564,8 @@ def _check_private(
     expect(key.decode(token) == {"sub": "fuzz"}, "a PrivateKey doesn't verify its own token")
     jwk = key.jwk()
     public = ryjwt.PublicKey.from_jwks({"keys": [jwk]}, algorithms=[algorithm])
-    expect(public.decode(token) == {"sub": "fuzz"}, "a PrivateKey's JWK doesn't verify its token")
+    outcome = decode_twice(partial(public.decode, token))
+    expect(outcome.value == {"sub": "fuzz"}, "a PrivateKey's JWK doesn't verify its token", outcome)
     segments = token.encode().split(b".")
     signature = b64decode(segments[2]) or b""
     reference = _reference_jwk_key(jwk)
@@ -1390,8 +1588,8 @@ def _check_public(
     key: ryjwt.PublicKey, family: Sequence[AsymmetricAlgorithm], material: bytes | str
 ) -> None:
     jwk = key.jwk()
-    again = ryjwt.PublicKey.from_jwks({"keys": [jwk]}, algorithms=list(family))
-    expect(again.jwk() == jwk, "a PublicKey's JWK doesn't take back the same", jwk)
+    reread = ryjwt.PublicKey.from_jwks({"keys": [jwk]}, algorithms=list(family))
+    expect(reread.jwk() == jwk, "a PublicKey's JWK doesn't take back the same", jwk)
     reference = _reference_jwk_key(jwk)
     pem = material.encode(errors="surrogateescape") if isinstance(material, str) else material
     try:
@@ -1407,7 +1605,8 @@ def _check_secret(key: ryjwt.SecretKey, secret: bytes) -> None:
         signing_input, _, signature = token.rpartition(b".")
         expected = reference_mac(algorithm, secret, signing_input)
         expect(b64decode(signature) == expected, "SecretKey's MAC isn't the reference's", algorithm)
-        expect(key.decode(token) == {"sub": "fuzz"}, "SecretKey doesn't verify its own token")
+        outcome = decode_twice(partial(key.decode, token))
+        expect(outcome.value == {"sub": "fuzz"}, "SecretKey doesn't verify its own token", outcome)
 
 
 def check_keys(data: bytes) -> None:

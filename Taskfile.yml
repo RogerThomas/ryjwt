@@ -89,8 +89,8 @@ tasks:
       LSAN_OPTIONS: suppressions={{.TASKFILE_DIR}}/fuzz/lsan.supp
     vars:
       FUZZ_TIME: '{{.FUZZ_TIME | default "600"}}'
-      # cargo-fuzz needs nightly Rust: pinned, so a new nightly can't break the weekly run. Bump it by
-      # hand (and run task fuzz) now and then.
+      # cargo-fuzz needs nightly Rust: pinned, so a new nightly can't break the scheduled runs. Bump
+      # it by hand (and run task fuzz) now and then.
       NIGHTLY: nightly-2026-10-12
     cmds:
       - rustup toolchain install {{.NIGHTLY}} --profile minimal

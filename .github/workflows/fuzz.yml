@@ -1,8 +1,8 @@
 # Fuzzes ryjwt (task fuzz: cargo-fuzz, libFuzzer with AddressSanitizer on nightly Rust; see
-# docs/development.md) weekly and on demand, never on pull requests: each target in a job of its
-# own, for FUZZ_TIME seconds. Each target's corpus is cached for its next run to grow. A crash fails
-# the job, and only the sanitizer's one-line summary is shown: the input may be an exploit for a
-# vulnerability (SECURITY.md), and a public repository's logs and artifacts are public, while
+# docs/development.md) twice a week and on demand, never on pull requests: each target in a job of
+# its own, for FUZZ_TIME seconds. Each target's corpus is cached for its next run to grow. A crash
+# fails the job, and only the sanitizer's one-line summary is shown: the input may be an exploit for
+# a vulnerability (SECURITY.md), and a public repository's logs and artifacts are public, while
 # libFuzzer prints small inputs and the harness's checks quote what they compared. So the full log
 # stays on the runner: find the failure again locally with task fuzz -- <target>.
 name: Fuzz
@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       seconds:
-        description: "How long to fuzz each target, in seconds (at most 3600)"
+        description: "How long to fuzz each target: a whole number of seconds, 1 to 3600"
         type: number
         default: 300
 
@@ -67,8 +67,15 @@ jobs:
           TARGET: ${{ matrix.target }}
           SECONDS_ASKED: ${{ inputs.seconds || 300 }}
         run: |
-          FUZZ_TIME=$(( SECONDS_ASKED > 3600 ? 3600 : SECONDS_ASKED ))
-          export FUZZ_TIME
+          case "$SECONDS_ASKED" in
+            "" | *[!0-9]* | ?????*) seconds=0 ;; # not digits, or too many for bash to add up
+            *) seconds=$(( 10#$SECONDS_ASKED )) ;;
+          esac
+          if [ "$seconds" -lt 1 ] || [ "$seconds" -gt 3600 ]; then
+            echo "::error::seconds must be a whole number from 1 to 3600"
+            exit 1
+          fi
+          export FUZZ_TIME="$seconds"
           if ! task fuzz -- "$TARGET" > fuzz.log 2>&1; then
             grep -E '^SUMMARY: ' fuzz.log || echo "No sanitizer summary: a panic or a failed check."
             echo "::error::Fuzzing $TARGET failed. Reproduce it locally (task fuzz -- $TARGET), and treat it as a possible vulnerability (SECURITY.md)."

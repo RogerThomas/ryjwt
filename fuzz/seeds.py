@@ -18,6 +18,13 @@ from cryptography.hazmat.primitives.asymmetric import ec, rsa
 HERE = Path(__file__).parent
 BENCH = HERE.parent / "bench" / "matrix"
 KEYS = ("rs2048", "rs3072", "rs4096", "es256", "es384", "es512", "ed25519")
+# JSON nested deeper than the harness's reference parses it (harness.py MAX_REFERENCE_DEPTH).
+DEEP = b"[" * 1200 + b"]" * 1200
+
+
+def _secp256k1_key() -> ec.EllipticCurvePrivateKey:
+    """A secp256k1 key (ES256K's curve, which the bench has no key on), the same every time."""
+    return ec.derive_private_key(0x5EED, ec.SECP256K1())
 
 
 def _b64decode(segment: str) -> bytes:
@@ -85,6 +92,8 @@ def _claims_seeds(cases: list[dict[str, str]]) -> dict[str, bytes]:
         seeds[f"header-{name}"] = b"\x80" + header + b"\0" + payloads["registered"]
     seeds["audience"] = b"\x08" + payloads["registered"]
     seeds["issuer"] = b"\x0c" + payloads["registered"]
+    seeds["deep"] = b"\0" + b'{"a":' + DEEP + b"}"
+    seeds["header-deep"] = b"\x80" + b'{"alg":"HS256","a":' + DEEP + b"}\0" + payloads["dates"]
     return seeds
 
 
@@ -105,6 +114,11 @@ def _jwks_seeds() -> dict[str, bytes]:
     seeds = {name: b"\0" + seed for name, seed in seeds.items()}
     seeds["es256-str"] = b"\x01" + json.dumps(documents["es256"]).encode()
     seeds["es256-dict"] = b"\x02" + json.dumps(documents["es256"]).encode()
+    numbers = _secp256k1_key().public_key().public_numbers()
+    point = {name: _b64encode(n.to_bytes(32)) for name, n in (("x", numbers.x), ("y", numbers.y))}
+    es256k = {"kid": "es256k", "kty": "EC", "crv": "secp256k1", **point}
+    seeds["es256k"] = b"\0" + json.dumps({"keys": [es256k]}).encode()
+    seeds["deep"] = b"\0" + b'{"keys":' + DEEP + b"}"
     return seeds
 
 
@@ -128,6 +142,9 @@ def _keys_seeds(fixtures: dict[str, dict[str, str]]) -> dict[str, bytes]:
             seeds[f"{key}-public-pkcs1"] = private.public_key().public_bytes(pem, pkcs1_public)
         ssh = serialization.Encoding.OpenSSH, serialization.PublicFormat.OpenSSH
         seeds[f"{key}-ssh"] = private.public_key().public_bytes(*ssh)
+    pkcs8 = serialization.PrivateFormat.PKCS8
+    seeds["es256k-private"] = _secp256k1_key().private_bytes(pem, pkcs8, sec1)
+    seeds["es256k-public"] = _secp256k1_key().public_key().public_bytes(pem, spki)
     seeds = {name: b"\0" + seed for name, seed in seeds.items()}
     # A curve's parameters ahead of its key, as `openssl ecparam -genkey` writes them.
     parameters = b"-----BEGIN EC PARAMETERS-----\nBggqhkjOPQMBBw==\n-----END EC PARAMETERS-----\n"
