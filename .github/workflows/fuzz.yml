@@ -1,0 +1,73 @@
+# Fuzzes ryjwt (task fuzz: cargo-fuzz, libFuzzer with AddressSanitizer on nightly Rust; see
+# docs/development.md) weekly and on demand, never on pull requests: each target in a job of its
+# own, for FUZZ_TIME seconds. Each target's corpus is cached for its next run to grow. A crash fails
+# the job, and its log shows what failed. Its input isn't uploaded: anyone signed in to GitHub can
+# download a public repository's artifacts, and it may be an exploit for a vulnerability
+# (SECURITY.md). Find it again locally with task fuzz -- <target>.
+name: Fuzz
+
+on:
+  schedule:
+    - cron: "0 4 * * 1" # Mondays, 04:00 UTC
+  workflow_dispatch:
+    inputs:
+      seconds:
+        description: "How long to fuzz each target, in seconds (at most 3600)"
+        type: number
+        default: 300
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_FUZZ_VERSION: 0.13.2
+  FUZZ_TIME: ${{ inputs.seconds || 300 }}
+  TASK_VERSION: 3.54.0
+  UV_LOCKED: 1 # fail if uv.lock is out of date with pyproject.toml
+  UV_PYTHON_PREFERENCE: only-managed # a uv-managed Python, whose libpython the targets embed
+  UV_VERSION: 0.13.0 # as ci.yml
+
+jobs:
+  fuzz:
+    name: Fuzz (${{ matrix.target }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [decode, claims, encode, jwks, keys] # fuzz/Cargo.toml's [[bin]]s
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2.2.0
+        with:
+          version: ${{ env.TASK_VERSION }}
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      # task fuzz installs the nightly Rust it pins.
+      - name: Install cargo-fuzz
+        run: cargo install --locked "cargo-fuzz@${CARGO_FUZZ_VERSION}"
+      - name: Restore the corpus
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: fuzz/corpus/${{ matrix.target }}
+          key: fuzz-corpus-${{ matrix.target }}-${{ github.run_id }}
+          restore-keys: fuzz-corpus-${{ matrix.target }}-
+      - name: Fuzz
+        env:
+          TARGET: ${{ matrix.target }}
+        run: task fuzz -- "$TARGET"
+      - name: Save the corpus
+        if: ${{ !cancelled() }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: fuzz/corpus/${{ matrix.target }}
+          key: fuzz-corpus-${{ matrix.target }}-${{ github.run_id }}

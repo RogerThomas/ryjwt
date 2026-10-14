@@ -80,6 +80,42 @@ tasks:
       - cargo fetch --locked
       - cargo about generate --frozen --fail --output-file THIRD_PARTY_LICENSES about.hbs
 
+  fuzz:
+    desc: 'Fuzz each target (fuzz/fuzz_targets) for FUZZ_TIME seconds (default 600), one after another, or one: task fuzz -- decode; or run one on given inputs instead: task fuzz -- decode fuzz/artifacts/decode/crash-…. A crash stops it, its input in fuzz/artifacts/<target>/. Needs cargo-fuzz (cargo install cargo-fuzz); it installs the nightly Rust it pins'
+    dir: fuzz
+    env:
+      # Python allocates every object with malloc, not its own arenas, for AddressSanitizer to check.
+      PYTHONMALLOC: malloc
+      LSAN_OPTIONS: suppressions={{.TASKFILE_DIR}}/fuzz/lsan.supp
+    vars:
+      FUZZ_TIME: '{{.FUZZ_TIME | default "600"}}'
+      # cargo-fuzz needs nightly Rust: pinned, so a new nightly can't break the weekly run. Bump it by
+      # hand (and run task fuzz) now and then.
+      NIGHTLY: nightly-2026-10-12
+    cmds:
+      - rustup toolchain install {{.NIGHTLY}} --profile minimal
+      # The versions the wheels are built with, plus the fuzz crate's own dependencies.
+      - cp ../Cargo.lock Cargo.lock
+      - uv run --only-group fuzz yeet ./seeds.py
+      - |
+        set -eu
+        # The targets embed the project's Python, with the fuzz group installed, and run ryjwt's
+        # package from ../python on their own build of the extension module.
+        python=$(uv run --only-group fuzz python -c 'import sys; print(sys.executable)')
+        export PYO3_PYTHON="$python"
+        PYTHONHOME=$("$python" -c 'import sys; print(sys.base_prefix)')
+        packages=$("$python" -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
+        export PYTHONHOME PYTHONPATH="$PWD/../python:$PWD:$packages"
+        options="-max_total_time={{.FUZZ_TIME}} -timeout=30 -dict=$PWD/jwt.dict -print_final_stats=1"
+        if [ -n "{{.CLI_ARGS}}" ]; then
+          cargo +{{.NIGHTLY}} fuzz run {{.CLI_ARGS}} -- $options
+        else
+          for target in $(cargo +{{.NIGHTLY}} fuzz list); do
+            echo "──── ${target} ────"
+            cargo +{{.NIGHTLY}} fuzz run "$target" -- $options
+          done
+        fi
+
   bench-docker:
     desc: 'Benchmark every implementation in its own container (1 core, 500 MB), one after another; results in bench/results-docker'
     dir: bench

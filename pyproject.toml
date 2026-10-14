@@ -56,6 +56,7 @@ exclude = [
     { path = "scripts/**/*", format = "sdist" },
     { path = "zensical.toml", format = "sdist" },
     { path = "bench/**/*", format = "sdist" },
+    { path = "fuzz/**/*", format = "sdist" },
     { path = "jwks_server.py", format = "sdist" },
     { path = "main.py", format = "sdist" },
     { path = "plans/**/*", format = "sdist" },
@@ -98,6 +99,13 @@ docs = [
     "mkdocstrings-python==2.0.9",
     "ruff==0.16.10", # formats the API reference's signatures; the version dev's ruff is locked at
     "zensical==0.0.68",
+]
+# The fuzz targets' Python (fuzz/harness.py) and seed corpus (fuzz/seeds.py): `task fuzz`.
+fuzz = [
+    "cryptography>=46",
+    "msgspec>=0.22.0",
+    "pydantic>=2.13.5",
+    "yeetr>=2026.9.18",
 ]
 # The raster icons rendered from assets/favicon.svg (assets/build_icons.py): `task icons`.
 icons = [
@@ -200,6 +208,10 @@ exempt-modules = ["typing", "typing_extensions", "collections.abc", "ryjwt._algo
 "scripts/**" = [
     "INP001", # loaded by path (zensical.toml), not imported as a package
 ]
+"fuzz/**" = [
+    "INP001", # harness.py is imported from PYTHONPATH by the fuzz targets; seeds.py is a script
+    "S311",   # seeded random for reproducible seeds, not crypto
+]
 "tests/**" = [
     "INP001", # pytest test dirs are not packages; no __init__.py needed
     "S101",   # assert is how pytest tests
@@ -237,6 +249,7 @@ project-excludes = ["tests/typing_errors"] # code that must not type-check: test
 # yeetr, which runs the bench scripts, needs Python 3.13+; the bench runs on 3.14.
 bench = { requires-python = ">=3.13" }
 icons = { requires-python = ">=3.13" } # yeetr, which runs assets/build_icons.py
+fuzz = { requires-python = ">=3.13" } # yeetr, which runs fuzz/seeds.py
 
 [tool.uv]
 # Rebuild the extension when the Rust sources change.

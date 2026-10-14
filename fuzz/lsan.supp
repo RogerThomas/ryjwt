@@ -1,0 +1,5 @@
+# LeakSanitizer suppressions (task fuzz; LeakSanitizer runs on Linux only): what the cryptography
+# package (harness.py's reference, with cffi) and pydantic-core allocate once and never free.
+leak:cryptography/hazmat/bindings/_rust.abi3.so
+leak:_cffi_backend.
+leak:_pydantic_core.

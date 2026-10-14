@@ -12,12 +12,41 @@ and rustup; `.python-version` and `rust-toolchain.toml` pin the versions.
 | `task licenses` | regenerates `THIRD_PARTY_LICENSES` with [cargo-about](https://github.com/EmbarkStudios/cargo-about), after a `Cargo.lock` change |
 | `task docs` | serves this site, rebuilding as you edit |
 | `task docs-test` | builds the site strictly, failing on any warning, broken link or unresolved reference |
+| `task fuzz` | fuzzes the Rust core (see [Fuzzing](#fuzzing)) |
 
 For another Python, use its own venv: `UV_PROJECT_ENVIRONMENT=.venv-312 uv run --python 3.12 pytest`
 (`.venv-313` for `3.13`, `.venv-314t` for `3.14t`).
 
 CI runs the same tasks on each supported Python. The Python examples in these pages and the README
 run as tests (`tests/test_docs.py`).
+
+## Fuzzing
+
+`task fuzz` runs coverage-guided fuzzing on the code that reads untrusted input, with
+[cargo-fuzz](https://rust-fuzz.github.io/book/cargo-fuzz.html) (libFuzzer and AddressSanitizer).
+It needs cargo-fuzz (`cargo install cargo-fuzz`), and nightly Rust, which it installs itself: a
+dated nightly, pinned in `Taskfile.yml`, so a new one can't break it unannounced.
+
+Each target embeds Python and calls ryjwt's public API, on a build of the extension instrumented
+for the fuzzer. It checks what ryjwt does against references: Python's `json` and `hmac`, the
+cryptography package, and ryjwt's own slower paths. The checks are in `fuzz/harness.py`.
+
+| target | what it gives ryjwt |
+| :-- | :-- |
+| `decode` | tokens, to each kind of key, and to `unverified_token` |
+| `claims` | payloads (and headers), signed, then decoded into dicts, Structs and models |
+| `encode` | claims and header parameters of every kind, encoded, then decoded back |
+| `jwks` | JWKS documents, to `PublicKey.from_jwks` and the JWKS client's reading |
+| `keys` | key material, to `SecretKey`, `PrivateKey` and `PublicKey` |
+
+`task fuzz` runs each target for `FUZZ_TIME` seconds (600 by default); `task fuzz -- decode` runs
+one. The inputs found are kept in `fuzz/corpus/`, which `fuzz/seeds.py` seeds from the bench's keys
+and tokens. A crash, a sanitizer error or a failed check stops the run and saves the input in
+`fuzz/artifacts/<target>/`; `task fuzz -- decode fuzz/artifacts/decode/crash-…` reruns it. The
+Fuzz workflow (`.github/workflows/fuzz.yml`) runs every target for five minutes each week.
+
+A crash may be a vulnerability: report it privately, as the
+[security policy](https://github.com/RogerThomas/ryjwt/blob/main/SECURITY.md) says.
 
 ## Releases
 

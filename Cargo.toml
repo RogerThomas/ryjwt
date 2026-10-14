@@ -7,7 +7,8 @@ publish = false
 
 [lib]
 name = "_ryjwt"
-crate-type = ["cdylib"]
+# The rlib is for the fuzz targets (fuzz/) to link; the wheels hold the cdylib, which it leaves as is.
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # prebuilt-nasm: on Windows x86_64 without NASM installed, use aws-lc-sys's prebuilt assembly

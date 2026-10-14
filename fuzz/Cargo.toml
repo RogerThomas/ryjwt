@@ -1,0 +1,66 @@
+# The fuzz targets (cargo-fuzz: libFuzzer and AddressSanitizer, on nightly Rust), run with
+# `task fuzz`. A package and workspace of its own, outside ryjwt's: nothing here is built into the
+# wheels, and its Cargo.lock (which `task fuzz` copies from ryjwt's, so it fuzzes the versions the
+# wheels are built with) isn't committed.
+[package]
+name = "ryjwt-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+# The version ryjwt uses, whatever it is: only one copy of PyO3 can link libpython.
+pyo3 = "*"
+ryjwt = { path = ".." }
+
+[build-dependencies]
+pyo3-build-config = "*" # PyO3's own
+
+[lints.clippy]
+undocumented_unsafe_blocks = "deny"
+
+# Symbols for the stack traces of crashes.
+[profile.release]
+debug = 1
+
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "decode"
+path = "fuzz_targets/decode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "claims"
+path = "fuzz_targets/claims.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "encode"
+path = "fuzz_targets/encode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "jwks"
+path = "fuzz_targets/jwks.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "keys"
+path = "fuzz_targets/keys.rs"
+test = false
+doc = false
+bench = false

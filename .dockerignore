@@ -5,6 +5,7 @@
 **/.pytest_cache
 **/.ruff_cache
 target
+fuzz
 **/*.so
 bench/bun/node_modules
 bench/rust/target
