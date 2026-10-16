@@ -102,18 +102,54 @@ tasks:
       - uv run --group bench yeet ./gen_tls.py
 
   bench-matrix:
-    desc: 'Benchmark the full matrix (algorithm x key size x payload x key source) in Docker, one library container after another (1 core, 500 MB), against an HTTPS JWKS server; results in bench/results-matrix, page in bench/results-matrix.md'
+    desc: 'Benchmark the full matrix (algorithm x key size x payload x key source) in Docker, one library container after another (1 core, 500 MB), against an HTTPS JWKS server; results in bench/results-matrix, page in bench/results-matrix.md. With MATRIX_JOBS=n (a machine with n+1 cores or more), n libraries at once, each on a core of its own (1 to n)'
     dir: bench
+    vars:
+      MATRIX_JOBS: '{{.MATRIX_JOBS | default "1"}}'
     cmds:
       - docker compose build
       - defer: docker compose rm --stop --force jwks
       - |
         set -eu
-        for service in matrix-pyjwt matrix-joserfc matrix-ryjwt matrix-ryjwt-jiter matrix-ryjwt-msgspec matrix-ryjwt-pydantic matrix-jose matrix-fast-jwt matrix-jsonwebtoken matrix-jsonwebtoken-struct; do
-          echo "──── ${service} ────"
-          docker compose run --rm "${service}"
-        done
-      - uv run --group bench yeet ./compare.py:matrix results-matrix "Run in Docker, one container per library, each limited to 1 CPU (pinned) and 500 MB with no swap; the JWKS server runs in a container of its own, outside that limit. Each case gets 1,000 untimed decodes, then 10,000 timed."
+        services="matrix-pyjwt matrix-joserfc matrix-ryjwt matrix-ryjwt-jiter matrix-ryjwt-msgspec matrix-ryjwt-pydantic matrix-jose matrix-fast-jwt matrix-jsonwebtoken matrix-jsonwebtoken-struct"
+        jobs={{.MATRIX_JOBS}}
+        if [ "$jobs" -le 1 ]; then
+          for service in $services; do
+            echo "──── ${service} ────"
+            docker compose run --rm "${service}"
+          done
+          note="one container per library, each limited to 1 CPU (pinned) and 500 MB with no swap"
+        else
+          # Libraries dealt to cores 1 to $jobs, each core's run one after another; core 0 is left to
+          # the JWKS server and Docker. Each library's output is shown once all have finished.
+          logs=$(mktemp -d)
+          docker compose up --detach --wait jwks
+          i=0
+          for service in $services; do
+            echo "$service" >> "$logs/core-$(( i % jobs + 1 ))"
+            i=$(( i + 1 ))
+          done
+          for core in $(seq 1 "$jobs"); do
+            [ -f "$logs/core-$core" ] || continue
+            (
+              while read -r service; do
+                BENCH_CPU=$core docker compose run --rm --no-deps "$service" > "$logs/$service.log" 2>&1 \
+                  || echo "$service" >> "$logs/failed"
+              done < "$logs/core-$core"
+            ) &
+          done
+          wait
+          for service in $services; do
+            echo "──── ${service} ────"
+            cat "$logs/$service.log"
+          done
+          if [ -f "$logs/failed" ]; then
+            echo "Failed: $(cat "$logs/failed")" >&2
+            exit 1
+          fi
+          note="one container per library, up to $jobs at once, each limited to 1 CPU (pinned, a core of its own) and 500 MB with no swap"
+        fi
+        uv run --group bench yeet ./compare.py:matrix results-matrix "Run in Docker, ${note}; the JWKS server runs in a container of its own, outside that limit. Each case gets 1,000 untimed decodes, then 10,000 timed."
 
   bench-race:
     desc: 'Benchmark just the races'' two cases of the matrix (HS256 typical-k64 from the secret, RS256 typical-rs3072 from the PEM), 3 rounds of 100,000 decodes each, into bench/results-race; then redraw the races'
