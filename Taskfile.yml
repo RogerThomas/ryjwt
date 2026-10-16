@@ -133,8 +133,9 @@ tasks:
             [ -f "$logs/core-$core" ] || continue
             (
               while read -r service; do
-                BENCH_CPU=$core docker compose run --rm --no-deps "$service" > "$logs/$service.log" 2>&1 \
-                  || echo "$service" >> "$logs/failed"
+                # < /dev/null: docker compose run reads stdin, which would swallow the rest of the list.
+                BENCH_CPU=$core docker compose run --rm --no-deps "$service" < /dev/null \
+                  > "$logs/$service.log" 2>&1 || echo "$service" >> "$logs/failed"
               done < "$logs/core-$core"
             ) &
           done
