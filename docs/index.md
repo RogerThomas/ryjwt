@@ -102,7 +102,7 @@ example, extra and all, with nothing installed first.
 
 ## Why it's fast
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) in about 0.4 to 0.5, fast-jwt (Bun) in 0.7, and joserfc, jose and PyJWT in about 3 to 6 seconds](assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.15 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in 0.5, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](assets/perf-race.svg)
 
 One bar per library, decoding 100,000 HS256 tokens in real time
 ([benchmarks](benchmarks/index.md)).
@@ -118,6 +118,5 @@ One bar per library, decoding 100,000 HS256 tokens in real time
   [jiter](https://github.com/pydantic/jiter).
 
 With RSA, ECDSA and EdDSA, most of the time goes on the signature check, so the gaps are smaller.
-ryjwt is about twice as fast as PyJWT with ES256. With RS256 it's 1.7 to 2.9 times as fast: the
-fastest of them on x86_64, and second to fast-jwt (Bun) on Arm
-([benchmarks](benchmarks/index.md#rs256)).
+ryjwt is about twice as fast as PyJWT with ES256. With RS256 it's 2.7 to 2.9 times as fast, and
+the fastest of them on both Arm and x86_64 ([benchmarks](benchmarks/index.md#rs256)).

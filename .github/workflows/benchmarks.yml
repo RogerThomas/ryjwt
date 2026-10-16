@@ -5,9 +5,11 @@
 # benchmarks=race`.
 #
 # Every library runs in the one job, one after another, so they're all timed on the same machine:
-# runners differ, so a job per library would compare machines. The published numbers come from the
-# arm64 runner: x86_64 runners come with one of several CPUs, a run's times depending on which it
-# gets. Runners are shared VMs, so expect a few percent of variation from run to run either way.
+# runners differ, so a job per library would compare machines. The published numbers come from a
+# run on an AWS EC2 c9g.2xlarge (Graviton5) instead (docs/benchmarks/index.md): this workflow is for
+# benchmarking any ref, and for the x86_64 cross-check (bench/x86_64/). x86_64 runners come with
+# one of several CPUs, a run's times depending on which it gets. Runners are shared VMs, so expect
+# a few percent of variation from run to run either way.
 # Neither runner has the Apple Silicon slowdown (docs/benchmarks/index.md): aws-lc detects both.
 #
 # The ref must have the task asked for: `bench-race` is newer than v0.1.0.
@@ -26,7 +28,7 @@ on:
         options: [race, hs256, matrix, all]
         default: race
       runner:
-        description: "ubuntu-24.04-arm is arm64 (Arm Neoverse), the one the published numbers come from; ubuntu-24.04 is x86_64"
+        description: "ubuntu-24.04-arm is arm64 (Arm Neoverse); ubuntu-24.04 is x86_64, the one the cross-check comes from"
         type: choice
         options: [ubuntu-24.04-arm, ubuntu-24.04]
         default: ubuntu-24.04-arm

@@ -6,10 +6,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 22683,
-    "mean_us": 44.086,
+    "ops_per_sec": 56199,
+    "mean_us": 17.794,
     "round_means_us": [
-      44.086
+      17.794
     ]
   },
   {
@@ -19,10 +19,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 26699,
-    "mean_us": 37.454,
+    "ops_per_sec": 83429,
+    "mean_us": 11.986,
     "round_means_us": [
-      37.454
+      11.986
     ]
   },
   {
@@ -32,10 +32,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 28781,
-    "mean_us": 34.745,
+    "ops_per_sec": 88571,
+    "mean_us": 11.29,
     "round_means_us": [
-      34.745
+      11.29
     ]
   },
   {
@@ -45,10 +45,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 21764,
-    "mean_us": 45.947,
+    "ops_per_sec": 57918,
+    "mean_us": 17.266,
     "round_means_us": [
-      45.947
+      17.266
     ]
   },
   {
@@ -58,10 +58,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 25521,
-    "mean_us": 39.184,
+    "ops_per_sec": 79328,
+    "mean_us": 12.606,
     "round_means_us": [
-      39.184
+      12.606
     ]
   },
   {
@@ -71,10 +71,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 25351,
-    "mean_us": 39.446,
+    "ops_per_sec": 75825,
+    "mean_us": 13.188,
     "round_means_us": [
-      39.446
+      13.188
     ]
   },
   {
@@ -84,10 +84,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 21761,
-    "mean_us": 45.953,
+    "ops_per_sec": 58184,
+    "mean_us": 17.187,
     "round_means_us": [
-      45.953
+      17.187
     ]
   },
   {
@@ -97,10 +97,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 22849,
-    "mean_us": 43.765,
+    "ops_per_sec": 65695,
+    "mean_us": 15.222,
     "round_means_us": [
-      43.765
+      15.222
     ]
   },
   {
@@ -110,10 +110,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 20746,
-    "mean_us": 48.202,
+    "ops_per_sec": 53648,
+    "mean_us": 18.64,
     "round_means_us": [
-      48.202
+      18.64
     ]
   },
   {
@@ -123,10 +123,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 20868,
-    "mean_us": 47.921,
+    "ops_per_sec": 54833,
+    "mean_us": 18.237,
     "round_means_us": [
-      47.921
+      18.237
     ]
   },
   {
@@ -136,10 +136,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 19948,
-    "mean_us": 50.13,
+    "ops_per_sec": 55116,
+    "mean_us": 18.143,
     "round_means_us": [
-      50.13
+      18.143
     ]
   },
   {
@@ -149,10 +149,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 19580,
-    "mean_us": 51.072,
+    "ops_per_sec": 49490,
+    "mean_us": 20.206,
     "round_means_us": [
-      51.072
+      20.206
     ]
   },
   {
@@ -162,10 +162,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 6182,
-    "mean_us": 161.757,
+    "ops_per_sec": 10782,
+    "mean_us": 92.749,
     "round_means_us": [
-      161.757
+      92.749
     ]
   },
   {
@@ -175,10 +175,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 6186,
-    "mean_us": 161.666,
+    "ops_per_sec": 10385,
+    "mean_us": 96.293,
     "round_means_us": [
-      161.666
+      96.293
     ]
   },
   {
@@ -188,10 +188,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 6153,
-    "mean_us": 162.525,
+    "ops_per_sec": 10933,
+    "mean_us": 91.468,
     "round_means_us": [
-      162.525
+      91.468
     ]
   },
   {
@@ -201,10 +201,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 6034,
-    "mean_us": 165.723,
+    "ops_per_sec": 10610,
+    "mean_us": 94.248,
     "round_means_us": [
-      165.723
+      94.248
     ]
   }
 ]

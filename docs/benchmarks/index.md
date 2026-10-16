@@ -24,13 +24,13 @@ Each bar is one library decoding the same token 100,000 times, three times over,
 the mean speed. [The races page](races.md) has each library's time and its range over the three
 rounds.
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.2 seconds, jsonwebtoken (Rust) in about 0.4 to 0.5, fast-jwt (Bun) in 0.7, and joserfc, jose and PyJWT in about 3 to 6 seconds](../assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.15 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in 0.5, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](../assets/perf-race.svg)
 
-With HS256, ryjwt decodes a typical token over 28 times faster than PyJWT 2.15 into a `Struct`
-(27 times into a dict, 23 times with jiter). Against jsonwebtoken (Rust), it's about 1.8 times
-faster struct to struct, and 1.8 to 2.2 times faster dict to `Value`. It's about 3.3 times faster
-than fast-jwt (Bun). Into a pydantic model it's slower than jsonwebtoken's struct, but still about
-13 times faster than PyJWT.
+With HS256, ryjwt decodes a typical token over 26 times faster than PyJWT 2.15 into a `Struct`
+(25 times into a dict, 21 times with jiter). Against jsonwebtoken (Rust), it's about 2.1 times
+faster struct to struct, and 2.0 to 2.4 times faster dict to `Value`. It's about 3.2 times faster
+than fast-jwt (Bun). Even into a pydantic model it's a little faster than jsonwebtoken's struct,
+and about 13 times faster than PyJWT.
 
 ### Why it's faster than jsonwebtoken (Rust)
 
@@ -42,29 +42,30 @@ building the result.
 
 ### RS256
 
-![A race to decode 100,000 RS256 tokens with a 3072-bit RSA key: fast-jwt (Bun) finishes first in about 4.8 seconds, ryjwt next in about 7.0, joserfc, jsonwebtoken (Rust) and jose in 7.6 to 8.0, and PyJWT in 11.6](../assets/perf-race-rs256.svg)
+![A race to decode 100,000 RS256 tokens with a 3072-bit RSA key: ryjwt finishes first in about 2.9 seconds, fast-jwt (Bun) and jsonwebtoken (Rust) next in 3.4 to 3.6, jose in 4.2, joserfc in 5.3, and PyJWT in 7.9](../assets/perf-race-rs256.svg)
 
 Most identity providers sign with RS256 by default. Most of the time goes on checking the
-signature, which every library hands to native crypto, so the gaps are smaller. On this Arm CPU,
-fast-jwt wins, taking about 30% less time than ryjwt. ryjwt comes next, about 1.7 times faster
-than PyJWT and a little ahead of joserfc and jsonwebtoken, by about 7% and 9%. On x86_64, aws-lc checks RSA signatures
-in half the time, and ryjwt finishes first, about 15% ahead of jsonwebtoken and fast-jwt
+signature, which every library hands to native crypto, so the gaps are smaller. ryjwt still
+finishes first, about 2.7 times faster than PyJWT, and ahead of fast-jwt and jsonwebtoken by about
+14% and 17%. It finishes first on x86_64 too, about 15% ahead of jsonwebtoken and fast-jwt
 ([cross-check](x86_64.md)).
 
-With ES256, ryjwt is about 2.3 times faster than PyJWT, and a little ahead of jsonwebtoken and
-fast-jwt, by about 4% and 11% ([full matrix](matrix.md#pem-public-key)).
+With ES256, ryjwt is about 2.1 times faster than PyJWT, and a little ahead of jsonwebtoken and
+fast-jwt, by about 5% and 8% ([full matrix](matrix.md#pem-public-key)).
 
 ## How they're measured
 
 - Each decode checks the signature, `exp` and `aud`, as a real service would.
 - Before timing, each library's result is checked against the token's claims, and each is shown
   to reject an expired token and one for another audience.
-- The published numbers come from one run of the [Benchmarks workflow](#running-them) on GitHub's
-  arm64 Linux runner, a Neoverse-N2. GitHub's x86_64 runners get different CPUs from run to run,
-  so they're used for a [cross-check](x86_64.md) instead. Either way it's a shared virtual
-  machine, so expect a few percent of variation between runs.
-- Each library runs in its own Docker container, with one CPU (pinned to one of Docker's virtual
-  CPUs) and 500 MB of memory. The containers run one after another, so they never compete.
+- The published numbers come from one run on an AWS c9g.2xlarge, a virtual machine with 8
+  Graviton5 (Arm) cores. GitHub's x86_64 runners, which get different CPUs from run to run, are
+  used for a [cross-check](x86_64.md). Either way it's a virtual machine, so expect a few percent
+  of variation between runs.
+- Each library runs in its own Docker container, with one CPU (pinned to one core) and 500 MB of
+  memory. For the races and the HS256 by-size tables, the containers run one after another. The full
+  matrix runs up to 7 at once, each on a core of its own; where it times the same token as the
+  races, its times are within a few percent of theirs.
 - jose and fast-jwt run on [Bun](https://bun.sh), whose crypto is BoringSSL. On Node (OpenSSL),
   their numbers could differ.
 - JWKS URL cases fetch the keys over HTTPS from another container, and are timed once the keys are
@@ -90,9 +91,9 @@ Each results page says when it was made, and with which versions.
 
 In Docker on an Apple Silicon Mac, aws-lc (the crypto library under ryjwt and jsonwebtoken) runs
 RSA, Ed25519, P-384 and P-521 checks about 1.6 to 1.8 times slower than natively, as it doesn't
-recognise the CPU. HS256 and ES256 aren't affected. Neither is Linux on x86_64, or on Neoverse Arm
-servers such as GitHub's arm64 runner (where the published numbers come from) and AWS Graviton. Results made on a
-Mac carry a note saying so.
+recognise the CPU. HS256 and ES256 aren't affected. Neither is Linux on x86_64, or on Arm servers
+such as AWS Graviton (where the published numbers come from) and GitHub's arm64 runner. Results
+made on a Mac carry a note saying so.
 
 ## Running them
 
@@ -111,7 +112,12 @@ These pages show those files as is, so rerunning the benchmarks updates the docs
 To run them on Linux, for any commit or tag, run the **Benchmarks** workflow from the repository's
 Actions tab, choosing the ref, benchmarks (`race` for just the races) and runner (x86_64 or
 arm64). It uploads the results, with a note of the machine, as an artifact;
-`task bench-download -- <run id>` puts them in place. To update the published numbers, run `all`
-on arm64, so the races and the tables come from the same machine; for the cross-check, run `all`
-on x86_64 and fetch it with `task bench-download CROSS_CHECK=x86_64 -- <run id>`. GitHub's Linux runners don't have the
-[Apple Silicon](#apple-silicon) slowdown.
+`task bench-download -- <run id>` puts them in place. For the cross-check, run `all` on x86_64 and
+fetch it with `task bench-download CROSS_CHECK=x86_64 -- <run id>`. GitHub's Linux runners don't
+have the [Apple Silicon](#apple-silicon) slowdown.
+
+To update the published numbers, run `task bench-race`, `task bench-docker` and
+`MATRIX_JOBS=7 task bench-matrix` (the matrix 7 libraries at once) on one AWS c9g.2xlarge, with 8
+cores, so the races and the tables come from the same machine. Then copy back the
+`bench/results-*` files and pages, and the redrawn races, `perf-race*.svg`, in `assets/` and
+`docs/assets/`.
