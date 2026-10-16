@@ -25,8 +25,8 @@ That's exactly where Rust shines, and it all fits behind one typed call:
 
 ## Compared with PyJWT
 
-- **Faster.** With HS256, ryjwt decodes a typical token over 27 times faster than PyJWT into a
-  dict, and over 28 times faster into a `Struct` ([benchmarks](benchmarks/index.md)).
+- **Faster.** With HS256, ryjwt decodes a typical token 25 times faster than PyJWT into a dict,
+  and over 26 times faster into a `Struct` ([benchmarks](benchmarks/index.md)).
 - **Typed claims.** `decode(token, into=Claims)` returns your msgspec `Struct` or pydantic
   `BaseModel`, and your type checker knows it; PyJWT returns a dict
   ([typed claims](encoding-and-decoding.md#typed-claims)).

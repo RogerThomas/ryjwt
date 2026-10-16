@@ -1,210 +1,210 @@
 [
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "small-k32",
     "token_len": 231,
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 889750.2462161368,
-    "mean_us": 1.1239109,
+    "ops_per_sec": 1271874.8159756125,
+    "mean_us": 0.7862409,
     "round_means_us": [
-      1.1239109
+      0.7862409
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "small-k64",
     "token_len": 231,
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 886200.5895538041,
-    "mean_us": 1.1284127000000002,
+    "ops_per_sec": 1267824.5031681033,
+    "mean_us": 0.7887527,
     "round_means_us": [
-      1.1284127000000002
+      0.7887527
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "small-k256",
     "token_len": 231,
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 878551.0374018503,
-    "mean_us": 1.1382378000000002,
+    "ops_per_sec": 1272120.2631965938,
+    "mean_us": 0.7860892,
     "round_means_us": [
-      1.1382378000000002
+      0.7860892
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "small-k4096",
     "token_len": 231,
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 884257.7363709355,
-    "mean_us": 1.130892,
+    "ops_per_sec": 1261776.9529121243,
+    "mean_us": 0.7925331,
     "round_means_us": [
-      1.130892
+      0.7925331
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "typical-k32",
     "token_len": 661,
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 483403.92158530967,
-    "mean_us": 2.0686633999999997,
+    "ops_per_sec": 645715.8560952478,
+    "mean_us": 1.5486688,
     "round_means_us": [
-      2.0686633999999997
+      1.5486688
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "typical-k64",
     "token_len": 661,
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 479756.98965154577,
-    "mean_us": 2.0843886,
+    "ops_per_sec": 649354.0647843668,
+    "mean_us": 1.5399919,
     "round_means_us": [
-      2.0843886
+      1.5399919
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "typical-k256",
     "token_len": 661,
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 483359.43313152436,
-    "mean_us": 2.0688538,
+    "ops_per_sec": 643801.8300710822,
+    "mean_us": 1.553273,
     "round_means_us": [
-      2.0688538
+      1.553273
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "typical-k4096",
     "token_len": 661,
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 481731.67507159984,
-    "mean_us": 2.0758444,
+    "ops_per_sec": 645216.3210307357,
+    "mean_us": 1.5498678,
     "round_means_us": [
-      2.0758444
+      1.5498678
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "medium-k32",
     "token_len": 2244,
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 269720.0195611747,
-    "mean_us": 3.7075483,
+    "ops_per_sec": 322255.86322790873,
+    "mean_us": 3.1031243,
     "round_means_us": [
-      3.7075483
+      3.1031243
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "medium-k64",
     "token_len": 2244,
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 270266.69836714864,
-    "mean_us": 3.7000488999999996,
+    "ops_per_sec": 321052.28095606156,
+    "mean_us": 3.1147575,
     "round_means_us": [
-      3.7000488999999996
+      3.1147575
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "medium-k256",
     "token_len": 2244,
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 269088.85383916873,
-    "mean_us": 3.7162446,
+    "ops_per_sec": 322189.3410100314,
+    "mean_us": 3.1037649999999997,
     "round_means_us": [
-      3.7162446
+      3.1037649999999997
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "medium-k4096",
     "token_len": 2244,
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 269388.73567703867,
-    "mean_us": 3.7121077000000002,
+    "ops_per_sec": 320970.2957718808,
+    "mean_us": 3.1155531,
     "round_means_us": [
-      3.7121077000000002
+      3.1155531
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "large-k32",
     "token_len": 20884,
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 37366.595183124526,
-    "mean_us": 26.761871,
+    "ops_per_sec": 41211.360635230594,
+    "mean_us": 24.2651537,
     "round_means_us": [
-      26.761871
+      24.2651537
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "large-k64",
     "token_len": 20884,
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 37362.30077347062,
-    "mean_us": 26.764947,
+    "ops_per_sec": 41350.0982399769,
+    "mean_us": 24.1837394,
     "round_means_us": [
-      26.764947
+      24.1837394
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "large-k256",
     "token_len": 20884,
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 37385.28721835724,
-    "mean_us": 26.7484905,
+    "ops_per_sec": 41268.95397422957,
+    "mean_us": 24.2312902,
     "round_means_us": [
-      26.7484905
+      24.2312902
     ]
   },
   {
-    "impl": "ryjwt 0.1.1 \u2192 Struct",
+    "impl": "ryjwt 0.2.2 \u2192 Struct",
     "name": "large-k4096",
     "token_len": 20884,
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 37368.2709128193,
-    "mean_us": 26.7606709,
+    "ops_per_sec": 41362.8645269439,
+    "mean_us": 24.1762753,
     "round_means_us": [
-      26.7606709
+      24.1762753
     ]
   }
 ]

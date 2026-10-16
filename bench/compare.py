@@ -35,13 +35,18 @@ def machine() -> str:
             check=True,
         ).stdout.strip()
         return f"{cpu}, macOS {platform.mac_ver()[0]}"
-    # x86 names the CPU in /proc/cpuinfo; Arm doesn't, but lscpu does (`Model name: Neoverse-N2`).
+    # x86 names the CPU in /proc/cpuinfo; Arm doesn't, but lscpu does (`Model name: Neoverse-N2`),
+    # or, for a core it doesn't know, gives the firmware's name (`BIOS Model name: AWS Graviton5`).
     lscpu = subprocess.run(["/usr/bin/lscpu"], capture_output=True, text=True, check=False).stdout
+    fields: dict[str, str] = {}
+    for line in [*Path("/proc/cpuinfo").read_text().splitlines(), *lscpu.splitlines()]:
+        key, _, value = line.partition(":")
+        fields.setdefault(key.strip().lower(), value.strip())
     cpu = next(
         (
-            line.split(":", 1)[1].strip()
-            for line in [*Path("/proc/cpuinfo").read_text().splitlines(), *lscpu.splitlines()]
-            if line.lower().startswith("model name")
+            fields[name]
+            for name in ("model name", "bios model name")
+            if fields.get(name, "-") not in {"", "-"}
         ),
         platform.machine(),
     )
