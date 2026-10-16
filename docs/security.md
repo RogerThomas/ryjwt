@@ -88,6 +88,9 @@ A [`JWKSClient`](jwks-urls.md):
   claims](encoding-and-decoding.md#typed-claims) class.
 - **Check everything else you need.** ryjwt doesn't check `sub`, scopes, roles, `iat` or `jti`,
   or the header's `typ`. It doesn't track seen tokens (to stop replays) or revoked ones.
+- **Track tokens by `jti`, not by the token string.** An ECDSA (`ES*`) token can be re-encoded
+  with an equivalent signature that also verifies, so a deny-list or replay check keyed on the
+  string can be dodged.
 - **Keep `leeway` small**, a minute at most. It extends every token's life by that much.
 - **Limit request sizes.** ryjwt doesn't cap token size, so cap your server's request headers.
 - **Keep the clock right.** `exp` and `nbf` are checked against the system clock.
