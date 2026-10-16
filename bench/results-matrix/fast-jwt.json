@@ -12,10 +12,10 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 89064,
-      "mean_us": 11.228,
+      "ops_per_sec": 132882,
+      "mean_us": 7.525,
       "round_means_us": [
-        11.228
+        7.525
       ]
     },
     {
@@ -28,10 +28,10 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 99514,
-      "mean_us": 10.049,
+      "ops_per_sec": 133664,
+      "mean_us": 7.481,
       "round_means_us": [
-        10.049
+        7.481
       ]
     },
     {
@@ -44,10 +44,10 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 71485,
-      "mean_us": 13.989,
+      "ops_per_sec": 109596,
+      "mean_us": 9.124,
       "round_means_us": [
-        13.989
+        9.124
       ]
     },
     {
@@ -60,10 +60,10 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8541,
-      "mean_us": 117.078,
+      "ops_per_sec": 12559,
+      "mean_us": 79.625,
       "round_means_us": [
-        117.078
+        79.625
       ]
     },
     {
@@ -76,10 +76,10 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 202316,
-      "mean_us": 4.943,
+      "ops_per_sec": 302938,
+      "mean_us": 3.301,
       "round_means_us": [
-        4.943
+        3.301
       ]
     },
     {
@@ -92,10 +92,10 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 140874,
-      "mean_us": 7.099,
+      "ops_per_sec": 214438,
+      "mean_us": 4.663,
       "round_means_us": [
-        7.099
+        4.663
       ]
     },
     {
@@ -108,10 +108,10 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 50823,
-      "mean_us": 19.676,
+      "ops_per_sec": 108944,
+      "mean_us": 9.179,
       "round_means_us": [
-        19.676
+        9.179
       ]
     },
     {
@@ -124,10 +124,10 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8805,
-      "mean_us": 113.566,
+      "ops_per_sec": 13365,
+      "mean_us": 74.825,
       "round_means_us": [
-        113.566
+        74.825
       ]
     },
     {
@@ -140,10 +140,10 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 214883,
-      "mean_us": 4.654,
+      "ops_per_sec": 312346,
+      "mean_us": 3.202,
       "round_means_us": [
-        4.654
+        3.202
       ]
     },
     {
@@ -156,10 +156,10 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 140675,
-      "mean_us": 7.109,
+      "ops_per_sec": 205927,
+      "mean_us": 4.856,
       "round_means_us": [
-        7.109
+        4.856
       ]
     },
     {
@@ -172,10 +172,10 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 79692,
-      "mean_us": 12.548,
+      "ops_per_sec": 116273,
+      "mean_us": 8.6,
       "round_means_us": [
-        12.548
+        8.6
       ]
     },
     {
@@ -188,10 +188,10 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8800,
-      "mean_us": 113.633,
+      "ops_per_sec": 13308,
+      "mean_us": 75.144,
       "round_means_us": [
-        113.633
+        75.144
       ]
     },
     {
@@ -204,10 +204,10 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 155454,
-      "mean_us": 6.433,
+      "ops_per_sec": 197949,
+      "mean_us": 5.052,
       "round_means_us": [
-        6.433
+        5.052
       ]
     },
     {
@@ -220,10 +220,10 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 112126,
-      "mean_us": 8.919,
+      "ops_per_sec": 152638,
+      "mean_us": 6.551,
       "round_means_us": [
-        8.919
+        6.551
       ]
     },
     {
@@ -236,10 +236,10 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 64760,
-      "mean_us": 15.442,
+      "ops_per_sec": 95841,
+      "mean_us": 10.434,
       "round_means_us": [
-        15.442
+        10.434
       ]
     },
     {
@@ -252,10 +252,10 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8708,
-      "mean_us": 114.84,
+      "ops_per_sec": 12853,
+      "mean_us": 77.804,
       "round_means_us": [
-        114.84
+        77.804
       ]
     },
     {
@@ -268,10 +268,10 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 38709,
-      "mean_us": 25.834,
+      "ops_per_sec": 54725,
+      "mean_us": 18.273,
       "round_means_us": [
-        25.834
+        18.273
       ]
     },
     {
@@ -284,10 +284,10 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 34414,
-      "mean_us": 29.058,
+      "ops_per_sec": 48479,
+      "mean_us": 20.627,
       "round_means_us": [
-        29.058
+        20.627
       ]
     },
     {
@@ -300,10 +300,10 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 27753,
-      "mean_us": 36.032,
+      "ops_per_sec": 41937,
+      "mean_us": 23.845,
       "round_means_us": [
-        36.032
+        23.845
       ]
     },
     {
@@ -316,10 +316,10 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 7299,
-      "mean_us": 137.005,
+      "ops_per_sec": 10682,
+      "mean_us": 93.617,
       "round_means_us": [
-        137.005
+        93.617
       ]
     },
     {
@@ -332,10 +332,10 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 21588,
-      "mean_us": 46.323,
+      "ops_per_sec": 30314,
+      "mean_us": 32.988,
       "round_means_us": [
-        46.323
+        32.988
       ]
     },
     {
@@ -348,10 +348,10 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 20436,
-      "mean_us": 48.933,
+      "ops_per_sec": 29419,
+      "mean_us": 33.991,
       "round_means_us": [
-        48.933
+        33.991
       ]
     },
     {
@@ -364,10 +364,10 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18103,
-      "mean_us": 55.241,
+      "ops_per_sec": 26275,
+      "mean_us": 38.059,
       "round_means_us": [
-        55.241
+        38.059
       ]
     },
     {
@@ -380,10 +380,10 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6054,
-      "mean_us": 165.193,
+      "ops_per_sec": 9484,
+      "mean_us": 105.446,
       "round_means_us": [
-        165.193
+        105.446
       ]
     },
     {
@@ -396,10 +396,10 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13149,
-      "mean_us": 76.051,
+      "ops_per_sec": 18838,
+      "mean_us": 53.084,
       "round_means_us": [
-        76.051
+        53.084
       ]
     },
     {
@@ -412,10 +412,10 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12651,
-      "mean_us": 79.047,
+      "ops_per_sec": 18213,
+      "mean_us": 54.906,
       "round_means_us": [
-        79.047
+        54.906
       ]
     },
     {
@@ -428,15 +428,463 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 11747,
-      "mean_us": 85.127,
+      "ops_per_sec": 17132,
+      "mean_us": 58.369,
       "round_means_us": [
-        85.127
+        58.369
       ]
     },
     {
       "impl": "fast-jwt 6.3.3",
       "source": "pem",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7968,
+      "mean_us": 125.505,
+      "round_means_us": [
+        125.505
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23216,
+      "mean_us": 43.075,
+      "round_means_us": [
+        43.075
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22572,
+      "mean_us": 44.303,
+      "round_means_us": [
+        44.303
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21011,
+      "mean_us": 47.593,
+      "round_means_us": [
+        47.593
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8622,
+      "mean_us": 115.979,
+      "round_means_us": [
+        115.979
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2919,
+      "mean_us": 342.576,
+      "round_means_us": [
+        342.576
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2899,
+      "mean_us": 344.943,
+      "round_means_us": [
+        344.943
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2867,
+      "mean_us": 348.855,
+      "round_means_us": [
+        348.855
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2382,
+      "mean_us": 419.759,
+      "round_means_us": [
+        419.759
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1103,
+      "mean_us": 906.741,
+      "round_means_us": [
+        906.741
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1119,
+      "mean_us": 893.992,
+      "round_means_us": [
+        893.992
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1124,
+      "mean_us": 889.971,
+      "round_means_us": [
+        889.971
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1024,
+      "mean_us": 976.102,
+      "round_means_us": [
+        976.102
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24376,
+      "mean_us": 41.024,
+      "round_means_us": [
+        41.024
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23898,
+      "mean_us": 41.844,
+      "round_means_us": [
+        41.844
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21257,
+      "mean_us": 47.044,
+      "round_means_us": [
+        47.044
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "pem",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8375,
+      "mean_us": 119.4,
+      "round_means_us": [
+        119.4
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 49082,
+      "mean_us": 20.374,
+      "round_means_us": [
+        20.374
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 46196,
+      "mean_us": 21.647,
+      "round_means_us": [
+        21.647
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 34757,
+      "mean_us": 28.771,
+      "round_means_us": [
+        28.771
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6526,
+      "mean_us": 153.243,
+      "round_means_us": [
+        153.243
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 28899,
+      "mean_us": 34.603,
+      "round_means_us": [
+        34.603
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 26959,
+      "mean_us": 37.094,
+      "round_means_us": [
+        37.094
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 22852,
+      "mean_us": 43.761,
+      "round_means_us": [
+        43.761
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 5990,
+      "mean_us": 166.951,
+      "round_means_us": [
+        166.951
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18016,
+      "mean_us": 55.508,
+      "round_means_us": [
+        55.508
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17310,
+      "mean_us": 57.77,
+      "round_means_us": [
+        57.77
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15469,
+      "mean_us": 64.646,
+      "round_means_us": [
+        64.646
+      ]
+    },
+    {
+      "impl": "fast-jwt 6.3.3",
+      "source": "jwks",
       "name": "large-rs4096",
       "key": "rs4096",
       "alg": "RS256",
@@ -445,457 +893,9 @@
       "iterations": 10000,
       "rounds": 1,
       "ops_per_sec": 5305,
-      "mean_us": 188.512,
+      "mean_us": 188.489,
       "round_means_us": [
-        188.512
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "small-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "small",
-      "token_len": 304,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 16759,
-      "mean_us": 59.668,
-      "round_means_us": [
-        59.668
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "typical-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "typical",
-      "token_len": 704,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 16344,
-      "mean_us": 61.186,
-      "round_means_us": [
-        61.186
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "medium-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "medium",
-      "token_len": 2317,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 14721,
-      "mean_us": 67.929,
-      "round_means_us": [
-        67.929
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "large-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "large",
-      "token_len": 20957,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 5826,
-      "mean_us": 171.646,
-      "round_means_us": [
-        171.646
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "small-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "small",
-      "token_len": 346,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2082,
-      "mean_us": 480.349,
-      "round_means_us": [
-        480.349
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "typical-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "typical",
-      "token_len": 746,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2059,
-      "mean_us": 485.717,
-      "round_means_us": [
-        485.717
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "medium-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "medium",
-      "token_len": 2359,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2030,
-      "mean_us": 492.611,
-      "round_means_us": [
-        492.611
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "large-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "large",
-      "token_len": 20999,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 1649,
-      "mean_us": 606.531,
-      "round_means_us": [
-        606.531
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "small-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "small",
-      "token_len": 394,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 796,
-      "mean_us": 1255.919,
-      "round_means_us": [
-        1255.919
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "typical-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "typical",
-      "token_len": 794,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 805,
-      "mean_us": 1242.046,
-      "round_means_us": [
-        1242.046
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "medium-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "medium",
-      "token_len": 2407,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 808,
-      "mean_us": 1237.751,
-      "round_means_us": [
-        1237.751
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "large-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "large",
-      "token_len": 21047,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 724,
-      "mean_us": 1380.908,
-      "round_means_us": [
-        1380.908
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "small-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "small",
-      "token_len": 306,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 19518,
-      "mean_us": 51.234,
-      "round_means_us": [
-        51.234
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "typical-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "typical",
-      "token_len": 706,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 18637,
-      "mean_us": 53.658,
-      "round_means_us": [
-        53.658
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "medium-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "medium",
-      "token_len": 2319,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 16135,
-      "mean_us": 61.979,
-      "round_means_us": [
-        61.979
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "pem",
-      "name": "large-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "large",
-      "token_len": 20959,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 5893,
-      "mean_us": 169.705,
-      "round_means_us": [
-        169.705
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "small-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 561,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 34528,
-      "mean_us": 28.962,
-      "round_means_us": [
-        28.962
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "typical-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 961,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 31597,
-      "mean_us": 31.648,
-      "round_means_us": [
-        31.648
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "medium-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2574,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 23022,
-      "mean_us": 43.436,
-      "round_means_us": [
-        43.436
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "large-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21214,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 4168,
-      "mean_us": 239.92,
-      "round_means_us": [
-        239.92
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "small-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 731,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 19996,
-      "mean_us": 50.01,
-      "round_means_us": [
-        50.01
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "typical-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 1131,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 18493,
-      "mean_us": 54.075,
-      "round_means_us": [
-        54.075
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "medium-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2744,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 15338,
-      "mean_us": 65.199,
-      "round_means_us": [
-        65.199
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "large-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21384,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 3834,
-      "mean_us": 260.804,
-      "round_means_us": [
-        260.804
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "small-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 902,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 12450,
-      "mean_us": 80.324,
-      "round_means_us": [
-        80.324
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "typical-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 1302,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 12013,
-      "mean_us": 83.241,
-      "round_means_us": [
-        83.241
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "medium-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2915,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 10397,
-      "mean_us": 96.18,
-      "round_means_us": [
-        96.18
-      ]
-    },
-    {
-      "impl": "fast-jwt 6.3.3",
-      "source": "jwks",
-      "name": "large-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21555,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 3424,
-      "mean_us": 292.074,
-      "round_means_us": [
-        292.074
+        188.489
       ]
     },
     {
@@ -908,10 +908,10 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16327,
-      "mean_us": 61.247,
+      "ops_per_sec": 22750,
+      "mean_us": 43.956,
       "round_means_us": [
-        61.247
+        43.956
       ]
     },
     {
@@ -924,10 +924,10 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 15143,
-      "mean_us": 66.039,
+      "ops_per_sec": 21233,
+      "mean_us": 47.096,
       "round_means_us": [
-        66.039
+        47.096
       ]
     },
     {
@@ -940,10 +940,10 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12977,
-      "mean_us": 77.059,
+      "ops_per_sec": 18737,
+      "mean_us": 53.372,
       "round_means_us": [
-        77.059
+        53.372
       ]
     },
     {
@@ -956,10 +956,10 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3635,
-      "mean_us": 275.079,
+      "ops_per_sec": 5639,
+      "mean_us": 177.345,
       "round_means_us": [
-        275.079
+        177.345
       ]
     },
     {
@@ -972,10 +972,10 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2065,
-      "mean_us": 484.286,
+      "ops_per_sec": 2902,
+      "mean_us": 344.546,
       "round_means_us": [
-        484.286
+        344.546
       ]
     },
     {
@@ -988,10 +988,10 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2040,
-      "mean_us": 490.199,
+      "ops_per_sec": 2878,
+      "mean_us": 347.471,
       "round_means_us": [
-        490.199
+        347.471
       ]
     },
     {
@@ -1004,10 +1004,10 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1989,
-      "mean_us": 502.719,
+      "ops_per_sec": 2819,
+      "mean_us": 354.746,
       "round_means_us": [
-        502.719
+        354.746
       ]
     },
     {
@@ -1020,10 +1020,10 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1416,
-      "mean_us": 706.068,
+      "ops_per_sec": 2077,
+      "mean_us": 481.479,
       "round_means_us": [
-        706.068
+        481.479
       ]
     },
     {
@@ -1036,10 +1036,10 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 793,
-      "mean_us": 1261.059,
+      "ops_per_sec": 1100,
+      "mean_us": 909.034,
       "round_means_us": [
-        1261.059
+        909.034
       ]
     },
     {
@@ -1052,10 +1052,10 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 800,
-      "mean_us": 1249.853,
+      "ops_per_sec": 1114,
+      "mean_us": 897.611,
       "round_means_us": [
-        1249.853
+        897.611
       ]
     },
     {
@@ -1068,10 +1068,10 @@
       "token_len": 2407,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 800,
-      "mean_us": 1250.059,
+      "ops_per_sec": 1116,
+      "mean_us": 896.073,
       "round_means_us": [
-        1250.059
+        896.073
       ]
     },
     {
@@ -1084,10 +1084,10 @@
       "token_len": 21047,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 676,
-      "mean_us": 1480.233,
+      "ops_per_sec": 963,
+      "mean_us": 1038.044,
       "round_means_us": [
-        1480.233
+        1038.044
       ]
     },
     {
@@ -1100,10 +1100,10 @@
       "token_len": 306,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18358,
-      "mean_us": 54.473,
+      "ops_per_sec": 23553,
+      "mean_us": 42.458,
       "round_means_us": [
-        54.473
+        42.458
       ]
     },
     {
@@ -1116,10 +1116,10 @@
       "token_len": 706,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17334,
-      "mean_us": 57.689,
+      "ops_per_sec": 22382,
+      "mean_us": 44.679,
       "round_means_us": [
-        57.689
+        44.679
       ]
     },
     {
@@ -1132,10 +1132,10 @@
       "token_len": 2319,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14336,
-      "mean_us": 69.755,
+      "ops_per_sec": 19156,
+      "mean_us": 52.203,
       "round_means_us": [
-        69.755
+        52.203
       ]
     },
     {
@@ -1148,10 +1148,10 @@
       "token_len": 20959,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3702,
-      "mean_us": 270.153,
+      "ops_per_sec": 5518,
+      "mean_us": 181.21,
       "round_means_us": [
-        270.153
+        181.21
       ]
     },
     {
@@ -1164,10 +1164,10 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12661,
-      "mean_us": 78.98,
+      "ops_per_sec": 19231,
+      "mean_us": 51.998,
       "round_means_us": [
-        78.98
+        51.998
       ]
     },
     {
@@ -1180,10 +1180,10 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14730,
-      "mean_us": 67.89,
+      "ops_per_sec": 22225,
+      "mean_us": 44.994,
       "round_means_us": [
-        67.89
+        44.994
       ]
     },
     {
@@ -1196,10 +1196,10 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13864,
-      "mean_us": 72.13,
+      "ops_per_sec": 21471,
+      "mean_us": 46.573,
       "round_means_us": [
-        72.13
+        46.573
       ]
     },
     {
@@ -1212,10 +1212,10 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 5069,
-      "mean_us": 197.28,
+      "ops_per_sec": 8502,
+      "mean_us": 117.618,
       "round_means_us": [
-        197.28
+        117.618
       ]
     },
     {
@@ -1228,10 +1228,10 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10033,
-      "mean_us": 99.674,
+      "ops_per_sec": 14505,
+      "mean_us": 68.943,
       "round_means_us": [
-        99.674
+        68.943
       ]
     },
     {
@@ -1244,10 +1244,10 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9487,
-      "mean_us": 105.407,
+      "ops_per_sec": 14424,
+      "mean_us": 69.327,
       "round_means_us": [
-        105.407
+        69.327
       ]
     },
     {
@@ -1260,10 +1260,10 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8567,
-      "mean_us": 116.726,
+      "ops_per_sec": 13696,
+      "mean_us": 73.013,
       "round_means_us": [
-        116.726
+        73.013
       ]
     },
     {
@@ -1276,10 +1276,10 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 4214,
-      "mean_us": 237.3,
+      "ops_per_sec": 6898,
+      "mean_us": 144.97,
       "round_means_us": [
-        237.3
+        144.97
       ]
     },
     {
@@ -1292,10 +1292,10 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6465,
-      "mean_us": 154.678,
+      "ops_per_sec": 9443,
+      "mean_us": 105.9,
       "round_means_us": [
-        154.678
+        105.9
       ]
     },
     {
@@ -1308,10 +1308,10 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6283,
-      "mean_us": 159.154,
+      "ops_per_sec": 9384,
+      "mean_us": 106.56,
       "round_means_us": [
-        159.154
+        106.56
       ]
     },
     {
@@ -1324,10 +1324,10 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6096,
-      "mean_us": 164.052,
+      "ops_per_sec": 9011,
+      "mean_us": 110.972,
       "round_means_us": [
-        164.052
+        110.972
       ]
     },
     {
@@ -1340,10 +1340,10 @@
       "token_len": 21555,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3455,
-      "mean_us": 289.433,
+      "ops_per_sec": 5488,
+      "mean_us": 182.226,
       "round_means_us": [
-        289.433
+        182.226
       ]
     },
     {
@@ -1356,10 +1356,10 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 282,
-      "mean_us": 3551.202,
+      "ops_per_sec": 415,
+      "mean_us": 2411.113,
       "round_means_us": [
-        3551.202
+        2411.113
       ]
     },
     {
@@ -1372,10 +1372,10 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 282,
-      "mean_us": 3542.817,
+      "ops_per_sec": 416,
+      "mean_us": 2405.052,
       "round_means_us": [
-        3542.817
+        2405.052
       ]
     },
     {
@@ -1388,10 +1388,10 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 284,
-      "mean_us": 3519.196,
+      "ops_per_sec": 415,
+      "mean_us": 2409.306,
       "round_means_us": [
-        3519.196
+        2409.306
       ]
     },
     {
@@ -1404,10 +1404,10 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 277,
-      "mean_us": 3610.723,
+      "ops_per_sec": 403,
+      "mean_us": 2479.598,
       "round_means_us": [
-        3610.723
+        2479.598
       ]
     },
     {
@@ -1420,10 +1420,10 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 81,
-      "mean_us": 12313.103,
+      "ops_per_sec": 86,
+      "mean_us": 11581.337,
       "round_means_us": [
-        12313.103
+        11581.337
       ]
     },
     {
@@ -1436,10 +1436,10 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 81,
-      "mean_us": 12329.964,
+      "ops_per_sec": 86,
+      "mean_us": 11607.907,
       "round_means_us": [
-        12329.964
+        11607.907
       ]
     },
     {
@@ -1452,10 +1452,10 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 81,
-      "mean_us": 12273.709,
+      "ops_per_sec": 86,
+      "mean_us": 11591.314,
       "round_means_us": [
-        12273.709
+        11591.314
       ]
     },
     {
@@ -1468,10 +1468,10 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 81,
-      "mean_us": 12346.253,
+      "ops_per_sec": 86,
+      "mean_us": 11653.312,
       "round_means_us": [
-        12346.253
+        11653.312
       ]
     },
     {
@@ -1484,10 +1484,10 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 35,
-      "mean_us": 28790.139,
+      "ops_per_sec": 36,
+      "mean_us": 27804.413,
       "round_means_us": [
-        28790.139
+        27804.413
       ]
     },
     {
@@ -1500,10 +1500,10 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 35,
-      "mean_us": 28730.053,
+      "ops_per_sec": 36,
+      "mean_us": 27798.828,
       "round_means_us": [
-        28730.053
+        27798.828
       ]
     },
     {
@@ -1516,10 +1516,10 @@
       "token_len": 2407,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 35,
-      "mean_us": 28648.032,
+      "ops_per_sec": 36,
+      "mean_us": 27773.607,
       "round_means_us": [
-        28648.032
+        27773.607
       ]
     },
     {
@@ -1532,10 +1532,10 @@
       "token_len": 21047,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 35,
-      "mean_us": 28673.005,
+      "ops_per_sec": 36,
+      "mean_us": 27811.263,
       "round_means_us": [
-        28673.005
+        27811.263
       ]
     }
   ],
@@ -1543,13 +1543,13 @@
     {
       "source": "jwks-url-async",
       "name": "typical-rs3072",
-      "ms": 1.920254,
+      "ms": 0.760408,
       "trials_ms": [
-        3.513921,
-        1.85874,
-        1.91171,
-        1.920254,
-        3.585115
+        1.576239,
+        0.886533,
+        0.741665,
+        0.760408,
+        0.673074
       ]
     }
   ],

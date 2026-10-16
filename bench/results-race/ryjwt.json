@@ -1,9 +1,9 @@
 {
-  "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+  "impl": "ryjwt 0.2.2 \u2192 dict (msgspec)",
   "runtime": "CPython 3.14.8",
   "rows": [
     {
-      "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+      "impl": "ryjwt 0.2.2 \u2192 dict (msgspec)",
       "source": "hmac",
       "name": "typical-k64",
       "key": "k64",
@@ -12,16 +12,16 @@
       "token_len": 661,
       "iterations": 100000,
       "rounds": 3,
-      "ops_per_sec": 458349.5894654397,
-      "mean_us": 2.1817408,
+      "ops_per_sec": 646191.9581578817,
+      "mean_us": 1.5475277699999999,
       "round_means_us": [
-        2.18114579,
-        2.18661094,
-        2.17746567
+        1.54861275,
+        1.54853414,
+        1.54543642
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 dict (msgspec)",
+      "impl": "ryjwt 0.2.2 \u2192 dict (msgspec)",
       "source": "pem",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -30,12 +30,12 @@
       "token_len": 1131,
       "iterations": 100000,
       "rounds": 3,
-      "ops_per_sec": 14199.011955041708,
-      "mean_us": 70.42743559666667,
+      "ops_per_sec": 33927.51648475826,
+      "mean_us": 29.474600666666664,
       "round_means_us": [
-        70.48603399,
-        70.42978678,
-        70.36648602
+        29.43071488,
+        29.487235130000002,
+        29.50585199
       ]
     }
   ],

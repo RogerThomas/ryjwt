@@ -1,9 +1,9 @@
 {
-  "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+  "impl": "ryjwt 0.2.2 \u2192 BaseModel",
   "runtime": "CPython 3.14.8",
   "rows": [
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "small-k32",
       "key": "k32",
@@ -12,14 +12,14 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 435525.8050781612,
-      "mean_us": 2.2960752,
+      "ops_per_sec": 667137.932902469,
+      "mean_us": 1.4989404,
       "round_means_us": [
-        2.2960752
+        1.4989404
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "typical-k32",
       "key": "k32",
@@ -28,14 +28,14 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 228329.54017079234,
-      "mean_us": 4.3796348,
+      "ops_per_sec": 327291.72447456745,
+      "mean_us": 3.0553782000000003,
       "round_means_us": [
-        4.3796348
+        3.0553782000000003
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "medium-k32",
       "key": "k32",
@@ -44,14 +44,14 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 157700.32802772132,
-      "mean_us": 6.3411409,
+      "ops_per_sec": 210667.44523736628,
+      "mean_us": 4.7468179,
       "round_means_us": [
-        6.3411409
+        4.7468179
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "large-k32",
       "key": "k32",
@@ -60,14 +60,14 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 24616.353272673023,
-      "mean_us": 40.623401400000006,
+      "ops_per_sec": 30223.480727959733,
+      "mean_us": 33.0868575,
       "round_means_us": [
-        40.623401400000006
+        33.0868575
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "small-k64",
       "key": "k64",
@@ -76,14 +76,14 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 438390.7744344003,
-      "mean_us": 2.2810699,
+      "ops_per_sec": 666478.0089582641,
+      "mean_us": 1.5004246,
       "round_means_us": [
-        2.2810699
+        1.5004246
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "typical-k64",
       "key": "k64",
@@ -92,14 +92,14 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 228104.4063065029,
-      "mean_us": 4.3839574,
+      "ops_per_sec": 329740.98120496195,
+      "mean_us": 3.0326834,
       "round_means_us": [
-        4.3839574
+        3.0326834
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "medium-k64",
       "key": "k64",
@@ -108,14 +108,14 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 157939.14434194227,
-      "mean_us": 6.3315526,
+      "ops_per_sec": 210885.9051157673,
+      "mean_us": 4.7419006,
       "round_means_us": [
-        6.3315526
+        4.7419006
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "large-k64",
       "key": "k64",
@@ -124,14 +124,14 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 24581.4312600788,
-      "mean_us": 40.681113700000004,
+      "ops_per_sec": 30428.64000559741,
+      "mean_us": 32.8637757,
       "round_means_us": [
-        40.681113700000004
+        32.8637757
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "small-k256",
       "key": "k256",
@@ -140,14 +140,14 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 438796.5863205252,
-      "mean_us": 2.2789603,
+      "ops_per_sec": 662020.8690162582,
+      "mean_us": 1.5105264,
       "round_means_us": [
-        2.2789603
+        1.5105264
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "typical-k256",
       "key": "k256",
@@ -156,14 +156,14 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 229524.9670947269,
-      "mean_us": 4.3568245,
+      "ops_per_sec": 327731.9357270481,
+      "mean_us": 3.0512742,
       "round_means_us": [
-        4.3568245
+        3.0512742
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "medium-k256",
       "key": "k256",
@@ -172,14 +172,14 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 157370.8814801021,
-      "mean_us": 6.3544157,
+      "ops_per_sec": 210816.18138152017,
+      "mean_us": 4.7434689,
       "round_means_us": [
-        6.3544157
+        4.7434689
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "large-k256",
       "key": "k256",
@@ -188,14 +188,14 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 24562.688171837264,
-      "mean_us": 40.712156300000004,
+      "ops_per_sec": 30439.603672829184,
+      "mean_us": 32.8519389,
       "round_means_us": [
-        40.712156300000004
+        32.8519389
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "small-k4096",
       "key": "k4096",
@@ -204,14 +204,14 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 436031.55473155284,
-      "mean_us": 2.293412,
+      "ops_per_sec": 661433.4493112791,
+      "mean_us": 1.5118679,
       "round_means_us": [
-        2.293412
+        1.5118679
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "typical-k4096",
       "key": "k4096",
@@ -220,14 +220,14 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 229315.4431820196,
-      "mean_us": 4.3608053,
+      "ops_per_sec": 329028.06688377255,
+      "mean_us": 3.0392544,
       "round_means_us": [
-        4.3608053
+        3.0392544
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "medium-k4096",
       "key": "k4096",
@@ -236,14 +236,14 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 158070.62785337243,
-      "mean_us": 6.326286,
+      "ops_per_sec": 210971.1451178313,
+      "mean_us": 4.7399847,
       "round_means_us": [
-        6.326286
+        4.7399847
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "hmac",
       "name": "large-k4096",
       "key": "k4096",
@@ -252,14 +252,14 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 24576.71209265562,
-      "mean_us": 40.6889252,
+      "ops_per_sec": 30442.823286306124,
+      "mean_us": 32.8484645,
       "round_means_us": [
-        40.6889252
+        32.8484645
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "small-rs2048",
       "key": "rs2048",
@@ -268,14 +268,14 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 32579.02550869933,
-      "mean_us": 30.6945952,
+      "ops_per_sec": 68173.34717861297,
+      "mean_us": 14.6684891,
       "round_means_us": [
-        30.6945952
+        14.6684891
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "typical-rs2048",
       "key": "rs2048",
@@ -284,14 +284,14 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 30451.563896247022,
-      "mean_us": 32.839035900000006,
+      "ops_per_sec": 61615.63047075556,
+      "mean_us": 16.2296481,
       "round_means_us": [
-        32.839035900000006
+        16.2296481
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "medium-rs2048",
       "key": "rs2048",
@@ -300,14 +300,14 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 28752.60431745311,
-      "mean_us": 34.7794582,
+      "ops_per_sec": 55860.00842849324,
+      "mean_us": 17.9018949,
       "round_means_us": [
-        34.7794582
+        17.9018949
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "large-rs2048",
       "key": "rs2048",
@@ -316,14 +316,14 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14509.905488061964,
-      "mean_us": 68.9184365,
+      "ops_per_sec": 21717.461931564136,
+      "mean_us": 46.0458963,
       "round_means_us": [
-        68.9184365
+        46.0458963
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "small-rs3072",
       "key": "rs3072",
@@ -332,14 +332,14 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14172.685860680327,
-      "mean_us": 70.5582562,
+      "ops_per_sec": 33977.46693899878,
+      "mean_us": 29.4312699,
       "round_means_us": [
-        70.5582562
+        29.4312699
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -348,14 +348,14 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13761.564940504308,
-      "mean_us": 72.66615420000001,
+      "ops_per_sec": 32508.545375034282,
+      "mean_us": 30.7611426,
       "round_means_us": [
-        72.66615420000001
+        30.7611426
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "medium-rs3072",
       "key": "rs3072",
@@ -364,14 +364,14 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13398.997927534112,
-      "mean_us": 74.63244680000001,
+      "ops_per_sec": 30881.554775603458,
+      "mean_us": 32.3817893,
       "round_means_us": [
-        74.63244680000001
+        32.3817893
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "large-rs3072",
       "key": "rs3072",
@@ -380,14 +380,14 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9172.156360468105,
-      "mean_us": 109.0256163,
+      "ops_per_sec": 16478.478623274656,
+      "mean_us": 60.6852139,
       "round_means_us": [
-        109.0256163
+        60.6852139
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "small-rs4096",
       "key": "rs4096",
@@ -396,14 +396,14 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8344.080307120297,
-      "mean_us": 119.8454429,
+      "ops_per_sec": 20354.87333456452,
+      "mean_us": 49.128284099999995,
       "round_means_us": [
-        119.8454429
+        49.128284099999995
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "typical-rs4096",
       "key": "rs4096",
@@ -412,14 +412,14 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8192.41415644775,
-      "mean_us": 122.0641414,
+      "ops_per_sec": 19715.720563027906,
+      "mean_us": 50.7209461,
       "round_means_us": [
-        122.0641414
+        50.7209461
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "medium-rs4096",
       "key": "rs4096",
@@ -428,14 +428,14 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8063.730669640967,
-      "mean_us": 124.0120784,
+      "ops_per_sec": 19063.62054233907,
+      "mean_us": 52.4559329,
       "round_means_us": [
-        124.0120784
+        52.4559329
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "large-rs4096",
       "key": "rs4096",
@@ -444,14 +444,14 @@
       "token_len": 21555,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6304.647661423978,
-      "mean_us": 158.613146,
+      "ops_per_sec": 12402.04763561014,
+      "mean_us": 80.6318464,
       "round_means_us": [
-        158.613146
+        80.6318464
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "small-es256",
       "key": "es256",
@@ -460,14 +460,14 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18372.125982422567,
-      "mean_us": 54.4302821,
+      "ops_per_sec": 24694.97147828339,
+      "mean_us": 40.494073900000004,
       "round_means_us": [
-        54.4302821
+        40.494073900000004
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "typical-es256",
       "key": "es256",
@@ -476,14 +476,14 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17580.641435328573,
-      "mean_us": 56.880746,
+      "ops_per_sec": 23671.103985540703,
+      "mean_us": 42.2456004,
       "round_means_us": [
-        56.880746
+        42.2456004
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "medium-es256",
       "key": "es256",
@@ -492,14 +492,14 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17041.72193389399,
-      "mean_us": 58.6795163,
+      "ops_per_sec": 22830.208638016735,
+      "mean_us": 43.8016146,
       "round_means_us": [
-        58.6795163
+        43.8016146
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "large-es256",
       "key": "es256",
@@ -508,14 +508,14 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10743.840746266147,
-      "mean_us": 93.0765844,
+      "ops_per_sec": 13828.741947390461,
+      "mean_us": 72.31315790000001,
       "round_means_us": [
-        93.0765844
+        72.31315790000001
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "small-es384",
       "key": "es384",
@@ -524,14 +524,14 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3981.695890754344,
-      "mean_us": 251.1492659,
+      "ops_per_sec": 5552.276436614855,
+      "mean_us": 180.1063062,
       "round_means_us": [
-        251.1492659
+        180.1063062
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "typical-es384",
       "key": "es384",
@@ -540,14 +540,14 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3930.9619153039584,
-      "mean_us": 254.390661,
+      "ops_per_sec": 5478.652195589973,
+      "mean_us": 182.52664420000002,
       "round_means_us": [
-        254.390661
+        182.52664420000002
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "medium-es384",
       "key": "es384",
@@ -556,14 +556,14 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3926.01504271587,
-      "mean_us": 254.7111993,
+      "ops_per_sec": 5457.673917272879,
+      "mean_us": 183.2282425,
       "round_means_us": [
-        254.7111993
+        183.2282425
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "large-es384",
       "key": "es384",
@@ -572,14 +572,14 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3377.530186981712,
-      "mean_us": 296.07433380000003,
+      "ops_per_sec": 4583.481220309799,
+      "mean_us": 218.17477849999997,
       "round_means_us": [
-        296.07433380000003
+        218.17477849999997
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "small-es512",
       "key": "es512",
@@ -588,14 +588,14 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1980.3546438939438,
-      "mean_us": 504.9600601,
+      "ops_per_sec": 3467.4428074140706,
+      "mean_us": 288.3969702,
       "round_means_us": [
-        504.9600601
+        288.3969702
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "typical-es512",
       "key": "es512",
@@ -604,14 +604,14 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1990.4369900670117,
-      "mean_us": 502.40223879999996,
+      "ops_per_sec": 3481.5500709578546,
+      "mean_us": 287.2283838,
       "round_means_us": [
-        502.40223879999996
+        287.2283838
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "medium-es512",
       "key": "es512",
@@ -620,14 +620,14 @@
       "token_len": 2407,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1974.191848763303,
-      "mean_us": 506.5363838,
+      "ops_per_sec": 3442.3370910778876,
+      "mean_us": 290.5003123,
       "round_means_us": [
-        506.5363838
+        290.5003123
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "large-es512",
       "key": "es512",
@@ -636,14 +636,14 @@
       "token_len": 21047,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1830.9981118487472,
-      "mean_us": 546.1502082,
+      "ops_per_sec": 3085.413484522255,
+      "mean_us": 324.10566850000004,
       "round_means_us": [
-        546.1502082
+        324.10566850000004
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "small-ed25519",
       "key": "ed25519",
@@ -652,14 +652,14 @@
       "token_len": 306,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17569.787631323863,
-      "mean_us": 56.915884299999995,
+      "ops_per_sec": 29907.095700702466,
+      "mean_us": 33.436881,
       "round_means_us": [
-        56.915884299999995
+        33.436881
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "typical-ed25519",
       "key": "ed25519",
@@ -668,14 +668,14 @@
       "token_len": 706,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16906.01343922575,
-      "mean_us": 59.1505504,
+      "ops_per_sec": 28472.50881186422,
+      "mean_us": 35.121597699999995,
       "round_means_us": [
-        59.1505504
+        35.121597699999995
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "medium-ed25519",
       "key": "ed25519",
@@ -684,14 +684,14 @@
       "token_len": 2319,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16230.35269549705,
-      "mean_us": 61.6129556,
+      "ops_per_sec": 26769.42076704793,
+      "mean_us": 37.3560567,
       "round_means_us": [
-        61.6129556
+        37.3560567
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "pem",
       "name": "large-ed25519",
       "key": "ed25519",
@@ -700,14 +700,14 @@
       "token_len": 20959,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9830.85277536766,
-      "mean_us": 101.7205753,
+      "ops_per_sec": 14077.883814307002,
+      "mean_us": 71.0334034,
       "round_means_us": [
-        101.7205753
+        71.0334034
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "small-rs2048",
       "key": "rs2048",
@@ -716,14 +716,14 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 32553.664178262406,
-      "mean_us": 30.7185082,
+      "ops_per_sec": 67942.08269008034,
+      "mean_us": 14.718418400000001,
       "round_means_us": [
-        30.7185082
+        14.718418400000001
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "typical-rs2048",
       "key": "rs2048",
@@ -732,14 +732,14 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 30465.269124033457,
-      "mean_us": 32.8242628,
+      "ops_per_sec": 61568.69612542838,
+      "mean_us": 16.2420201,
       "round_means_us": [
-        32.8242628
+        16.2420201
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "medium-rs2048",
       "key": "rs2048",
@@ -748,14 +748,14 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 28751.928496069973,
-      "mean_us": 34.7802757,
+      "ops_per_sec": 55708.96256374428,
+      "mean_us": 17.950433,
       "round_means_us": [
-        34.7802757
+        17.950433
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "large-rs2048",
       "key": "rs2048",
@@ -764,14 +764,14 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14505.921068203495,
-      "mean_us": 68.9373667,
+      "ops_per_sec": 21645.461582000553,
+      "mean_us": 46.199061,
       "round_means_us": [
-        68.9373667
+        46.199061
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "small-rs3072",
       "key": "rs3072",
@@ -780,14 +780,14 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14174.140011517198,
-      "mean_us": 70.5510175,
+      "ops_per_sec": 34306.00791648183,
+      "mean_us": 29.149413199999998,
       "round_means_us": [
-        70.5510175
+        29.149413199999998
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -796,14 +796,14 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13743.197802529738,
-      "mean_us": 72.7632691,
+      "ops_per_sec": 32535.019922738113,
+      "mean_us": 30.7361115,
       "round_means_us": [
-        72.7632691
+        30.7361115
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "medium-rs3072",
       "key": "rs3072",
@@ -812,14 +812,14 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13401.6200733368,
-      "mean_us": 74.6178443,
+      "ops_per_sec": 30682.301201431474,
+      "mean_us": 32.5920795,
       "round_means_us": [
-        74.6178443
+        32.5920795
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "large-rs3072",
       "key": "rs3072",
@@ -828,14 +828,14 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9160.870953866024,
-      "mean_us": 109.1599265,
+      "ops_per_sec": 16498.67969480729,
+      "mean_us": 60.610910600000004,
       "round_means_us": [
-        109.1599265
+        60.610910600000004
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "small-rs4096",
       "key": "rs4096",
@@ -844,14 +844,14 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8339.363888733711,
-      "mean_us": 119.9132228,
+      "ops_per_sec": 20343.486878167172,
+      "mean_us": 49.1557817,
       "round_means_us": [
-        119.9132228
+        49.1557817
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "typical-rs4096",
       "key": "rs4096",
@@ -860,14 +860,14 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8191.117855033185,
-      "mean_us": 122.0834589,
+      "ops_per_sec": 19695.983008795432,
+      "mean_us": 50.7717741,
       "round_means_us": [
-        122.0834589
+        50.7717741
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "medium-rs4096",
       "key": "rs4096",
@@ -876,14 +876,14 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8066.324058962973,
-      "mean_us": 123.97220750000001,
+      "ops_per_sec": 19070.679676735195,
+      "mean_us": 52.436516000000005,
       "round_means_us": [
-        123.97220750000001
+        52.436516000000005
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "large-rs4096",
       "key": "rs4096",
@@ -892,14 +892,14 @@
       "token_len": 21555,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6309.146971310558,
-      "mean_us": 158.5000325,
+      "ops_per_sec": 12403.500687132233,
+      "mean_us": 80.6224005,
       "round_means_us": [
-        158.5000325
+        80.6224005
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "small-es256",
       "key": "es256",
@@ -908,14 +908,14 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18353.57409839375,
-      "mean_us": 54.4853005,
+      "ops_per_sec": 24706.490780796434,
+      "mean_us": 40.475193700000005,
       "round_means_us": [
-        54.4853005
+        40.475193700000005
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "typical-es256",
       "key": "es256",
@@ -924,14 +924,14 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17594.129317607032,
-      "mean_us": 56.837140500000004,
+      "ops_per_sec": 23677.975909634257,
+      "mean_us": 42.233339699999995,
       "round_means_us": [
-        56.837140500000004
+        42.233339699999995
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "medium-es256",
       "key": "es256",
@@ -940,14 +940,14 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17057.991548952425,
-      "mean_us": 58.623548799999995,
+      "ops_per_sec": 22842.27334646342,
+      "mean_us": 43.778479700000005,
       "round_means_us": [
-        58.623548799999995
+        43.778479700000005
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "large-es256",
       "key": "es256",
@@ -956,14 +956,14 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10710.611156062476,
-      "mean_us": 93.3653538,
+      "ops_per_sec": 13858.254197863022,
+      "mean_us": 72.15916130000001,
       "round_means_us": [
-        93.3653538
+        72.15916130000001
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "small-es384",
       "key": "es384",
@@ -972,14 +972,14 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3983.089741518833,
-      "mean_us": 251.0613782,
+      "ops_per_sec": 5552.627661159412,
+      "mean_us": 180.0949138,
       "round_means_us": [
-        251.0613782
+        180.0949138
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "typical-es384",
       "key": "es384",
@@ -988,14 +988,14 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3927.6040194434986,
-      "mean_us": 254.60815169999998,
+      "ops_per_sec": 5479.732253772158,
+      "mean_us": 182.49066810000002,
       "round_means_us": [
-        254.60815169999998
+        182.49066810000002
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "medium-es384",
       "key": "es384",
@@ -1004,14 +1004,14 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3925.4932278215188,
-      "mean_us": 254.745058,
+      "ops_per_sec": 5454.896451345316,
+      "mean_us": 183.3215367,
       "round_means_us": [
-        254.745058
+        183.3215367
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "large-es384",
       "key": "es384",
@@ -1020,14 +1020,14 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3376.978953736465,
-      "mean_us": 296.1226628,
+      "ops_per_sec": 4586.112725739997,
+      "mean_us": 218.0495901,
       "round_means_us": [
-        296.1226628
+        218.0495901
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "small-es512",
       "key": "es512",
@@ -1036,14 +1036,14 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1979.846131751741,
-      "mean_us": 505.0897562,
+      "ops_per_sec": 3466.2703399712336,
+      "mean_us": 288.4945206,
       "round_means_us": [
-        505.0897562
+        288.4945206
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "typical-es512",
       "key": "es512",
@@ -1052,14 +1052,14 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1991.2938042214903,
-      "mean_us": 502.1860651,
+      "ops_per_sec": 3480.7830267858194,
+      "mean_us": 287.291679,
       "round_means_us": [
-        502.1860651
+        287.291679
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "medium-es512",
       "key": "es512",
@@ -1068,14 +1068,14 @@
       "token_len": 2407,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1974.1027293962102,
-      "mean_us": 506.559251,
+      "ops_per_sec": 3442.80467322533,
+      "mean_us": 290.4608582,
       "round_means_us": [
-        506.559251
+        290.4608582
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "large-es512",
       "key": "es512",
@@ -1084,14 +1084,14 @@
       "token_len": 21047,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1830.4142158015964,
-      "mean_us": 546.3244283,
+      "ops_per_sec": 3081.9253100658866,
+      "mean_us": 324.4724967,
       "round_means_us": [
-        546.3244283
+        324.4724967
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "small-ed25519",
       "key": "ed25519",
@@ -1100,14 +1100,14 @@
       "token_len": 306,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17562.599435705954,
-      "mean_us": 56.9391794,
+      "ops_per_sec": 29875.91347061887,
+      "mean_us": 33.4717799,
       "round_means_us": [
-        56.9391794
+        33.4717799
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "typical-ed25519",
       "key": "ed25519",
@@ -1116,14 +1116,14 @@
       "token_len": 706,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16910.73562171764,
-      "mean_us": 59.1340331,
+      "ops_per_sec": 28479.116769177486,
+      "mean_us": 35.1134485,
       "round_means_us": [
-        59.1340331
+        35.1134485
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "medium-ed25519",
       "key": "ed25519",
@@ -1132,14 +1132,14 @@
       "token_len": 2319,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16220.584901963923,
-      "mean_us": 61.650057999999994,
+      "ops_per_sec": 26765.489493227175,
+      "mean_us": 37.361543499999996,
       "round_means_us": [
-        61.650057999999994
+        37.361543499999996
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks",
       "name": "large-ed25519",
       "key": "ed25519",
@@ -1148,14 +1148,14 @@
       "token_len": 20959,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9834.989132597635,
-      "mean_us": 101.6777941,
+      "ops_per_sec": 14095.145839958022,
+      "mean_us": 70.9464103,
       "round_means_us": [
-        101.6777941
+        70.9464103
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "small-rs2048",
       "key": "rs2048",
@@ -1164,14 +1164,14 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 32220.190825111207,
-      "mean_us": 31.0364394,
+      "ops_per_sec": 66761.80847484544,
+      "mean_us": 14.9786236,
       "round_means_us": [
-        31.0364394
+        14.9786236
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "typical-rs2048",
       "key": "rs2048",
@@ -1180,14 +1180,14 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 30155.706335963594,
-      "mean_us": 33.161219599999995,
+      "ops_per_sec": 60462.201972812734,
+      "mean_us": 16.539258699999998,
       "round_means_us": [
-        33.161219599999995
+        16.539258699999998
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "medium-rs2048",
       "key": "rs2048",
@@ -1196,14 +1196,14 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 28435.383298502642,
-      "mean_us": 35.1674528,
+      "ops_per_sec": 54830.497165553905,
+      "mean_us": 18.238025399999998,
       "round_means_us": [
-        35.1674528
+        18.238025399999998
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "large-rs2048",
       "key": "rs2048",
@@ -1212,14 +1212,14 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14352.31546752224,
-      "mean_us": 69.6751686,
+      "ops_per_sec": 21420.654568849328,
+      "mean_us": 46.6839142,
       "round_means_us": [
-        69.6751686
+        46.6839142
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "small-rs3072",
       "key": "rs3072",
@@ -1228,14 +1228,14 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14105.612435724584,
-      "mean_us": 70.8937669,
+      "ops_per_sec": 33732.53483251063,
+      "mean_us": 29.6449705,
       "round_means_us": [
-        70.8937669
+        29.6449705
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -1244,14 +1244,14 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13685.950872166233,
-      "mean_us": 73.0676304,
+      "ops_per_sec": 32064.69249228825,
+      "mean_us": 31.1869512,
       "round_means_us": [
-        73.0676304
+        31.1869512
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "medium-rs3072",
       "key": "rs3072",
@@ -1260,14 +1260,14 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13327.95415326647,
-      "mean_us": 75.0302701,
+      "ops_per_sec": 30374.673665137278,
+      "mean_us": 32.9221644,
       "round_means_us": [
-        75.0302701
+        32.9221644
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "large-rs3072",
       "key": "rs3072",
@@ -1276,14 +1276,14 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9131.964151952374,
-      "mean_us": 109.50546709999999,
+      "ops_per_sec": 16313.556633753315,
+      "mean_us": 61.2987114,
       "round_means_us": [
-        109.50546709999999
+        61.2987114
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "small-rs4096",
       "key": "rs4096",
@@ -1292,14 +1292,14 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8314.650625177956,
-      "mean_us": 120.2696355,
+      "ops_per_sec": 20097.34078679124,
+      "mean_us": 49.757826699999995,
       "round_means_us": [
-        120.2696355
+        49.757826699999995
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "typical-rs4096",
       "key": "rs4096",
@@ -1308,14 +1308,14 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8166.542923125024,
-      "mean_us": 122.45083500000001,
+      "ops_per_sec": 19459.482970722343,
+      "mean_us": 51.388826800000004,
       "round_means_us": [
-        122.45083500000001
+        51.388826800000004
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "medium-rs4096",
       "key": "rs4096",
@@ -1324,14 +1324,14 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8042.85925164888,
-      "mean_us": 124.3338928,
+      "ops_per_sec": 18838.978686366983,
+      "mean_us": 53.0814338,
       "round_means_us": [
-        124.3338928
+        53.0814338
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "large-rs4096",
       "key": "rs4096",
@@ -1340,14 +1340,14 @@
       "token_len": 21555,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6295.238702722634,
-      "mean_us": 158.85021160000002,
+      "ops_per_sec": 12283.067983996718,
+      "mean_us": 81.41288490000001,
       "round_means_us": [
-        158.85021160000002
+        81.41288490000001
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "small-es256",
       "key": "es256",
@@ -1356,14 +1356,14 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18237.367146297143,
-      "mean_us": 54.832476199999995,
+      "ops_per_sec": 24472.540400052814,
+      "mean_us": 40.8621248,
       "round_means_us": [
-        54.832476199999995
+        40.8621248
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "typical-es256",
       "key": "es256",
@@ -1372,14 +1372,14 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17467.561829369646,
-      "mean_us": 57.2489744,
+      "ops_per_sec": 23485.63547959733,
+      "mean_us": 42.5792183,
       "round_means_us": [
-        57.2489744
+        42.5792183
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "medium-es256",
       "key": "es256",
@@ -1388,14 +1388,14 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16963.613332693716,
-      "mean_us": 58.9497049,
+      "ops_per_sec": 22707.361003662085,
+      "mean_us": 44.0385829,
       "round_means_us": [
-        58.9497049
+        44.0385829
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "large-es256",
       "key": "es256",
@@ -1404,14 +1404,14 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10684.25847203815,
-      "mean_us": 93.5956391,
+      "ops_per_sec": 13785.914046562946,
+      "mean_us": 72.537809,
       "round_means_us": [
-        93.5956391
+        72.537809
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "small-es384",
       "key": "es384",
@@ -1420,14 +1420,14 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3977.2687350892343,
-      "mean_us": 251.4288238,
+      "ops_per_sec": 5533.766065760377,
+      "mean_us": 180.7087593,
       "round_means_us": [
-        251.4288238
+        180.7087593
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "typical-es384",
       "key": "es384",
@@ -1436,14 +1436,14 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3921.8341325458055,
-      "mean_us": 254.9827367,
+      "ops_per_sec": 5461.986862467615,
+      "mean_us": 183.0835601,
       "round_means_us": [
-        254.9827367
+        183.0835601
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "medium-es384",
       "key": "es384",
@@ -1452,14 +1452,14 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3920.699157830449,
-      "mean_us": 255.0565498,
+      "ops_per_sec": 5442.808402399043,
+      "mean_us": 183.7286794,
       "round_means_us": [
-        255.0565498
+        183.7286794
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "large-es384",
       "key": "es384",
@@ -1468,14 +1468,14 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3372.3993149140765,
-      "mean_us": 296.5247904,
+      "ops_per_sec": 4563.2201134097,
+      "mean_us": 219.1434941,
       "round_means_us": [
-        296.5247904
+        219.1434941
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "small-es512",
       "key": "es512",
@@ -1484,14 +1484,14 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1979.7005073437883,
-      "mean_us": 505.12690999999995,
+      "ops_per_sec": 3465.8766293313483,
+      "mean_us": 288.5272925,
       "round_means_us": [
-        505.12690999999995
+        288.5272925
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "typical-es512",
       "key": "es512",
@@ -1500,14 +1500,14 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1990.018702595761,
-      "mean_us": 502.50784009999995,
+      "ops_per_sec": 3479.7862081293924,
+      "mean_us": 287.37397649999997,
       "round_means_us": [
-        502.50784009999995
+        287.37397649999997
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "medium-es512",
       "key": "es512",
@@ -1516,14 +1516,14 @@
       "token_len": 2407,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1973.8708413129611,
-      "mean_us": 506.618761,
+      "ops_per_sec": 3440.809340208805,
+      "mean_us": 290.62929710000003,
       "round_means_us": [
-        506.618761
+        290.62929710000003
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "large-es512",
       "key": "es512",
@@ -1532,14 +1532,14 @@
       "token_len": 21047,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1828.9373207134927,
-      "mean_us": 546.7655937,
+      "ops_per_sec": 3082.278618533006,
+      "mean_us": 324.4353038,
       "round_means_us": [
-        546.7655937
+        324.4353038
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "small-ed25519",
       "key": "ed25519",
@@ -1548,14 +1548,14 @@
       "token_len": 306,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17444.332357437488,
-      "mean_us": 57.3252091,
+      "ops_per_sec": 29628.767015512018,
+      "mean_us": 33.7509826,
       "round_means_us": [
-        57.3252091
+        33.7509826
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "typical-ed25519",
       "key": "ed25519",
@@ -1564,14 +1564,14 @@
       "token_len": 706,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16806.15449982535,
-      "mean_us": 59.502011599999996,
+      "ops_per_sec": 28228.10353630277,
+      "mean_us": 35.4256884,
       "round_means_us": [
-        59.502011599999996
+        35.4256884
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "medium-ed25519",
       "key": "ed25519",
@@ -1580,14 +1580,14 @@
       "token_len": 2319,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16123.697030740897,
-      "mean_us": 62.020515399999994,
+      "ops_per_sec": 26579.944812326383,
+      "mean_us": 37.6223505,
       "round_means_us": [
-        62.020515399999994
+        37.6223505
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-sync",
       "name": "large-ed25519",
       "key": "ed25519",
@@ -1596,14 +1596,14 @@
       "token_len": 20959,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9780.002166681239,
-      "mean_us": 102.2494661,
+      "ops_per_sec": 13976.994856038198,
+      "mean_us": 71.5461378,
       "round_means_us": [
-        102.2494661
+        71.5461378
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "small-rs2048",
       "key": "rs2048",
@@ -1612,14 +1612,14 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 32089.54039441293,
-      "mean_us": 31.162802199999998,
+      "ops_per_sec": 66402.04169279283,
+      "mean_us": 15.059777899999998,
       "round_means_us": [
-        31.162802199999998
+        15.059777899999998
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "typical-rs2048",
       "key": "rs2048",
@@ -1628,14 +1628,14 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 30038.09728875323,
-      "mean_us": 33.2910567,
+      "ops_per_sec": 60138.75514280323,
+      "mean_us": 16.6282125,
       "round_means_us": [
-        33.2910567
+        16.6282125
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "medium-rs2048",
       "key": "rs2048",
@@ -1644,14 +1644,14 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 28368.95898692223,
-      "mean_us": 35.249795400000004,
+      "ops_per_sec": 54508.48035306146,
+      "mean_us": 18.3457692,
       "round_means_us": [
-        35.249795400000004
+        18.3457692
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "large-rs2048",
       "key": "rs2048",
@@ -1660,14 +1660,14 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14308.92696292121,
-      "mean_us": 69.88644239999999,
+      "ops_per_sec": 21189.29490292507,
+      "mean_us": 47.1936421,
       "round_means_us": [
-        69.88644239999999
+        47.1936421
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "small-rs3072",
       "key": "rs3072",
@@ -1676,14 +1676,14 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14083.905818166982,
-      "mean_us": 71.0030309,
+      "ops_per_sec": 33674.451599348715,
+      "mean_us": 29.6961035,
       "round_means_us": [
-        71.0030309
+        29.6961035
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -1692,14 +1692,14 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13659.628734651262,
-      "mean_us": 73.2084319,
+      "ops_per_sec": 31975.19512726932,
+      "mean_us": 31.2742423,
       "round_means_us": [
-        73.2084319
+        31.2742423
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "medium-rs3072",
       "key": "rs3072",
@@ -1708,14 +1708,14 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13315.353185835196,
-      "mean_us": 75.1012749,
+      "ops_per_sec": 30321.483130714114,
+      "mean_us": 32.9799171,
       "round_means_us": [
-        75.1012749
+        32.9799171
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "large-rs3072",
       "key": "rs3072",
@@ -1724,14 +1724,14 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9110.794916519366,
-      "mean_us": 109.7599067,
+      "ops_per_sec": 16174.596147588389,
+      "mean_us": 61.8253458,
       "round_means_us": [
-        109.7599067
+        61.8253458
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "small-rs4096",
       "key": "rs4096",
@@ -1740,14 +1740,14 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8306.750120055176,
-      "mean_us": 120.3840233,
+      "ops_per_sec": 20038.661190194078,
+      "mean_us": 49.903533499999995,
       "round_means_us": [
-        120.3840233
+        49.903533499999995
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "typical-rs4096",
       "key": "rs4096",
@@ -1756,14 +1756,14 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8156.208334952782,
-      "mean_us": 122.6059903,
+      "ops_per_sec": 19443.564612343755,
+      "mean_us": 51.4308986,
       "round_means_us": [
-        122.6059903
+        51.4308986
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "medium-rs4096",
       "key": "rs4096",
@@ -1772,14 +1772,14 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8035.585610159998,
-      "mean_us": 124.4464372,
+      "ops_per_sec": 18821.812189336462,
+      "mean_us": 53.1298469,
       "round_means_us": [
-        124.4464372
+        53.1298469
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "large-rs4096",
       "key": "rs4096",
@@ -1788,14 +1788,14 @@
       "token_len": 21555,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6280.742807172119,
-      "mean_us": 159.2168364,
+      "ops_per_sec": 12191.587639698344,
+      "mean_us": 82.02377159999999,
       "round_means_us": [
-        159.2168364
+        82.02377159999999
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "small-es256",
       "key": "es256",
@@ -1804,14 +1804,14 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18192.788466341182,
-      "mean_us": 54.9668349,
+      "ops_per_sec": 24460.01334621492,
+      "mean_us": 40.8830521,
       "round_means_us": [
-        54.9668349
+        40.8830521
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "typical-es256",
       "key": "es256",
@@ -1820,14 +1820,14 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17420.98607240942,
-      "mean_us": 57.402032,
+      "ops_per_sec": 23430.76125814631,
+      "mean_us": 42.6789377,
       "round_means_us": [
-        57.402032
+        42.6789377
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "medium-es256",
       "key": "es256",
@@ -1836,14 +1836,14 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16900.255262976516,
-      "mean_us": 59.1707039,
+      "ops_per_sec": 22624.25882079693,
+      "mean_us": 44.200343000000004,
       "round_means_us": [
-        59.1707039
+        44.200343000000004
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "large-es256",
       "key": "es256",
@@ -1852,14 +1852,14 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10664.363414426212,
-      "mean_us": 93.77024779999999,
+      "ops_per_sec": 13678.862774913938,
+      "mean_us": 73.1054925,
       "round_means_us": [
-        93.77024779999999
+        73.1054925
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "small-es384",
       "key": "es384",
@@ -1868,14 +1868,14 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3971.5420063049796,
-      "mean_us": 251.79136929999999,
+      "ops_per_sec": 5534.977242016728,
+      "mean_us": 180.6692162,
       "round_means_us": [
-        251.79136929999999
+        180.6692162
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "typical-es384",
       "key": "es384",
@@ -1884,14 +1884,14 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3921.343602301699,
-      "mean_us": 255.0146331,
+      "ops_per_sec": 5464.790503971691,
+      "mean_us": 182.9896314,
       "round_means_us": [
-        255.0146331
+        182.9896314
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "medium-es384",
       "key": "es384",
@@ -1900,14 +1900,14 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3913.1695200900094,
-      "mean_us": 255.5473242,
+      "ops_per_sec": 5441.019072228409,
+      "mean_us": 183.7891003,
       "round_means_us": [
-        255.5473242
+        183.7891003
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "large-es384",
       "key": "es384",
@@ -1916,14 +1916,14 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3367.6679224078457,
-      "mean_us": 296.94139179999996,
+      "ops_per_sec": 4561.2319837232035,
+      "mean_us": 219.2390134,
       "round_means_us": [
-        296.94139179999996
+        219.2390134
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "small-es512",
       "key": "es512",
@@ -1932,14 +1932,14 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1976.9755805326567,
-      "mean_us": 505.8231421,
+      "ops_per_sec": 3458.3301544218457,
+      "mean_us": 289.1568923,
       "round_means_us": [
-        505.8231421
+        289.1568923
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "typical-es512",
       "key": "es512",
@@ -1948,14 +1948,14 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1987.746156771769,
-      "mean_us": 503.08234610000005,
+      "ops_per_sec": 3470.388747162319,
+      "mean_us": 288.1521561,
       "round_means_us": [
-        503.08234610000005
+        288.1521561
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "medium-es512",
       "key": "es512",
@@ -1964,14 +1964,14 @@
       "token_len": 2407,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1972.1154316237898,
-      "mean_us": 507.06971000000004,
+      "ops_per_sec": 3432.865109127135,
+      "mean_us": 291.30186249999997,
       "round_means_us": [
-        507.06971000000004
+        291.30186249999997
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "large-es512",
       "key": "es512",
@@ -1980,14 +1980,14 @@
       "token_len": 21047,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1828.8099154167278,
-      "mean_us": 546.8036844999999,
+      "ops_per_sec": 3071.1588604366893,
+      "mean_us": 325.6099881,
       "round_means_us": [
-        546.8036844999999
+        325.6099881
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "small-ed25519",
       "key": "ed25519",
@@ -1996,14 +1996,14 @@
       "token_len": 306,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17408.833074777343,
-      "mean_us": 57.442104,
+      "ops_per_sec": 29576.12234936721,
+      "mean_us": 33.8110584,
       "round_means_us": [
-        57.442104
+        33.8110584
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "typical-ed25519",
       "key": "ed25519",
@@ -2012,14 +2012,14 @@
       "token_len": 706,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16762.82957200163,
-      "mean_us": 59.6557995,
+      "ops_per_sec": 28145.932517019482,
+      "mean_us": 35.529112399999995,
       "round_means_us": [
-        59.6557995
+        35.529112399999995
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "medium-ed25519",
       "key": "ed25519",
@@ -2028,14 +2028,14 @@
       "token_len": 2319,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16089.469265220856,
-      "mean_us": 62.1524541,
+      "ops_per_sec": 26458.346347532442,
+      "mean_us": 37.795257,
       "round_means_us": [
-        62.1524541
+        37.795257
       ]
     },
     {
-      "impl": "ryjwt 0.1.1 \u2192 BaseModel",
+      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
       "source": "jwks-url-async",
       "name": "large-ed25519",
       "key": "ed25519",
@@ -2044,10 +2044,10 @@
       "token_len": 20959,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9761.312225384576,
-      "mean_us": 102.44524270000001,
+      "ops_per_sec": 13883.781334981193,
+      "mean_us": 72.0264873,
       "round_means_us": [
-        102.44524270000001
+        72.0264873
       ]
     }
   ],
@@ -2055,25 +2055,25 @@
     {
       "source": "jwks-url-sync",
       "name": "typical-rs3072",
-      "ms": 2.528985,
+      "ms": 1.527095,
       "trials_ms": [
-        3.569642,
-        2.590603,
-        2.528985,
-        2.44439,
-        2.479991
+        2.022584,
+        1.601936,
+        1.488911,
+        1.527095,
+        1.396901
       ]
     },
     {
       "source": "jwks-url-async",
       "name": "typical-rs3072",
-      "ms": 2.585763,
+      "ms": 1.507636,
       "trials_ms": [
-        3.676981,
-        2.585763,
-        2.514945,
-        2.587035,
-        2.526169
+        2.006895,
+        1.628481,
+        1.507636,
+        1.45167,
+        1.451311
       ]
     }
   ],

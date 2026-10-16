@@ -1,8 +1,10 @@
 # One service per implementation, each limited to a single core and 500 MB (no swap).
-# Run them one at a time (`task bench-docker`, `task bench-matrix`), so they never compete for the core.
+# Run them one at a time (`task bench-docker`, `task bench-matrix`), so they never compete for the core;
+# or, for the matrix on a machine with cores to spare, several at once, each on a core of its own
+# (BENCH_CPU, set by `MATRIX_JOBS=n task bench-matrix`).
 
 x-limits: &limits
-  cpuset: "0"
+  cpuset: "${BENCH_CPU:-0}"
   cpus: 1.0
   mem_limit: 500m
   memswap_limit: 500m
