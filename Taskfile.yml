@@ -80,6 +80,10 @@ tasks:
       - cargo fetch --locked
       - cargo about generate --frozen --fail --output-file THIRD_PARTY_LICENSES about.hbs
 
+  bench-codspeed:
+    desc: 'Run the CodSpeed benchmarks (benchmarks/) with pytest-codspeed, as the CodSpeed workflow does; under the CodSpeed CLI (codspeed run -- task bench-codspeed) they are measured'
+    cmd: uv run --group codspeed pytest benchmarks --codspeed {{.CLI_ARGS}}
+
   bench-docker:
     desc: 'Benchmark every implementation in its own container (1 core, 500 MB), one after another; results in bench/results-docker'
     dir: bench
