@@ -12,6 +12,7 @@ and rustup; `.python-version` and `rust-toolchain.toml` pin the versions.
 | `task licenses` | regenerates `THIRD_PARTY_LICENSES` with [cargo-about](https://github.com/EmbarkStudios/cargo-about), after a `Cargo.lock` change |
 | `task docs` | serves this site, rebuilding as you edit |
 | `task docs-test` | builds the site strictly, failing on any warning, broken link or unresolved reference |
+| `task bench-codspeed` | the [CodSpeed](https://app.codspeed.io/RogerThomas/ryjwt) benchmarks (`benchmarks/`), with pytest-codspeed; the CodSpeed workflow runs them on every push and pull request |
 
 For another Python, use its own venv: `UV_PROJECT_ENVIRONMENT=.venv-312 uv run --python 3.12 pytest`
 (`.venv-313` for `3.13`, `.venv-314t` for `3.14t`).

@@ -1,0 +1,50 @@
+# Runs the CodSpeed benchmarks (benchmarks/, as `task bench-codspeed` does locally) with
+# pytest-codspeed, under CodSpeed's CPU simulation instrument, and uploads the results to CodSpeed
+# (https://app.codspeed.io/RogerThomas/ryjwt), which reports any change on pull requests.
+# The extension is built (release profile) before the measured step, so only the benchmarks run
+# under the instrument. Authenticates with OpenID Connect: no token secret needed.
+name: CodSpeed
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Lets CodSpeed trigger runs on past commits, to backfill performance data.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # OpenID Connect authentication with CodSpeed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_TERM_COLOR: always
+  UV_LOCKED: 1 # fail if uv.lock is out of date with pyproject.toml
+  UV_VERSION: 0.13.0 # as ci.yml
+
+jobs:
+  benchmarks:
+    name: Run benchmarks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Install Rust (rust-toolchain.toml)
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - name: Build ryjwt and the benchmark environment
+        run: uv sync --group codspeed
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@60071d77f86077619d673f6a395f417af1758a17 # v5.5.0
+        with:
+          mode: simulation
+          run: uv run --no-sync pytest benchmarks --codspeed

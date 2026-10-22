@@ -12,6 +12,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/ryjwt)](https://pypi.org/project/ryjwt/)
 [![License](https://img.shields.io/pypi/l/ryjwt)](https://github.com/RogerThomas/ryjwt/blob/main/LICENSE)
 [![Docs](https://img.shields.io/badge/docs-rogerthomas.github.io%2Fryjwt-blue)](https://rogerthomas.github.io/ryjwt/)
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/RogerThomas/ryjwt?utm_source=badge)
 
 ryjwt is a Rust-powered, AI-implemented JWT library for Python ([a note on AI, and the motivation behind ryjwt](https://rogerthomas.github.io/ryjwt/why/)).
 
