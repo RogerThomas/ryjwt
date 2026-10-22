@@ -99,10 +99,10 @@ dev = [
 ]
 # The documentation site (zensical.toml): `task docs`, `task docs-test`.
 docs = [
-    "mkdocstrings==1.0.6",
+    "mkdocstrings==1.0.7",
     "mkdocstrings-python==2.0.9",
-    "ruff==0.16.10", # formats the API reference's signatures; the version dev's ruff is locked at
-    "zensical==0.0.69",
+    "ruff==0.17.1", # formats the API reference's signatures; the version dev's ruff is locked at
+    "zensical==0.0.70",
 ]
 # The raster icons rendered from assets/favicon.svg (assets/build_icons.py): `task icons`.
 icons = [
