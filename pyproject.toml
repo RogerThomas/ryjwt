@@ -69,7 +69,7 @@ exclude = [
 [dependency-groups]
 bench = [
     "cryptography>=46",
-    "joserfc==1.7.5",
+    "joserfc==1.7.7",
     "msgspec>=0.22.0",
     "pydantic>=2.13.5",
     "pyjwt>=2.15.1",
@@ -99,14 +99,14 @@ dev = [
 ]
 # The documentation site (zensical.toml): `task docs`, `task docs-test`.
 docs = [
-    "mkdocstrings==1.0.6",
-    "mkdocstrings-python==2.0.9",
-    "ruff==0.16.10", # formats the API reference's signatures; the version dev's ruff is locked at
-    "zensical==0.0.69",
+    "mkdocstrings==1.0.8",
+    "mkdocstrings-python==2.0.10",
+    "ruff==0.17.1", # formats the API reference's signatures; the version dev's ruff is locked at
+    "zensical==0.0.71",
 ]
 # The raster icons rendered from assets/favicon.svg (assets/build_icons.py): `task icons`.
 icons = [
-    "pillow==12.3.0",
+    "pillow==13.0.0",
     "rich==15.0.0",
     "yeetr==2026.9.18",
 ]
