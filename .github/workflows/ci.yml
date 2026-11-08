@@ -8,6 +8,9 @@
 # repo, and a job's setup takes about as long as the checks it then runs. So the quick checks share
 # one job, and the tests run on Linux only: on macOS and Windows, the Release workflow tests the
 # wheels it builds, on every supported Python, for every pull request that changes the code.
+#
+# The ruleset need only require "CI passed", which fails unless every other job passed: jobs can
+# then be added, renamed or merged without changing the ruleset.
 name: CI
 
 on:
@@ -148,3 +151,19 @@ jobs:
           flags: rust
           use_oidc: ${{ !github.event.pull_request.head.repo.fork }}
           fail_ci_if_error: true
+
+  ci-passed:
+    name: CI passed
+    if: always()
+    needs: [checks, test, coverage]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check every job passed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "Results: $RESULTS"
+          for result in $RESULTS; do
+            [ "$result" = success ] || { echo "::error::A required job ended with: $result"; exit 1; }
+          done
