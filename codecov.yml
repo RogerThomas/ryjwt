@@ -1,0 +1,22 @@
+# Codecov (https://app.codecov.io/gh/RogerThomas/ryjwt): the Coverage job in ci.yml uploads the
+# Python's coverage and the Rust's under a flag each.
+coverage:
+  status:
+    # Report, don't block: a pull request's checks show the coverage, but a drop doesn't fail them.
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
+
+flags:
+  python:
+    paths:
+      - python/
+  rust:
+    paths:
+      - src/
+
+comment:
+  layout: "condensed_header, diff, flags, files"
