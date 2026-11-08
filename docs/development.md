@@ -9,6 +9,7 @@ and rustup; `.python-version` and `rust-toolchain.toml` pin the versions.
 | `task lint` | rustfmt, clippy and ruff, read-only (`task rustfmt` and `task ruff` fix what they can) |
 | `task typecheck` | pyright on the package, then the tests (the public interface) under mypy, ty, pyright, zuban and pyrefly |
 | `task test` | the tests, rebuilding the extension if the Rust changed |
+| `task coverage` | the tests, measuring the coverage of the Python and of the Rust (needs [cargo-llvm-cov](https://github.com/taiki-e/cargo-llvm-cov)); reports in `coverage/`, which the Coverage CI job uploads to [Codecov](https://app.codecov.io/gh/RogerThomas/ryjwt) |
 | `task licenses` | regenerates `THIRD_PARTY_LICENSES` with [cargo-about](https://github.com/EmbarkStudios/cargo-about), after a `Cargo.lock` change |
 | `task docs` | serves this site, rebuilding as you edit |
 | `task docs-test` | builds the site strictly, failing on any warning, broken link or unresolved reference |

@@ -20,6 +20,23 @@ tasks:
 
   test: uv run pytest {{.CLI_ARGS}}
 
+  coverage:
+    desc: 'Run the tests measuring coverage of the Python and of the Rust (the extension built instrumented, by cargo-llvm-cov), as the Coverage CI job does; reports in coverage/ (python.xml, rust.lcov). Uses a venv of its own (.venv-coverage) with ryjwt installed, not editable, so the instrumented build never lands in python/ryjwt (needs cargo-llvm-cov: cargo install --locked cargo-llvm-cov)'
+    env:
+      UV_PROJECT_ENVIRONMENT: .venv-coverage
+      CARGO_TARGET_DIR: target/llvm-cov-target # apart from the normal builds, so neither rebuilds the other
+      MATURIN_PEP517_ARGS: --profile dev # not the release profile's fat LTO: quicker to build
+    cmds:
+      - |
+        set -eu
+        eval "$(cargo llvm-cov show-env --sh)"
+        cargo llvm-cov clean --profraw-only
+        mkdir -p coverage
+        uv sync --no-editable
+        uv run --no-sync pytest --cov --cov-report=term --cov-report=xml:coverage/python.xml {{.CLI_ARGS}}
+        cargo llvm-cov report --lcov --output-path coverage/rust.lcov
+        cargo llvm-cov report --summary-only
+
   rustfmt: cargo fmt
 
   clippy: cargo clippy --release --all-targets -- -D warnings
