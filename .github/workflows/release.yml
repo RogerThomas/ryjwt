@@ -302,23 +302,17 @@ jobs:
       matrix:
         # Each wheel on its own architecture, unlike the builds: an arm64 runner can't test the
         # x86_64 wheels under Rosetta, as cryptography (which the tests use) has no x86_64 macOS
-        # wheels and can't be built for x86_64 there. On the slow Intel runner, where building
-        # cryptography takes as long as the tests, four jobs in parallel: the GIL Pythons in pairs,
-        # which share one build (an abi3 wheel), and each free-threaded one, which can't use it, on
-        # its own. On the arm64 one, all six in one job, as GitHub runs at most 5 macOS jobs at
-        # once. Windows, which has no such limit, one job per Python.
+        # wheels and can't be built for x86_64 there. Few jobs, each testing several Pythons in
+        # turn: an account runs at most 20 jobs at once (5 on macOS), shared with every other run
+        # and repo, and each job's setup costs about as much as one Python's tests. On the slow
+        # Intel runner, where building cryptography takes as long as the tests, two jobs: the GIL
+        # Pythons, which share one build (an abi3 wheel), and the free-threaded ones, which can't
+        # use it. On arm64 and Windows, all six in one job.
         include:
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.12 3.13" }
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14 3.15" }
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14t" }
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.15t" }
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.12 3.13 3.14 3.15" }
+          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14t 3.15t" }
           - { name: macOS arm64, runner: macos-15, target: aarch64-apple-darwin, pythons: "3.12 3.13 3.14 3.14t 3.15 3.15t" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.12" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.13" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.14" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.14t" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.15" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.15t" }
+          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.12 3.13 3.14 3.14t 3.15 3.15t" }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

@@ -1,8 +1,13 @@
 # Runs the Taskfile tasks developers run locally (task lint, task typecheck, task test, task
-# docs-test), so the two
-# can't drift. uv takes Python from .python-version (or the test job's UV_PYTHON) and rustup takes
-# Rust from rust-toolchain.toml. Lint and type-check run once, on 3.14: the type checkers target
-# 3.12 (pyproject.toml), so they catch any use of a newer API.
+# docs-test, task licenses, task coverage), so the two can't drift. uv takes Python from
+# .python-version (or the test job's UV_PYTHON) and rustup takes Rust from rust-toolchain.toml.
+# Lint and type-check run once, on .python-version's Python: the type checkers target 3.12
+# (pyproject.toml), so they catch any use of a newer API.
+#
+# Few jobs: an account runs at most 20 jobs at once (5 on macOS), shared with every other run and
+# repo, and a job's setup takes about as long as the checks it then runs. So the quick checks share
+# one job, and the tests run on Linux only: on macOS and Windows, the Release workflow tests the
+# wheels it builds, on every supported Python, for every pull request that changes the code.
 name: CI
 
 on:
@@ -24,8 +29,9 @@ env:
   UV_VERSION: 0.13.0 # as bench/docker/python.Dockerfile
 
 jobs:
-  lint:
-    name: Lint
+  # Each check a step of its own, run even if one before it failed, so one run reports them all.
+  checks:
+    name: Checks
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -39,30 +45,27 @@ jobs:
         with:
           version: ${{ env.UV_VERSION }}
           enable-cache: true
+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
+        with:
+          tool: cargo-about@0.9.2
       - name: Install Rust (rust-toolchain.toml)
         run: rustup toolchain install
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
-      - run: task lint
-
-  typecheck:
-    name: Type-check
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2.2.0
-        with:
-          version: ${{ env.TASK_VERSION }}
-      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
-        with:
-          version: ${{ env.UV_VERSION }}
-          enable-cache: true
-      - name: Install Rust (rust-toolchain.toml)
-        run: rustup toolchain install
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
-      - run: task typecheck
+      - name: Lint
+        run: task lint
+      - name: Type-check
+        if: ${{ !cancelled() }}
+        run: task typecheck
+      # The examples in the docs run in the test job, as tests/test_docs.py.
+      - name: Docs
+        if: ${{ !cancelled() }}
+        run: task docs-test
+      - name: Third-party licenses
+        if: ${{ !cancelled() }}
+        run: |
+          task licenses
+          git diff --exit-code -- THIRD_PARTY_LICENSES \
+            || { echo "::error file=THIRD_PARTY_LICENSES::Out of date with Cargo.lock: run task licenses and commit it"; exit 1; }
 
   test:
     name: Test (${{ matrix.os }}, Python ${{ matrix.python }})
@@ -71,8 +74,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Every supported version (and the free-threaded build) on Linux; the oldest and newest on
-        # macOS and Windows, where what differs is the platform, not the Python version.
+        # Every supported version, and the free-threaded builds. (macOS and Windows: see the top.)
         include:
           - { os: ubuntu-24.04, python: "3.12" }
           - { os: ubuntu-24.04, python: "3.13" }
@@ -80,10 +82,6 @@ jobs:
           - { os: ubuntu-24.04, python: "3.14t" }
           - { os: ubuntu-24.04, python: "3.15" }
           - { os: ubuntu-24.04, python: "3.15t" }
-          - { os: macos-15, python: "3.12" }
-          - { os: macos-15, python: "3.15" }
-          - { os: windows-2025, python: "3.12" }
-          - { os: windows-2025, python: "3.15" }
     env:
       UV_PYTHON: ${{ matrix.python }} # instead of .python-version's; uv downloads it if need be
       UV_PYTHON_PREFERENCE: only-managed # the latest patch release, not the runner's own Python
@@ -150,44 +148,3 @@ jobs:
           flags: rust
           use_oidc: ${{ !github.event.pull_request.head.repo.fork }}
           fail_ci_if_error: true
-
-  docs:
-    name: Docs
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2.2.0
-        with:
-          version: ${{ env.TASK_VERSION }}
-      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
-        with:
-          version: ${{ env.UV_VERSION }}
-          enable-cache: true
-      # No Rust: the API reference reads the sources statically, without building the extension.
-      # (The examples in the docs run in the test job, as tests/test_docs.py.)
-      - run: task docs-test
-
-  licenses:
-    name: Third-party licenses
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2.2.0
-        with:
-          version: ${{ env.TASK_VERSION }}
-      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-        with:
-          tool: cargo-about@0.9.2
-      - name: Install Rust (rust-toolchain.toml)
-        run: rustup toolchain install
-      - run: task licenses
-      - name: Check THIRD_PARTY_LICENSES is up to date
-        run: |
-          git diff --exit-code -- THIRD_PARTY_LICENSES \
-            || { echo "::error file=THIRD_PARTY_LICENSES::Out of date with Cargo.lock: run task licenses and commit it"; exit 1; }

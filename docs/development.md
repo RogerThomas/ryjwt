@@ -18,7 +18,8 @@ and rustup; `.python-version` and `rust-toolchain.toml` pin the versions.
 For another Python, use its own venv: `UV_PROJECT_ENVIRONMENT=.venv-312 uv run --python 3.12 pytest`
 (`.venv-313` for `3.13`, `.venv-314t` for `3.14t`).
 
-CI runs the same tasks on each supported Python. The Python examples in these pages and the README
+CI runs the same tasks, the tests on each supported Python on Linux; on macOS and Windows, the
+Release workflow tests the wheels it builds, on every pull request that changes the code. The Python examples in these pages and the README
 run as tests (`tests/test_docs.py`).
 
 ## Releases
