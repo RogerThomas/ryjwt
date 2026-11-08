@@ -8,9 +8,9 @@ certificate 800 days (macOS rejects longer-lived ones, even from a CA it was tol
 this when it expires.
 """
 
-import datetime
 import ipaddress
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import ClassVar, Self
 
@@ -25,21 +25,21 @@ from rich.console import Console
 class TestCA:
     _key: ec.EllipticCurvePrivateKey
     _cert: x509.Certificate
-    _ca_lifetime: ClassVar[datetime.timedelta] = datetime.timedelta(days=3650)
-    _server_lifetime: ClassVar[datetime.timedelta] = datetime.timedelta(days=800)
+    _ca_lifetime: ClassVar[timedelta] = timedelta(days=3650)
+    _server_lifetime: ClassVar[timedelta] = timedelta(days=800)
 
     @classmethod
     def _builder(
-        cls, subject: str, issuer: x509.Name, lifetime: datetime.timedelta
+        cls, subject: str, issuer: x509.Name, lifetime: timedelta
     ) -> x509.CertificateBuilder:
-        now = datetime.datetime.now(datetime.UTC)
+        now = datetime.now(UTC)
         return (
             x509
             .CertificateBuilder()
             .subject_name(x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, subject)]))
             .issuer_name(issuer)
             .serial_number(x509.random_serial_number())
-            .not_valid_before(now - datetime.timedelta(days=1))
+            .not_valid_before(now - timedelta(days=1))
             .not_valid_after(now + lifetime)
         )
 

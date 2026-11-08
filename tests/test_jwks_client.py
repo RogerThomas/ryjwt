@@ -12,7 +12,6 @@ deadline, which is real time spent waiting for the network, run on the real cloc
 
 import asyncio
 import base64
-import datetime
 import http.client
 import importlib.metadata
 import inspect
@@ -28,7 +27,7 @@ import typing
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 from functools import partial
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
@@ -387,7 +386,7 @@ def _tls_cert(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, Path]:
     """A self-signed certificate for 127.0.0.1, and its private key, as PEM files."""
     key = ec.generate_private_key(ec.SECP256R1())
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "common-name")])
-    now = datetime.datetime.now(datetime.UTC)
+    now = datetime.now(UTC)
     cert = (
         x509
         .CertificateBuilder()
