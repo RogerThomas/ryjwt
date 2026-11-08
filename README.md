@@ -9,6 +9,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/ryjwt)](https://pypi.org/project/ryjwt/)
 [![CI](https://github.com/RogerThomas/ryjwt/actions/workflows/ci.yml/badge.svg)](https://github.com/RogerThomas/ryjwt/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/RogerThomas/ryjwt/graph/badge.svg)](https://codecov.io/gh/RogerThomas/ryjwt)
 [![Python versions](https://img.shields.io/pypi/pyversions/ryjwt)](https://pypi.org/project/ryjwt/)
 [![License](https://img.shields.io/pypi/l/ryjwt)](https://github.com/RogerThomas/ryjwt/blob/main/LICENSE)
 [![Docs](https://img.shields.io/badge/docs-rogerthomas.github.io%2Fryjwt-blue)](https://rogerthomas.github.io/ryjwt/)

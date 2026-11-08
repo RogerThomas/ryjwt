@@ -17,6 +17,8 @@ wheels/
 .zuban/
 .coverage
 htmlcov/
+# task coverage's reports
+coverage/
 
 # Rust (the extension maturin builds into python/ryjwt for local development)
 target/

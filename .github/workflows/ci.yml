@@ -103,6 +103,54 @@ jobs:
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       - run: task test
 
+  # Once, on Linux and .python-version's Python: what the tests cover doesn't depend on the
+  # platform. task coverage measures the Python (pytest-cov) and the Rust (cargo-llvm-cov, the
+  # extension built instrumented); each is uploaded to Codecov under a flag of its own (codecov.yml).
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      id-token: write # OpenID Connect authentication with Codecov
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2.2.0
+        with:
+          version: ${{ env.TASK_VERSION }}
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Install Rust (rust-toolchain.toml) and llvm-tools
+        run: |
+          rustup toolchain install
+          rustup component add llvm-tools
+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
+        with:
+          tool: cargo-llvm-cov@0.9.1
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - run: task coverage
+      # A pull request from a fork gets no OpenID Connect token; Codecov takes its upload tokenless.
+      - name: Upload Python coverage
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          files: coverage/python.xml
+          disable_search: true
+          flags: python
+          use_oidc: ${{ !github.event.pull_request.head.repo.fork }}
+          fail_ci_if_error: true
+      - name: Upload Rust coverage
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          files: coverage/rust.lcov
+          disable_search: true
+          flags: rust
+          use_oidc: ${{ !github.event.pull_request.head.repo.fork }}
+          fail_ci_if_error: true
+
   docs:
     name: Docs
     runs-on: ubuntu-24.04
