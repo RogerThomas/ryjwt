@@ -117,9 +117,25 @@ jobs:
           version: ${{ env.UV_VERSION }}
           enable-cache: false # no caches in a workflow that publishes
 
+      # First: the builds below run as root in containers, and leave dist/ root-owned.
+      - name: Build sdist
+        id: sdist
+        if: matrix.arch == 'x86_64'
+        run: uv build --sdist --out-dir dist/sdist
+      - name: Record the sdist SHA-256
+        if: ${{ !cancelled() && steps.sdist.outcome == 'success' }}
+        run: sh .github/scripts/sha256.sh record dist/sdist/*.tar.gz
+      - if: ${{ !cancelled() && steps.sdist.outcome == 'success' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist-sdist
+          path: dist/sdist/
+          if-no-files-found: error
+
       - name: Build manylinux
         id: manylinux
-        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        if: ${{ !cancelled() }}
+        uses:PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
         with:
           maturin-version: ${{ env.MATURIN_VERSION }}
           target: ${{ matrix.arch }}-unknown-linux-gnu
@@ -163,20 +179,6 @@ jobs:
         with:
           name: dist-${{ matrix.arch }}-unknown-linux-musl
           path: dist/musllinux/
-          if-no-files-found: error
-
-      - name: Build sdist
-        id: sdist
-        if: ${{ !cancelled() && matrix.arch == 'x86_64' }}
-        run: uv build --sdist --out-dir dist/sdist
-      - name: Record the sdist SHA-256
-        if: ${{ !cancelled() && steps.sdist.outcome == 'success' }}
-        run: sh .github/scripts/sha256.sh record dist/sdist/*.tar.gz
-      - if: ${{ !cancelled() && steps.sdist.outcome == 'success' }}
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: dist-sdist
-          path: dist/sdist/
           if-no-files-found: error
 
       # The tests on the runner itself first: the Alpine ones, last, leave root-owned files.
