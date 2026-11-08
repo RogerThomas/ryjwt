@@ -1,6 +1,6 @@
 import base64
-import datetime
 import hashlib
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -214,7 +214,7 @@ def _certificate_der(private_keys: dict[ryjwt.AsymmetricAlgorithm, SigningKey]) 
     key = private_keys["ES256"]
     assert isinstance(key, ec.EllipticCurvePrivateKey)
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "common-name")])
-    now = datetime.datetime.now(datetime.UTC)
+    now = datetime.now(UTC)
     certificate = (
         x509
         .CertificateBuilder()
@@ -223,7 +223,7 @@ def _certificate_der(private_keys: dict[ryjwt.AsymmetricAlgorithm, SigningKey]) 
         .public_key(key.public_key())
         .serial_number(x509.random_serial_number())
         .not_valid_before(now)
-        .not_valid_after(now + datetime.timedelta(days=1))
+        .not_valid_after(now + timedelta(days=1))
         .sign(key, hashes.SHA256())
     )
     return certificate.public_bytes(serialization.Encoding.DER)
