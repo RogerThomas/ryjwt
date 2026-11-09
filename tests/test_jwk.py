@@ -93,8 +93,7 @@ def test_key_material_matches_pyjwts(
         assert {name: jwk[name] for name in expected} == expected
 
 
-# PyJWT has no ES521 alias (ES512 tests P-521).
-@pytest.mark.parametrize("alg", [alg for alg in ASYMMETRIC_ALGORITHMS if alg != "ES521"])
+@pytest.mark.parametrize("alg", ASYMMETRIC_ALGORITHMS)
 def test_pyjwt_verifies_with_the_jwks(
     alg: ryjwt.AsymmetricAlgorithm,
     private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],

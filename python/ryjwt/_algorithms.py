@@ -16,7 +16,6 @@ type AsymmetricAlgorithm = Literal[
     "ES256K",
     "ES384",
     "ES512",
-    "ES521",
     "EdDSA",
 ]
 """The algorithms `PrivateKey` and `PublicKey` take."""

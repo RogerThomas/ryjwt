@@ -39,7 +39,6 @@ ASYMMETRIC_ALGORITHMS: list[ryjwt.AsymmetricAlgorithm] = [
     "ES256K",
     "ES384",
     "ES512",
-    "ES521",
     "EdDSA",
 ]
 """Every algorithm `PrivateKey` and `PublicKey` take."""
