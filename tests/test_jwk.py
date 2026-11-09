@@ -72,7 +72,7 @@ def test_round_trip_through_jwks(
     token = signer.encode(claims)
     verifier = ryjwt.PublicKey.from_jwks(ryjwt.jwks([exported]), algorithms=[alg])
 
-    assert ryjwt.unverified_header(token) == {"alg": alg, "kid": "2026-10", "typ": "JWT"}
+    assert ryjwt.get_unverified_header(token) == {"alg": alg, "kid": "2026-10", "typ": "JWT"}
     assert verifier.decode(token) == claims
 
 
@@ -260,7 +260,7 @@ def test_jwks_of_one_key_without_kid(
 
     assert jwks == {"keys": [key.jwk()]}
     assert "kid" not in jwks["keys"][0]
-    assert "kid" not in ryjwt.unverified_header(token)
+    assert "kid" not in ryjwt.get_unverified_header(token)
     assert ryjwt.PublicKey.from_jwks(jwks, algorithms=["ES256"]).decode(token) == {"exp": future}
 
 
@@ -362,12 +362,12 @@ def test_key_kid_comes_with_header_fields(
     with_kid = ryjwt.PrivateKey(private_pems["ES256"], algorithms=["ES256"], kid="kid")
     without_kid = ryjwt.PrivateKey(private_pems["ES256"], algorithms=["ES256"])
 
-    assert ryjwt.unverified_header(with_kid.encode({}, header={"typ": "at+jwt"})) == {
+    assert ryjwt.get_unverified_header(with_kid.encode({}, header={"typ": "at+jwt"})) == {
         "alg": "ES256",
         "kid": "kid",
         "typ": "at+jwt",
     }
-    assert ryjwt.unverified_header(without_kid.encode({}, header={"kid": "header"})) == {
+    assert ryjwt.get_unverified_header(without_kid.encode({}, header={"kid": "header"})) == {
         "alg": "ES256",
         "kid": "header",
         "typ": "JWT",
@@ -381,7 +381,7 @@ def test_key_kid_counts_toward_the_header_limit(
     key = ryjwt.PrivateKey(private_pems["ES256"], algorithms=["ES256"], kid="kid")
     largest = {f"x{i}": i for i in range(61)}
 
-    assert len(ryjwt.unverified_header(key.encode({}, header=largest))) == 64
+    assert len(ryjwt.get_unverified_header(key.encode({}, header=largest))) == 64
     with pytest.raises(ValueError, match="more parameters"):
         key.encode({}, header={**largest, "x61": 61})
 

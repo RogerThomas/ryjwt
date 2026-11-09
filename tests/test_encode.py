@@ -462,7 +462,7 @@ def test_largest_header_decode_takes(hmac_jwt: ryjwt.SecretKey) -> None:
     with_typ = {**without_typ, "typ": "at+jwt"}
 
     for header in (without_typ, with_typ):
-        assert len(ryjwt.unverified_header(hmac_jwt.encode({}, header=header))) == 64
+        assert len(ryjwt.get_unverified_header(hmac_jwt.encode({}, header=header))) == 64
         assert hmac_jwt.decode(hmac_jwt.encode({}, header=header)) == {}
 
 

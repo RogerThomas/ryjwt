@@ -1,5 +1,5 @@
-"""`unverified_header`, `unverified_claims` and `unverified_token`: reading a token without
-verifying it, though it must still be well formed."""
+"""`get_unverified_header`, `get_unverified_claims` and `get_unverified_token`: reading a token
+without verifying it, though it must still be well formed."""
 
 import sys
 from collections.abc import Callable
@@ -23,9 +23,9 @@ def test_reads_an_hmac_token(hmac_key: str) -> None:
     token = key.encode({"sub": "sub", "n": 1}, header={"kid": "kid"})
     header = {"alg": "HS256", "typ": "JWT", "kid": "kid"}
 
-    assert ryjwt.unverified_header(token) == header
-    assert ryjwt.unverified_claims(token) == {"sub": "sub", "n": 1}
-    assert ryjwt.unverified_token(token) == (header, {"sub": "sub", "n": 1})
+    assert ryjwt.get_unverified_header(token) == header
+    assert ryjwt.get_unverified_claims(token) == {"sub": "sub", "n": 1}
+    assert ryjwt.get_unverified_token(token) == (header, {"sub": "sub", "n": 1})
 
 
 @pytest.mark.usefixtures("dict_parser")
@@ -38,28 +38,28 @@ def test_reads_a_private_key_token(
     token = key.encode({"sub": "sub", "n": 1}, header={"kid": "kid"})
     header = {"alg": algorithm, "typ": "JWT", "kid": "kid"}
 
-    assert ryjwt.unverified_header(token) == header
-    assert ryjwt.unverified_claims(token) == {"sub": "sub", "n": 1}
-    assert ryjwt.unverified_token(token) == (header, {"sub": "sub", "n": 1})
+    assert ryjwt.get_unverified_header(token) == header
+    assert ryjwt.get_unverified_claims(token) == {"sub": "sub", "n": 1}
+    assert ryjwt.get_unverified_token(token) == (header, {"sub": "sub", "n": 1})
 
 
 def test_takes_str_or_bytes(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub"})
 
-    assert ryjwt.unverified_header(token.encode()) == ryjwt.unverified_header(token)
-    assert ryjwt.unverified_claims(token.encode()) == {"sub": "sub"}
-    assert ryjwt.unverified_token(token.encode()) == ryjwt.unverified_token(token)
+    assert ryjwt.get_unverified_header(token.encode()) == ryjwt.get_unverified_header(token)
+    assert ryjwt.get_unverified_claims(token.encode()) == {"sub": "sub"}
+    assert ryjwt.get_unverified_token(token.encode()) == ryjwt.get_unverified_token(token)
 
 
 def test_token_must_be_str_or_bytes() -> None:
     untyped_caller: Any = 1  # what an untyped caller could pass
 
     with pytest.raises(TypeError):
-        ryjwt.unverified_header(untyped_caller)
+        ryjwt.get_unverified_header(untyped_caller)
     with pytest.raises(TypeError):
-        ryjwt.unverified_claims(untyped_caller)
+        ryjwt.get_unverified_claims(untyped_caller)
     with pytest.raises(TypeError):
-        ryjwt.unverified_token(untyped_caller)
+        ryjwt.get_unverified_token(untyped_caller)
 
 
 @pytest.mark.parametrize("problem", ["expired", "not-yet-valid", "wrong-aud", "wrong-iss"])
@@ -76,8 +76,8 @@ def test_claims_are_not_checked(problem: str, hmac_key: str, past: int, future: 
 
     with pytest.raises(ryjwt.InvalidTokenError):
         key.decode(token)
-    assert ryjwt.unverified_claims(token) == claims
-    assert ryjwt.unverified_token(token)[1] == claims
+    assert ryjwt.get_unverified_claims(token) == claims
+    assert ryjwt.get_unverified_token(token)[1] == claims
 
 
 @pytest.mark.parametrize("tamper", ["other-key", "replaced", "empty"])
@@ -92,8 +92,8 @@ def test_signature_is_not_checked(tamper: str, hmac_jwt: ryjwt.SecretKey) -> Non
 
     with pytest.raises(ryjwt.InvalidSignatureError):
         hmac_jwt.decode(tampered)
-    assert ryjwt.unverified_header(tampered) == {"alg": "HS256", "typ": "JWT"}
-    assert ryjwt.unverified_claims(tampered) == {"sub": "sub"}
+    assert ryjwt.get_unverified_header(tampered) == {"alg": "HS256", "typ": "JWT"}
+    assert ryjwt.get_unverified_claims(tampered) == {"sub": "sub"}
 
 
 @pytest.mark.parametrize(
@@ -118,8 +118,8 @@ def test_header_fields_are_not_checked(
 
     with pytest.raises(ryjwt.InvalidTokenError):
         hmac_jwt.decode(token)
-    assert ryjwt.unverified_header(token) == expected
-    assert ryjwt.unverified_token(token) == (expected, {"sub": "sub"})
+    assert ryjwt.get_unverified_header(token) == expected
+    assert ryjwt.get_unverified_token(token) == (expected, {"sub": "sub"})
 
 
 @pytest.mark.parametrize("payload", ["{payload}=", "{payload}!"])
@@ -129,11 +129,11 @@ def test_payload_must_be_unpadded_base64url(payload: str, hmac_jwt: ryjwt.Secret
     token = f"{header}.{payload.format(payload=original)}.{signature}"
 
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload encoding"):
-        ryjwt.unverified_header(token)
+        ryjwt.get_unverified_header(token)
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload encoding"):
-        ryjwt.unverified_claims(token)
+        ryjwt.get_unverified_claims(token)
     with pytest.raises(ryjwt.DecodeError, match="Invalid payload encoding"):
-        ryjwt.unverified_token(token)
+        ryjwt.get_unverified_token(token)
 
 
 def _assert_rejected_as_decode_rejects(key: ryjwt.SecretKey, token: str) -> None:
@@ -141,11 +141,11 @@ def _assert_rejected_as_decode_rejects(key: ryjwt.SecretKey, token: str) -> None
     with pytest.raises(ryjwt.DecodeError) as decoded:
         key.decode(token)
     with pytest.raises(ryjwt.DecodeError) as header:
-        ryjwt.unverified_header(token)
+        ryjwt.get_unverified_header(token)
     with pytest.raises(ryjwt.DecodeError) as claims:
-        ryjwt.unverified_claims(token)
+        ryjwt.get_unverified_claims(token)
     with pytest.raises(ryjwt.DecodeError) as both:
-        ryjwt.unverified_token(token)
+        ryjwt.get_unverified_token(token)
 
     assert str(header.value) == str(claims.value) == str(both.value) == str(decoded.value)
     assert type(header.value) is type(claims.value) is type(both.value) is ryjwt.DecodeError

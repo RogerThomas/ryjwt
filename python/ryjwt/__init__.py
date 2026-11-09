@@ -19,10 +19,10 @@ from ryjwt._ryjwt import (
     RYJWTError,
     SecretKey,
     UnknownKeyError,
+    get_unverified_claims,
+    get_unverified_header,
+    get_unverified_token,
     jwks,
-    unverified_claims,
-    unverified_header,
-    unverified_token,
 )
 
 __all__ = [
@@ -45,8 +45,8 @@ __all__ = [
     "RYJWTError",
     "SecretKey",
     "UnknownKeyError",
+    "get_unverified_claims",
+    "get_unverified_header",
+    "get_unverified_token",
     "jwks",
-    "unverified_claims",
-    "unverified_header",
-    "unverified_token",
 ]
