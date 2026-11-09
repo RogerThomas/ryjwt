@@ -40,7 +40,6 @@ def _other_private_keys() -> dict[ryjwt.AsymmetricAlgorithm, SigningKey]:
         "ES256K": ec.generate_private_key(ec.SECP256K1()),
         "ES384": ec.generate_private_key(ec.SECP384R1()),
         "ES512": p521_key,
-        "ES521": p521_key,
         "EdDSA": ed25519.Ed25519PrivateKey.generate(),
     }
 
@@ -82,7 +81,7 @@ def test_signed_by_another_key(
         ryjwt.PublicKey(public_pems[alg], algorithms=[alg]).decode(token)
 
 
-@pytest.mark.parametrize("alg", ["ES256", "ES256K", "ES384", "ES512", "ES521"])
+@pytest.mark.parametrize("alg", ["ES256", "ES256K", "ES384", "ES512"])
 def test_ecdsa_signature_in_der_form(
     alg: ryjwt.AsymmetricAlgorithm,
     private_pems: dict[ryjwt.AsymmetricAlgorithm, bytes],

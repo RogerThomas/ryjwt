@@ -8,7 +8,7 @@ once, when created. Create it at startup and reuse it for every token.
 | class | key | algorithms | can |
 | :-- | :-- | :-- | :-- |
 | [`SecretKey`][ryjwt.SecretKey] | a shared secret, `str` or `bytes` | `HS256` `HS384` `HS512` | `encode`, `decode` |
-| [`PrivateKey`][ryjwt.PrivateKey] | a private key PEM, `str` or `bytes` | `RS*` `PS*` `ES256` `ES256K` `ES384` `ES512` `ES521` `EdDSA` | `encode`, `decode` |
+| [`PrivateKey`][ryjwt.PrivateKey] | a private key PEM, `str` or `bytes` | `RS*` `PS*` `ES256` `ES256K` `ES384` `ES512` `EdDSA` | `encode`, `decode` |
 | [`PublicKey`][ryjwt.PublicKey] | a public key PEM, `str` or `bytes`, or a JWKS | as `PrivateKey` | `decode` |
 | [`JWKSClient`][ryjwt.JWKSClient] | a JWKS URL | as `PrivateKey` | `decode` |
 

@@ -40,6 +40,8 @@ def test_invalid_hmac_algorithms(algorithms: list[str], match: str, hmac_key: st
         pytest.param([], "must not be empty", id="empty"),
         pytest.param(["ES999"], "Unsupported algorithm", id="unknown"),
         pytest.param(["none"], "Unsupported algorithm", id="none"),
+        # Not a JWA name (P-521 is ES512): other libraries reject it.
+        pytest.param(["ES521"], "Unsupported algorithm", id="es521"),
         pytest.param(["HS256"], "needs a SecretKey", id="hmac"),
         pytest.param(["ES256", "HS256"], "needs a SecretKey", id="ec-and-hmac"),
         pytest.param(["ES256", "ES384"], "same kind of key", id="two-curves"),
@@ -80,9 +82,9 @@ def test_algorithms_property(
         "PS256",
         "RS256",
     ]
-    assert ryjwt.PublicKey(public_pems["ES521"], algorithms=["ES521", "ES512"]).algorithms == [
-        "ES521",
-        "ES512",
+    assert ryjwt.PublicKey(public_pems["RS256"], algorithms=["RS512", "PS384"]).algorithms == [
+        "RS512",
+        "PS384",
     ]
 
 

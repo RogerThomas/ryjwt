@@ -98,7 +98,7 @@ impl AlgSpec {
     }
 }
 
-static ALGORITHMS: [AlgSpec; 15] = [
+static ALGORITHMS: [AlgSpec; 14] = [
     AlgSpec::hmac("HS256", mac::Hash::Sha256),
     AlgSpec::hmac("HS384", mac::Hash::Sha384),
     AlgSpec::hmac("HS512", mac::Hash::Sha512),
@@ -150,15 +150,9 @@ static ALGORITHMS: [AlgSpec; 15] = [
         &signature::ECDSA_P384_SHA384_FIXED_SIGNING,
         &signature::ECDSA_P384_SHA384_FIXED,
     ),
-    // ES512 is the common (if misnamed) alias for P-521 + SHA-512.
+    // P-521, despite the name: RFC 7518 names ECDSA algorithms by their hash, SHA-512.
     AlgSpec::ecdsa(
         "ES512",
-        KeyKind::P521,
-        &signature::ECDSA_P521_SHA512_FIXED_SIGNING,
-        &signature::ECDSA_P521_SHA512_FIXED,
-    ),
-    AlgSpec::ecdsa(
-        "ES521",
         KeyKind::P521,
         &signature::ECDSA_P521_SHA512_FIXED_SIGNING,
         &signature::ECDSA_P521_SHA512_FIXED,
