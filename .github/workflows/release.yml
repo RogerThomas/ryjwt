@@ -4,10 +4,11 @@
 # then builds, tests and publishes it. (A tag made with the workflow's own token can't trigger
 # another workflow, and PyPI trusts this file by name, so it all happens here.)
 #
-# Builds the wheels and the sdist, each uploaded with its SHA-256 as soon as it's built; tests them,
-# downloaded, in jobs of their own (.github/scripts/test-wheel.sh), each wheel on the Python it's
-# for; and when a release was created, once every build and test passed, publishes them all to
-# PyPI, checking first that each SHA-256 still matches: what's published is exactly what was tested.
+# Builds the wheels and the sdist, each uploaded with its SHA-256 as soon as it's built; tests them
+# (.github/scripts/test-wheel.sh), in the job that built them where its runner can, each wheel on
+# the Python it's for; and when a release was created, once every build and test passed, publishes
+# them all to PyPI, checking first that each SHA-256 still matches: what's published is exactly what
+# was tested.
 # Once they're published, it builds the documentation site (zensical.toml) and deploys it to GitHub
 # Pages. Pull requests and manual runs build and test only; a manual run with `docs-only` instead
 # deploys just the docs, as they are on the branch it runs on, without building or publishing.
@@ -76,8 +77,13 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  build-linux:
-    name: Build ${{ matrix.platform.name }}
+  # An account runs at most 20 jobs at once (5 on macOS), shared with every other run and repo, and
+  # each job's setup costs about as much as some of its steps. So each wheel's build and its tests
+  # share a job, where the runner that builds it can test it; and a job's steps are what can't run
+  # in parallel anyway. A wheel is uploaded with its SHA-256 as soon as it's built, before its
+  # tests. Only an x86_64 macOS wheel is tested in jobs of its own: see test-macos-x86_64.
+  linux:
+    name: ${{ matrix.platform.name }}
     needs: release-please
     if: >-
       ${{ !cancelled() && needs.release-please.result != 'failure' && !inputs.docs-only &&
@@ -87,30 +93,39 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Each on a runner of its own architecture (no emulation), as its test job is. The images are
-        # the ones maturin-action picks for each, pinned. The manylinux ones hold every CPython
-        # (cp315-cp315t included); for musl, maturin cross-compiles with its own sysconfig data.
+        # Each on a runner of its own architecture (no emulation), where it's then tested. The
+        # images are the ones maturin-action picks for each, pinned. The manylinux ones hold every
+        # CPython (cp315-cp315t included); for musl, maturin cross-compiles with its own sysconfig
+        # data.
         platform:
           - name: manylinux x86_64
             runner: ubuntu-24.04
             target: x86_64-unknown-linux-gnu
             manylinux: "2_28"
             container: quay.io/pypa/manylinux_2_28_x86_64@sha256:4131ddd7acb9c6c966af02fe7e71edc51e078c2d41f475966697676430bfa2ae # latest
+            libc: glibc
           - name: manylinux aarch64
             runner: ubuntu-24.04-arm
             target: aarch64-unknown-linux-gnu
             manylinux: "2_28"
             container: quay.io/pypa/manylinux_2_28_aarch64@sha256:abd1230aa9e4058a74b89d27cd14ba18c0db036d7bfe6e6f219a29ea63c24eb6 # latest
+            libc: glibc
           - name: musllinux x86_64
             runner: ubuntu-24.04
             target: x86_64-unknown-linux-musl
             manylinux: musllinux_1_2
             container: ghcr.io/rust-cross/rust-musl-cross@sha256:ce75e9174325d4fbb3de85c309e2d7ca29f7500169bc4b5d2c611ff7e86d549a # x86_64-musl
+            libc: musl
           - name: musllinux aarch64
             runner: ubuntu-24.04-arm
             target: aarch64-unknown-linux-musl
             manylinux: musllinux_1_2
             container: ghcr.io/rust-cross/rust-musl-cross@sha256:ecae5dd62d1c938c14f8071d36c16fa699860aace03bfb5284fb1216474d2643 # aarch64-musl
+            libc: musl
+    env:
+      ALPINE_PYTHON_312: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4 # 3.12.15-alpine
+      ALPINE_PYTHON_313: python@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a # 3.13.16-alpine
+      ALPINE_PYTHON_314: python@sha256:f6a589d43c42b9e7f7dc67a12d37132491f362859a5d750607710cc56da3bc72 # 3.14.8-alpine
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -123,7 +138,8 @@ jobs:
           manylinux: ${{ matrix.platform.manylinux }}
           container: ${{ matrix.platform.container }}
           # Caches compiled crates between runs, on pull requests only: no caches in a build that
-          # may be published.
+          # may be published. (It sets RUSTC_WRAPPER=sccache for the job's later steps too, which
+          # don't compile.)
           sccache: ${{ github.event_name == 'pull_request' }}
           # Listed rather than --find-interpreter, which would also take the images' PyPy.
           args: >-
@@ -136,50 +152,6 @@ jobs:
           name: dist-${{ matrix.platform.target }}
           path: dist/
           if-no-files-found: error
-
-  test-linux:
-    name: Test ${{ matrix.platform.name }}
-    needs: build-linux
-    # Explicit: on pull requests the release-please job is skipped, and a skip would otherwise
-    # carry down to here even though the build ran.
-    if: ${{ !cancelled() && needs.build-linux.result == 'success' }}
-    runs-on: ${{ matrix.platform.runner }}
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        # As build-linux: each wheel is tested natively.
-        platform:
-          - name: manylinux x86_64
-            runner: ubuntu-24.04
-            target: x86_64-unknown-linux-gnu
-            libc: glibc
-          - name: manylinux aarch64
-            runner: ubuntu-24.04-arm
-            target: aarch64-unknown-linux-gnu
-            libc: glibc
-          - name: musllinux x86_64
-            runner: ubuntu-24.04
-            target: x86_64-unknown-linux-musl
-            libc: musl
-          - name: musllinux aarch64
-            runner: ubuntu-24.04-arm
-            target: aarch64-unknown-linux-musl
-            libc: musl
-    env:
-      ALPINE_PYTHON_312: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4 # 3.12.15-alpine
-      ALPINE_PYTHON_313: python@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a # 3.13.16-alpine
-      ALPINE_PYTHON_314: python@sha256:f6a589d43c42b9e7f7dc67a12d37132491f362859a5d750607710cc56da3bc72 # 3.14.8-alpine
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: dist-${{ matrix.platform.target }}
-          path: dist
-      - name: Check the SHA-256
-        run: sh .github/scripts/sha256.sh check dist/*.sha256
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         if: matrix.platform.libc == 'glibc'
         with:
@@ -213,8 +185,8 @@ jobs:
               '
           done
 
-  build-macos-windows:
-    name: Build ${{ matrix.platform.name }}
+  macos-windows:
+    name: ${{ matrix.platform.name }}
     needs: release-please
     if: >-
       ${{ !cancelled() && needs.release-please.result != 'failure' && !inputs.docs-only &&
@@ -224,19 +196,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The x86_64 wheels are built on an arm64 runner too: it compiles for x86_64 as fast as for
-        # itself, where an Intel runner takes twice as long. PyO3 doesn't count x86_64 from arm64 on
-        # macOS as cross-compiling, so the arm64 Pythons below serve for both.
+        # The x86_64 macOS wheels are built on an arm64 runner too: it compiles for x86_64 as fast
+        # as for itself, where an Intel runner takes twice as long (and as long again to set up the
+        # Pythons). PyO3 doesn't count x86_64 from arm64 on macOS as cross-compiling, so the arm64
+        # Pythons below serve for both. They're tested in test-macos-x86_64; the others here.
         platform:
-          - name: macOS x86_64
-            runner: macos-15
-            target: x86_64-apple-darwin
-          - name: macOS arm64
-            runner: macos-15
-            target: aarch64-apple-darwin
-          - name: Windows x64
-            runner: windows-2025
-            target: x86_64-pc-windows-msvc
+          - { name: macOS arm64, runner: macos-15, target: aarch64-apple-darwin, test: true }
+          - { name: Build macOS x86_64, runner: macos-15, target: x86_64-apple-darwin, test: false }
+          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, test: true }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -288,44 +255,43 @@ jobs:
           name: dist-${{ matrix.platform.target }}
           path: dist/
           if-no-files-found: error
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        if: matrix.platform.test
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: false # no caches in a workflow that publishes
+      - name: Test
+        if: matrix.platform.test
+        # On the Pythons uv downloads (python-build-standalone's), as on Linux: with setup-python's,
+        # a request for 3.14 could find its free-threaded 3.14t, which can't load a cp314 wheel.
+        env:
+          UV_PYTHON_PREFERENCE: only-managed
+        run: sh .github/scripts/test-wheel.sh dist 3.12 3.13 3.14 3.14t 3.15 3.15t
 
-  test-macos-windows:
-    name: Test ${{ matrix.name }}, Python ${{ matrix.pythons }}
-    needs: build-macos-windows
+  test-macos-x86_64:
+    name: Test macOS x86_64, Python ${{ matrix.pythons }}
+    needs: macos-windows
     # Explicit: on pull requests the release-please job is skipped, and a skip would otherwise
     # carry down to here even though the build ran.
-    if: ${{ !cancelled() && needs.build-macos-windows.result == 'success' }}
-    runs-on: ${{ matrix.runner }}
+    if: ${{ !cancelled() && needs.macos-windows.result == 'success' }}
+    runs-on: macos-15-intel
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        # Each wheel on its own architecture, unlike the builds: an arm64 runner can't test the
-        # x86_64 wheels under Rosetta, as cryptography (which the tests use) has no x86_64 macOS
-        # wheels and can't be built for x86_64 there. On the slow Intel runner, where building
-        # cryptography takes as long as the tests, four jobs in parallel: the GIL Pythons in pairs,
-        # which share one build (an abi3 wheel), and each free-threaded one, which can't use it, on
-        # its own. On the arm64 one, all six in one job, as GitHub runs at most 5 macOS jobs at
-        # once. Windows, which has no such limit, one job per Python.
-        include:
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.12 3.13" }
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14 3.15" }
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.14t" }
-          - { name: macOS x86_64, runner: macos-15-intel, target: x86_64-apple-darwin, pythons: "3.15t" }
-          - { name: macOS arm64, runner: macos-15, target: aarch64-apple-darwin, pythons: "3.12 3.13 3.14 3.14t 3.15 3.15t" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.12" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.13" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.14" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.14t" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.15" }
-          - { name: Windows x64, runner: windows-2025, target: x86_64-pc-windows-msvc, pythons: "3.15t" }
+        # On an Intel runner: an arm64 one can't test the x86_64 wheels under Rosetta, as
+        # cryptography (which the tests use) has no x86_64 macOS wheels and can't be built for
+        # x86_64 there. Building cryptography on this slow runner takes as long as the tests, so two
+        # jobs in parallel: the GIL Pythons, which share one build (an abi3 wheel), and the
+        # free-threaded ones, which can't use it.
+        pythons: ["3.12 3.13 3.14 3.15", "3.14t 3.15t"]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: dist-${{ matrix.target }}
+          name: dist-x86_64-apple-darwin
           path: dist
       - name: Check the SHA-256
         run: sh .github/scripts/sha256.sh check dist/*.sha256
@@ -334,21 +300,19 @@ jobs:
           version: ${{ env.UV_VERSION }}
           enable-cache: false # no caches in a workflow that publishes
       - name: Test
-        # On the Pythons uv downloads (python-build-standalone's), as on Linux: with setup-python's,
-        # a request for 3.14 could find its free-threaded 3.14t, which can't load a cp314 wheel.
         env:
-          UV_PYTHON_PREFERENCE: only-managed
+          UV_PYTHON_PREFERENCE: only-managed # as macos-windows
           PYTHONS: ${{ matrix.pythons }}
         run: sh .github/scripts/test-wheel.sh dist $PYTHONS # unquoted: one argument per Python
 
-  build-sdist:
-    name: Build sdist
+  sdist:
+    name: sdist
     needs: release-please
     if: >-
       ${{ !cancelled() && needs.release-please.result != 'failure' && !inputs.docs-only &&
       (github.event_name != 'push' || needs.release-please.outputs.release_created == 'true') }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -366,29 +330,6 @@ jobs:
           name: dist-sdist
           path: dist/
           if-no-files-found: error
-
-  test-sdist:
-    name: Test sdist
-    needs: build-sdist
-    # Explicit: on pull requests the release-please job is skipped, and a skip would otherwise
-    # carry down to here even though the build ran.
-    if: ${{ !cancelled() && needs.build-sdist.result == 'success' }}
-    runs-on: ubuntu-24.04
-    timeout-minutes: 45
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: dist-sdist
-          path: dist
-      - name: Check the SHA-256
-        run: sh .github/scripts/sha256.sh check dist/*.sha256
-      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
-        with:
-          version: ${{ env.UV_VERSION }}
-          enable-cache: false # no caches in a workflow that publishes
       # From the sdist alone: which fails if the sdist is missing a file.
       - name: Build a wheel from the sdist
         run: uv build --python 3.14 --wheel --out-dir wheel dist/*.tar.gz
@@ -400,12 +341,10 @@ jobs:
     if: needs.release-please.outputs.release_created == 'true'
     needs:
       - release-please
-      - build-linux
-      - build-macos-windows
-      - build-sdist
-      - test-linux
-      - test-macos-windows
-      - test-sdist
+      - linux
+      - macos-windows
+      - test-macos-x86_64
+      - sdist
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment:
