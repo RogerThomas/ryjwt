@@ -309,7 +309,7 @@ class PublicKey:
         leeway: float | timedelta = 0,
     ) -> T: ...
 
-def unverified_header(token: str | bytes) -> dict[str, Any]:
+def get_unverified_header(token: str | bytes) -> dict[str, Any]:
     """Return a token's header without verifying its signature; use it for routing or logging,
     never for trust decisions.
 
@@ -318,14 +318,14 @@ def unverified_header(token: str | bytes) -> dict[str, Any]:
     `DecodeError`.
     """
 
-def unverified_claims(token: str | bytes) -> dict[str, Any]:
+def get_unverified_claims(token: str | bytes) -> dict[str, Any]:
     """Return a token's claims without verifying its signature or checking exp/nbf/aud/iss; don't
     trust any value in the result.
 
     The token must still be well formed, as `decode` requires, or it raises `DecodeError`.
     """
 
-def unverified_token(token: str | bytes) -> tuple[dict[str, Any], dict[str, Any]]:
+def get_unverified_token(token: str | bytes) -> tuple[dict[str, Any], dict[str, Any]]:
     """Return a token's `(header, claims)` without verifying anything; verify with a key's
     `decode()` before trusting either.
 

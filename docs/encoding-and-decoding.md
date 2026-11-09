@@ -188,9 +188,9 @@ set of keys. A valid signature then proves only the provider made the token, not
 
 ## Inspecting a token without verifying it
 
-`unverified_header`, `unverified_claims` and `unverified_token` read a token without checking the
-signature, `exp`, `nbf`, `aud` or `iss`. Anyone can make a token say anything, so what they return
-is a claim, not a fact.
+`get_unverified_header`, `get_unverified_claims` and `get_unverified_token` read a token without
+checking the signature, `exp`, `nbf`, `aud` or `iss`. Anyone can make a token say anything, so what
+they return is a claim, not a fact.
 
 ```python
 import secrets
@@ -200,7 +200,7 @@ import ryjwt
 key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
 token = key.encode({"sub": "user-1", "iss": "https://tenant-1.example/"}, header={"kid": "key-1"})
 
-header, claims = ryjwt.unverified_token(token)
+header, claims = ryjwt.get_unverified_token(token)
 assert header["kid"] == "key-1"
 assert claims["iss"] == "https://tenant-1.example/"
 
@@ -215,6 +215,27 @@ and [`JWKSClient`](jwks-urls.md) already do it.
 
 The token must still be well formed: three base64url parts, with a JSON object as header and
 payload. If not, they raise [`DecodeError`][ryjwt.DecodeError]. They return dicts (no `into`).
+
+### A verified token's header
+
+`decode` returns only the claims. To read the header too (its `kid`, `typ` or your own fields),
+call `get_unverified_header` once `decode` has accepted the token. The signature covers the header
+as well as the claims, so by then the header is as trustworthy as the claims are:
+
+```python
+import secrets
+
+import ryjwt
+
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+token = key.encode({"sub": "user-1"}, header={"kid": "key-1", "typ": "at+jwt"})
+
+claims = key.decode(token)  # raises unless the token is valid
+header = ryjwt.get_unverified_header(token)  # so this is the verified token's header
+assert header == {"alg": "HS256", "kid": "key-1", "typ": "at+jwt"}
+```
+
+The order matters: read before `decode`, the header is only a claim, as above.
 
 ## Typed claims
 
@@ -399,8 +420,8 @@ level) is written as whole seconds.
 
 Dicts are read with [msgspec](https://jcristharif.com/msgspec/) if it's installed
 (`uv add 'ryjwt[msgspec]'`), as it's faster for typical tokens, else with the built-in
-[jiter](https://github.com/pydantic/jiter). Each key picks when created; `unverified_claims` and
-`unverified_token` pick at each call.
+[jiter](https://github.com/pydantic/jiter). Each key picks when created; `get_unverified_claims` and
+`get_unverified_token` pick at each call.
 
 Both give the same dict for any valid payload and reject the same malformed ones. They differ only
 on payloads no real token contains:

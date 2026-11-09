@@ -1,4 +1,4 @@
-"""`decode`, `encode`, `jwks`, the `unverified_*` functions and the constructors take only the
+"""`decode`, `encode`, `jwks`, the `get_unverified_*` functions and the constructors take only the
 arguments they declare, of their types; only `PrivateKey` and `PublicKey` export JWKs."""
 
 from typing import Any
@@ -39,9 +39,9 @@ hmac.decode(1)  # error
 hmac.encode([1])  # error
 hmac.encode({}, header=[("kid", "kid")])  # error
 hmac.encode({}, headers={"kid": "kid"})  # error
-ryjwt.unverified_header(1)  # error
-ryjwt.unverified_claims("token", into=Claims)  # error
-ryjwt.unverified_token("token", audience="aud")  # error
+ryjwt.get_unverified_header(1)  # error
+ryjwt.get_unverified_claims("token", into=Claims)  # error
+ryjwt.get_unverified_token("token", audience="aud")  # error
 ryjwt.SecretKey("secret", algorithm=["HS256"])  # error
 ryjwt.SecretKey(1, algorithms=["HS256"])  # error
 ryjwt.PrivateKey("pem", algorithms=["ES256"], allow_short_secret=True)  # error

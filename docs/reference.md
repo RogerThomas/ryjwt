@@ -18,11 +18,11 @@ Everything below is importable from `ryjwt`.
 
 ## Inspecting a token without verifying it
 
-::: ryjwt.unverified_header
+::: ryjwt.get_unverified_header
 
-::: ryjwt.unverified_claims
+::: ryjwt.get_unverified_claims
 
-::: ryjwt.unverified_token
+::: ryjwt.get_unverified_token
 
 ## Algorithms
 

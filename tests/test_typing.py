@@ -80,12 +80,12 @@ def test_encode_and_algorithms_types(
 def test_unverified_types(hmac_jwt: ryjwt.SecretKey) -> None:
     token = hmac_jwt.encode({"sub": "sub"}, header={"kid": "kid"})
 
-    assert_type(ryjwt.unverified_header(token), dict[str, Any])
-    assert_type(ryjwt.unverified_header(token.encode()), dict[str, Any])
-    assert_type(ryjwt.unverified_claims(token), dict[str, Any])
-    assert_type(ryjwt.unverified_claims(token.encode()), dict[str, Any])
-    assert_type(ryjwt.unverified_token(token), tuple[dict[str, Any], dict[str, Any]])
-    assert_type(ryjwt.unverified_token(token.encode()), tuple[dict[str, Any], dict[str, Any]])
+    assert_type(ryjwt.get_unverified_header(token), dict[str, Any])
+    assert_type(ryjwt.get_unverified_header(token.encode()), dict[str, Any])
+    assert_type(ryjwt.get_unverified_claims(token), dict[str, Any])
+    assert_type(ryjwt.get_unverified_claims(token.encode()), dict[str, Any])
+    assert_type(ryjwt.get_unverified_token(token), tuple[dict[str, Any], dict[str, Any]])
+    assert_type(ryjwt.get_unverified_token(token.encode()), tuple[dict[str, Any], dict[str, Any]])
 
 
 def test_hmac_constructor_types(hmac_key: str) -> None:
