@@ -22,11 +22,11 @@ them and keeps them up to date.
 | `ES256` | ECDSA with SHA-256 | EC, P-256 curve |
 | `ES256K` | ECDSA with SHA-256 | EC, secp256k1 curve |
 | `ES384` | ECDSA with SHA-384 | EC, P-384 curve |
-| `ES512`, `ES521` | ECDSA with SHA-512 | EC, P-521 curve |
+| `ES512` | ECDSA with SHA-512 | EC, P-521 curve |
 | `EdDSA` | Ed25519 | Ed25519 |
 
-`ES521` is an alias for `ES512`. `EdDSA` means Ed25519 only, not Ed448. There is no `none`
-algorithm: every token ryjwt makes or accepts is signed.
+`ES512` uses P-521, not a 512-bit curve: the name is its hash's. `EdDSA` means Ed25519 only, not
+Ed448. There is no `none` algorithm: every token ryjwt makes or accepts is signed.
 
 ### Choosing `algorithms`
 
@@ -247,7 +247,7 @@ signature is still checked).
 | EC | P-256 | `ES256` |
 | EC | secp256k1 | `ES256K` |
 | EC | P-384 | `ES384` |
-| EC | P-521 | `ES512`, `ES521` |
+| EC | P-521 | `ES512` |
 | OKP | Ed25519 | `EdDSA` |
 
 - Keys of any other type or curve, and encryption keys (`"use": "enc"`), are ignored entirely:

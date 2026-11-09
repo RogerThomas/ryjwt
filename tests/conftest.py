@@ -25,7 +25,6 @@ def _private_keys() -> dict[ryjwt.AsymmetricAlgorithm, SigningKey]:
         "ES256K": ec.generate_private_key(ec.SECP256K1()),
         "ES384": ec.generate_private_key(ec.SECP384R1()),
         "ES512": p521_key,
-        "ES521": p521_key,
         "EdDSA": ed25519.Ed25519PrivateKey.generate(),
     }
 
