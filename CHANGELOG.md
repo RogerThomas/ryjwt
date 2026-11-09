@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/RogerThomas/ryjwt/compare/v0.2.2...v0.3.0) (2026-11-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* `unverified_header`, `unverified_claims` and `unverified_token` are now `get_unverified_header`, `get_unverified_claims` and `get_unverified_token`; the old names are gone.
+* `"ES521"` is no longer an algorithm. Use `"ES512"`: it takes the same P-521 keys and makes the same signatures. Tokens already signed with `"alg": "ES521"` are rejected (`InvalidAlgorithmError`).
+
+### Features
+
+* drop the ES521 algorithm name; P-521 is ES512 ([#49](https://github.com/RogerThomas/ryjwt/issues/49)) ([febcd40](https://github.com/RogerThomas/ryjwt/commit/febcd40b17e9c07a9a06bfcef2fd5c397c3060cf))
+* rename unverified_* to get_unverified_*, as PyJWT names them ([#50](https://github.com/RogerThomas/ryjwt/issues/50)) ([01d70f6](https://github.com/RogerThomas/ryjwt/commit/01d70f62614fb0ba1f2ac654c0322135a8c2a092))
+
 ## [0.2.2](https://github.com/RogerThomas/ryjwt/compare/v0.2.1...v0.2.2) (2026-10-12)
 
 
