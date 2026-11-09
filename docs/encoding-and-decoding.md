@@ -216,6 +216,27 @@ and [`JWKSClient`](jwks-urls.md) already do it.
 The token must still be well formed: three base64url parts, with a JSON object as header and
 payload. If not, they raise [`DecodeError`][ryjwt.DecodeError]. They return dicts (no `into`).
 
+### A verified token's header
+
+`decode` returns only the claims. To read the header too (its `kid`, `typ` or your own fields),
+call `get_unverified_header` once `decode` has accepted the token. The signature covers the header
+as well as the claims, so by then the header is as trustworthy as the claims are:
+
+```python
+import secrets
+
+import ryjwt
+
+key = ryjwt.SecretKey(secrets.token_bytes(32), algorithms=["HS256"])
+token = key.encode({"sub": "user-1"}, header={"kid": "key-1", "typ": "at+jwt"})
+
+claims = key.decode(token)  # raises unless the token is valid
+header = ryjwt.get_unverified_header(token)  # so this is the verified token's header
+assert header == {"alg": "HS256", "kid": "key-1", "typ": "at+jwt"}
+```
+
+The order matters: read before `decode`, the header is only a claim, as above.
+
 ## Typed claims
 
 Pass a msgspec `Struct` or pydantic `BaseModel` class as `into`, and `decode` returns an instance
