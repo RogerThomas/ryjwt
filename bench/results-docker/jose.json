@@ -6,10 +6,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 56199,
-    "mean_us": 17.794,
+    "ops_per_sec": 57230,
+    "mean_us": 17.473,
     "round_means_us": [
-      17.794
+      17.473
     ]
   },
   {
@@ -19,10 +19,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 83429,
-    "mean_us": 11.986,
+    "ops_per_sec": 81296,
+    "mean_us": 12.301,
     "round_means_us": [
-      11.986
+      12.301
     ]
   },
   {
@@ -32,10 +32,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 88571,
-    "mean_us": 11.29,
+    "ops_per_sec": 89085,
+    "mean_us": 11.225,
     "round_means_us": [
-      11.29
+      11.225
     ]
   },
   {
@@ -45,10 +45,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 57918,
-    "mean_us": 17.266,
+    "ops_per_sec": 56848,
+    "mean_us": 17.591,
     "round_means_us": [
-      17.266
+      17.591
     ]
   },
   {
@@ -58,10 +58,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 79328,
-    "mean_us": 12.606,
+    "ops_per_sec": 79813,
+    "mean_us": 12.529,
     "round_means_us": [
-      12.606
+      12.529
     ]
   },
   {
@@ -71,10 +71,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 75825,
-    "mean_us": 13.188,
+    "ops_per_sec": 80700,
+    "mean_us": 12.392,
     "round_means_us": [
-      13.188
+      12.392
     ]
   },
   {
@@ -84,10 +84,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 58184,
-    "mean_us": 17.187,
+    "ops_per_sec": 58801,
+    "mean_us": 17.007,
     "round_means_us": [
-      17.187
+      17.007
     ]
   },
   {
@@ -97,10 +97,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 65695,
-    "mean_us": 15.222,
+    "ops_per_sec": 67612,
+    "mean_us": 14.79,
     "round_means_us": [
-      15.222
+      14.79
     ]
   },
   {
@@ -110,10 +110,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 53648,
-    "mean_us": 18.64,
+    "ops_per_sec": 56794,
+    "mean_us": 17.607,
     "round_means_us": [
-      18.64
+      17.607
     ]
   },
   {
@@ -123,10 +123,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 54833,
-    "mean_us": 18.237,
+    "ops_per_sec": 57264,
+    "mean_us": 17.463,
     "round_means_us": [
-      18.237
+      17.463
     ]
   },
   {
@@ -136,10 +136,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 55116,
-    "mean_us": 18.143,
+    "ops_per_sec": 56595,
+    "mean_us": 17.669,
     "round_means_us": [
-      18.143
+      17.669
     ]
   },
   {
@@ -149,10 +149,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 49490,
-    "mean_us": 20.206,
+    "ops_per_sec": 50609,
+    "mean_us": 19.759,
     "round_means_us": [
-      20.206
+      19.759
     ]
   },
   {
@@ -162,10 +162,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 10782,
-    "mean_us": 92.749,
+    "ops_per_sec": 10821,
+    "mean_us": 92.414,
     "round_means_us": [
-      92.749
+      92.414
     ]
   },
   {
@@ -175,10 +175,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 10385,
-    "mean_us": 96.293,
+    "ops_per_sec": 10898,
+    "mean_us": 91.763,
     "round_means_us": [
-      96.293
+      91.763
     ]
   },
   {
@@ -188,10 +188,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 10933,
-    "mean_us": 91.468,
+    "ops_per_sec": 10840,
+    "mean_us": 92.248,
     "round_means_us": [
-      91.468
+      92.248
     ]
   },
   {
@@ -201,10 +201,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 10610,
-    "mean_us": 94.248,
+    "ops_per_sec": 10561,
+    "mean_us": 94.69,
     "round_means_us": [
-      94.248
+      94.69
     ]
   }
 ]

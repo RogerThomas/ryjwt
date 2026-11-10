@@ -1,9 +1,9 @@
 {
-  "impl": "ryjwt 0.2.2 \u2192 BaseModel",
+  "impl": "ryjwt 0.3.1 \u2192 BaseModel",
   "runtime": "CPython 3.14.8",
   "rows": [
     {
-      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
+      "impl": "ryjwt 0.3.1 \u2192 BaseModel",
       "source": "hmac",
       "name": "typical-k64",
       "key": "k64",
@@ -12,16 +12,16 @@
       "token_len": 661,
       "iterations": 100000,
       "rounds": 3,
-      "ops_per_sec": 326451.3528766497,
-      "mean_us": 3.0632435466666665,
+      "ops_per_sec": 359262.41816056,
+      "mean_us": 2.7834806800000003,
       "round_means_us": [
-        3.0673370799999997,
-        3.06338501,
-        3.05900855
+        2.79502486,
+        2.7576351199999998,
+        2.79778206
       ]
     },
     {
-      "impl": "ryjwt 0.2.2 \u2192 BaseModel",
+      "impl": "ryjwt 0.3.1 \u2192 BaseModel",
       "source": "pem",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -30,12 +30,12 @@
       "token_len": 1131,
       "iterations": 100000,
       "rounds": 3,
-      "ops_per_sec": 32388.923117460854,
-      "mean_us": 30.874752963333332,
+      "ops_per_sec": 32472.358696443996,
+      "mean_us": 30.795422326666667,
       "round_means_us": [
-        30.88213962,
-        30.80480355,
-        30.937315719999997
+        30.6894998,
+        30.877192230000002,
+        30.81957495
       ]
     }
   ],

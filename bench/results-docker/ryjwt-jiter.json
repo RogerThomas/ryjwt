@@ -1,210 +1,210 @@
 [
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "small-k32",
     "token_len": 231,
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 1174607.9364264598,
-    "mean_us": 0.8513478999999999,
+    "ops_per_sec": 1308187.5271121864,
+    "mean_us": 0.7644164,
     "round_means_us": [
-      0.8513478999999999
+      0.7644164
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "small-k64",
     "token_len": 231,
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 1166886.7415061148,
-    "mean_us": 0.8569812,
+    "ops_per_sec": 1312567.293684438,
+    "mean_us": 0.7618657,
     "round_means_us": [
-      0.8569812
+      0.7618657
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "small-k256",
     "token_len": 231,
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 1180135.8123895614,
-    "mean_us": 0.8473601,
+    "ops_per_sec": 1318836.3326748824,
+    "mean_us": 0.7582441999999999,
     "round_means_us": [
-      0.8473601
+      0.7582441999999999
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "small-k4096",
     "token_len": 231,
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 1160594.2056637926,
-    "mean_us": 0.8616276,
+    "ops_per_sec": 1311003.104848653,
+    "mean_us": 0.7627747,
     "round_means_us": [
-      0.8616276
+      0.7627747
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "typical-k32",
     "token_len": 661,
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 529701.2776129965,
-    "mean_us": 1.8878565,
+    "ops_per_sec": 583569.3141747527,
+    "mean_us": 1.7135925,
     "round_means_us": [
-      1.8878565
+      1.7135925
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "typical-k64",
     "token_len": 661,
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 526430.5236209639,
-    "mean_us": 1.8995859,
+    "ops_per_sec": 590056.4512907515,
+    "mean_us": 1.6947531,
     "round_means_us": [
-      1.8995859
+      1.6947531
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "typical-k256",
     "token_len": 661,
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 525936.561531948,
-    "mean_us": 1.9013699999999998,
+    "ops_per_sec": 589685.9562574496,
+    "mean_us": 1.6958179,
     "round_means_us": [
-      1.9013699999999998
+      1.6958179
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "typical-k4096",
     "token_len": 661,
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 524666.8994788589,
-    "mean_us": 1.9059712,
+    "ops_per_sec": 589775.8232606994,
+    "mean_us": 1.6955595,
     "round_means_us": [
-      1.9059712
+      1.6955595
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "medium-k32",
     "token_len": 2244,
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 184119.26760080314,
-    "mean_us": 5.4312621,
+    "ops_per_sec": 220141.63428438263,
+    "mean_us": 4.5425301,
     "round_means_us": [
-      5.4312621
+      4.5425301
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "medium-k64",
     "token_len": 2244,
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 184112.13872687635,
-    "mean_us": 5.4314724,
+    "ops_per_sec": 220290.08723906006,
+    "mean_us": 4.5394689,
     "round_means_us": [
-      5.4314724
+      4.5394689
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "medium-k256",
     "token_len": 2244,
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 184144.29591222314,
-    "mean_us": 5.4305239,
+    "ops_per_sec": 220609.47868921258,
+    "mean_us": 4.5328968000000005,
     "round_means_us": [
-      5.4305239
+      4.5328968000000005
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "medium-k4096",
     "token_len": 2244,
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 184352.3291571017,
-    "mean_us": 5.4243958,
+    "ops_per_sec": 219931.78419835874,
+    "mean_us": 4.5468644000000005,
     "round_means_us": [
-      5.4243958
+      4.5468644000000005
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "large-k32",
     "token_len": 20884,
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 20732.812666753365,
-    "mean_us": 48.2327225,
+    "ops_per_sec": 25064.408009261402,
+    "mean_us": 39.897211999999996,
     "round_means_us": [
-      48.2327225
+      39.897211999999996
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "large-k64",
     "token_len": 20884,
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 20606.992269412553,
-    "mean_us": 48.5272177,
+    "ops_per_sec": 25078.913434407274,
+    "mean_us": 39.8741358,
     "round_means_us": [
-      48.5272177
+      39.8741358
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "large-k256",
     "token_len": 20884,
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 20764.081530971776,
-    "mean_us": 48.160088300000005,
+    "ops_per_sec": 25088.00772758807,
+    "mean_us": 39.8596816,
     "round_means_us": [
-      48.160088300000005
+      39.8596816
     ]
   },
   {
-    "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+    "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
     "name": "large-k4096",
     "token_len": 20884,
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 20768.972062926685,
-    "mean_us": 48.148747900000004,
+    "ops_per_sec": 25106.913712169797,
+    "mean_us": 39.8296665,
     "round_means_us": [
-      48.148747900000004
+      39.8296665
     ]
   }
 ]
