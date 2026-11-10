@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/RogerThomas/ryjwt/compare/v0.3.0...v0.3.1) (2026-11-10)
+
+
+### Performance Improvements
+
+* build the wheels with profile-guided optimisation (PGO) ([#52](https://github.com/RogerThomas/ryjwt/issues/52)) ([fca7ef3](https://github.com/RogerThomas/ryjwt/commit/fca7ef345648b6f030206f8dc97ed4b3a986f790))
+
 ## [0.3.0](https://github.com/RogerThomas/ryjwt/compare/v0.2.2...v0.3.0) (2026-11-09)
 
 
