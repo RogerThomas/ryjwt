@@ -102,7 +102,7 @@ example, extra and all, with nothing installed first.
 
 ## Why it's fast
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.14 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in 0.5, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.14 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in about 0.45, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](assets/perf-race.svg)
 
 One bar per library, decoding 100,000 HS256 tokens in real time
 ([benchmarks](benchmarks/index.md)).

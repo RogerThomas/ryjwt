@@ -24,11 +24,11 @@ Each bar is one library decoding the same token 100,000 times, filling in at its
 3 rounds of 10 seconds. [The races page](races.md) has each library's time and its range over the
 three rounds.
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.14 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in 0.5, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](../assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.14 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in about 0.45, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](../assets/perf-race.svg)
 
 With HS256, ryjwt decodes a typical token over 27 times faster than PyJWT 2.15 into a `Struct`
 (over 26 times into a dict, 22 times with jiter). Against jsonwebtoken (Rust), it's about 2.2 times
-faster struct to struct, and 2.2 to 2.6 times faster dict to `Value`. It's about 3.4 times faster
+faster struct to struct, and 2.1 to 2.5 times faster dict to `Value`. It's about 3.2 times faster
 than fast-jwt (Bun). Even into a pydantic model it's a little faster than jsonwebtoken's struct,
 and about 14 times faster than PyJWT.
 
@@ -47,11 +47,11 @@ building the result.
 Most identity providers sign with RS256 by default. Most of the time goes on checking the
 signature, which every library hands to native crypto, so the gaps are smaller. ryjwt still
 finishes first, about 2.7 times faster than PyJWT, and ahead of fast-jwt and jsonwebtoken by about
-15% and 18%. It finishes first on x86_64 too, about 15% ahead of jsonwebtoken and fast-jwt
+14% and 18%. It finishes first on x86_64 too, about 15% ahead of jsonwebtoken and fast-jwt
 ([cross-check](x86_64.md)).
 
 With ES256, ryjwt is about 2.1 times faster than PyJWT, and a little ahead of jsonwebtoken and
-fast-jwt, by about 4% and 7% ([full matrix](matrix.md#pem-public-key)).
+fast-jwt, by about 5% and 9% ([full matrix](matrix.md#pem-public-key)).
 
 ## How they're measured
 
@@ -67,7 +67,7 @@ fast-jwt, by about 4% and 7% ([full matrix](matrix.md#pem-public-key)).
 - Each library runs in its own Docker container, with one CPU (pinned to one core) and 500 MB of
   memory. For the races and the HS256 by-size tables, the containers run one after another. The full
   matrix runs several at once, each on a core of its own (its page says how); where it times the
-  same token as the races, its times are within a few percent of theirs.
+  same token as the races, its times are within 7% of theirs.
 - jose and fast-jwt run on [Bun](https://bun.sh), whose crypto is BoringSSL. On Node (OpenSSL),
   their numbers could differ.
 - JWKS URL cases fetch the keys over HTTPS from another container, and are timed once the keys are

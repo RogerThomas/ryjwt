@@ -10,14 +10,20 @@
       "alg": "HS256",
       "payload_size": "typical",
       "token_len": 661,
-      "iterations": 100000,
+      "iterations": 1000,
       "rounds": 3,
-      "ops_per_sec": 78254,
-      "mean_us": 12.779,
+      "seconds": 10,
+      "ops_per_sec": 79377,
+      "mean_us": 12.598,
       "round_means_us": [
-        13.395,
-        12.418,
-        12.523
+        12.596,
+        12.599,
+        12.6
+      ],
+      "round_decodes": [
+        794000,
+        794000,
+        794000
       ]
     },
     {
@@ -28,14 +34,20 @@
       "alg": "RS256",
       "payload_size": "typical",
       "token_len": 1131,
-      "iterations": 100000,
+      "iterations": 1000,
       "rounds": 3,
-      "ops_per_sec": 23833,
-      "mean_us": 41.959,
+      "seconds": 10,
+      "ops_per_sec": 23968,
+      "mean_us": 41.722,
       "round_means_us": [
-        42.721,
-        41.567,
-        41.589
+        41.883,
+        41.653,
+        41.63
+      ],
+      "round_decodes": [
+        239000,
+        241000,
+        241000
       ]
     }
   ],
