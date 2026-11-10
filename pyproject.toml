@@ -78,8 +78,11 @@ bench = [
     "rich>=15.0.0",
     "yeetr>=2026.9.18",
 ]
-# The CodSpeed benchmarks (benchmarks/), run by the CodSpeed workflow: `task bench-codspeed`.
+# The CodSpeed benchmarks (benchmarks/), run by the CodSpeed workflow: `task bench-codspeed`; and,
+# on their own (--only-group codspeed), the PGO training of the release builds (pgo-train.sh).
 codspeed = [
+    "msgspec>=0.22.0",
+    "pydantic>=2.13.5",
     "pytest-codspeed>=5.0.3",
 ]
 dev = [

@@ -33,3 +33,9 @@ follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat: …`
 Merging it tags the release. The same run builds the sdist and the wheels (cp312 to cp315, cp314t
 and cp315t, per platform), and tests each wheel on its own Python. It publishes them
 to PyPI, checking by SHA-256 that they're the files tested, then deploys this site to GitHub Pages.
+
+The wheels are built with profile-guided optimisation (PGO): each platform's job first builds an
+instrumented wheel, runs the CodSpeed benchmarks (`benchmarks/`) on it to count which code runs, and
+builds the real wheels with those counts. That makes the HMAC paths 3 to 20% faster (the RSA, ECDSA
+and EdDSA maths is in aws-lc's C, which PGO doesn't reach). The benchmarks are the training, so a
+new feature needs a benchmark there too: code they never run can get slower, not faster.
