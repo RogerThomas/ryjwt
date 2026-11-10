@@ -204,6 +204,9 @@ exempt-modules = ["typing", "typing_extensions", "collections.abc", "ryjwt._algo
 "tests/test_docs.py" = [
     "S307", # evaluates the examples of the repo's own docs
 ]
+"bench/aws.py" = [
+    "S603", # runs the AWS CLI, ssh, git and uv (found on PATH) with arguments it builds itself
+]
 "assets/build_icons.py" = [
     "S603", # runs rsvg-convert (found on PATH) on the repo's own favicon.svg
 ]
