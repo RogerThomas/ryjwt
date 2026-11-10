@@ -9,9 +9,10 @@ docs site shows).
   identity providers sign with. Draw it from a Linux run: Docker on Apple Silicon slows down RSA
   for ryjwt and jsonwebtoken only (see the Apple Silicon caveat in compare.py).
 
-A lane per library. Each bar fills over the time the library took to decode 100,000 tokens (the
-mean of 3 rounds of 100,000, `task bench-race`), in real time, then every bar holds while the
-finish times show, and the race restarts.
+A lane per library. Each bar fills over the time the library takes to decode 100,000 tokens, in
+real time, at its mean speed over every timed decode (`task bench-race`: 3 rounds of 10 s each,
+so every library is timed for as long, however fast), then every bar holds while the finish times
+show, and the race restarts.
 
 The animation is pure CSS `@keyframes`, no JavaScript, so it plays where GitHub (and PyPI) show the
 SVG as an image. Every `@keyframes` rule repeats its final value at 100%: without that stop, a
@@ -44,6 +45,42 @@ class Lane:
 
 
 @dataclass(frozen=True, slots=True)
+class Timing:
+    """How the races' libraries were timed, as their results say."""
+
+    rounds: int
+    seconds: float
+    """Each round's length, or 0 for rounds of `iterations` decodes."""
+    iterations: int
+
+    def caption(self, decodes: int) -> str:
+        """For under the race."""
+        if self.seconds:
+            return (
+                f"Each bar takes {decodes:,} decodes at the library's mean speed over "
+                f"{self.rounds} rounds of {self.seconds:g} s."
+            )
+        return (
+            f"Each bar takes the library's mean time for {decodes:,} decodes, over "
+            f"{self.rounds} rounds."
+        )
+
+    def method(self, decodes: int) -> str:
+        """For the results page."""
+        if self.seconds:
+            return (
+                f"Each library decodes the same token for {self.rounds} rounds of "
+                f"{self.seconds:g} s each, after 1 s of untimed decodes, so each is timed for as "
+                f"long, however fast. The time per decode is the mean over every timed decode; the "
+                f"time for {decodes:,} decodes is {decodes:,} times that."
+            )
+        return (
+            f"Each library decodes the same token {self.iterations:,} times, in {self.rounds} "
+            "rounds, after 1,000 untimed decodes; the time is the mean over every round."
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class Race:
     """One race: which case of the matrix, and how to describe it."""
 
@@ -70,6 +107,7 @@ class RaceSVG:
     lanes: list[Lane]  # fastest first
     decodes: int
     token_bytes: int
+    timing: Timing
     track_x: int
     track_width: int
 
@@ -180,13 +218,15 @@ fill="{lane.color}" />
         )
 
     @classmethod
-    def fitted(cls, race: Race, lanes: list[Lane], decodes: int, token_bytes: int) -> RaceSVG:
+    def fitted(
+        cls, race: Race, lanes: list[Lane], decodes: int, token_bytes: int, timing: Timing
+    ) -> RaceSVG:
         """The race, its tracks starting right of the longest lane name, and ending far enough
         from the right edge for the finish times."""
         longest = max(len(lane.name) for lane in lanes)
         track_x = cls.name_x + math.ceil(longest * cls.name_char_width) + cls.name_gap
         track_width = cls.width - track_x - cls.badge_room
-        return cls(race, lanes, decodes, token_bytes, track_x, track_width)
+        return cls(race, lanes, decodes, token_bytes, timing, track_x, track_width)
 
     def render(self) -> str:
         loop = self._loop_seconds()
@@ -243,8 +283,8 @@ class="playhead" />
 
 {lanes}
 
-  <text x="20" y="{footer_y}" class="caption">{self._setup()}. Each bar takes \
-the library's mean time for {self.decodes:,} decodes, over 3 rounds.</text>
+  <text x="20" y="{footer_y}" class="caption">{self._setup()}. \
+{self.timing.caption(self.decodes)}</text>
   <text x="20" y="{footer_y + 16}" class="caption">Measured in Docker, one container per \
 library, each on one pinned CPU.</text>
   <text x="20" y="{footer_y + 32}" class="caption">~N&#215;: how many times faster than \
@@ -329,6 +369,11 @@ class Races:
     def load(cls, results_dir: Path) -> Races:
         return cls({path.stem: json.loads(path.read_text()) for path in results_dir.glob("*.json")})
 
+    def timing(self) -> Timing:
+        """How the libraries were timed: as PyJWT was in the first race."""
+        row = self._row(RaceSVG.baseline, self.races[0])
+        return Timing(row["rounds"], row.get("seconds", 0), row["iterations"])
+
     def _range(self, key: str, race: Race) -> str:
         """The fastest and slowest of `key`'s round means for `race`, in µs."""
         rounds: list[float] = self._row(key, race)["round_means_us"]
@@ -340,7 +385,10 @@ class Races:
         lines = [
             f"## {race.algorithm}, {race.key}",
             "",
-            f"| library | {decodes:,} decodes | µs per decode | range over 3 rounds | vs PyJWT |",
+            (
+                f"| library | {decodes:,} decodes | µs per decode "
+                f"| range over {self.timing().rounds} rounds | vs PyJWT |"
+            ),
             "| :-- | --: | --: | --: | --: |",
         ]
         lines.extend(
@@ -359,8 +407,7 @@ class Races:
             "# The races' numbers",
             "",
             f"Generated {generated} from `bench/results-race/` by `bench/race_svg.py`, on",
-            f"{machine()}. Each library decodes the same token {decodes:,} times, in 3 rounds,",
-            "after 1,000 untimed decodes; the time is the mean over all three.",
+            f"{machine()}. {self.timing().method(decodes)}",
             "",
         ]
         for race in self.races:
@@ -370,7 +417,7 @@ class Races:
     def svg(self, race: Race, decodes: int) -> str:
         lanes = sorted((self._lane(key, race) for key in self.lane_names), key=_mean_us)
         token_bytes: int = self._row("pyjwt", race)["token_len"]
-        return RaceSVG.fitted(race, lanes, decodes, token_bytes).render()
+        return RaceSVG.fitted(race, lanes, decodes, token_bytes, self.timing()).render()
 
 
 def _mean_us(lane: Lane) -> float:

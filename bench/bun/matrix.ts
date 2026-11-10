@@ -1,9 +1,10 @@
 // JWT verify benchmark for Bun over the full matrix (bench/matrix/fixtures.json): jose and
 // fast-jwt, per algorithm, key size, payload size and key source. Mirrors bench/bench_matrix.py.
-// Run from bench/bun:  bun run matrix.ts <jose|fast-jwt> [jwks_url] [only_sources] [only_cases] [iterations] [rounds]
+// Run from bench/bun:  bun run matrix.ts <jose|fast-jwt> [jwks_url] [only_sources] [only_cases] [iterations] [rounds] [seconds]
 // (an empty filter means all; iterations: decodes per timed round, default 10000; rounds default 1).
 // Each case: 1,000 untimed warm-up decodes, then `rounds` timed loops of `iterations` decodes; the
-// mean is over every timed decode.
+// mean is over every timed decode. With `seconds` (as the races are): 1 s of untimed decodes, then
+// `rounds` rounds of `seconds` each, in loops of `iterations` decodes, the clock read after each.
 //
 // Key sources: "hmac" (the HS256 secret), "pem" (the public key's PEM, imported once), "jwks" (a
 // JWKS document, the token's kid picks the key) and "jwks-url-async" (the document fetched over
@@ -52,11 +53,13 @@ interface Row {
   alg: string;
   payload_size: string;
   token_len: number;
-  iterations: number;
+  iterations: number; // decodes per timed loop: a round's, or with `seconds`, between clock reads
   rounds: number;
+  seconds: number; // each round's length, or 0 for rounds of `iterations` decodes
   ops_per_sec: number;
   mean_us: number;
   round_means_us: number[];
+  round_decodes: number[];
 }
 
 interface NotApplicable {
@@ -94,14 +97,18 @@ const [
   onlyCases = "",
   iterationsArg = "10000",
   roundsArg = "1",
+  secondsArg = "0",
 ] = Bun.argv;
 const JWKS_URL = jwksUrlArg.replace(/\/$/, "");
 const ITERATIONS = Number(iterationsArg);
 const ROUNDS = Number(roundsArg);
+const SECONDS = Number(secondsArg);
 for (const [what, n] of [["iterations", ITERATIONS], ["rounds", ROUNDS]] as const) {
   if (!Number.isInteger(n) || n < 1) throw new Error(`${what} must be a positive integer, got ${n}`);
 }
+if (!(SECONDS >= 0)) throw new Error(`seconds must be 0 or more, got ${secondsArg}`);
 const WARMUP = 1_000;
+const WARMUP_SECONDS = 1;
 const FIRST_FETCH_CASE = "typical-rs3072";
 const FIRST_FETCH_TRIALS = 5;
 
@@ -232,6 +239,35 @@ async function batch(p: Prepared, token: string, n: number): Promise<number> {
   return Bun.nanoseconds() - t0;
 }
 
+interface Round {
+  ns: number;
+  decodes: number;
+}
+
+// Loops of `ITERATIONS` decodes of `token` until `seconds` have passed.
+async function forSeconds(p: Prepared, token: string, seconds: number): Promise<Round> {
+  let ns = 0;
+  let decodes = 0;
+  while (ns < seconds * 1e9) {
+    ns += await batch(p, token, ITERATIONS);
+    decodes += ITERATIONS;
+  }
+  return { ns, decodes };
+}
+
+// The warm-up, then every timed round.
+async function timeRounds(p: Prepared, token: string): Promise<Round[]> {
+  const rounds: Round[] = [];
+  if (SECONDS) {
+    await forSeconds(p, token, WARMUP_SECONDS);
+    for (let r = 0; r < ROUNDS; r++) rounds.push(await forSeconds(p, token, SECONDS));
+  } else {
+    await batch(p, token, WARMUP);
+    for (let r = 0; r < ROUNDS; r++) rounds.push({ ns: await batch(p, token, ITERATIONS), decodes: ITERATIONS });
+  }
+  return rounds;
+}
+
 // Throws unless `p` rejects `token` with an error carrying every field of `expected`.
 async function checkRejects(p: Prepared, token: string, expected: ExpectedError, where: string, what: string): Promise<void> {
   let error: unknown;
@@ -259,11 +295,9 @@ async function benchCase(impl: Impl, source: Source, c: Fixture, key: Key): Prom
   await checkRejects(p, c.expired_token, impl.rejects.expired, where, "an expired token");
   await checkRejects(p, c.wrong_audience_token, impl.rejects.wrongAudience, where, "another audience's token");
 
-  await batch(p, token, WARMUP);
-
-  const roundNs: number[] = [];
-  for (let r = 0; r < ROUNDS; r++) roundNs.push(await batch(p, token, ITERATIONS));
-  const meanNs = roundNs.reduce((a, b) => a + b, 0) / (ITERATIONS * ROUNDS);
+  const rounds = await timeRounds(p, token);
+  const sum = (ns: number[]) => ns.reduce((a, b) => a + b, 0);
+  const meanNs = sum(rounds.map((r) => r.ns)) / sum(rounds.map((r) => r.decodes));
 
   return {
     impl: impl.label,
@@ -275,9 +309,11 @@ async function benchCase(impl: Impl, source: Source, c: Fixture, key: Key): Prom
     token_len: c.token_len,
     iterations: ITERATIONS,
     rounds: ROUNDS,
+    seconds: SECONDS,
     ops_per_sec: Math.round(1e9 / meanNs),
     mean_us: +(meanNs / 1e3).toFixed(3),
-    round_means_us: roundNs.map((ns) => +(ns / ITERATIONS / 1e3).toFixed(3)),
+    round_means_us: rounds.map((r) => +(r.ns / r.decodes / 1e3).toFixed(3)),
+    round_decodes: rounds.map((r) => r.decodes),
   };
 }
 
