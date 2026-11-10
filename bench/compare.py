@@ -8,6 +8,7 @@ Markdown page written to bench/<results>.md.
 
 import json
 import math
+import os
 import platform
 import subprocess
 from dataclasses import dataclass
@@ -26,7 +27,11 @@ HEADLINE_CASE = "typical-k64"
 
 
 def machine() -> str:
-    """The CPU and OS the page is made on (the benchmarks' host): `Apple M3 Max, macOS 26.0`."""
+    """The machine the benchmarks ran on: $BENCH_MACHINE if set (by `task bench-aws`, whose pages
+    are made elsewhere, and on instances lscpu can't name), otherwise the CPU and OS the page is
+    made on: `Apple M3 Max, macOS 26.0`."""
+    if named := os.environ.get("BENCH_MACHINE"):
+        return named
     if platform.system() == "Darwin":
         cpu = subprocess.run(
             ["/usr/sbin/sysctl", "-n", "machdep.cpu.brand_string"],
@@ -300,8 +305,10 @@ class MatrixPage:
     @staticmethod
     def _apple_silicon_caveat() -> list[str]:
         """A caveat for pages generated on macOS on Apple Silicon, where Docker runs the
-        benchmarks in a Linux VM on the same CPU."""
-        if (platform.system(), platform.machine()) != ("Darwin", "arm64"):
+        benchmarks in a Linux VM on the same CPU; not when $BENCH_MACHINE says they ran
+        elsewhere."""
+        on_a_mac = (platform.system(), platform.machine()) == ("Darwin", "arm64")
+        if os.environ.get("BENCH_MACHINE") or not on_a_mac:
             return []
         return [
             "## Apple Silicon caveat",

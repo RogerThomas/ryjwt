@@ -66,8 +66,8 @@ fast-jwt, by about 4% and 7% ([full matrix](matrix.md#pem-public-key)).
   of variation between runs.
 - Each library runs in its own Docker container, with one CPU (pinned to one core) and 500 MB of
   memory. For the races and the HS256 by-size tables, the containers run one after another. The full
-  matrix runs up to 7 at once, each on a core of its own; where it times the same token as the
-  races, its times are within a few percent of theirs.
+  matrix runs several at once, each on a core of its own (its page says how); where it times the
+  same token as the races, its times are within a few percent of theirs.
 - jose and fast-jwt run on [Bun](https://bun.sh), whose crypto is BoringSSL. On Node (OpenSSL),
   their numbers could differ.
 - JWKS URL cases fetch the keys over HTTPS from another container, and are timed once the keys are
@@ -120,8 +120,10 @@ arm64). It uploads the results, with a note of the machine, as an artifact;
 fetch it with `task bench-download CROSS_CHECK=x86_64 -- <run id>`. GitHub's Linux runners don't
 have the [Apple Silicon](#apple-silicon) slowdown.
 
-To update the published numbers, run `task bench-race`, `task bench-docker` and
-`MATRIX_JOBS=7 task bench-matrix` (the matrix 7 libraries at once) on one AWS m9g.2xlarge, with 8
-cores, so the races and the tables come from the same machine. Then copy back the
-`bench/results-*` files and pages, and the redrawn races, `perf-race*.svg`, in `assets/` and
-`docs/assets/`.
+To update the published numbers, run `task bench-aws`, with the AWS CLI and an AWS profile
+named `ryjwt-benchmarks`. It runs the races, the HS256 tables and the two halves of the matrix
+each on an AWS m9g.2xlarge spot instance of its own, all at once, spread over the region's zones,
+for about 25 minutes. When AWS reclaims an instance, only that piece runs again, on a new one.
+The results, pages and redrawn races land in place as each piece finishes, and every instance is
+terminated at the end, or on Ctrl-C. It benchmarks `main` as it is on GitHub; `-- --ref <branch,
+tag or SHA>` picks another.
