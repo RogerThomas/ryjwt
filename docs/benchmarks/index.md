@@ -12,7 +12,7 @@ The benchmarks time decoding, which a service does on every request. They compar
 ryjwt is timed decoding into a msgspec `Struct`, a pydantic `BaseModel`, and a dict, built by
 msgspec (when it's installed) and by jiter (when it isn't). The results:
 
-- [The races](races.md): the two cases below, 100,000 decodes in 3 rounds.
+- [The races](races.md): the two cases below, each library timed for 3 rounds of 10 seconds.
 - [Full matrix](matrix.md): every algorithm and key size, four payload sizes, and four key sources
   (HMAC secret, PEM public key, JWKS document, JWKS URL).
 - [HS256 by token and key size](docker.md): tokens from 231 bytes to 20 KB, secrets from 32 bytes
@@ -20,9 +20,9 @@ msgspec (when it's installed) and by jiter (when it isn't). The results:
 
 ## The races
 
-Each bar is one library decoding the same token 100,000 times, three times over, filling in at
-the mean speed. [The races page](races.md) has each library's time and its range over the three
-rounds.
+Each bar is one library decoding the same token 100,000 times, filling in at its mean speed over
+3 rounds of 10 seconds. [The races page](races.md) has each library's time and its range over the
+three rounds.
 
 ![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.14 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in 0.5, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](../assets/perf-race.svg)
 
@@ -72,9 +72,11 @@ fast-jwt, by about 4% and 7% ([full matrix](matrix.md#pem-public-key)).
   their numbers could differ.
 - JWKS URL cases fetch the keys over HTTPS from another container, and are timed once the keys are
   cached.
-- Each case starts with 1,000 untimed decodes. The races then time 100,000 decodes, three times
-  over; the tables time 10,000, once. Times are microseconds per decode (lower is better), the
-  mean over every timed decode, with the speed-up over PyJWT.
+- The races give each library 1 second of untimed decodes, then time 3 rounds of 10 seconds each,
+  so every library is timed for as long, however fast it is, and Bun's JIT has warmed up. The
+  tables start each case with 1,000 untimed decodes, then time 10,000, once. Times are
+  microseconds per decode (lower is better), the mean over every timed decode, with the speed-up
+  over PyJWT.
 
 When reading them, note:
 

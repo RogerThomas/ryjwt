@@ -175,7 +175,7 @@ tasks:
         uv run --group bench yeet ./compare.py:matrix results-matrix "Run in Docker, ${note}; the JWKS server runs in a container of its own, outside that limit. Each case gets 1,000 untimed decodes, then 10,000 timed."
 
   bench-race:
-    desc: 'Benchmark just the races'' two cases of the matrix (HS256 typical-k64 from the secret, RS256 typical-rs3072 from the PEM), 3 rounds of 100,000 decodes each, into bench/results-race; then redraw the races'
+    desc: 'Benchmark just the races'' two cases of the matrix (HS256 typical-k64 from the secret, RS256 typical-rs3072 from the PEM), 3 rounds of 10 s each per library, into bench/results-race; then redraw the races'
     dir: bench
     env:
       MATRIX_RESULTS: results-race
@@ -183,21 +183,24 @@ tasks:
       # The races' cases (race_svg.py's Races.races): the sources and cases to run.
       SOURCES: hmac,pem
       CASES: typical-k64,typical-rs3072
-      # Each library really decodes 100,000 tokens per round; the races show the mean of 3 rounds.
-      ITERATIONS: 100000
+      # Each library decodes for 1 s untimed, then 3 rounds of SECONDS each, in loops of
+      # ITERATIONS decodes (the clock read after each), so every library is timed for as long,
+      # however fast. The races show 100,000 decodes at the mean over every timed decode.
+      ITERATIONS: 1000
       ROUNDS: 3
+      SECONDS: 10
     cmds:
       - docker compose build
       - |
         set -eu
         for impl in pyjwt joserfc ryjwt ryjwt-jiter ryjwt-msgspec ryjwt-pydantic jose fast-jwt; do
           echo "──── ${impl} ────"
-          docker compose run --rm --no-deps "matrix-${impl}" "${impl}" https://jwks:8443 {{.SOURCES}} {{.CASES}} {{.ITERATIONS}} {{.ROUNDS}}
+          docker compose run --rm --no-deps "matrix-${impl}" "${impl}" https://jwks:8443 {{.SOURCES}} {{.CASES}} {{.ITERATIONS}} {{.ROUNDS}} {{.SECONDS}}
         done
         for mode in value struct; do
           echo "──── jsonwebtoken (${mode}) ────"
           service=matrix-jsonwebtoken$([ "$mode" = struct ] && echo -struct || true)
-          docker compose run --rm --no-deps "$service" "$mode" {{.SOURCES}} {{.CASES}} {{.ITERATIONS}} {{.ROUNDS}}
+          docker compose run --rm --no-deps "$service" "$mode" {{.SOURCES}} {{.CASES}} {{.ITERATIONS}} {{.ROUNDS}} {{.SECONDS}}
         done
       - task: race-svg
 

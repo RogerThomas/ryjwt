@@ -16,9 +16,13 @@ Each decode verifies the signature and checks `exp` and `aud`, and is checked on
 fixture's payload before timing. Before that, each library must reject two tokens signed with the
 case's key (from `matrix/keys/`, or the HMAC secret): an expired one and one for another audience.
 Then each case gets 1,000 untimed warm-up decodes, then `rounds` rounds of `iterations` decodes,
-each round timed as one loop.
+each round timed as one loop. With `seconds` (as the races are), each case instead gets 1 s of
+untimed decodes, then `rounds` rounds of `seconds` each: loops of `iterations` decodes, the clock
+read after each, until `seconds` have passed. Every library is then timed for as long, however
+fast it is, and a runtime with a JIT (Bun's) is warm before the timing starts.
 
-Usage: `yeet ./bench_matrix.py [impl] [jwks_url] [only_sources] [only_cases] [iterations] [rounds]`
+Usage: `yeet ./bench_matrix.py [impl] [jwks_url] [only_sources] [only_cases] [iterations] [rounds]
+[seconds]`
 """
 
 import json
@@ -53,10 +57,13 @@ from rich.console import Console
 from rich.table import Table
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Awaitable, Callable
 
 type Impl = Literal["pyjwt", "joserfc", "ryjwt", "ryjwt-jiter", "ryjwt-msgspec", "ryjwt-pydantic"]
 type Source = Literal["hmac", "pem", "jwks", "jwks-url-sync", "jwks-url-async"]
+
+WARMUP_SECONDS = 1.0
+"""Untimed decoding before each case's timed rounds, when they're timed by `seconds`."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -103,10 +110,14 @@ class Row:
     payload_size: str
     token_len: int
     iterations: int
+    """Decodes per timed loop: a round's, or with `seconds`, between clock reads."""
     rounds: int
+    seconds: float
+    """Each round's length, or 0 for rounds of `iterations` decodes."""
     ops_per_sec: float
     mean_us: float
     round_means_us: list[float]
+    round_decodes: list[int]
 
 
 @dataclass(frozen=True, slots=True)
@@ -125,19 +136,27 @@ class NotApplicable:
 
 
 @dataclass(frozen=True, slots=True)
+class Round:
+    ns: int
+    decodes: int
+
+
+@dataclass(frozen=True, slots=True)
 class Measure:
     """Times a prepared decode: `WARMUP` untimed decodes, then `rounds` rounds of `iterations`
-    decodes, each round timed as one loop. Sync and async variants of the same methodology; each
-    returns every round's nanoseconds."""
+    decodes, each timed as one loop; or with `seconds`, `WARMUP_SECONDS` of untimed decodes, then
+    `rounds` rounds of `seconds` each, in loops of `iterations`. Sync and async variants of the
+    same methodology; each returns every round."""
 
     _iterations: int
     _rounds: int
+    _seconds: float
 
     def _check(self, case: Case, decoded: object, expected: object) -> None:
         if decoded != expected:
             raise AssertionError(f"{case.name}: decoded payload does not match the fixture")
 
-    def sync(self, prepared: Prepared, case: Case) -> list[int]:
+    async def sync(self, prepared: Prepared, case: Case) -> list[Round]:
         decode, kwargs, token, clock = (
             prepared.decode,
             prepared.kwargs,
@@ -145,17 +164,16 @@ class Measure:
             time.perf_counter_ns,
         )
         self._check(case, decode(token, **kwargs), prepared.expected)
-        for _ in range(WARMUP):
-            decode(token, **kwargs)
-        rounds_ns: list[int] = []
-        for _ in range(self._rounds):
-            t0 = clock()
-            for _ in range(self._iterations):
-                decode(token, **kwargs)
-            rounds_ns.append(clock() - t0)
-        return rounds_ns
 
-    async def async_(self, prepared: Prepared, case: Case) -> list[int]:
+        async def loop(n: int) -> int:
+            t0 = clock()
+            for _ in range(n):
+                decode(token, **kwargs)
+            return clock() - t0
+
+        return await self._rounds_of(loop)
+
+    async def async_(self, prepared: Prepared, case: Case) -> list[Round]:
         decode, kwargs, token, clock = (
             prepared.decode,
             prepared.kwargs,
@@ -163,15 +181,32 @@ class Measure:
             time.perf_counter_ns,
         )
         self._check(case, await decode(token, **kwargs), prepared.expected)
-        for _ in range(WARMUP):
-            await decode(token, **kwargs)
-        rounds_ns: list[int] = []
-        for _ in range(self._rounds):
+
+        async def loop(n: int) -> int:
             t0 = clock()
-            for _ in range(self._iterations):
+            for _ in range(n):
                 await decode(token, **kwargs)
-            rounds_ns.append(clock() - t0)
-        return rounds_ns
+            return clock() - t0
+
+        return await self._rounds_of(loop)
+
+    async def _rounds_of(self, loop: Callable[[int], Awaitable[int]]) -> list[Round]:
+        """The warm-up, then every timed round, of `loop(n)`: `n` decodes' nanoseconds."""
+        if not self._seconds:
+            await loop(WARMUP)
+            return [
+                Round(await loop(self._iterations), self._iterations) for _ in range(self._rounds)
+            ]
+        await self._for(loop, WARMUP_SECONDS)
+        return [await self._for(loop, self._seconds) for _ in range(self._rounds)]
+
+    async def _for(self, loop: Callable[[int], Awaitable[int]], seconds: float) -> Round:
+        """Loops of `iterations` decodes until `seconds` have passed."""
+        ns = decodes = 0
+        while ns < seconds * 1e9:
+            ns += await loop(self._iterations)
+            decodes += self._iterations
+        return Round(ns, decodes)
 
 
 def _asymmetric(alg: str) -> ryjwt.AsymmetricAlgorithm:
@@ -455,9 +490,11 @@ async def main(
     only_cases: str = "",
     iterations: int = 10_000,
     rounds: int = 1,
+    seconds: float = 0,
 ) -> None:
     """`only_sources` / `only_cases` are comma-separated filters; `iterations` decodes per round,
-    `rounds` rounds per case."""
+    `rounds` rounds per case; with `seconds`, rounds of `seconds` each, in loops of `iterations`
+    decodes."""
     if impl == "ryjwt-jiter":
         # This script imports msgspec, so ryjwt would read dicts with it; block it, before any
         # ryjwt key is created, to time a default install's jiter.
@@ -471,7 +508,7 @@ async def main(
         (bench_dir / "matrix" / "tls" / "ca.pem").read_bytes(),
         bench_dir / "matrix" / "keys",
     )
-    measure = Measure(iterations, rounds)
+    measure = Measure(iterations, rounds, seconds)
     not_applicable = sources.not_applicable()
     skipped: set[Source] = {n.source for n in not_applicable if n.alg == "*"}
     skipped_algs: set[tuple[Source, str]] = {(n.source, n.alg) for n in not_applicable}
@@ -488,10 +525,14 @@ async def main(
     ]
 
     console = Console()
+    timing = (
+        f"{WARMUP_SECONDS:g} s of warm-up decodes, then {rounds} x {seconds:g} s timed"
+        if seconds
+        else f"{WARMUP:,} warm-up decodes, then {rounds} x {iterations:,} timed"
+    )
     console.print(
         f"[bold]{label}[/] on {platform.python_implementation()} {platform.python_version()}"
-        f" — {len(cases)} cases x {', '.join(selected)}; {WARMUP:,} warm-up decodes, then"
-        f" {rounds} x {iterations:,} timed",
+        f" — {len(cases)} cases x {', '.join(selected)}; {timing}",
     )
     rows: list[Row] = []
     first_fetch: list[FirstFetch] = []
@@ -509,10 +550,10 @@ async def main(
             with console.status(f"{source}: {case.name}..."):
                 prepared = await sources.prepare(source, case)
                 if prepared.is_async:
-                    rounds_ns = await measure.async_(prepared, case)
+                    timed = await measure.async_(prepared, case)
                 else:
-                    rounds_ns = measure.sync(prepared, case)
-            mean_us = sum(rounds_ns) / (iterations * rounds) / 1e3
+                    timed = await measure.sync(prepared, case)
+            mean_us = sum(r.ns for r in timed) / sum(r.decodes for r in timed) / 1e3
             source_rows.append(
                 Row(
                     impl=label,
@@ -524,9 +565,11 @@ async def main(
                     token_len=case.token_len,
                     iterations=iterations,
                     rounds=rounds,
+                    seconds=seconds,
                     ops_per_sec=1e6 / mean_us,
                     mean_us=mean_us,
-                    round_means_us=[ns / iterations / 1e3 for ns in rounds_ns],
+                    round_means_us=[r.ns / r.decodes / 1e3 for r in timed],
+                    round_decodes=[r.decodes for r in timed],
                 )
             )
         _print_table(console, label, source, rounds, source_rows)

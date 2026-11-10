@@ -1,18 +1,21 @@
 //! Benchmark `jsonwebtoken::decode` (aws-lc-rs backend) over the full matrix in
 //! `bench/matrix/fixtures.json`, per algorithm, key size, payload size and key source. Mirrors
 //! `bench/bench_matrix.py`: 1,000 untimed warm-up decodes, then `rounds` rounds of `iterations`
-//! decodes, each round timed as one loop.
+//! decodes, each round timed as one loop; or with `seconds` (as the races are), 1 s of untimed
+//! decodes, then `rounds` rounds of `seconds` each, in loops of `iterations` decodes, the clock
+//! read after each.
 //!
 //! Key sources: `hmac` (the HS256 secret), `pem` (the public key's PEM) and `jwks` (a JWKS document:
 //! `JwkSet`, each key turned into a `DecodingKey` with `DecodingKey::from_jwk` once, then picked per
 //! token by the `kid` from `decode_header`). jsonwebtoken doesn't fetch JWKS URLs.
 //!
-//! Usage: `jwt_matrix <value|struct> [only_sources] [only_cases] [iterations] [rounds]`: `value`
+//! Usage: `jwt_matrix <value|struct> [only_sources] [only_cases] [iterations] [rounds] [seconds]`:
+//! `value`
 //! decodes into `serde_json::Value` and writes `results/matrix/jsonwebtoken.json`; `struct` decodes
 //! into typed claims structs, the same fields ryjwt's msgspec lane decodes, and writes
 //! `results/matrix/jsonwebtoken-struct.json`. `only_sources` and `only_cases` are comma-separated
-//! filters, as bench_matrix.py's (empty: all); `iterations` (default 10,000) and `rounds` (default
-//! 1) as there.
+//! filters, as bench_matrix.py's (empty: all); `iterations` (default 10,000), `rounds` (default 1)
+//! and `seconds` (default 0: rounds of `iterations` decodes) as there.
 
 use std::collections::HashMap;
 use std::fmt::Debug;
@@ -30,6 +33,7 @@ use serde_json::Value;
 const ITERATIONS: u64 = 10_000;
 const ROUNDS: u64 = 1;
 const WARMUP: u64 = 1_000;
+const WARMUP_SECONDS: f64 = 1.0;
 
 #[derive(Serialize)]
 struct Row {
@@ -41,11 +45,15 @@ struct Row {
     alg: String,
     payload_size: String,
     token_len: u64,
+    /// Decodes per timed loop: a round's, or with `seconds`, between clock reads.
     iterations: u64,
     rounds: u64,
+    /// Each round's length, or 0 for rounds of `iterations` decodes.
+    seconds: f64,
     ops_per_sec: f64,
     mean_us: f64,
     round_means_us: Vec<f64>,
+    round_decodes: Vec<u64>,
 }
 
 #[derive(Serialize)]
@@ -155,11 +163,18 @@ struct Checks<'a> {
 struct Timing {
     iterations: u64,
     rounds: u64,
+    seconds: f64,
 }
 
 struct Stats {
     mean_us: f64,
     round_means_us: Vec<f64>,
+    round_decodes: Vec<u64>,
+}
+
+struct Round {
+    ns: u128,
+    decodes: u64,
 }
 
 fn bench_dir() -> PathBuf {
@@ -176,30 +191,54 @@ fn jsonwebtoken_version() -> &'static str {
     &rest[..rest.find('"').expect("closing quote")]
 }
 
-/// Runs the methodology against `call`, which must perform one decode: `WARMUP` untimed calls,
-/// then `timing.rounds` rounds of `timing.iterations` calls, the clock read once per round.
-fn measure(timing: Timing, mut call: impl FnMut()) -> Stats {
-    for _ in 0..WARMUP {
+/// Nanoseconds for `n` calls of `call`, the clock read once.
+fn timed_loop(n: u64, call: &mut impl FnMut()) -> u128 {
+    let start = Instant::now();
+    for _ in 0..n {
         call();
     }
-    let round_ns: Vec<u128> = (0..timing.rounds)
-        .map(|_| {
-            let start = Instant::now();
-            for _ in 0..timing.iterations {
-                call();
-            }
-            start.elapsed().as_nanos()
-        })
-        .collect();
+    start.elapsed().as_nanos()
+}
 
-    let per_round = timing.iterations as f64;
-    let total_ns = round_ns.iter().sum::<u128>() as f64;
+/// Loops of `iterations` calls until `seconds` have passed.
+fn for_seconds(seconds: f64, iterations: u64, call: &mut impl FnMut()) -> Round {
+    let (mut ns, mut decodes) = (0, 0);
+    while (ns as f64) < seconds * 1e9 {
+        ns += timed_loop(iterations, call);
+        decodes += iterations;
+    }
+    Round { ns, decodes }
+}
+
+/// Runs the methodology against `call`, which must perform one decode: `WARMUP` untimed calls,
+/// then `timing.rounds` rounds of `timing.iterations` calls, the clock read once per round; or with
+/// `timing.seconds`, `WARMUP_SECONDS` of untimed calls, then `timing.rounds` rounds of
+/// `timing.seconds` each.
+fn measure(timing: Timing, mut call: impl FnMut()) -> Stats {
+    let rounds: Vec<Round> = if timing.seconds > 0.0 {
+        for_seconds(WARMUP_SECONDS, timing.iterations, &mut call);
+        (0..timing.rounds)
+            .map(|_| for_seconds(timing.seconds, timing.iterations, &mut call))
+            .collect()
+    } else {
+        timed_loop(WARMUP, &mut call);
+        (0..timing.rounds)
+            .map(|_| Round {
+                ns: timed_loop(timing.iterations, &mut call),
+                decodes: timing.iterations,
+            })
+            .collect()
+    };
+
+    let total_ns = rounds.iter().map(|r| r.ns).sum::<u128>() as f64;
+    let total_decodes = rounds.iter().map(|r| r.decodes).sum::<u64>() as f64;
     Stats {
-        mean_us: total_ns / (per_round * timing.rounds as f64) / 1e3,
-        round_means_us: round_ns
+        mean_us: total_ns / total_decodes / 1e3,
+        round_means_us: rounds
             .iter()
-            .map(|&ns| ns as f64 / per_round / 1e3)
+            .map(|r| r.ns as f64 / r.decodes as f64 / 1e3)
             .collect(),
+        round_decodes: rounds.iter().map(|r| r.decodes).collect(),
     }
 }
 
@@ -326,6 +365,7 @@ fn main() {
             .get(4)
             .map_or(ITERATIONS, |s| s.parse().expect("iterations")),
         rounds: args.get(5).map_or(ROUNDS, |s| s.parse().expect("rounds")),
+        seconds: args.get(6).map_or(0.0, |s| s.parse().expect("seconds")),
     };
     let impl_name = format!(
         "jsonwebtoken {} (aws-lc-rs) → {}",
@@ -352,10 +392,17 @@ fn main() {
             reason: "jsonwebtoken doesn't fetch JWKS URLs (it takes your own HTTP client and cache)",
         },
     ];
-    println!(
-        "{impl_name} — {WARMUP} warm-up, then {} rounds of {} iters",
-        timing.rounds, timing.iterations
-    );
+    if timing.seconds > 0.0 {
+        println!(
+            "{impl_name} — {WARMUP_SECONDS} s of warm-up, then {} rounds of {} s",
+            timing.rounds, timing.seconds
+        );
+    } else {
+        println!(
+            "{impl_name} — {WARMUP} warm-up, then {} rounds of {} iters",
+            timing.rounds, timing.iterations
+        );
+    }
 
     let mut rows = Vec::new();
     for source in ["hmac", "pem", "jwks"] {
@@ -444,9 +491,11 @@ fn main() {
                 token_len: case["token_len"].as_u64().expect("token_len"),
                 iterations: timing.iterations,
                 rounds: timing.rounds,
+                seconds: timing.seconds,
                 ops_per_sec: 1e6 / stats.mean_us,
                 mean_us: stats.mean_us,
                 round_means_us: stats.round_means_us,
+                round_decodes: stats.round_decodes,
             });
         }
     }
