@@ -42,7 +42,6 @@ from typing import Any
 from rich.console import Console
 from rich.markup import escape
 
-ROOT = Path(__file__).parent.parent
 REPO_URL = "https://github.com/RogerThomas/ryjwt.git"
 NAME = "ryjwt-benchmarks"
 """The key pair and security group names' prefix, and the instances' Name tag."""
@@ -176,6 +175,8 @@ class Run:
     machine: str
     sha: str
     attempts: int
+    root: Path
+    """The checkout the results land in."""
     workdir: Path
     """Holds the run's SSH key, known hosts and the pieces' logs."""
     image: str = ""
@@ -434,7 +435,7 @@ class Run:
         if done.returncode != 0:
             raise RuntimeError(f"{piece.name}: fetching the results failed: {done.stderr!r}")
         with tarfile.open(fileobj=io.BytesIO(done.stdout)) as tar:
-            tar.extractall(ROOT, filter="data")
+            tar.extractall(self.root, filter="data")
         self.say(piece.name, f"[green]done[/]: {', '.join(piece.outputs)}")
 
 
@@ -463,7 +464,7 @@ def _spot_prices(aws: Aws, instance_type: str) -> dict[str, float]:
     return {h["AvailabilityZone"]: float(h["SpotPrice"]) for h in history}
 
 
-def _matrix_page(machine: str) -> None:
+def _matrix_page(root: Path, machine: str) -> None:
     note = (
         "Run in Docker, one container per library, on two instances, up to 5 at once on each, "
         "each limited to 1 CPU (pinned, a core of its own) and 500 MB with no swap; the JWKS "
@@ -481,7 +482,7 @@ def _matrix_page(machine: str) -> None:
             "results-matrix",
             note,
         ],
-        cwd=ROOT / "bench",
+        cwd=root / "bench",
         env={**os.environ, "BENCH_MACHINE": machine},
         check=True,
     )
@@ -517,13 +518,14 @@ def main(
     instance_type: str = "m9g.2xlarge",
     cpu: str = "Graviton5",
     attempts: int = 3,
+    root: Path = Path(__file__).parent.parent,
     yes: bool = False,
 ) -> None:
     """Benchmark `ref` on AWS spot instances, a piece on each, and put the results in place.
 
     `cpu` names the instance type's CPU on the pages (lscpu doesn't); `attempts` is how many
-    instances a piece gets before it gives up, when AWS keeps reclaiming them; `yes` launches
-    without asking.
+    instances a piece gets before it gives up, when AWS keeps reclaiming them; `root` is the
+    checkout the results land in (this one by default); `yes` launches without asking.
     """
     aws = Aws(profile, region)
     sha = _commit(ref)
@@ -543,7 +545,7 @@ def main(
         return
     machine = f"AWS {instance_type}, {cpu} (aarch64), Linux"
     workdir = tempfile.mkdtemp(prefix="ryjwt-bench-aws-")
-    run = Run(aws, instance_type, machine, sha, attempts, Path(workdir))
+    run = Run(aws, instance_type, machine, sha, attempts, root, Path(workdir))
     try:
         run.prepare(prices)
         failed = _run_pieces(run, pieces)
@@ -551,6 +553,6 @@ def main(
         run.tear_down()
     console.print(f"Logs: {workdir}")
     if not any(name.startswith("matrix-") for name in failed):
-        _matrix_page(machine)
+        _matrix_page(root, machine)
     if failed:
         raise SystemExit(f"Failed: {', '.join(failed)}; the other pieces' results are in place")
