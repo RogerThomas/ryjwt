@@ -24,13 +24,13 @@ Each bar is one library decoding the same token 100,000 times, three times over,
 the mean speed. [The races page](races.md) has each library's time and its range over the three
 rounds.
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.15 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in 0.5, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](../assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.14 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in 0.5, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](../assets/perf-race.svg)
 
-With HS256, ryjwt decodes a typical token over 26 times faster than PyJWT 2.15 into a `Struct`
-(25 times into a dict, 21 times with jiter). Against jsonwebtoken (Rust), it's about 2.1 times
-faster struct to struct, and 2.0 to 2.4 times faster dict to `Value`. It's about 3.2 times faster
+With HS256, ryjwt decodes a typical token over 27 times faster than PyJWT 2.15 into a `Struct`
+(over 26 times into a dict, 22 times with jiter). Against jsonwebtoken (Rust), it's about 2.2 times
+faster struct to struct, and 2.2 to 2.6 times faster dict to `Value`. It's about 3.4 times faster
 than fast-jwt (Bun). Even into a pydantic model it's a little faster than jsonwebtoken's struct,
-and about 13 times faster than PyJWT.
+and about 14 times faster than PyJWT.
 
 ### Why it's faster than jsonwebtoken (Rust)
 
@@ -47,11 +47,11 @@ building the result.
 Most identity providers sign with RS256 by default. Most of the time goes on checking the
 signature, which every library hands to native crypto, so the gaps are smaller. ryjwt still
 finishes first, about 2.7 times faster than PyJWT, and ahead of fast-jwt and jsonwebtoken by about
-14% and 17%. It finishes first on x86_64 too, about 15% ahead of jsonwebtoken and fast-jwt
+15% and 18%. It finishes first on x86_64 too, about 15% ahead of jsonwebtoken and fast-jwt
 ([cross-check](x86_64.md)).
 
 With ES256, ryjwt is about 2.1 times faster than PyJWT, and a little ahead of jsonwebtoken and
-fast-jwt, by about 5% and 8% ([full matrix](matrix.md#pem-public-key)).
+fast-jwt, by about 4% and 7% ([full matrix](matrix.md#pem-public-key)).
 
 ## How they're measured
 
@@ -60,7 +60,7 @@ fast-jwt, by about 5% and 8% ([full matrix](matrix.md#pem-public-key)).
   optimisation (trained on the CodSpeed benchmarks, `benchmarks/`).
 - Before timing, each library's result is checked against the token's claims, and each is shown
   to reject an expired token and one for another audience.
-- The published numbers come from one run on an AWS c9g.2xlarge, a virtual machine with 8
+- The published numbers come from AWS m9g.2xlarge instances, virtual machines with 8
   Graviton5 (Arm) cores. GitHub's x86_64 runners, which get different CPUs from run to run, are
   used for a [cross-check](x86_64.md). Either way it's a virtual machine, so expect a few percent
   of variation between runs.
@@ -119,7 +119,7 @@ fetch it with `task bench-download CROSS_CHECK=x86_64 -- <run id>`. GitHub's Lin
 have the [Apple Silicon](#apple-silicon) slowdown.
 
 To update the published numbers, run `task bench-race`, `task bench-docker` and
-`MATRIX_JOBS=7 task bench-matrix` (the matrix 7 libraries at once) on one AWS c9g.2xlarge, with 8
+`MATRIX_JOBS=7 task bench-matrix` (the matrix 7 libraries at once) on one AWS m9g.2xlarge, with 8
 cores, so the races and the tables come from the same machine. Then copy back the
 `bench/results-*` files and pages, and the redrawn races, `perf-race*.svg`, in `assets/` and
 `docs/assets/`.

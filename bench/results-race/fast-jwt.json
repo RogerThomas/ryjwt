@@ -12,12 +12,12 @@
       "token_len": 661,
       "iterations": 100000,
       "rounds": 3,
-      "ops_per_sec": 209551,
-      "mean_us": 4.772,
+      "ops_per_sec": 208231,
+      "mean_us": 4.802,
       "round_means_us": [
-        5.449,
-        4.46,
-        4.407
+        5.508,
+        4.478,
+        4.422
       ]
     },
     {
@@ -30,12 +30,12 @@
       "token_len": 1131,
       "iterations": 100000,
       "rounds": 3,
-      "ops_per_sec": 29097,
-      "mean_us": 34.367,
+      "ops_per_sec": 29284,
+      "mean_us": 34.148,
       "round_means_us": [
-        34.913,
-        34.398,
-        33.791
+        34.81,
+        33.842,
+        33.792
       ]
     }
   ],

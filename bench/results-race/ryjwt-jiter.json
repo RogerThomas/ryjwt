@@ -1,9 +1,9 @@
 {
-  "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+  "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
   "runtime": "CPython 3.14.8",
   "rows": [
     {
-      "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+      "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
       "source": "hmac",
       "name": "typical-k64",
       "key": "k64",
@@ -12,16 +12,16 @@
       "token_len": 661,
       "iterations": 100000,
       "rounds": 3,
-      "ops_per_sec": 533932.4359012375,
-      "mean_us": 1.8728961433333333,
+      "ops_per_sec": 575566.5197652075,
+      "mean_us": 1.73741864,
       "round_means_us": [
-        1.87803335,
-        1.87472252,
-        1.86593256
+        1.73516262,
+        1.74270588,
+        1.73438742
       ]
     },
     {
-      "impl": "ryjwt 0.2.2 \u2192 dict (jiter)",
+      "impl": "ryjwt 0.3.1 \u2192 dict (jiter)",
       "source": "pem",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -30,12 +30,12 @@
       "token_len": 1131,
       "iterations": 100000,
       "rounds": 3,
-      "ops_per_sec": 33630.193723317476,
-      "mean_us": 29.73518405,
+      "ops_per_sec": 33822.27804965017,
+      "mean_us": 29.56631125,
       "round_means_us": [
-        29.728018260000002,
-        29.69292614,
-        29.78460775
+        29.57466729,
+        29.514223780000002,
+        29.61004268
       ]
     }
   ],

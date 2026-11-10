@@ -12,10 +12,10 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 58275,
-      "mean_us": 17.16,
+      "ops_per_sec": 59926,
+      "mean_us": 16.687,
       "round_means_us": [
-        17.16
+        16.687
       ]
     },
     {
@@ -28,10 +28,10 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 59279,
-      "mean_us": 16.869,
+      "ops_per_sec": 58575,
+      "mean_us": 17.072,
       "round_means_us": [
-        16.869
+        17.072
       ]
     },
     {
@@ -44,10 +44,10 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 54700,
-      "mean_us": 18.282,
+      "ops_per_sec": 53609,
+      "mean_us": 18.653,
       "round_means_us": [
-        18.282
+        18.653
       ]
     },
     {
@@ -60,10 +60,10 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9989,
-      "mean_us": 100.111,
+      "ops_per_sec": 10120,
+      "mean_us": 98.817,
       "round_means_us": [
-        100.111
+        98.817
       ]
     },
     {
@@ -76,10 +76,10 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 96394,
-      "mean_us": 10.374,
+      "ops_per_sec": 89381,
+      "mean_us": 11.188,
       "round_means_us": [
-        10.374
+        11.188
       ]
     },
     {
@@ -92,10 +92,10 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 80792,
-      "mean_us": 12.377,
+      "ops_per_sec": 85265,
+      "mean_us": 11.728,
       "round_means_us": [
-        12.377
+        11.728
       ]
     },
     {
@@ -108,10 +108,10 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 55972,
-      "mean_us": 17.866,
+      "ops_per_sec": 58312,
+      "mean_us": 17.149,
       "round_means_us": [
-        17.866
+        17.149
       ]
     },
     {
@@ -124,10 +124,10 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10674,
-      "mean_us": 93.681,
+      "ops_per_sec": 10823,
+      "mean_us": 92.397,
       "round_means_us": [
-        93.681
+        92.397
       ]
     },
     {
@@ -140,10 +140,10 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 89246,
-      "mean_us": 11.205,
+      "ops_per_sec": 85348,
+      "mean_us": 11.717,
       "round_means_us": [
-        11.205
+        11.717
       ]
     },
     {
@@ -156,10 +156,10 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 77695,
-      "mean_us": 12.871,
+      "ops_per_sec": 80539,
+      "mean_us": 12.416,
       "round_means_us": [
-        12.871
+        12.416
       ]
     },
     {
@@ -172,10 +172,10 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 55835,
-      "mean_us": 17.91,
+      "ops_per_sec": 55151,
+      "mean_us": 18.132,
       "round_means_us": [
-        17.91
+        18.132
       ]
     },
     {
@@ -188,10 +188,10 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10640,
-      "mean_us": 93.981,
+      "ops_per_sec": 10725,
+      "mean_us": 93.242,
       "round_means_us": [
-        93.981
+        93.242
       ]
     },
     {
@@ -204,10 +204,10 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 73174,
-      "mean_us": 13.666,
+      "ops_per_sec": 74401,
+      "mean_us": 13.441,
       "round_means_us": [
-        13.666
+        13.441
       ]
     },
     {
@@ -220,10 +220,10 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 66657,
-      "mean_us": 15.002,
+      "ops_per_sec": 67009,
+      "mean_us": 14.923,
       "round_means_us": [
-        15.002
+        14.923
       ]
     },
     {
@@ -236,10 +236,10 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 49311,
-      "mean_us": 20.279,
+      "ops_per_sec": 50436,
+      "mean_us": 19.827,
       "round_means_us": [
-        20.279
+        19.827
       ]
     },
     {
@@ -252,10 +252,10 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10368,
-      "mean_us": 96.455,
+      "ops_per_sec": 10515,
+      "mean_us": 95.103,
       "round_means_us": [
-        96.455
+        95.103
       ]
     },
     {
@@ -268,10 +268,10 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 39383,
-      "mean_us": 25.392,
+      "ops_per_sec": 39294,
+      "mean_us": 25.449,
       "round_means_us": [
-        25.392
+        25.449
       ]
     },
     {
@@ -284,10 +284,10 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 36397,
-      "mean_us": 27.475,
+      "ops_per_sec": 36772,
+      "mean_us": 27.195,
       "round_means_us": [
-        27.475
+        27.195
       ]
     },
     {
@@ -300,10 +300,10 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 26686,
-      "mean_us": 37.473,
+      "ops_per_sec": 26962,
+      "mean_us": 37.089,
       "round_means_us": [
-        37.473
+        37.089
       ]
     },
     {
@@ -316,10 +316,10 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 9238,
-      "mean_us": 108.253,
+      "ops_per_sec": 9299,
+      "mean_us": 107.543,
       "round_means_us": [
-        108.253
+        107.543
       ]
     },
     {
@@ -332,10 +332,10 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 24643,
-      "mean_us": 40.579,
+      "ops_per_sec": 24707,
+      "mean_us": 40.474,
       "round_means_us": [
-        40.579
+        40.474
       ]
     },
     {
@@ -348,10 +348,10 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 23844,
-      "mean_us": 41.939,
+      "ops_per_sec": 24098,
+      "mean_us": 41.498,
       "round_means_us": [
-        41.939
+        41.498
       ]
     },
     {
@@ -364,10 +364,10 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 21372,
-      "mean_us": 46.791,
+      "ops_per_sec": 21499,
+      "mean_us": 46.514,
       "round_means_us": [
-        46.791
+        46.514
       ]
     },
     {
@@ -380,10 +380,10 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 8201,
-      "mean_us": 121.94,
+      "ops_per_sec": 8208,
+      "mean_us": 121.826,
       "round_means_us": [
-        121.94
+        121.826
       ]
     },
     {
@@ -396,10 +396,10 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16390,
-      "mean_us": 61.013,
+      "ops_per_sec": 16547,
+      "mean_us": 60.432,
       "round_means_us": [
-        61.013
+        60.432
       ]
     },
     {
@@ -412,10 +412,10 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 16097,
-      "mean_us": 62.122,
+      "ops_per_sec": 16068,
+      "mean_us": 62.234,
       "round_means_us": [
-        62.122
+        62.234
       ]
     },
     {
@@ -428,10 +428,10 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14791,
-      "mean_us": 67.608,
+      "ops_per_sec": 14752,
+      "mean_us": 67.789,
       "round_means_us": [
-        67.608
+        67.789
       ]
     },
     {
@@ -444,10 +444,10 @@
       "token_len": 21555,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6953,
-      "mean_us": 143.825,
+      "ops_per_sec": 6974,
+      "mean_us": 143.38,
       "round_means_us": [
-        143.825
+        143.38
       ]
     },
     {
@@ -460,10 +460,10 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 19503,
-      "mean_us": 51.275,
+      "ops_per_sec": 19617,
+      "mean_us": 50.977,
       "round_means_us": [
-        51.275
+        50.977
       ]
     },
     {
@@ -476,10 +476,10 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18826,
-      "mean_us": 53.119,
+      "ops_per_sec": 18841,
+      "mean_us": 53.076,
       "round_means_us": [
-        53.119
+        53.076
       ]
     },
     {
@@ -492,10 +492,10 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17133,
-      "mean_us": 58.367,
+      "ops_per_sec": 17183,
+      "mean_us": 58.198,
       "round_means_us": [
-        58.367
+        58.198
       ]
     },
     {
@@ -508,10 +508,10 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 7451,
-      "mean_us": 134.205,
+      "ops_per_sec": 7462,
+      "mean_us": 134.01,
       "round_means_us": [
-        134.205
+        134.01
       ]
     },
     {
@@ -524,10 +524,10 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2799,
-      "mean_us": 357.263,
+      "ops_per_sec": 2802,
+      "mean_us": 356.854,
       "round_means_us": [
-        357.263
+        356.854
       ]
     },
     {
@@ -540,10 +540,10 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2734,
-      "mean_us": 365.705,
+      "ops_per_sec": 2741,
+      "mean_us": 364.884,
       "round_means_us": [
-        365.705
+        364.884
       ]
     },
     {
@@ -556,10 +556,10 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2732,
-      "mean_us": 366,
+      "ops_per_sec": 2736,
+      "mean_us": 365.461,
       "round_means_us": [
-        366
+        365.461
       ]
     },
     {
@@ -572,10 +572,10 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2239,
-      "mean_us": 446.538,
+      "ops_per_sec": 2240,
+      "mean_us": 446.331,
       "round_means_us": [
-        446.538
+        446.331
       ]
     },
     {
@@ -588,10 +588,10 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1073,
-      "mean_us": 931.81,
+      "ops_per_sec": 1075,
+      "mean_us": 930.019,
       "round_means_us": [
-        931.81
+        930.019
       ]
     },
     {
@@ -604,15 +604,463 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1088,
-      "mean_us": 919.386,
+      "ops_per_sec": 1090,
+      "mean_us": 917.3,
       "round_means_us": [
-        919.386
+        917.3
       ]
     },
     {
       "impl": "jose 6.2.12",
       "source": "pem",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1092,
+      "mean_us": 915.814,
+      "round_means_us": [
+        915.814
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "pem",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 984,
+      "mean_us": 1016.669,
+      "round_means_us": [
+        1016.669
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "pem",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 20018,
+      "mean_us": 49.955,
+      "round_means_us": [
+        49.955
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "pem",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19534,
+      "mean_us": 51.192,
+      "round_means_us": [
+        51.192
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "pem",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17391,
+      "mean_us": 57.501,
+      "round_means_us": [
+        57.501
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "pem",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7192,
+      "mean_us": 139.048,
+      "round_means_us": [
+        139.048
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 34483,
+      "mean_us": 29,
+      "round_means_us": [
+        29
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 34619,
+      "mean_us": 28.886,
+      "round_means_us": [
+        28.886
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 29650,
+      "mean_us": 33.727,
+      "round_means_us": [
+        33.727
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9239,
+      "mean_us": 108.241,
+      "round_means_us": [
+        108.241
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 24778,
+      "mean_us": 40.358,
+      "round_means_us": [
+        40.358
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23799,
+      "mean_us": 42.018,
+      "round_means_us": [
+        42.018
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21195,
+      "mean_us": 47.18,
+      "round_means_us": [
+        47.18
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8141,
+      "mean_us": 122.832,
+      "round_means_us": [
+        122.832
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16371,
+      "mean_us": 61.085,
+      "round_means_us": [
+        61.085
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15681,
+      "mean_us": 63.771,
+      "round_means_us": [
+        63.771
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14586,
+      "mean_us": 68.561,
+      "round_means_us": [
+        68.561
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6918,
+      "mean_us": 144.557,
+      "round_means_us": [
+        144.557
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19232,
+      "mean_us": 51.997,
+      "round_means_us": [
+        51.997
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18165,
+      "mean_us": 55.052,
+      "round_means_us": [
+        55.052
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16978,
+      "mean_us": 58.9,
+      "round_means_us": [
+        58.9
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7414,
+      "mean_us": 134.878,
+      "round_means_us": [
+        134.878
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2783,
+      "mean_us": 359.379,
+      "round_means_us": [
+        359.379
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2781,
+      "mean_us": 359.586,
+      "round_means_us": [
+        359.586
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2734,
+      "mean_us": 365.82,
+      "round_means_us": [
+        365.82
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2226,
+      "mean_us": 449.287,
+      "round_means_us": [
+        449.287
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1074,
+      "mean_us": 930.967,
+      "round_means_us": [
+        930.967
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1086,
+      "mean_us": 920.703,
+      "round_means_us": [
+        920.703
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
       "name": "medium-es512",
       "key": "es512",
       "alg": "ES512",
@@ -621,910 +1069,14 @@
       "iterations": 10000,
       "rounds": 1,
       "ops_per_sec": 1090,
-      "mean_us": 917.361,
+      "mean_us": 917.136,
       "round_means_us": [
-        917.361
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "pem",
-      "name": "large-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "large",
-      "token_len": 21047,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 983,
-      "mean_us": 1017.546,
-      "round_means_us": [
-        1017.546
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "pem",
-      "name": "small-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "small",
-      "token_len": 306,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 19844,
-      "mean_us": 50.393,
-      "round_means_us": [
-        50.393
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "pem",
-      "name": "typical-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "typical",
-      "token_len": 706,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 19538,
-      "mean_us": 51.182,
-      "round_means_us": [
-        51.182
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "pem",
-      "name": "medium-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "medium",
-      "token_len": 2319,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 17372,
-      "mean_us": 57.564,
-      "round_means_us": [
-        57.564
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "pem",
-      "name": "large-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "large",
-      "token_len": 20959,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 7187,
-      "mean_us": 139.148,
-      "round_means_us": [
-        139.148
+        917.136
       ]
     },
     {
       "impl": "jose 6.2.12",
       "source": "jwks",
-      "name": "small-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 561,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 34871,
-      "mean_us": 28.677,
-      "round_means_us": [
-        28.677
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "typical-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 961,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 35241,
-      "mean_us": 28.376,
-      "round_means_us": [
-        28.376
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "medium-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2574,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 29724,
-      "mean_us": 33.643,
-      "round_means_us": [
-        33.643
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "large-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21214,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 9160,
-      "mean_us": 109.167,
-      "round_means_us": [
-        109.167
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "small-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 731,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 24689,
-      "mean_us": 40.504,
-      "round_means_us": [
-        40.504
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "typical-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 1131,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 23729,
-      "mean_us": 42.142,
-      "round_means_us": [
-        42.142
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "medium-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2744,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 21052,
-      "mean_us": 47.501,
-      "round_means_us": [
-        47.501
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "large-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21384,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 8089,
-      "mean_us": 123.618,
-      "round_means_us": [
-        123.618
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "small-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 902,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 16339,
-      "mean_us": 61.202,
-      "round_means_us": [
-        61.202
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "typical-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 1302,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 15653,
-      "mean_us": 63.885,
-      "round_means_us": [
-        63.885
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "medium-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2915,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 14567,
-      "mean_us": 68.647,
-      "round_means_us": [
-        68.647
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "large-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21555,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 6924,
-      "mean_us": 144.423,
-      "round_means_us": [
-        144.423
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "small-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "small",
-      "token_len": 304,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 19202,
-      "mean_us": 52.077,
-      "round_means_us": [
-        52.077
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "typical-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "typical",
-      "token_len": 704,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 18089,
-      "mean_us": 55.282,
-      "round_means_us": [
-        55.282
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "medium-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "medium",
-      "token_len": 2317,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 17061,
-      "mean_us": 58.613,
-      "round_means_us": [
-        58.613
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "large-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "large",
-      "token_len": 20957,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 7439,
-      "mean_us": 134.422,
-      "round_means_us": [
-        134.422
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "small-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "small",
-      "token_len": 346,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2778,
-      "mean_us": 359.925,
-      "round_means_us": [
-        359.925
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "typical-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "typical",
-      "token_len": 746,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2776,
-      "mean_us": 360.259,
-      "round_means_us": [
-        360.259
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "medium-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "medium",
-      "token_len": 2359,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2726,
-      "mean_us": 366.881,
-      "round_means_us": [
-        366.881
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "large-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "large",
-      "token_len": 20999,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2226,
-      "mean_us": 449.142,
-      "round_means_us": [
-        449.142
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "small-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "small",
-      "token_len": 394,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 1072,
-      "mean_us": 932.533,
-      "round_means_us": [
-        932.533
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "typical-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "typical",
-      "token_len": 794,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 1085,
-      "mean_us": 922.047,
-      "round_means_us": [
-        922.047
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "medium-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "medium",
-      "token_len": 2407,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 1089,
-      "mean_us": 918.242,
-      "round_means_us": [
-        918.242
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "large-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "large",
-      "token_len": 21047,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 978,
-      "mean_us": 1022.57,
-      "round_means_us": [
-        1022.57
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "small-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "small",
-      "token_len": 306,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 19467,
-      "mean_us": 51.37,
-      "round_means_us": [
-        51.37
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "typical-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "typical",
-      "token_len": 706,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 19297,
-      "mean_us": 51.822,
-      "round_means_us": [
-        51.822
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "medium-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "medium",
-      "token_len": 2319,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 17245,
-      "mean_us": 57.987,
-      "round_means_us": [
-        57.987
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks",
-      "name": "large-ed25519",
-      "key": "ed25519",
-      "alg": "EdDSA",
-      "payload_size": "large",
-      "token_len": 20959,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 7153,
-      "mean_us": 139.806,
-      "round_means_us": [
-        139.806
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "small-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 561,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 37711,
-      "mean_us": 26.517,
-      "round_means_us": [
-        26.517
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "typical-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 961,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 34735,
-      "mean_us": 28.79,
-      "round_means_us": [
-        28.79
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "medium-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2574,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 30182,
-      "mean_us": 33.132,
-      "round_means_us": [
-        33.132
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "large-rs2048",
-      "key": "rs2048",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21214,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 9113,
-      "mean_us": 109.734,
-      "round_means_us": [
-        109.734
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "small-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 731,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 23159,
-      "mean_us": 43.18,
-      "round_means_us": [
-        43.18
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "typical-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 1131,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 23525,
-      "mean_us": 42.509,
-      "round_means_us": [
-        42.509
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "medium-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2744,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 20881,
-      "mean_us": 47.89,
-      "round_means_us": [
-        47.89
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "large-rs3072",
-      "key": "rs3072",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21384,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 8079,
-      "mean_us": 123.773,
-      "round_means_us": [
-        123.773
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "small-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "small",
-      "token_len": 902,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 16151,
-      "mean_us": 61.916,
-      "round_means_us": [
-        61.916
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "typical-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "typical",
-      "token_len": 1302,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 15894,
-      "mean_us": 62.917,
-      "round_means_us": [
-        62.917
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "medium-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "medium",
-      "token_len": 2915,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 14616,
-      "mean_us": 68.417,
-      "round_means_us": [
-        68.417
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "large-rs4096",
-      "key": "rs4096",
-      "alg": "RS256",
-      "payload_size": "large",
-      "token_len": 21555,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 6699,
-      "mean_us": 149.268,
-      "round_means_us": [
-        149.268
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "small-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "small",
-      "token_len": 304,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 19454,
-      "mean_us": 51.402,
-      "round_means_us": [
-        51.402
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "typical-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "typical",
-      "token_len": 704,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 18528,
-      "mean_us": 53.973,
-      "round_means_us": [
-        53.973
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "medium-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "medium",
-      "token_len": 2317,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 17074,
-      "mean_us": 58.569,
-      "round_means_us": [
-        58.569
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "large-es256",
-      "key": "es256",
-      "alg": "ES256",
-      "payload_size": "large",
-      "token_len": 20957,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 7376,
-      "mean_us": 135.571,
-      "round_means_us": [
-        135.571
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "small-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "small",
-      "token_len": 346,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2794,
-      "mean_us": 357.903,
-      "round_means_us": [
-        357.903
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "typical-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "typical",
-      "token_len": 746,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2776,
-      "mean_us": 360.234,
-      "round_means_us": [
-        360.234
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "medium-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "medium",
-      "token_len": 2359,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2718,
-      "mean_us": 367.857,
-      "round_means_us": [
-        367.857
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "large-es384",
-      "key": "es384",
-      "alg": "ES384",
-      "payload_size": "large",
-      "token_len": 20999,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 2226,
-      "mean_us": 449.23,
-      "round_means_us": [
-        449.23
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "small-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "small",
-      "token_len": 394,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 1073,
-      "mean_us": 932.302,
-      "round_means_us": [
-        932.302
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "typical-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "typical",
-      "token_len": 794,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 1087,
-      "mean_us": 920.239,
-      "round_means_us": [
-        920.239
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
-      "name": "medium-es512",
-      "key": "es512",
-      "alg": "ES512",
-      "payload_size": "medium",
-      "token_len": 2407,
-      "iterations": 10000,
-      "rounds": 1,
-      "ops_per_sec": 1086,
-      "mean_us": 920.952,
-      "round_means_us": [
-        920.952
-      ]
-    },
-    {
-      "impl": "jose 6.2.12",
-      "source": "jwks-url-async",
       "name": "large-es512",
       "key": "es512",
       "alg": "ES512",
@@ -1533,9 +1085,457 @@
       "iterations": 10000,
       "rounds": 1,
       "ops_per_sec": 981,
-      "mean_us": 1019.483,
+      "mean_us": 1019.445,
       "round_means_us": [
-        1019.483
+        1019.445
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "small-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "small",
+      "token_len": 306,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19395,
+      "mean_us": 51.56,
+      "round_means_us": [
+        51.56
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "typical-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "typical",
+      "token_len": 706,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19370,
+      "mean_us": 51.625,
+      "round_means_us": [
+        51.625
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "medium-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "medium",
+      "token_len": 2319,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17261,
+      "mean_us": 57.934,
+      "round_means_us": [
+        57.934
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks",
+      "name": "large-ed25519",
+      "key": "ed25519",
+      "alg": "EdDSA",
+      "payload_size": "large",
+      "token_len": 20959,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7144,
+      "mean_us": 139.973,
+      "round_means_us": [
+        139.973
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "small-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 561,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 37721,
+      "mean_us": 26.511,
+      "round_means_us": [
+        26.511
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "typical-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 961,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 35294,
+      "mean_us": 28.333,
+      "round_means_us": [
+        28.333
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "medium-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2574,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 30127,
+      "mean_us": 33.192,
+      "round_means_us": [
+        33.192
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "large-rs2048",
+      "key": "rs2048",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21214,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 9172,
+      "mean_us": 109.022,
+      "round_means_us": [
+        109.022
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "small-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 731,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23298,
+      "mean_us": 42.922,
+      "round_means_us": [
+        42.922
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "typical-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1131,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 23651,
+      "mean_us": 42.282,
+      "round_means_us": [
+        42.282
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "medium-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2744,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 21010,
+      "mean_us": 47.596,
+      "round_means_us": [
+        47.596
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "large-rs3072",
+      "key": "rs3072",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21384,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 8090,
+      "mean_us": 123.61,
+      "round_means_us": [
+        123.61
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "small-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "small",
+      "token_len": 902,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 16277,
+      "mean_us": 61.435,
+      "round_means_us": [
+        61.435
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "typical-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "typical",
+      "token_len": 1302,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 15833,
+      "mean_us": 63.158,
+      "round_means_us": [
+        63.158
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "medium-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "medium",
+      "token_len": 2915,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 14622,
+      "mean_us": 68.388,
+      "round_means_us": [
+        68.388
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "large-rs4096",
+      "key": "rs4096",
+      "alg": "RS256",
+      "payload_size": "large",
+      "token_len": 21555,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 6700,
+      "mean_us": 149.253,
+      "round_means_us": [
+        149.253
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "small-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "small",
+      "token_len": 304,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 19425,
+      "mean_us": 51.48,
+      "round_means_us": [
+        51.48
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "typical-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "typical",
+      "token_len": 704,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 18470,
+      "mean_us": 54.142,
+      "round_means_us": [
+        54.142
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "medium-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "medium",
+      "token_len": 2317,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 17084,
+      "mean_us": 58.536,
+      "round_means_us": [
+        58.536
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "large-es256",
+      "key": "es256",
+      "alg": "ES256",
+      "payload_size": "large",
+      "token_len": 20957,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 7408,
+      "mean_us": 134.987,
+      "round_means_us": [
+        134.987
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "small-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "small",
+      "token_len": 346,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2790,
+      "mean_us": 358.437,
+      "round_means_us": [
+        358.437
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "typical-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "typical",
+      "token_len": 746,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2781,
+      "mean_us": 359.577,
+      "round_means_us": [
+        359.577
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "medium-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "medium",
+      "token_len": 2359,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2727,
+      "mean_us": 366.636,
+      "round_means_us": [
+        366.636
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "large-es384",
+      "key": "es384",
+      "alg": "ES384",
+      "payload_size": "large",
+      "token_len": 20999,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 2222,
+      "mean_us": 450.104,
+      "round_means_us": [
+        450.104
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "small-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "small",
+      "token_len": 394,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1074,
+      "mean_us": 931.274,
+      "round_means_us": [
+        931.274
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "typical-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "typical",
+      "token_len": 794,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1088,
+      "mean_us": 919.312,
+      "round_means_us": [
+        919.312
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "medium-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "medium",
+      "token_len": 2407,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 1091,
+      "mean_us": 916.428,
+      "round_means_us": [
+        916.428
+      ]
+    },
+    {
+      "impl": "jose 6.2.12",
+      "source": "jwks-url-async",
+      "name": "large-es512",
+      "key": "es512",
+      "alg": "ES512",
+      "payload_size": "large",
+      "token_len": 21047,
+      "iterations": 10000,
+      "rounds": 1,
+      "ops_per_sec": 980,
+      "mean_us": 1020.475,
+      "round_means_us": [
+        1020.475
       ]
     },
     {
@@ -1548,10 +1548,10 @@
       "token_len": 306,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 19099,
-      "mean_us": 52.36,
+      "ops_per_sec": 19670,
+      "mean_us": 50.838,
       "round_means_us": [
-        52.36
+        50.838
       ]
     },
     {
@@ -1564,10 +1564,10 @@
       "token_len": 706,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 19174,
-      "mean_us": 52.153,
+      "ops_per_sec": 19397,
+      "mean_us": 51.553,
       "round_means_us": [
-        52.153
+        51.553
       ]
     },
     {
@@ -1580,10 +1580,10 @@
       "token_len": 2319,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 17216,
-      "mean_us": 58.087,
+      "ops_per_sec": 17342,
+      "mean_us": 57.662,
       "round_means_us": [
-        58.087
+        57.662
       ]
     },
     {
@@ -1596,10 +1596,10 @@
       "token_len": 20959,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 7163,
-      "mean_us": 139.615,
+      "ops_per_sec": 7153,
+      "mean_us": 139.792,
       "round_means_us": [
-        139.615
+        139.792
       ]
     }
   ],
@@ -1607,13 +1607,13 @@
     {
       "source": "jwks-url-async",
       "name": "typical-rs3072",
-      "ms": 0.741472,
+      "ms": 0.842611,
       "trials_ms": [
-        1.276985,
-        0.82722,
-        0.741472,
-        0.671585,
-        0.6814
+        1.214223,
+        0.852193,
+        0.842611,
+        0.694475,
+        0.690369
       ]
     }
   ],

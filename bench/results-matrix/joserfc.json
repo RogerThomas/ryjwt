@@ -1,9 +1,9 @@
 {
-  "impl": "joserfc 1.7.5",
+  "impl": "joserfc 1.7.7",
   "runtime": "CPython 3.14.8",
   "rows": [
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "small-k32",
       "key": "k32",
@@ -12,14 +12,14 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 66263.97650560352,
-      "mean_us": 15.0911559,
+      "ops_per_sec": 67139.11431946857,
+      "mean_us": 14.8944473,
       "round_means_us": [
-        15.0911559
+        14.8944473
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "typical-k32",
       "key": "k32",
@@ -28,14 +28,14 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 52240.398444623635,
-      "mean_us": 19.1422736,
+      "ops_per_sec": 51462.102929156514,
+      "mean_us": 19.4317749,
       "round_means_us": [
-        19.1422736
+        19.4317749
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "medium-k32",
       "key": "k32",
@@ -44,14 +44,14 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 33260.103454886594,
-      "mean_us": 30.066052,
+      "ops_per_sec": 33299.674799038876,
+      "mean_us": 30.0303233,
       "round_means_us": [
-        30.066052
+        30.0303233
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "large-k32",
       "key": "k32",
@@ -60,14 +60,14 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6154.424647038945,
-      "mean_us": 162.48472560000002,
+      "ops_per_sec": 6139.250401479656,
+      "mean_us": 162.8863354,
       "round_means_us": [
-        162.48472560000002
+        162.8863354
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "small-k64",
       "key": "k64",
@@ -76,14 +76,14 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 66820.97545433702,
-      "mean_us": 14.9653607,
+      "ops_per_sec": 67153.21318522182,
+      "mean_us": 14.891320200000001,
       "round_means_us": [
-        14.9653607
+        14.891320200000001
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "typical-k64",
       "key": "k64",
@@ -92,14 +92,14 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 52630.31942072418,
-      "mean_us": 19.0004547,
+      "ops_per_sec": 51560.08760017635,
+      "mean_us": 19.3948468,
       "round_means_us": [
-        19.0004547
+        19.3948468
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "medium-k64",
       "key": "k64",
@@ -108,14 +108,14 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 33486.37208129181,
-      "mean_us": 29.8628946,
+      "ops_per_sec": 33299.79178505991,
+      "mean_us": 30.0302178,
       "round_means_us": [
-        29.8628946
+        30.0302178
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "large-k64",
       "key": "k64",
@@ -124,14 +124,14 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6137.008973263265,
-      "mean_us": 162.9458266,
+      "ops_per_sec": 6090.727302134079,
+      "mean_us": 164.1840047,
       "round_means_us": [
-        162.9458266
+        164.1840047
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "small-k256",
       "key": "k256",
@@ -140,14 +140,14 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 65906.98974932112,
-      "mean_us": 15.1728975,
+      "ops_per_sec": 66046.58085701145,
+      "mean_us": 15.1408292,
       "round_means_us": [
-        15.1728975
+        15.1408292
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "typical-k256",
       "key": "k256",
@@ -156,14 +156,14 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 51837.5953227933,
-      "mean_us": 19.2910183,
+      "ops_per_sec": 51780.33879306089,
+      "mean_us": 19.3123495,
       "round_means_us": [
-        19.2910183
+        19.3123495
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "medium-k256",
       "key": "k256",
@@ -172,14 +172,14 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 33084.082597098626,
-      "mean_us": 30.2260157,
+      "ops_per_sec": 33038.95415930681,
+      "mean_us": 30.2673019,
       "round_means_us": [
-        30.2260157
+        30.2673019
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "large-k256",
       "key": "k256",
@@ -188,14 +188,14 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6126.832692122203,
-      "mean_us": 163.2164693,
+      "ops_per_sec": 6135.285345044347,
+      "mean_us": 162.9916041,
       "round_means_us": [
-        163.2164693
+        162.9916041
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "small-k4096",
       "key": "k4096",
@@ -204,14 +204,14 @@
       "token_len": 231,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 58711.99458102381,
-      "mean_us": 17.0322948,
+      "ops_per_sec": 58986.51818297175,
+      "mean_us": 16.9530264,
       "round_means_us": [
-        17.0322948
+        16.9530264
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "typical-k4096",
       "key": "k4096",
@@ -220,14 +220,14 @@
       "token_len": 661,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 47333.92988916292,
-      "mean_us": 21.126494299999997,
+      "ops_per_sec": 47254.246635185766,
+      "mean_us": 21.1621192,
       "round_means_us": [
-        21.126494299999997
+        21.1621192
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "medium-k4096",
       "key": "k4096",
@@ -236,14 +236,14 @@
       "token_len": 2244,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 31188.427319466733,
-      "mean_us": 32.0631749,
+      "ops_per_sec": 31092.120140860115,
+      "mean_us": 32.1624899,
       "round_means_us": [
-        32.0631749
+        32.1624899
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "hmac",
       "name": "large-k4096",
       "key": "k4096",
@@ -252,14 +252,14 @@
       "token_len": 20884,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 6050.535615134075,
-      "mean_us": 165.2746242,
+      "ops_per_sec": 6039.3512082261705,
+      "mean_us": 165.5806999,
       "round_means_us": [
-        165.2746242
+        165.5806999
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "small-rs2048",
       "key": "rs2048",
@@ -268,14 +268,14 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 30717.408799314453,
-      "mean_us": 32.5548293,
+      "ops_per_sec": 30717.077424897092,
+      "mean_us": 32.5551805,
       "round_means_us": [
-        32.5548293
+        32.5551805
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "typical-rs2048",
       "key": "rs2048",
@@ -284,14 +284,14 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 27569.350425301345,
-      "mean_us": 36.272164,
+      "ops_per_sec": 27506.62185474879,
+      "mean_us": 36.3548823,
       "round_means_us": [
-        36.272164
+        36.3548823
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "medium-rs2048",
       "key": "rs2048",
@@ -300,14 +300,14 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 20966.099102972366,
-      "mean_us": 47.6960447,
+      "ops_per_sec": 20989.924202487095,
+      "mean_us": 47.6419062,
       "round_means_us": [
-        47.6960447
+        47.6419062
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "large-rs2048",
       "key": "rs2048",
@@ -316,14 +316,14 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 5555.523040313761,
-      "mean_us": 180.0010535,
+      "ops_per_sec": 5501.600046571265,
+      "mean_us": 181.76530309999998,
       "round_means_us": [
-        180.0010535
+        181.76530309999998
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "small-rs3072",
       "key": "rs3072",
@@ -332,14 +332,14 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 20415.7326690141,
-      "mean_us": 48.981832600000004,
+      "ops_per_sec": 20370.16741560235,
+      "mean_us": 49.0913982,
       "round_means_us": [
-        48.981832600000004
+        49.0913982
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -348,14 +348,14 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18922.176801239806,
-      "mean_us": 52.8480423,
+      "ops_per_sec": 18881.58421446087,
+      "mean_us": 52.9616577,
       "round_means_us": [
-        52.8480423
+        52.9616577
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "medium-rs3072",
       "key": "rs3072",
@@ -364,14 +364,14 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 15602.462511070084,
-      "mean_us": 64.0924469,
+      "ops_per_sec": 15588.277574111215,
+      "mean_us": 64.1507694,
       "round_means_us": [
-        64.0924469
+        64.1507694
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "large-rs3072",
       "key": "rs3072",
@@ -380,14 +380,14 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 5045.696623942352,
-      "mean_us": 198.1886892,
+      "ops_per_sec": 5027.037210826182,
+      "mean_us": 198.9243282,
       "round_means_us": [
-        198.1886892
+        198.9243282
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "small-rs4096",
       "key": "rs4096",
@@ -396,14 +396,14 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13972.487777541866,
-      "mean_us": 71.5692163,
+      "ops_per_sec": 13963.880278806855,
+      "mean_us": 71.6133324,
       "round_means_us": [
-        71.5692163
+        71.6133324
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "typical-rs4096",
       "key": "rs4096",
@@ -412,14 +412,14 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13249.128953572043,
-      "mean_us": 75.4766599,
+      "ops_per_sec": 13230.29500203975,
+      "mean_us": 75.5841045,
       "round_means_us": [
-        75.4766599
+        75.5841045
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "medium-rs4096",
       "key": "rs4096",
@@ -428,14 +428,14 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 11515.592152655046,
-      "mean_us": 86.8387823,
+      "ops_per_sec": 11543.826949390012,
+      "mean_us": 86.6263852,
       "round_means_us": [
-        86.8387823
+        86.6263852
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "large-rs4096",
       "key": "rs4096",
@@ -444,14 +444,14 @@
       "token_len": 21555,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 4525.873329806556,
-      "mean_us": 220.9518312,
+      "ops_per_sec": 4518.058017128477,
+      "mean_us": 221.3340325,
       "round_means_us": [
-        220.9518312
+        221.3340325
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "small-es256",
       "key": "es256",
@@ -460,14 +460,14 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14715.647613416122,
-      "mean_us": 67.9548754,
+      "ops_per_sec": 14691.365102120466,
+      "mean_us": 68.0671941,
       "round_means_us": [
-        67.9548754
+        68.0671941
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "typical-es256",
       "key": "es256",
@@ -476,14 +476,14 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13951.927923581363,
-      "mean_us": 71.67468219999999,
+      "ops_per_sec": 13896.8463389096,
+      "mean_us": 71.95877220000001,
       "round_means_us": [
-        71.67468219999999
+        71.95877220000001
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "medium-es256",
       "key": "es256",
@@ -492,14 +492,14 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12043.630353698396,
-      "mean_us": 83.0314424,
+      "ops_per_sec": 12025.563326811292,
+      "mean_us": 83.15618760000001,
       "round_means_us": [
-        83.0314424
+        83.15618760000001
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "large-es256",
       "key": "es256",
@@ -508,14 +508,14 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 4623.083108513187,
-      "mean_us": 216.305867,
+      "ops_per_sec": 4606.364006766391,
+      "mean_us": 217.09096340000002,
       "round_means_us": [
-        216.305867
+        217.09096340000002
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "small-es384",
       "key": "es384",
@@ -524,14 +524,14 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3767.258102743894,
-      "mean_us": 265.4450459,
+      "ops_per_sec": 3774.3181046953955,
+      "mean_us": 264.9485211,
       "round_means_us": [
-        265.4450459
+        264.9485211
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "typical-es384",
       "key": "es384",
@@ -540,14 +540,14 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3718.154383701955,
-      "mean_us": 268.9506397,
+      "ops_per_sec": 3716.8772887094697,
+      "mean_us": 269.04304940000003,
       "round_means_us": [
-        268.9506397
+        269.04304940000003
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "medium-es384",
       "key": "es384",
@@ -556,14 +556,14 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3555.73090334342,
-      "mean_us": 281.23613040000004,
+      "ops_per_sec": 3553.0583814833026,
+      "mean_us": 281.4476692,
       "round_means_us": [
-        281.23613040000004
+        281.4476692
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "large-es384",
       "key": "es384",
@@ -572,14 +572,14 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2381.229549835428,
-      "mean_us": 419.95111310000004,
+      "ops_per_sec": 2383.5673552417584,
+      "mean_us": 419.5392246,
       "round_means_us": [
-        419.95111310000004
+        419.5392246
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "small-es512",
       "key": "es512",
@@ -588,14 +588,14 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2656.2517140709306,
-      "mean_us": 376.47034529999996,
+      "ops_per_sec": 2658.6055428304016,
+      "mean_us": 376.13703269999996,
       "round_means_us": [
-        376.47034529999996
+        376.13703269999996
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "typical-es512",
       "key": "es512",
@@ -604,14 +604,14 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2629.4560698496703,
-      "mean_us": 380.30679100000003,
+      "ops_per_sec": 2630.61727676416,
+      "mean_us": 380.13891600000005,
       "round_means_us": [
-        380.30679100000003
+        380.13891600000005
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "medium-es512",
       "key": "es512",
@@ -620,14 +620,14 @@
       "token_len": 2407,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2544.7141546713947,
-      "mean_us": 392.9714456,
+      "ops_per_sec": 2547.374977454171,
+      "mean_us": 392.5609731,
       "round_means_us": [
-        392.9714456
+        392.5609731
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "large-es512",
       "key": "es512",
@@ -636,14 +636,14 @@
       "token_len": 21047,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1876.8278151605782,
-      "mean_us": 532.8139278,
+      "ops_per_sec": 1874.4761981285164,
+      "mean_us": 533.4823675,
       "round_means_us": [
-        532.8139278
+        533.4823675
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "small-ed25519",
       "key": "ed25519",
@@ -652,14 +652,14 @@
       "token_len": 306,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12889.32994457382,
-      "mean_us": 77.583552,
+      "ops_per_sec": 12910.806915658748,
+      "mean_us": 77.4544927,
       "round_means_us": [
-        77.583552
+        77.4544927
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "typical-ed25519",
       "key": "ed25519",
@@ -668,14 +668,14 @@
       "token_len": 706,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12354.894512909901,
-      "mean_us": 80.9395822,
+      "ops_per_sec": 12359.93193652457,
+      "mean_us": 80.9065944,
       "round_means_us": [
-        80.9395822
+        80.9065944
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "medium-ed25519",
       "key": "ed25519",
@@ -684,14 +684,14 @@
       "token_len": 2319,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10731.019958078885,
-      "mean_us": 93.1877868,
+      "ops_per_sec": 10769.887937851301,
+      "mean_us": 92.8514768,
       "round_means_us": [
-        93.1877868
+        92.8514768
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "pem",
       "name": "large-ed25519",
       "key": "ed25519",
@@ -700,14 +700,14 @@
       "token_len": 20959,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 4282.435466529279,
-      "mean_us": 233.5119835,
+      "ops_per_sec": 4290.128048511526,
+      "mean_us": 233.0932757,
       "round_means_us": [
-        233.5119835
+        233.0932757
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "small-rs2048",
       "key": "rs2048",
@@ -716,14 +716,14 @@
       "token_len": 561,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 28705.06920384573,
-      "mean_us": 34.8370524,
+      "ops_per_sec": 28587.29541884388,
+      "mean_us": 34.9805739,
       "round_means_us": [
-        34.8370524
+        34.9805739
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "typical-rs2048",
       "key": "rs2048",
@@ -732,14 +732,14 @@
       "token_len": 961,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 25798.6057742037,
-      "mean_us": 38.7617846,
+      "ops_per_sec": 25706.520648419526,
+      "mean_us": 38.900635900000005,
       "round_means_us": [
-        38.7617846
+        38.900635900000005
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "medium-rs2048",
       "key": "rs2048",
@@ -748,14 +748,14 @@
       "token_len": 2574,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 20004.213847638577,
-      "mean_us": 49.989467600000005,
+      "ops_per_sec": 19964.82501298053,
+      "mean_us": 50.0880924,
       "round_means_us": [
-        49.989467600000005
+        50.0880924
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "large-rs2048",
       "key": "rs2048",
@@ -764,14 +764,14 @@
       "token_len": 21214,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 5418.5616878282135,
-      "mean_us": 184.55081950000002,
+      "ops_per_sec": 5408.053255514562,
+      "mean_us": 184.9094217,
       "round_means_us": [
-        184.55081950000002
+        184.9094217
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "small-rs3072",
       "key": "rs3072",
@@ -780,14 +780,14 @@
       "token_len": 731,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 19516.2044167454,
-      "mean_us": 51.2394715,
+      "ops_per_sec": 19491.590020179607,
+      "mean_us": 51.3041778,
       "round_means_us": [
-        51.2394715
+        51.3041778
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "typical-rs3072",
       "key": "rs3072",
@@ -796,14 +796,14 @@
       "token_len": 1131,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 18143.674668585416,
-      "mean_us": 55.1156267,
+      "ops_per_sec": 18062.18223405995,
+      "mean_us": 55.3642958,
       "round_means_us": [
-        55.1156267
+        55.3642958
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "medium-rs3072",
       "key": "rs3072",
@@ -812,14 +812,14 @@
       "token_len": 2744,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 15071.166083926215,
-      "mean_us": 66.3518665,
+      "ops_per_sec": 14988.189801047041,
+      "mean_us": 66.71919779999999,
       "round_means_us": [
-        66.3518665
+        66.71919779999999
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "large-rs3072",
       "key": "rs3072",
@@ -828,14 +828,14 @@
       "token_len": 21384,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 4971.373993355429,
-      "mean_us": 201.1516336,
+      "ops_per_sec": 4963.09764680115,
+      "mean_us": 201.4870694,
       "round_means_us": [
-        201.1516336
+        201.4870694
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "small-rs4096",
       "key": "rs4096",
@@ -844,14 +844,14 @@
       "token_len": 902,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13524.064531767126,
-      "mean_us": 73.9422677,
+      "ops_per_sec": 13527.331463241084,
+      "mean_us": 73.9244102,
       "round_means_us": [
-        73.9422677
+        73.9244102
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "typical-rs4096",
       "key": "rs4096",
@@ -860,14 +860,14 @@
       "token_len": 1302,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12848.15128587131,
-      "mean_us": 77.8322093,
+      "ops_per_sec": 12828.004128231321,
+      "mean_us": 77.9544495,
       "round_means_us": [
-        77.8322093
+        77.9544495
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "medium-rs4096",
       "key": "rs4096",
@@ -876,14 +876,14 @@
       "token_len": 2915,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 11232.97185652365,
-      "mean_us": 89.0236362,
+      "ops_per_sec": 11207.614901868927,
+      "mean_us": 89.22505,
       "round_means_us": [
-        89.0236362
+        89.22505
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "large-rs4096",
       "key": "rs4096",
@@ -892,14 +892,14 @@
       "token_len": 21555,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 4464.835498980509,
-      "mean_us": 223.9724174,
+      "ops_per_sec": 4463.791377289375,
+      "mean_us": 224.0248066,
       "round_means_us": [
-        223.9724174
+        224.0248066
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "small-es256",
       "key": "es256",
@@ -908,14 +908,14 @@
       "token_len": 304,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 14242.115345616092,
-      "mean_us": 70.21428879999999,
+      "ops_per_sec": 14245.751026328366,
+      "mean_us": 70.1963693,
       "round_means_us": [
-        70.21428879999999
+        70.1963693
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "typical-es256",
       "key": "es256",
@@ -924,14 +924,14 @@
       "token_len": 704,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 13515.11810504237,
-      "mean_us": 73.99121430000001,
+      "ops_per_sec": 13509.311022435993,
+      "mean_us": 74.02302,
       "round_means_us": [
-        73.99121430000001
+        74.02302
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "medium-es256",
       "key": "es256",
@@ -940,14 +940,14 @@
       "token_len": 2317,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 11722.06272818988,
-      "mean_us": 85.3092176,
+      "ops_per_sec": 11735.170184758226,
+      "mean_us": 85.2139325,
       "round_means_us": [
-        85.3092176
+        85.2139325
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "large-es256",
       "key": "es256",
@@ -956,14 +956,14 @@
       "token_len": 20957,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 4569.5738529481305,
-      "mean_us": 218.83878719999998,
+      "ops_per_sec": 4527.900722306481,
+      "mean_us": 220.8528988,
       "round_means_us": [
-        218.83878719999998
+        220.8528988
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "small-es384",
       "key": "es384",
@@ -972,14 +972,14 @@
       "token_len": 346,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3737.5677661822215,
-      "mean_us": 267.5536773,
+      "ops_per_sec": 3736.9962503596234,
+      "mean_us": 267.59459549999997,
       "round_means_us": [
-        267.5536773
+        267.59459549999997
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "typical-es384",
       "key": "es384",
@@ -988,14 +988,14 @@
       "token_len": 746,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3685.6392255653777,
-      "mean_us": 271.323355,
+      "ops_per_sec": 3689.96155026486,
+      "mean_us": 271.0055339,
       "round_means_us": [
-        271.323355
+        271.0055339
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "medium-es384",
       "key": "es384",
@@ -1004,14 +1004,14 @@
       "token_len": 2359,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 3532.0724104442907,
-      "mean_us": 283.1199035,
+      "ops_per_sec": 3533.350368746133,
+      "mean_us": 283.0175034,
       "round_means_us": [
-        283.1199035
+        283.0175034
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "large-es384",
       "key": "es384",
@@ -1020,14 +1020,14 @@
       "token_len": 20999,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2354.8143420737997,
-      "mean_us": 424.6619286,
+      "ops_per_sec": 2367.6285882774414,
+      "mean_us": 422.3635434,
       "round_means_us": [
-        424.6619286
+        422.3635434
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "small-es512",
       "key": "es512",
@@ -1036,14 +1036,14 @@
       "token_len": 394,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2641.677091039268,
-      "mean_us": 378.5474021,
+      "ops_per_sec": 2638.961305505727,
+      "mean_us": 378.9369696,
       "round_means_us": [
-        378.5474021
+        378.9369696
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "typical-es512",
       "key": "es512",
@@ -1052,14 +1052,14 @@
       "token_len": 794,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2614.8971408689035,
-      "mean_us": 382.4242202,
+      "ops_per_sec": 2616.9608081416154,
+      "mean_us": 382.1226504,
       "round_means_us": [
-        382.4242202
+        382.1226504
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "medium-es512",
       "key": "es512",
@@ -1068,14 +1068,14 @@
       "token_len": 2407,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 2535.9167139889646,
-      "mean_us": 394.33471710000003,
+      "ops_per_sec": 2537.8584385415534,
+      "mean_us": 394.03301020000004,
       "round_means_us": [
-        394.33471710000003
+        394.03301020000004
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "large-es512",
       "key": "es512",
@@ -1084,14 +1084,14 @@
       "token_len": 21047,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 1870.3599841817147,
-      "mean_us": 534.6564343,
+      "ops_per_sec": 1867.8549931741845,
+      "mean_us": 535.3734651,
       "round_means_us": [
-        534.6564343
+        535.3734651
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "small-ed25519",
       "key": "ed25519",
@@ -1100,14 +1100,14 @@
       "token_len": 306,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12584.233035733421,
-      "mean_us": 79.464517,
+      "ops_per_sec": 12490.909568811292,
+      "mean_us": 80.0582211,
       "round_means_us": [
-        79.464517
+        80.0582211
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "typical-ed25519",
       "key": "ed25519",
@@ -1116,14 +1116,14 @@
       "token_len": 706,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 12071.045980747096,
-      "mean_us": 82.8428623,
+      "ops_per_sec": 12097.980654912762,
+      "mean_us": 82.6584228,
       "round_means_us": [
-        82.8428623
+        82.6584228
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "medium-ed25519",
       "key": "ed25519",
@@ -1132,14 +1132,14 @@
       "token_len": 2319,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 10520.932128831373,
-      "mean_us": 95.0486124,
+      "ops_per_sec": 10531.23162428431,
+      "mean_us": 94.9556553,
       "round_means_us": [
-        95.0486124
+        94.9556553
       ]
     },
     {
-      "impl": "joserfc 1.7.5",
+      "impl": "joserfc 1.7.7",
       "source": "jwks",
       "name": "large-ed25519",
       "key": "ed25519",
@@ -1148,10 +1148,10 @@
       "token_len": 20959,
       "iterations": 10000,
       "rounds": 1,
-      "ops_per_sec": 4241.2142042194455,
-      "mean_us": 235.7815361,
+      "ops_per_sec": 4240.460069800831,
+      "mean_us": 235.82346809999999,
       "round_means_us": [
-        235.7815361
+        235.82346809999999
       ]
     }
   ],
