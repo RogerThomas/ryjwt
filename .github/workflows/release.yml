@@ -13,6 +13,18 @@
 # Pages. Pull requests and manual runs build and test only; a manual run with `docs-only` instead
 # deploys just the docs, as they are on the branch it runs on, without building or publishing.
 #
+# Every set of wheels is built with profile-guided optimisation (PGO), from a profile of its own
+# (a profile from another OS, architecture or libc loses most of the gain): first a wheel for
+# Python 3.14 instrumented to count what runs (-Cprofile-generate), which runs the training
+# (.github/scripts/pgo-train.sh: the CodSpeed benchmarks in benchmarks/, which between them use
+# every feature: a new feature needs a benchmark there, or PGO can make it slower; musl's in
+# Alpine, macOS x86_64's under Rosetta). Its counts are merged into one profile (pgo-merge.sh),
+# which the wheels for every Python are then built with (-Cprofile-use). The instrumented wheel is
+# never uploaded. rustc only warns when a profile doesn't fit, so the build fails instead
+# (rustc-pgo.rs, pgo-check.sh) if the profile is missing, empty or unreadable, or doesn't match the
+# 3.14 wheel's code; no wheel is uploaded then. (The wheel built from the sdist has no PGO: it's
+# only there to check the sdist.)
+#
 # Each platform's job builds (and tests) a wheel per supported Python: cp312, cp313, cp314 and
 # cp315, and the free-threaded cp314t and cp315t. Not abi3: the extension uses CPython APIs outside
 # the limited API (e.g. PyO3's PyDelta accessors), jiter's fast string path needs them, and an abi3
@@ -130,21 +142,87 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Build
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        if: matrix.platform.libc == 'glibc'
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: false # no caches in a workflow that publishes
+      # PGO (see the top of this file): the instrumented wheel, for 3.14 only, in pgo/wheel; the
+      # training on the runner (musl's in Alpine); then the wheels. pgo/ is made here first: the
+      # builds' containers would make it root's.
+      - name: Make the PGO directory
+        run: mkdir -p pgo/raw
+      - name: Build for PGO training (3.14, instrumented)
         uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        env:
+          RUSTFLAGS: -Cprofile-generate=/tmp/pgo # pgo-train.sh says where the counts go instead
         with:
           maturin-version: ${{ env.MATURIN_VERSION }}
           target: ${{ matrix.platform.target }}
           manylinux: ${{ matrix.platform.manylinux }}
           container: ${{ matrix.platform.container }}
           # Caches compiled crates between runs, on pull requests only: no caches in a build that
-          # may be published. (It sets RUSTC_WRAPPER=sccache for the job's later steps too, which
-          # don't compile.)
+          # may be published. (It sets RUSTC_WRAPPER=sccache for the job's later steps too; the
+          # profile-guided builds set their own, as sccache would reuse what it compiled with
+          # another profile.)
           sccache: ${{ github.event_name == 'pull_request' }}
+          args: --release --out pgo/wheel --interpreter python3.14
+      - name: Train the PGO profile (glibc)
+        if: matrix.platform.libc == 'glibc'
+        env:
+          UV_PYTHON_PREFERENCE: only-managed # as the tests below
+        run: sh .github/scripts/pgo-train.sh pgo/wheel pgo/raw
+      - name: Train the PGO profile (musl, in Alpine)
+        if: matrix.platform.libc == 'musl'
+        # On the Python of the Alpine 3.14 image, as the musl tests below. As root: the venv in the
+        # container, and no bytecode files in the checkout.
+        run: |
+          docker run --rm --volume "$PWD:$PWD" --workdir "$PWD" \
+            --env UV_VERSION --env UV_PYTHON_PREFERENCE=system \
+            --env UV_PROJECT_ENVIRONMENT=/tmp/venv-pgo --env PYTHONDONTWRITEBYTECODE=1 \
+            "$ALPINE_PYTHON_314" sh -euxc '
+              pip install --root-user-action=ignore --disable-pip-version-check "uv==$UV_VERSION"
+              sh .github/scripts/pgo-train.sh pgo/wheel pgo/raw
+            '
+      # The wheel for 3.14 first, on its own: the one the check below can hold to the profile
+      # exactly (the build for any other Python finds some code changed, e.g. PyO3's), and that
+      # maturin would otherwise name as it does 3.14t's. The profile is merged in the build's
+      # container (by the before-script), with the toolchain's llvm-profdata, which also builds
+      # rustc-pgo.rs, the wrapper that logs what rustc says about the profile.
+      - name: Build for 3.14
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        env:
+          RUSTFLAGS: >-
+            -Cprofile-use=${{ github.workspace }}/pgo/ryjwt.profdata
+            -Cllvm-args=-pgo-warn-missing-function
+          RUSTC_WRAPPER: ${{ github.workspace }}/pgo/rustc_pgo
+          RUSTC_PGO_LOG: ${{ github.workspace }}/pgo/rustc-3.14.log
+        with:
+          maturin-version: ${{ env.MATURIN_VERSION }}
+          target: ${{ matrix.platform.target }}
+          manylinux: ${{ matrix.platform.manylinux }}
+          container: ${{ matrix.platform.container }}
+          before-script-linux: sh .github/scripts/pgo-merge.sh pgo/raw pgo/ryjwt.profdata
+          args: --release --out dist --interpreter python3.14
+      - name: Check the wheel for 3.14 was built with its profile
+        run: sh .github/scripts/pgo-check.sh pgo/rustc-3.14.log
+      - name: Build
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        env:
+          RUSTFLAGS: >-
+            -Cprofile-use=${{ github.workspace }}/pgo/ryjwt.profdata
+            -Cllvm-args=-pgo-warn-missing-function
+          RUSTC_WRAPPER: ${{ github.workspace }}/pgo/rustc_pgo
+          RUSTC_PGO_LOG: ${{ github.workspace }}/pgo/rustc.log
+        with:
+          maturin-version: ${{ env.MATURIN_VERSION }}
+          target: ${{ matrix.platform.target }}
+          manylinux: ${{ matrix.platform.manylinux }}
+          container: ${{ matrix.platform.container }}
           # Listed rather than --find-interpreter, which would also take the images' PyPy.
           args: >-
             --release --out dist --interpreter
-            python3.12 python3.13 python3.14 python3.14t python3.15 python3.15t
+            python3.12 python3.13 python3.14t python3.15 python3.15t
       - name: Record the SHA-256
         run: sh .github/scripts/sha256.sh record dist/*.whl
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -152,11 +230,6 @@ jobs:
           name: dist-${{ matrix.platform.target }}
           path: dist/
           if-no-files-found: error
-      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
-        if: matrix.platform.libc == 'glibc'
-        with:
-          version: ${{ env.UV_VERSION }}
-          enable-cache: false # no caches in a workflow that publishes
       - name: Test (glibc)
         if: matrix.platform.libc == 'glibc'
         # On the Pythons uv downloads (python-build-standalone's).
@@ -233,18 +306,66 @@ jobs:
         id: python315t
         with:
           python-version: "3.15t"
-      - name: Build
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: false # no caches in a workflow that publishes
+      # PGO, as on Linux. The x86_64 macOS wheel is trained on this arm64 runner too, on an x86_64
+      # Python under Rosetta: the profile counts what the code does, the same whatever runs it.
+      - name: Install Rosetta
+        if: matrix.platform.target == 'x86_64-apple-darwin'
+        run: arch -x86_64 /usr/bin/true || sudo softwareupdate --install-rosetta --agree-to-license
+      - name: Build for PGO training (3.14, instrumented)
         uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        env:
+          RUSTFLAGS: -Cprofile-generate=${{ runner.temp }}/pgo # pgo-train.sh says where instead
         with:
           maturin-version: ${{ env.MATURIN_VERSION }}
           target: ${{ matrix.platform.target }}
-          # As the Linux builds: pull requests only.
+          # As the Linux builds: pull requests only, and not the profile-guided builds.
           sccache: ${{ github.event_name == 'pull_request' }}
+          args: >-
+            --release --out pgo/wheel --interpreter ${{ steps.python314.outputs.python-path }}
+      - name: Train the PGO profile
+        env:
+          UV_PYTHON_PREFERENCE: only-managed # as the tests below
+          UV_PYTHON: >- # x86_64's under Rosetta
+            ${{ matrix.platform.target == 'x86_64-apple-darwin'
+            && 'cpython-3.14-macos-x86_64-none' || '3.14' }}
+        run: |
+          sh .github/scripts/pgo-train.sh pgo/wheel pgo/raw
+          sh .github/scripts/pgo-merge.sh pgo/raw pgo/ryjwt.profdata
+      - name: Build for 3.14
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        env:
+          RUSTFLAGS: >-
+            -Cprofile-use=${{ github.workspace }}/pgo/ryjwt.profdata
+            -Cllvm-args=-pgo-warn-missing-function
+          RUSTC_WRAPPER: >-
+            ${{ github.workspace }}/pgo/rustc_pgo${{ runner.os == 'Windows' && '.exe' || '' }}
+          RUSTC_PGO_LOG: ${{ github.workspace }}/pgo/rustc-3.14.log
+        with:
+          maturin-version: ${{ env.MATURIN_VERSION }}
+          target: ${{ matrix.platform.target }}
+          args: --release --out dist --interpreter ${{ steps.python314.outputs.python-path }}
+      - name: Check the wheel for 3.14 was built with its profile
+        run: sh .github/scripts/pgo-check.sh pgo/rustc-3.14.log
+      - name: Build
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        env:
+          RUSTFLAGS: >-
+            -Cprofile-use=${{ github.workspace }}/pgo/ryjwt.profdata
+            -Cllvm-args=-pgo-warn-missing-function
+          RUSTC_WRAPPER: >-
+            ${{ github.workspace }}/pgo/rustc_pgo${{ runner.os == 'Windows' && '.exe' || '' }}
+          RUSTC_PGO_LOG: ${{ github.workspace }}/pgo/rustc.log
+        with:
+          maturin-version: ${{ env.MATURIN_VERSION }}
+          target: ${{ matrix.platform.target }}
           args: >-
             --release --out dist --interpreter
             ${{ steps.python312.outputs.python-path }}
             ${{ steps.python313.outputs.python-path }}
-            ${{ steps.python314.outputs.python-path }}
             ${{ steps.python314t.outputs.python-path }}
             ${{ steps.python315.outputs.python-path }}
             ${{ steps.python315t.outputs.python-path }}
@@ -255,11 +376,6 @@ jobs:
           name: dist-${{ matrix.platform.target }}
           path: dist/
           if-no-files-found: error
-      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
-        if: matrix.platform.test
-        with:
-          version: ${{ env.UV_VERSION }}
-          enable-cache: false # no caches in a workflow that publishes
       - name: Test
         if: matrix.platform.test
         # On the Pythons uv downloads (python-build-standalone's), as on Linux: with setup-python's,
