@@ -23,7 +23,7 @@ It signs and verifies JWTs, checks their claims, and decodes them into a dict, m
 pydantic `BaseModel`. It also fetches and caches keys from JWKS URLs, and publishes yours as a
 JWKS.
 
-![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.14 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in 0.5, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/perf-race.svg)
+![A race to decode 100,000 HS256 tokens: ryjwt finishes in about 0.14 seconds, jsonwebtoken (Rust) in about 0.3 to 0.4, fast-jwt (Bun) in about 0.45, and jose, joserfc and PyJWT in about 1.3 to 3.9 seconds](https://raw.githubusercontent.com/RogerThomas/ryjwt/main/assets/perf-race.svg)
 
 One bar per library, decoding 100,000 HS256 tokens in real time
 ([benchmarks](https://rogerthomas.github.io/ryjwt/benchmarks/)).

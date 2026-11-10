@@ -6,10 +6,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 57230,
-    "mean_us": 17.473,
+    "ops_per_sec": 55747,
+    "mean_us": 17.938,
     "round_means_us": [
-      17.473
+      17.938
     ]
   },
   {
@@ -19,10 +19,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 81296,
-    "mean_us": 12.301,
+    "ops_per_sec": 86072,
+    "mean_us": 11.618,
     "round_means_us": [
-      12.301
+      11.618
     ]
   },
   {
@@ -32,10 +32,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 89085,
-    "mean_us": 11.225,
+    "ops_per_sec": 91822,
+    "mean_us": 10.891,
     "round_means_us": [
-      11.225
+      10.891
     ]
   },
   {
@@ -45,10 +45,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 56848,
-    "mean_us": 17.591,
+    "ops_per_sec": 57409,
+    "mean_us": 17.419,
     "round_means_us": [
-      17.591
+      17.419
     ]
   },
   {
@@ -58,10 +58,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 79813,
-    "mean_us": 12.529,
+    "ops_per_sec": 79978,
+    "mean_us": 12.503,
     "round_means_us": [
-      12.529
+      12.503
     ]
   },
   {
@@ -71,10 +71,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 80700,
-    "mean_us": 12.392,
+    "ops_per_sec": 77944,
+    "mean_us": 12.83,
     "round_means_us": [
-      12.392
+      12.83
     ]
   },
   {
@@ -84,10 +84,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 58801,
-    "mean_us": 17.007,
+    "ops_per_sec": 56654,
+    "mean_us": 17.651,
     "round_means_us": [
-      17.007
+      17.651
     ]
   },
   {
@@ -97,10 +97,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 67612,
-    "mean_us": 14.79,
+    "ops_per_sec": 65490,
+    "mean_us": 15.27,
     "round_means_us": [
-      14.79
+      15.27
     ]
   },
   {
@@ -110,10 +110,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 56794,
-    "mean_us": 17.607,
+    "ops_per_sec": 54661,
+    "mean_us": 18.295,
     "round_means_us": [
-      17.607
+      18.295
     ]
   },
   {
@@ -123,10 +123,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 57264,
-    "mean_us": 17.463,
+    "ops_per_sec": 56495,
+    "mean_us": 17.701,
     "round_means_us": [
-      17.463
+      17.701
     ]
   },
   {
@@ -136,10 +136,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 56595,
-    "mean_us": 17.669,
+    "ops_per_sec": 53595,
+    "mean_us": 18.659,
     "round_means_us": [
-      17.669
+      18.659
     ]
   },
   {
@@ -149,10 +149,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 50609,
-    "mean_us": 19.759,
+    "ops_per_sec": 50274,
+    "mean_us": 19.891,
     "round_means_us": [
-      19.759
+      19.891
     ]
   },
   {
@@ -162,10 +162,10 @@
     "key_len": 32,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 10821,
-    "mean_us": 92.414,
+    "ops_per_sec": 10576,
+    "mean_us": 94.555,
     "round_means_us": [
-      92.414
+      94.555
     ]
   },
   {
@@ -175,10 +175,10 @@
     "key_len": 64,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 10898,
-    "mean_us": 91.763,
+    "ops_per_sec": 10647,
+    "mean_us": 93.927,
     "round_means_us": [
-      91.763
+      93.927
     ]
   },
   {
@@ -188,10 +188,10 @@
     "key_len": 256,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 10840,
-    "mean_us": 92.248,
+    "ops_per_sec": 10645,
+    "mean_us": 93.937,
     "round_means_us": [
-      92.248
+      93.937
     ]
   },
   {
@@ -201,10 +201,10 @@
     "key_len": 4096,
     "iterations": 10000,
     "rounds": 1,
-    "ops_per_sec": 10561,
-    "mean_us": 94.69,
+    "ops_per_sec": 10395,
+    "mean_us": 96.2,
     "round_means_us": [
-      94.69
+      96.2
     ]
   }
 ]
