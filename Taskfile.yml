@@ -123,16 +123,17 @@ tasks:
       - uv run --group bench yeet ./gen_tls.py
 
   bench-matrix:
-    desc: 'Benchmark the full matrix (algorithm x key size x payload x key source) in Docker, one library container after another (1 core, 500 MB), against an HTTPS JWKS server; results in bench/results-matrix, page in bench/results-matrix.md. With MATRIX_JOBS=n (a machine with n+1 cores or more), n libraries at once, each on a core of its own (1 to n)'
+    desc: 'Benchmark the full matrix (algorithm x key size x payload x key source) in Docker, one library container after another (1 core, 500 MB), against an HTTPS JWKS server; results in bench/results-matrix, page in bench/results-matrix.md. With MATRIX_JOBS=n (a machine with n+1 cores or more), n libraries at once, each on a core of its own (1 to n). MATRIX_SERVICES runs only some (task bench-aws runs it in two halves)'
     dir: bench
     vars:
       MATRIX_JOBS: '{{.MATRIX_JOBS | default "1"}}'
+      MATRIX_SERVICES: '{{.MATRIX_SERVICES | default "matrix-pyjwt matrix-joserfc matrix-ryjwt matrix-ryjwt-jiter matrix-ryjwt-msgspec matrix-ryjwt-pydantic matrix-jose matrix-fast-jwt matrix-jsonwebtoken matrix-jsonwebtoken-struct"}}'
     cmds:
       - docker compose build
       - defer: docker compose rm --stop --force jwks
       - |
         set -eu
-        services="matrix-pyjwt matrix-joserfc matrix-ryjwt matrix-ryjwt-jiter matrix-ryjwt-msgspec matrix-ryjwt-pydantic matrix-jose matrix-fast-jwt matrix-jsonwebtoken matrix-jsonwebtoken-struct"
+        services="{{.MATRIX_SERVICES}}"
         jobs={{.MATRIX_JOBS}}
         if [ "$jobs" -le 1 ]; then
           for service in $services; do
@@ -199,6 +200,11 @@ tasks:
           docker compose run --rm --no-deps "$service" "$mode" {{.SOURCES}} {{.CASES}} {{.ITERATIONS}} {{.ROUNDS}}
         done
       - task: race-svg
+
+  bench-aws:
+    desc: 'Run the published benchmarks on AWS EC2 spot instances (the AWS CLI''s ryjwt-benchmarks profile), a piece on each, all at once: the races, the HS256 tables, and the matrix in two halves; then put the results, pages and races in place, and tear everything down. Benchmarks main as it is on GitHub, or: task bench-aws -- --ref <branch, tag or SHA>'
+    dir: bench
+    cmd: uv run --group bench yeet ./aws.py {{.CLI_ARGS}}
 
   bench-download:
     desc: 'Put a Benchmarks workflow run''s results in place (the results files and pages, and the races in assets/ and docs/assets/), from its artifact, and show the machine they ran on (needs gh): task bench-download -- <run id>. With CROSS_CHECK=x86_64, the results go to bench/x86_64/ instead, for the x86_64 cross-check page (no races drawn)'
