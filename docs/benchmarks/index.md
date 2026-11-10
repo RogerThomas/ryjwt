@@ -56,6 +56,8 @@ fast-jwt, by about 5% and 8% ([full matrix](matrix.md#pem-public-key)).
 ## How they're measured
 
 - Each decode checks the signature, `exp` and `aud`, as a real service would.
+- ryjwt is built from the code being benchmarked as its released wheels are, with profile-guided
+  optimisation (trained on the CodSpeed benchmarks, `benchmarks/`).
 - Before timing, each library's result is checked against the token's claims, and each is shown
   to reject an expired token and one for another audience.
 - The published numbers come from one run on an AWS c9g.2xlarge, a virtual machine with 8
