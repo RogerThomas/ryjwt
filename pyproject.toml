@@ -70,7 +70,7 @@ exclude = [
 [dependency-groups]
 bench = [
     "cryptography>=46",
-    "joserfc==1.7.7",
+    "joserfc==1.8.0",
     "msgspec>=0.22.0",
     "pydantic>=2.13.5",
     "pyjwt>=2.15.1",
@@ -107,7 +107,7 @@ docs = [
     "mkdocstrings==1.0.8",
     "mkdocstrings-python==2.0.10",
     "ruff==0.17.3", # formats the API reference's signatures; the version dev's ruff is locked at
-    "zensical==0.0.74",
+    "zensical==0.1.0",
 ]
 # The raster icons rendered from assets/favicon.svg (assets/build_icons.py): `task icons`.
 icons = [
